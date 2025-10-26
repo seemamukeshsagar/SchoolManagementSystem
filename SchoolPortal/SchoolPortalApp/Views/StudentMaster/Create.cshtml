@@ -1,0 +1,270 @@
+@model SchoolPortalApp.Models.StudentViewModel
+@{
+    ViewData["Title"] = "Create Student";
+}
+<h2>Create Student</h2>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DOB"></label>
+        <input asp-for="DOB" class="form-control" />
+        <span asp-validation-for="DOB" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SchoolId"></label>
+        <select asp-for="SchoolId" asp-items="Model.Schools" class="form-control"></select>
+        <span asp-validation-for="SchoolId" class="text-danger"></span>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="IsActive" />
+        <label class="form-check-label" asp-for="IsActive"></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="RollNumber"></label>
+        <input asp-for="RollNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="CityId"></label>
+            <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="StateId"></label>
+            <select asp-for="StateId" asp-items="Model.States" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="CountryId"></label>
+            <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="ZipCode"></label>
+            <input asp-for="ZipCode" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="ContactNumber"></label>
+            <input asp-for="ContactNumber" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="EmergencyContactNumber"></label>
+            <input asp-for="EmergencyContactNumber" class="form-control" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="DOJ"></label>
+            <input asp-for="DOJ" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="RegistrationNumber"></label>
+            <input asp-for="RegistrationNumber" class="form-control" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="ClassId"></label>
+            <select asp-for="ClassId" asp-items="Model.Classes" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="SectionId"></label>
+            <select asp-for="SectionId" asp-items="Model.Sections" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="AvailTransport" />
+        <label class="form-check-label" asp-for="AvailTransport"></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile"></label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Gender"></label>
+            <select asp-for="Gender" asp-items="Model.Genders" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="SiblingsIfAny" />
+        <label class="form-check-label" asp-for="SiblingsIfAny"></label>
+    </div>
+    <div class="form-group">
+        <label asp-for="SiblingClassId"></label>
+        <select asp-for="SiblingClassId" asp-items="Model.SiblingClasses" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="DisabilityAny"></label>
+        <input asp-for="DisabilityAny" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MedicalAlleryAny"></label>
+        <input asp-for="MedicalAlleryAny" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="BirthCityId"></label>
+            <select asp-for="BirthCityId" asp-items="Model.BirthCities" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="BirthStateId"></label>
+            <select asp-for="BirthStateId" asp-items="Model.BirthStates" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="BirthCountryId"></label>
+            <select asp-for="BirthCountryId" asp-items="Model.BirthCountries" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="PreviousSchoolAttended"></label>
+        <input asp-for="PreviousSchoolAttended" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="PreviousSchoolClassId"></label>
+            <select asp-for="PreviousSchoolClassId" asp-items="Model.PreviousSchoolClasses" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="PreviousSchoolBoardId"></label>
+            <select asp-for="PreviousSchoolBoardId" asp-items="Model.PreviousSchoolBoards" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="PreviousSchoolPercentage"></label>
+            <input asp-for="PreviousSchoolPercentage" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="PreviousSchoolFromDate"></label>
+            <input asp-for="PreviousSchoolFromDate" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="PreviousSchoolToDate"></label>
+            <input asp-for="PreviousSchoolToDate" class="form-control" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="PreviousSchoolRank"></label>
+            <input asp-for="PreviousSchoolRank" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="WithdrawnDate"></label>
+            <input asp-for="WithdrawnDate" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="WithdrawnReason"></label>
+        <input asp-for="WithdrawnReason" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="BloodGroupId"></label>
+            <select asp-for="BloodGroupId" asp-items="Model.BloodGroups" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Nationality"></label>
+            <select asp-for="Nationality" asp-items="Model.Nationalities" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="ReligionId"></label>
+            <select asp-for="ReligionId" asp-items="Model.Religions" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Hobbies"></label>
+        <input asp-for="Hobbies" class="form-control" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="RouteId"></label>
+            <select asp-for="RouteId" asp-items="Model.Routes" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="RouteStopDetailsId"></label>
+            <select asp-for="RouteStopDetailsId" asp-items="Model.RouteStops" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="ClassTeacherId"></label>
+            <select asp-for="ClassTeacherId" asp-items="Model.ClassTeachers" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="RoutePickAndDrop" />
+        <label class="form-check-label" asp-for="RoutePickAndDrop"></label>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="FeesDiscountCategoryMasterId"></label>
+            <select asp-for="FeesDiscountCategoryMasterId" asp-items="Model.FeesDiscountCategories" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="TutionFees"></label>
+            <input asp-for="TutionFees" class="form-control" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="AnnualFees"></label>
+            <input asp-for="AnnualFees" class="form-control" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="TransportFees"></label>
+            <input asp-for="TransportFees" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="UseTransportFees"></label>
+            <input class="form-check-input" type="checkbox" asp-for="UseTransportFees" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="SessionId"></label>
+            <select asp-for="SessionId" asp-items="Model.Sessions" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="HouseAllotted"></label>
+            <select asp-for="HouseAllotted" asp-items="Model.Houses" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="CompanyId"></label>
+            <input asp-for="CompanyId" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="IsDeleted"></label>
+            <input class="form-check-input" type="checkbox" asp-for="IsDeleted" />
+        </div>
+    </div>    
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

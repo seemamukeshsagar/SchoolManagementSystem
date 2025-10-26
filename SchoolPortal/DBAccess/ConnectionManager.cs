@@ -2,7 +2,6 @@
 using System;
 using System.Data.SqlClient;
 using System.IO;
-using System.Text.Json;
 using Properties = SchoolPortal.DBAccess.Properties;
 
 namespace SchoolPortal.DBAccess
@@ -56,32 +55,6 @@ namespace SchoolPortal.DBAccess
 
 		private static string LoadConnectionStringFromConfig()
 		{
-			try
-			{
-				string basePath = AppContext.BaseDirectory;
-				string? env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-				string[] candidates = env is not null && env.Length > 0
-					? new[] { Path.Combine(basePath, $"appsettings.{env}.json"), Path.Combine(basePath, "appsettings.json") }
-					: new[] { Path.Combine(basePath, "appsettings.json") };
-
-				foreach (var path in candidates)
-				{
-					if (!File.Exists(path)) continue;
-					string json = File.ReadAllText(path);
-					using JsonDocument doc = JsonDocument.Parse(json);
-					if (doc.RootElement.TryGetProperty("ConnectionStrings", out var cs) &&
-						cs.TryGetProperty("DefaultConnectionString", out var val))
-					{
-						string? s = val.GetString();
-						if (!string.IsNullOrWhiteSpace(s)) return s!;
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine($"Error loading connection string from config: {ex.Message}");
-			}
-
 			try
 			{
 				return Properties.Settings.Default.DefaultConnectionString;

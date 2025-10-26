@@ -1,0 +1,16 @@
+@model Schoolortal.Entities.Models.StudentMaster
+@{
+    ViewData["Title"] = "Delete Student";
+}
+<h2>Delete Student</h2>
+<div>
+    <h4>Are you sure you want to delete this?</h4>
+    <div>
+        <strong>@string.Join(" ", new[] { Model.FirstName, Model.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)))</strong>
+    </div>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    </form>
+</div>

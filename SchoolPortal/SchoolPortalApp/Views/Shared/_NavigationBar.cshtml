@@ -12,14 +12,14 @@
 
   <!-- Sidebar -->
   <div class="d-flex flex-column">
-	<ul class="nav nav-pills flex-column mb-auto">
+    <div class="accordion" id="sidebarAccordion">
+      <ul class="nav nav-pills flex-column mb-auto">
 	  <li class="nav-item">
 		<a href="#" class="nav-link active" data-tooltip="Home">
 		  <i class="bi bi-house-door"></i> <span>Home</span>
 		</a>
 	  </li>
 
-	  <div class="accordion" id="sidebarAccordion">
 	  <li>
 		<a href="#submenu-general" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-general" aria-expanded="false" aria-controls="submenu-general" data-tooltip="General">
 		  <i class="bi bi-gear"></i> <span>General</span>
@@ -173,7 +173,7 @@
 		  <li><a href="@Url.Action("Drivers", "Transport")" class="nav-link">Drivers</a></li>
 		  <li><a href="@Url.Action("Cleaners", "Transport")" class="nav-link">Cleaners</a></li>
 		  <li><a href="@Url.Action("Routes", "Transport")" class="nav-link">Routes</a></li>
-		  </ul>
+		</ul>
 	  </li>
 	  
 	  <li>
@@ -202,8 +202,8 @@
 		  <li><a href="@Url.Action("ViewTransactions", "Library")" class="nav-link">Book Transactions</a></li>
 		</ul>
 	  </li>
-	  </div>
-	</ul>
+	  </ul>
+    </div>
   </div>
 
   <!-- Bootstrap Icons -->

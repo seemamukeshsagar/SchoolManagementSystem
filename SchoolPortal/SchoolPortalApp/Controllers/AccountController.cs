@@ -62,19 +62,19 @@ namespace SchoolPortalApp.Controllers
                     return View(model);
                 }
 
-                _logger.LogInformation("Authenticating user: {UserName}", model.UserName ?? string.Empty);
+                _logger.LogInformation("Authenticating user: {UserName}", model?.UserName ?? string.Empty);
                 var userDetails = _loginService.AuthenticateUser(model.UserName ?? string.Empty, model.Password ?? string.Empty);
-                
+
                 if (userDetails != null)
                 {
                     _logger.LogInformation("Authentication successful for user: {UserName}. Privileges: {Privileges}", 
-                        userDetails.UserName, string.Join(", ", userDetails.Privileges));
+                        userDetails.UserName ?? string.Empty, string.Join(", ", userDetails.Privileges ?? Enumerable.Empty<string>()));
                     
                     // Store user details in session (you may want to use proper authentication/session management)
                     HttpContext.Session.SetString("UserId", userDetails.Id.ToString());
-                    HttpContext.Session.SetString("UserName", userDetails.UserName);
-                    HttpContext.Session.SetString("FullName", userDetails.FullName);
-                    HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges));
+                    HttpContext.Session.SetString("UserName", userDetails.UserName ?? string.Empty);
+                    HttpContext.Session.SetString("FullName", userDetails.FullName ?? string.Empty);
+                    HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges ?? Enumerable.Empty<string>()));
 
                     // Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
                     var claims = new List<Claim>
