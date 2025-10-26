@@ -45,6 +45,8 @@ builder.Services.AddScoped<ISchoolService, SchoolPortal.Services.SchoolService>(
 builder.Services.AddScoped<ISchoolContactService, SchoolPortal.Services.SchoolContactService>();
 builder.Services.AddScoped<IClassService, SchoolPortal.Services.ClassService>();
 builder.Services.AddScoped<ISectionService, SchoolPortal.Services.SectionService>();
+builder.Services.AddScoped<ISubjectService, SchoolPortal.Services.SubjectService>();
+builder.Services.AddScoped<ISubjectCategoryService, SchoolPortal.Services.SubjectCategoryService>();
 builder.Services.AddScoped<IClassRoomService, SchoolPortal.Services.ClassRoomService>();
 
 var app = builder.Build();

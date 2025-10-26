@@ -11,7 +11,7 @@
         <tr>
             <th>Name</th>
             <th>Is Active</th>
-            <th>School</th>
+            @* <th>School</th> *@
             <th></th>
         </tr>
     </thead>
@@ -21,7 +21,7 @@
         <tr>
             <td>@item.Name</td>
             <td>@item.IsActive</td>
-            <td>@item.SchoolName</td>
+            @* <td>@item.SchoolName</td> *@
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

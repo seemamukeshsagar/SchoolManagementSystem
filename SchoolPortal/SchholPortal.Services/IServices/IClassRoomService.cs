@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Schoolortal.Entities.Models;
+using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.IServices
 {

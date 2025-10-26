@@ -2,22 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using SchoolPortal.DBAccess;
-using SchoolPortal.Entities.Models;
+using Schoolortal.Entities.Models;
 using SchoolPortal.Services.IServices;
 
 namespace SchoolPortal.Services
 {
-    public class ClassRoomService : IClassRoomService
+    public class SubjectCategoryService : ISubjectCategoryService
     {
-        private static ClassRoomMaster Map(DataRow r)
+        private static SubjectCategoryDetails Map(DataRow r)
         {
-            var s = new ClassRoomMaster();
+            var s = new SubjectCategoryDetails();
             if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) s.Id = id;
             s.Name = r.Table.Columns.Contains("Name") ? r["Name"].ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
-            if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
+            s.Description = r.Table.Columns.Contains("Description") ? r["Description"].ToString() ?? string.Empty : string.Empty;
+            if (r.Table.Columns.Contains("ParentId") && Guid.TryParse(r["ParentId"].ToString(), out var parentId)) s.ParentId = parentId;
+            if (r.Table.Columns.Contains("SubjectId") && Guid.TryParse(r["SubjectId"].ToString(), out var subjectId)) s.SubjectId = subjectId;
+            if (r.Table.Columns.Contains("SessionId") && Guid.TryParse(r["SessionId"].ToString(), out var sessionId)) s.SessionId = sessionId;
             if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"].ToString(), out var companyId)) s.CompanyId = companyId;
             if (r.Table.Columns.Contains("SchoolId") && Guid.TryParse(r["SchoolId"].ToString(), out var schoolId)) s.SchoolId = schoolId;
+            if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
+            if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
             if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"].ToString(), out var createdBy)) s.CreatedBy = createdBy;
             if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"].ToString(), out var createdDate)) s.CreatedDate = createdDate;
             if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"].ToString(), out var modifiedBy)) s.ModifiedBy = modifiedBy;
@@ -27,10 +31,10 @@ namespace SchoolPortal.Services
             return s;
         }
 
-        public List<ClassRoomMaster> GetAll()
+        public List<SubjectCategoryDetails> GetAll()
         {
-            var list = new List<ClassRoomMaster>();
-            Proc p = new Proc("ClassRoom_GetAll");
+            var list = new List<SubjectCategoryDetails>();
+            Proc p = new Proc("SubjectCategory_GetAll");
             var dt = new DataTable();
             p.Exec(dt);
             foreach (DataRow r in dt.Rows)
@@ -40,9 +44,9 @@ namespace SchoolPortal.Services
             return list;
         }
 
-        public ClassRoomMaster? GetById(Guid id)
+        public SubjectCategoryDetails? GetById(Guid id)
         {
-            Proc p = new Proc("ClassRoom_GetById");
+            Proc p = new Proc("SubjectCategory_GetById");
             p["@Id"] = id;
             var dt = new DataTable();
             p.Exec(dt);
@@ -50,14 +54,17 @@ namespace SchoolPortal.Services
             return Map(dt.Rows[0]);
         }
 
-        public Guid Create(ClassRoomMaster room)
+        public Guid Create(SubjectCategoryDetails category)
         {
-            Proc p = new Proc("ClassRoom_Create");
-            p["@Name"] = room.Name;
-            p["@IsActive"] = room.IsActive;
-            p["@CompanyId"] = room.CompanyId;
-            p["@SchoolId"] = room.SchoolId;
-            p["@CreatedBy"] = room.CreatedBy;
+            Proc p = new Proc("SubjectCategory_Create");
+            p["@Name"] = category.Name;
+            p["@Description"] = category.Description ?? string.Empty;
+            p["@ParentId"] = category.ParentId;
+            p["@SubjectId"] = category.SubjectId;
+            p["@IsActive"] = category.IsActive;
+            p["@CompanyId"] = category.CompanyId;
+            p["@SchoolId"] = category.SchoolId;
+            p["@CreatedBy"] = category.CreatedBy;
             var dt = new DataTable();
             p.Exec(dt);
             if (dt.Rows.Count > 0)
@@ -71,14 +78,17 @@ namespace SchoolPortal.Services
             return Guid.Empty;
         }
 
-        public bool Update(ClassRoomMaster room)
+        public bool Update(SubjectCategoryDetails category)
         {
-            Proc p = new Proc("ClassRoom_Update");
-            p["@Id"] = room.Id;
-            p["@Name"] = room.Name;
-            p["@IsActive"] = room.IsActive;
-            p["@SchoolId"] = room.SchoolId;
-            p["@ModifiedBy"] = room.ModifiedBy ?? Guid.Empty;
+            Proc p = new Proc("SubjectCategory_Update");
+            p["@Id"] = category.Id;
+            p["@Name"] = category.Name;
+            p["@Description"] = category.Description ?? string.Empty;
+            p["@ParentId"] = category.ParentId;
+            p["@SubjectId"] = category.SubjectId;
+            p["@IsActive"] = category.IsActive;
+            p["@SchoolId"] = category.SchoolId;
+            p["@ModifiedBy"] = category.ModifiedBy ?? Guid.Empty;
             p.Exec();
             var ret = p.Parameters["@RETURN_VALUE"].Value;
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
@@ -87,7 +97,7 @@ namespace SchoolPortal.Services
 
         public bool Delete(Guid id)
         {
-            Proc p = new Proc("ClassRoom_Delete");
+            Proc p = new Proc("SubjectCategory_Delete");
             p["@Id"] = id;
             p.Exec();
             var ret = p.Parameters["@RETURN_VALUE"].Value;

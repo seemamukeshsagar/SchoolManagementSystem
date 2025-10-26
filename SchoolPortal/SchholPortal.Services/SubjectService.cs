@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using SchoolPortal.DBAccess;
-using SchoolPortal.Entities.Models;
+using Schoolortal.Entities.Models;
 using SchoolPortal.Services.IServices;
 
 namespace SchoolPortal.Services
 {
-    public class ClassRoomService : IClassRoomService
+    public class SubjectService : ISubjectService
     {
-        private static ClassRoomMaster Map(DataRow r)
+        private static SubjectMaster Map(DataRow r)
         {
-            var s = new ClassRoomMaster();
+            var s = new SubjectMaster();
             if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) s.Id = id;
-            s.Name = r.Table.Columns.Contains("Name") ? r["Name"].ToString() ?? string.Empty : string.Empty;
+            s.SubjectName = r.Table.Columns.Contains("SubjectName") ? r["SubjectName"].ToString() ?? string.Empty : string.Empty;
+            if (r.Table.Columns.Contains("IsScholastic") && bool.TryParse(r["IsScholastic"].ToString(), out var scholastic)) s.IsScholastic = scholastic;
             if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
             if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
             if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"].ToString(), out var companyId)) s.CompanyId = companyId;
@@ -27,10 +28,10 @@ namespace SchoolPortal.Services
             return s;
         }
 
-        public List<ClassRoomMaster> GetAll()
+        public List<SubjectMaster> GetAll()
         {
-            var list = new List<ClassRoomMaster>();
-            Proc p = new Proc("ClassRoom_GetAll");
+            var list = new List<SubjectMaster>();
+            Proc p = new Proc("Subject_GetAll");
             var dt = new DataTable();
             p.Exec(dt);
             foreach (DataRow r in dt.Rows)
@@ -40,9 +41,9 @@ namespace SchoolPortal.Services
             return list;
         }
 
-        public ClassRoomMaster? GetById(Guid id)
+        public SubjectMaster? GetById(Guid id)
         {
-            Proc p = new Proc("ClassRoom_GetById");
+            Proc p = new Proc("Subject_GetById");
             p["@Id"] = id;
             var dt = new DataTable();
             p.Exec(dt);
@@ -50,14 +51,15 @@ namespace SchoolPortal.Services
             return Map(dt.Rows[0]);
         }
 
-        public Guid Create(ClassRoomMaster room)
+        public Guid Create(SubjectMaster subject)
         {
-            Proc p = new Proc("ClassRoom_Create");
-            p["@Name"] = room.Name;
-            p["@IsActive"] = room.IsActive;
-            p["@CompanyId"] = room.CompanyId;
-            p["@SchoolId"] = room.SchoolId;
-            p["@CreatedBy"] = room.CreatedBy;
+            Proc p = new Proc("Subject_Create");
+            p["@SubjectName"] = subject.SubjectName;
+            p["@IsScholastic"] = subject.IsScholastic ?? false;
+            p["@IsActive"] = subject.IsActive;
+            p["@CompanyId"] = subject.CompanyId;
+            p["@SchoolId"] = subject.SchoolId;
+            p["@CreatedBy"] = subject.CreatedBy;
             var dt = new DataTable();
             p.Exec(dt);
             if (dt.Rows.Count > 0)
@@ -71,14 +73,15 @@ namespace SchoolPortal.Services
             return Guid.Empty;
         }
 
-        public bool Update(ClassRoomMaster room)
+        public bool Update(SubjectMaster subject)
         {
-            Proc p = new Proc("ClassRoom_Update");
-            p["@Id"] = room.Id;
-            p["@Name"] = room.Name;
-            p["@IsActive"] = room.IsActive;
-            p["@SchoolId"] = room.SchoolId;
-            p["@ModifiedBy"] = room.ModifiedBy ?? Guid.Empty;
+            Proc p = new Proc("Subject_Update");
+            p["@Id"] = subject.Id;
+            p["@SubjectName"] = subject.SubjectName;
+            p["@IsScholastic"] = subject.IsScholastic ?? false;
+            p["@IsActive"] = subject.IsActive;
+            p["@SchoolId"] = subject.SchoolId;
+            p["@ModifiedBy"] = subject.ModifiedBy ?? Guid.Empty;
             p.Exec();
             var ret = p.Parameters["@RETURN_VALUE"].Value;
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
@@ -87,7 +90,7 @@ namespace SchoolPortal.Services
 
         public bool Delete(Guid id)
         {
-            Proc p = new Proc("ClassRoom_Delete");
+            Proc p = new Proc("Subject_Delete");
             p["@Id"] = id;
             p.Exec();
             var ret = p.Parameters["@RETURN_VALUE"].Value;

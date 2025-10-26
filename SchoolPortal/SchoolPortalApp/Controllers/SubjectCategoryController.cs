@@ -6,28 +6,55 @@ using Microsoft.Extensions.Logging;
 using Schoolortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
-using SchoolPortal.Entities.Models;
 
 namespace SchoolPortalApp.Controllers
 {
-    [Route("ClassRoom")]
-    public class ClassRoomController : Controller
+    [Route("SubjectCategory")]
+    public class SubjectCategoryController : Controller
     {
-        private readonly IClassRoomService _service;
+        private readonly ISubjectCategoryService _service;
+        private readonly ISubjectService _subjectService;
         private readonly ISchoolService _schoolService;
-        private readonly ILogger<ClassRoomController> _logger;
+        private readonly ILogger<SubjectCategoryController> _logger;
 
-        public ClassRoomController(IClassRoomService service, ISchoolService schoolService, ILogger<ClassRoomController> logger)
+        public SubjectCategoryController(
+            ISubjectCategoryService service,
+            ISubjectService subjectService,
+            ISchoolService schoolService,
+            ILogger<SubjectCategoryController> logger)
         {
             _service = service;
+            _subjectService = subjectService;
             _schoolService = schoolService;
             _logger = logger;
         }
 
-        private void PopulateDropdowns(ClassRoomViewModel vm)
+        private void PopulateDropdowns(SubjectCategoryViewModel vm)
         {
-            var schools = _schoolService.GetAll();
-            vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
+            var subjects = _subjectService.GetAll();
+            vm.Subjects = subjects
+                .Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.SubjectName,
+                    Selected = s.Id == vm.SubjectId
+                }).ToList();
+
+            var categories = _service.GetAll();
+            vm.Parents = categories
+                .Where(c => c.Id != vm.Id)
+                .Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name,
+                    Selected = vm.ParentId.HasValue && c.Id == vm.ParentId.Value
+                }).Prepend(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = string.Empty,
+                    Text = "-- None --",
+                    Selected = !vm.ParentId.HasValue
+                })
+                .ToList();
         }
 
         [HttpGet]
@@ -36,14 +63,17 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Index()
         {
             var list = _service.GetAll();
+            var subjects = _subjectService.GetAll();
             var schools = _schoolService.GetAll();
             var result = list.Select(item =>
             {
+                var subject = subjects.FirstOrDefault(s => s.Id == item.SubjectId);
                 var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-                return new ClassRoomListItemViewModel
+                return new SubjectCategoryListItemViewModel
                 {
                     Id = item.Id,
                     Name = item.Name,
+                    SubjectName = subject?.SubjectName ?? string.Empty,
                     IsActive = item.IsActive,
                     SchoolName = school?.Name ?? string.Empty
                 };
@@ -64,24 +94,26 @@ namespace SchoolPortalApp.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            var vm = new ClassRoomViewModel();
+            var vm = new SubjectCategoryViewModel();
+            PopulateDropdowns(vm);
             return View(vm);
         }
 
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ClassRoomViewModel model)
+        public IActionResult Create(SubjectCategoryViewModel model)
         {
             var schoolIdStr = HttpContext.Session.GetString("SchoolId");
             if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
             {
-                ModelState.Remove(nameof(ClassRoomViewModel.SchoolId));
+                ModelState.Remove(nameof(SubjectCategoryViewModel.SchoolId));
                 model.SchoolId = schoolId;
             }
 
             if (!ModelState.IsValid)
             {
+                PopulateDropdowns(model);
                 return View(model);
             }
 
@@ -89,14 +121,18 @@ namespace SchoolPortalApp.Controllers
             var companyIdStr = HttpContext.Session.GetString("CompanyId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Please login and select company to create class room.");
+                ModelState.AddModelError(string.Empty, "Please login and select company to create subject category.");
+                PopulateDropdowns(model);
                 return View(model);
             }
 
-            var entity = new ClassRoomMaster
+            var entity = new SubjectCategoryDetails
             {
                 Id = Guid.Empty,
                 Name = model.Name,
+                Description = model.Description ?? string.Empty,
+                ParentId = model.ParentId ?? Guid.Empty,
+                SubjectId = model.SubjectId,
                 IsActive = model.IsActive,
                 CompanyId = companyId,
                 SchoolId = model.SchoolId,
@@ -107,7 +143,7 @@ namespace SchoolPortalApp.Controllers
             var newId = _service.Create(entity);
             if (newId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Failed to create class room.");
+                ModelState.AddModelError(string.Empty, "Failed to create subject category.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -120,46 +156,55 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-            var vm = new ClassRoomViewModel
+            var vm = new SubjectCategoryViewModel
             {
                 Id = item.Id,
                 Name = item.Name,
+                Description = item.Description,
+                ParentId = item.ParentId == Guid.Empty ? null : item.ParentId,
+                SubjectId = item.SubjectId,
                 IsActive = item.IsActive,
                 SchoolId = item.SchoolId
             };
+            PopulateDropdowns(vm);
             return View(vm);
         }
 
         [HttpPost]
         [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, ClassRoomViewModel model)
+        public IActionResult Edit(Guid id, SubjectCategoryViewModel model)
         {
             if (id != model.Id) return BadRequest();
 
             var schoolIdStr = HttpContext.Session.GetString("SchoolId");
             if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
             {
-                ModelState.Remove(nameof(ClassRoomViewModel.SchoolId));
+                ModelState.Remove(nameof(SubjectCategoryViewModel.SchoolId));
                 model.SchoolId = schoolIdFromSession;
             }
 
             if (!ModelState.IsValid)
             {
+                PopulateDropdowns(model);
                 return View(model);
             }
 
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Please login to update class room.");
+                ModelState.AddModelError(string.Empty, "Please login to update subject category.");
+                PopulateDropdowns(model);
                 return View(model);
             }
 
-            var entity = new ClassRoomMaster
+            var entity = new SubjectCategoryDetails
             {
                 Id = id,
                 Name = model.Name,
+                Description = model.Description ?? string.Empty,
+                ParentId = model.ParentId ?? Guid.Empty,
+                SubjectId = model.SubjectId,
                 IsActive = model.IsActive,
                 SchoolId = model.SchoolId,
                 ModifiedBy = userId,
@@ -168,7 +213,8 @@ namespace SchoolPortalApp.Controllers
 
             if (!_service.Update(entity))
             {
-                ModelState.AddModelError(string.Empty, "Failed to update class room.");
+                ModelState.AddModelError(string.Empty, "Failed to update subject category.");
+                PopulateDropdowns(model);
                 return View(model);
             }
             return RedirectToAction("Details", new { id });
@@ -191,7 +237,7 @@ namespace SchoolPortalApp.Controllers
         {
             if (!_service.Delete(id))
             {
-                TempData["ErrorMessage"] = "Failed to delete class room.";
+                TempData["ErrorMessage"] = "Failed to delete subject category.";
                 return RedirectToAction("Delete", new { id });
             }
             return RedirectToAction("Index");

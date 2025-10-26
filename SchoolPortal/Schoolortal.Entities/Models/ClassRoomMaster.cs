@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Schoolortal.Entities.Models;
+namespace SchoolPortal.Entities.Models;
 
 public partial class ClassRoomMaster
 {

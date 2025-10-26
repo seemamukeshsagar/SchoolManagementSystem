@@ -6,25 +6,24 @@ using Microsoft.Extensions.Logging;
 using Schoolortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
-using SchoolPortal.Entities.Models;
 
 namespace SchoolPortalApp.Controllers
 {
-    [Route("ClassRoom")]
-    public class ClassRoomController : Controller
+    [Route("Subject")]
+    public class SubjectController : Controller
     {
-        private readonly IClassRoomService _service;
+        private readonly ISubjectService _service;
         private readonly ISchoolService _schoolService;
-        private readonly ILogger<ClassRoomController> _logger;
+        private readonly ILogger<SubjectController> _logger;
 
-        public ClassRoomController(IClassRoomService service, ISchoolService schoolService, ILogger<ClassRoomController> logger)
+        public SubjectController(ISubjectService service, ISchoolService schoolService, ILogger<SubjectController> logger)
         {
             _service = service;
             _schoolService = schoolService;
             _logger = logger;
         }
 
-        private void PopulateDropdowns(ClassRoomViewModel vm)
+        private void PopulateDropdowns(SubjectViewModel vm)
         {
             var schools = _schoolService.GetAll();
             vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
@@ -40,10 +39,11 @@ namespace SchoolPortalApp.Controllers
             var result = list.Select(item =>
             {
                 var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-                return new ClassRoomListItemViewModel
+                return new SubjectListItemViewModel
                 {
                     Id = item.Id,
-                    Name = item.Name,
+                    SubjectName = item.SubjectName,
+                    IsScholastic = item.IsScholastic,
                     IsActive = item.IsActive,
                     SchoolName = school?.Name ?? string.Empty
                 };
@@ -64,19 +64,19 @@ namespace SchoolPortalApp.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            var vm = new ClassRoomViewModel();
+            var vm = new SubjectViewModel();
             return View(vm);
         }
 
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ClassRoomViewModel model)
+        public IActionResult Create(SubjectViewModel model)
         {
             var schoolIdStr = HttpContext.Session.GetString("SchoolId");
             if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
             {
-                ModelState.Remove(nameof(ClassRoomViewModel.SchoolId));
+                ModelState.Remove(nameof(SubjectViewModel.SchoolId));
                 model.SchoolId = schoolId;
             }
 
@@ -89,14 +89,15 @@ namespace SchoolPortalApp.Controllers
             var companyIdStr = HttpContext.Session.GetString("CompanyId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Please login and select company to create class room.");
+                ModelState.AddModelError(string.Empty, "Please login and select company to create subject.");
                 return View(model);
             }
 
-            var entity = new ClassRoomMaster
+            var entity = new SubjectMaster
             {
                 Id = Guid.Empty,
-                Name = model.Name,
+                SubjectName = model.SubjectName,
+                IsScholastic = model.IsScholastic ?? false,
                 IsActive = model.IsActive,
                 CompanyId = companyId,
                 SchoolId = model.SchoolId,
@@ -107,7 +108,7 @@ namespace SchoolPortalApp.Controllers
             var newId = _service.Create(entity);
             if (newId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Failed to create class room.");
+                ModelState.AddModelError(string.Empty, "Failed to create subject.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -120,10 +121,11 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-            var vm = new ClassRoomViewModel
+            var vm = new SubjectViewModel
             {
                 Id = item.Id,
-                Name = item.Name,
+                SubjectName = item.SubjectName,
+                IsScholastic = item.IsScholastic,
                 IsActive = item.IsActive,
                 SchoolId = item.SchoolId
             };
@@ -133,14 +135,14 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, ClassRoomViewModel model)
+        public IActionResult Edit(Guid id, SubjectViewModel model)
         {
             if (id != model.Id) return BadRequest();
 
             var schoolIdStr = HttpContext.Session.GetString("SchoolId");
             if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
             {
-                ModelState.Remove(nameof(ClassRoomViewModel.SchoolId));
+                ModelState.Remove(nameof(SubjectViewModel.SchoolId));
                 model.SchoolId = schoolIdFromSession;
             }
 
@@ -152,14 +154,15 @@ namespace SchoolPortalApp.Controllers
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Please login to update class room.");
+                ModelState.AddModelError(string.Empty, "Please login to update subject.");
                 return View(model);
             }
 
-            var entity = new ClassRoomMaster
+            var entity = new SubjectMaster
             {
                 Id = id,
-                Name = model.Name,
+                SubjectName = model.SubjectName,
+                IsScholastic = model.IsScholastic ?? false,
                 IsActive = model.IsActive,
                 SchoolId = model.SchoolId,
                 ModifiedBy = userId,
@@ -168,7 +171,7 @@ namespace SchoolPortalApp.Controllers
 
             if (!_service.Update(entity))
             {
-                ModelState.AddModelError(string.Empty, "Failed to update class room.");
+                ModelState.AddModelError(string.Empty, "Failed to update subject.");
                 return View(model);
             }
             return RedirectToAction("Details", new { id });
@@ -191,7 +194,7 @@ namespace SchoolPortalApp.Controllers
         {
             if (!_service.Delete(id))
             {
-                TempData["ErrorMessage"] = "Failed to delete class room.";
+                TempData["ErrorMessage"] = "Failed to delete subject.";
                 return RedirectToAction("Delete", new { id });
             }
             return RedirectToAction("Index");
