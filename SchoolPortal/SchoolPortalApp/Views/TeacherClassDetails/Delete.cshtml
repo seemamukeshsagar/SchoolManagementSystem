@@ -1,0 +1,25 @@
+@model Schoolortal.Entities.Models.TeacherClassDetails
+@{
+    ViewData["Title"] = "Delete Teacher Class Details";
+}
+<h2>Delete</h2>
+<div>
+    <h4>Are you sure you want to delete this mapping?</h4>
+    <div class="mb-2">
+        <strong>Teacher Id:</strong> @Model.TeacherId
+    </div>
+    <div class="mb-2">
+        <strong>Class Id:</strong> @Model.ClassId
+    </div>
+    <div class="mb-2">
+        <strong>Section Id:</strong> @Model.SectionId
+    </div>
+    <div class="mb-2">
+        <strong>Subject Id:</strong> @Model.SubjectId
+    </div>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    </form>
+</div>
