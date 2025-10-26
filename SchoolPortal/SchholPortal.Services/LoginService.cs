@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SchoolPortal.Services.ServiceViewModels;
+using SchoolPortal.Services.IServices;
 
 namespace SchoolPortal.Services
 {

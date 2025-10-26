@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using SchoolPortal.DBAccess;
+using SchoolPortal.Services.IServices;
 
 namespace SchoolPortal.Services
 {
@@ -22,10 +23,18 @@ namespace SchoolPortal.Services
 
         public List<LookupItem> GetCountries()
         {
-            Proc p = new Proc("Country_GetAll");
-            var dt = new DataTable();
-            p.Exec(dt);
-            return Map(dt, "Id", "CountryName");
+            try
+            {
+                Proc p = new Proc("Country_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "CountryName");
+            }
+            catch
+            {
+                // Fallback: return empty list if SP is missing to avoid runtime crash
+                return new List<LookupItem>();
+            }
         }
 
         public List<LookupItem> GetStates(Guid countryId)

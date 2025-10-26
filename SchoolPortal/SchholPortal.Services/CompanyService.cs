@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using SchoolPortal.DBAccess;
 using Schoolortal.Entities.Models;
+using SchoolPortal.Services.IServices;
 
 namespace SchoolPortal.Services
 {

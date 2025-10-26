@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Schoolortal.Entities.Models;
 using SchoolPortal.Services.ServiceViewModels;
 
-namespace SchoolPortal.Services
+namespace SchoolPortal.Services.IServices
 {
     public interface ILoginService
     {

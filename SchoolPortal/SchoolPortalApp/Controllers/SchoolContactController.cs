@@ -9,22 +9,27 @@ using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
 {
-    [Route("Company")]
-    public class CompanyController : Controller
+    [Route("SchoolContact")]
+    public class SchoolContactController : Controller
     {
-        private readonly ICompanyService _service;
+        private readonly ISchoolContactService _service;
         private readonly ILookupService _lookup;
-        private readonly ILogger<CompanyController> _logger;
+        private readonly ISchoolService _schoolService;
+        private readonly ILogger<SchoolContactController> _logger;
 
-        public CompanyController(ICompanyService service, ILookupService lookup, ILogger<CompanyController> logger)
+        public SchoolContactController(ISchoolContactService service, ILookupService lookup, ISchoolService schoolService, ILogger<SchoolContactController> logger)
         {
             _service = service;
             _lookup = lookup;
+            _schoolService = schoolService;
             _logger = logger;
         }
 
-        private void PopulateDropdowns(CompanyViewModel vm)
+        private void PopulateDropdowns(SchoolContactViewModel vm)
         {
+            var schools = _schoolService.GetAll();
+            vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
+
             var countries = _lookup.GetCountries();
             vm.Countries = countries.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CountryId }).ToList();
 
@@ -41,7 +46,7 @@ namespace SchoolPortalApp.Controllers
             if (vm.StateId != Guid.Empty)
             {
                 var cities = _lookup.GetCities(vm.StateId);
-                vm.Cities = cities.Select(ci => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = ci.Id.ToString(), Text = ci.Name, Selected = ci.Id == vm.CityId || ci.Id == vm.JudistrictionArea }).ToList();
+                vm.Cities = cities.Select(ci => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = ci.Id.ToString(), Text = ci.Name, Selected = ci.Id == vm.CityId }).ToList();
             }
             else
             {
@@ -55,30 +60,7 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Index()
         {
             var list = _service.GetAll();
-            var countries = _lookup.GetCountries();
-            var result = list.Select(item =>
-            {
-                var country = countries.FirstOrDefault(c => c.Id == item.CountryId);
-                var states = _lookup.GetStates(item.CountryId);
-                var state = states.FirstOrDefault(s => s.Id == item.StateId);
-                var cities = _lookup.GetCities(item.StateId);
-                var city = cities.FirstOrDefault(ci => ci.Id == item.CityId);
-                var juris = cities.FirstOrDefault(ci => ci.Id == item.JudistrictionArea);
-                return new CompanyListItemViewModel
-                {
-                    Id = item.Id,
-                    CompanyName = item.CompanyName,
-                    Email = item.Email,
-                    IsActive = item.IsActive,
-                    ZipCode = item.ZipCode,
-                    EstablishmentYear = item.EstablishmentYear,
-                    CountryName = country?.Name ?? string.Empty,
-                    StateName = state?.Name ?? string.Empty,
-                    CityName = city?.Name ?? string.Empty,
-                    JurisdictionAreaName = juris?.Name ?? string.Empty,
-                };
-            }).ToList();
-            return View(result);
+            return View(list);
         }
 
         [HttpGet]
@@ -94,7 +76,7 @@ namespace SchoolPortalApp.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            var vm = new CompanyViewModel();
+            var vm = new SchoolContactViewModel();
             PopulateDropdowns(vm);
             return View(vm);
         }
@@ -102,7 +84,7 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CompanyViewModel model)
+        public IActionResult Create(SchoolContactViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -112,33 +94,34 @@ namespace SchoolPortalApp.Controllers
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
             {
-                ModelState.AddModelError(string.Empty, "Please login to create company.");
+                ModelState.AddModelError(string.Empty, "Please login to create school contact.");
                 PopulateDropdowns(model);
                 return View(model);
             }
 
-            var entity = new CompanyMaster
+            var entity = new SchoolContactMaster
             {
                 Id = Guid.Empty,
-                CompanyName = model.CompanyName,
-                Description = model.Description ?? string.Empty,
-                Address = model.Address ?? string.Empty,
+                SchoolId = model.SchoolId,
+                FirstName = model.FirstName,
+                LastName = model.LastName ?? string.Empty,
+                Email = model.Email ?? string.Empty,
+                Phone = model.Phone ?? string.Empty,
+                MobilePhone = model.MobilePhone ?? string.Empty,
+                AddressLine1 = model.AddressLine1 ?? string.Empty,
+                AddressLine2 = model.AddressLine2 ?? string.Empty,
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ZipCode = model.ZipCode ?? string.Empty,
-                Email = model.Email ?? string.Empty,
                 IsActive = model.IsActive,
                 CreatedBy = userId,
-                CreatedDate = DateTime.UtcNow,
-                EstablishmentYear = model.EstablishmentYear ?? string.Empty,
-                JudistrictionArea = model.JudistrictionArea,
+                CreatedDate = DateTime.UtcNow
             };
 
             var newId = _service.Create(entity);
             if (newId == Guid.Empty)
             {
-                ModelState.AddModelError(string.Empty, "Failed to create company.");
+                ModelState.AddModelError(string.Empty, "Failed to create school contact.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -151,20 +134,21 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-            var vm = new CompanyViewModel
+            var vm = new SchoolContactViewModel
             {
                 Id = item.Id,
-                CompanyName = item.CompanyName,
-                Description = item.Description,
-                Address = item.Address,
+                SchoolId = item.SchoolId,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Email = item.Email,
+                Phone = item.Phone,
+                MobilePhone = item.MobilePhone,
+                AddressLine1 = item.AddressLine1,
+                AddressLine2 = item.AddressLine2,
                 CityId = item.CityId,
                 StateId = item.StateId,
                 CountryId = item.CountryId,
-                ZipCode = item.ZipCode,
-                Email = item.Email,
-                IsActive = item.IsActive,
-                EstablishmentYear = item.EstablishmentYear,
-                JudistrictionArea = item.JudistrictionArea,
+                IsActive = item.IsActive
             };
             PopulateDropdowns(vm);
             return View(vm);
@@ -173,7 +157,7 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, CompanyViewModel model)
+        public IActionResult Edit(Guid id, SchoolContactViewModel model)
         {
             if (id != model.Id) return BadRequest();
             if (!ModelState.IsValid)
@@ -185,32 +169,33 @@ namespace SchoolPortalApp.Controllers
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
             {
-                ModelState.AddModelError(string.Empty, "Please login to update company.");
+                ModelState.AddModelError(string.Empty, "Please login to update school contact.");
                 PopulateDropdowns(model);
                 return View(model);
             }
 
-            var entity = new CompanyMaster
+            var entity = new SchoolContactMaster
             {
                 Id = id,
-                CompanyName = model.CompanyName,
-                Description = model.Description ?? string.Empty,
-                Address = model.Address ?? string.Empty,
+                SchoolId = model.SchoolId,
+                FirstName = model.FirstName,
+                LastName = model.LastName ?? string.Empty,
+                Email = model.Email ?? string.Empty,
+                Phone = model.Phone ?? string.Empty,
+                MobilePhone = model.MobilePhone ?? string.Empty,
+                AddressLine1 = model.AddressLine1 ?? string.Empty,
+                AddressLine2 = model.AddressLine2 ?? string.Empty,
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ZipCode = model.ZipCode ?? string.Empty,
-                Email = model.Email ?? string.Empty,
                 IsActive = model.IsActive,
                 ModifiedBy = userId,
-                ModifiedDate = DateTime.UtcNow,
-                EstablishmentYear = model.EstablishmentYear ?? string.Empty,
-                JudistrictionArea = model.JudistrictionArea,
+                ModifiedDate = DateTime.UtcNow
             };
 
             if (!_service.Update(entity))
             {
-                ModelState.AddModelError(string.Empty, "Failed to update company.");
+                ModelState.AddModelError(string.Empty, "Failed to update school contact.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -234,13 +219,12 @@ namespace SchoolPortalApp.Controllers
         {
             if (!_service.Delete(id))
             {
-                TempData["ErrorMessage"] = "Failed to delete company.";
+                TempData["ErrorMessage"] = "Failed to delete school contact.";
                 return RedirectToAction("Delete", new { id });
             }
             return RedirectToAction("Index");
         }
 
-        // JSON endpoints for cascading dropdowns
         [HttpGet]
         [Route("GetStates")]
         public IActionResult GetStates(Guid countryId)

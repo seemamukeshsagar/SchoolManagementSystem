@@ -1,8 +1,23 @@
+using SchoolPortal.Services.IServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+
+// Authentication & Authorization
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/Login";
+        options.SlidingExpiration = true;
+    });
+builder.Services.AddAuthorization();
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -23,9 +38,11 @@ builder.Services.AddAntiforgery(o =>
 });
 
 // DI registrations
-builder.Services.AddScoped<SchoolPortal.Services.ILoginService, SchoolPortal.Services.LoginService>();
-builder.Services.AddScoped<SchoolPortal.Services.ICompanyService, SchoolPortal.Services.CompanyService>();
-builder.Services.AddScoped<SchoolPortal.Services.ILookupService, SchoolPortal.Services.LookupService>();
+builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
+builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
+builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
+builder.Services.AddScoped<ISchoolService, SchoolPortal.Services.SchoolService>();
+builder.Services.AddScoped<ISchoolContactService, SchoolPortal.Services.SchoolContactService>();
 
 var app = builder.Build();
 

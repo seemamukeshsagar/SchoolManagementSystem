@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace SchoolPortal.Services
+namespace SchoolPortal.Services.IServices
 {
     public class LookupItem
     {

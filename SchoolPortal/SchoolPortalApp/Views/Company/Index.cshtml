@@ -1,4 +1,4 @@
-@model IEnumerable<Schoolortal.Entities.Models.CompanyMaster>
+@model IEnumerable<SchoolPortalApp.Models.CompanyListItemViewModel>
 @{
     ViewData["Title"] = "Companies";
 }
@@ -12,6 +12,12 @@
             <th>Company Name</th>
             <th>Email</th>
             <th>Is Active</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Zip Code</th>
+            <th>Jurisdiction Area</th>
+            <th>Establishment Year</th>
             <th></th>
         </tr>
     </thead>
@@ -22,6 +28,12 @@
             <td>@item.CompanyName</td>
             <td>@item.Email</td>
             <td>@item.IsActive</td>
+            <td>@item.CityName</td>
+            <td>@item.StateName</td>
+            <td>@item.CountryName</td>
+            <td>@item.ZipCode</td>
+            <td>@item.JurisdictionAreaName</td>
+            <td>@item.EstablishmentYear</td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

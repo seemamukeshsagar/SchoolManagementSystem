@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using SchoolPortal.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using System.Linq;
 using Schoolortal.Entities.Models;
 using SchoolPortalApp.Models;
+using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -18,6 +22,23 @@ namespace SchoolPortalApp.Controllers
             _logger = logger;
         }
 
+        [HttpPost]
+        [Route("Logout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                HttpContext.Session.Clear();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error during logout");
+            }
+            return RedirectToAction("Login");
+        }
+
         [HttpGet]
         [Route("Login")]
         public IActionResult Login()
@@ -29,7 +50,7 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Login")]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model, string? returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             _logger.LogInformation("POST Login method called. UserName: {UserName}", model?.UserName);
             
@@ -41,8 +62,8 @@ namespace SchoolPortalApp.Controllers
                     return View(model);
                 }
 
-                _logger.LogInformation("Authenticating user: {UserName}", model.UserName);
-                var userDetails = _loginService.AuthenticateUser(model.UserName, model.Password);
+                _logger.LogInformation("Authenticating user: {UserName}", model.UserName ?? string.Empty);
+                var userDetails = _loginService.AuthenticateUser(model.UserName ?? string.Empty, model.Password ?? string.Empty);
                 
                 if (userDetails != null)
                 {
@@ -54,6 +75,27 @@ namespace SchoolPortalApp.Controllers
                     HttpContext.Session.SetString("UserName", userDetails.UserName);
                     HttpContext.Session.SetString("FullName", userDetails.FullName);
                     HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges));
+
+                    // Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()),
+                        new Claim(ClaimTypes.Name, userDetails.FullName ?? userDetails.UserName ?? string.Empty),
+                        new Claim("UserName", userDetails.UserName ?? string.Empty)
+                    };
+                    // Add role/privilege claims if needed
+                    foreach (var p in userDetails.Privileges ?? Enumerable.Empty<string>())
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, p));
+                    }
+
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        AllowRefresh = true
+                    });
                     
                     // Redirect to home or returnUrl if provided
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -63,7 +105,7 @@ namespace SchoolPortalApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                _logger.LogWarning("Authentication failed for user: {UserName}", model.UserName);
+                _logger.LogWarning("Authentication failed for user: {UserName}", model.UserName ?? string.Empty);
                 ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 return View(model);
             }

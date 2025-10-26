@@ -4,7 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Schoolortal.Entities.Models;
 
-namespace SchoolPortal.Services
+namespace SchoolPortal.Services.IServices
 {
     public interface ICompanyService
     {
