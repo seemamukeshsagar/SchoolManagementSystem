@@ -43,6 +43,7 @@ builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
 builder.Services.AddScoped<ISchoolService, SchoolPortal.Services.SchoolService>();
 builder.Services.AddScoped<ISchoolContactService, SchoolPortal.Services.SchoolContactService>();
+builder.Services.AddScoped<IClassService, SchoolPortal.Services.ClassService>();
 
 var app = builder.Build();
 
