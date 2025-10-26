@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "DBAccess\\DBAccess.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SchholPortal.Services\\SchoolPortal.Services.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "Schoolortal.Entities\\SchoolPortal.Entities.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SchoolPortalApp\\SchoolPortalApp.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]

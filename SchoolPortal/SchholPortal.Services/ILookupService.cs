@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+
+namespace SchoolPortal.Services
+{
+    public class LookupItem
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public interface ILookupService
+    {
+        List<LookupItem> GetCountries();
+        List<LookupItem> GetStates(Guid countryId);
+        List<LookupItem> GetCities(Guid stateId);
+    }
+}

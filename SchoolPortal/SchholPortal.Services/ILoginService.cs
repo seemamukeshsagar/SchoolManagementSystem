@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Schoolortal.Entities.Models;
+using SchoolPortal.Services.ServiceViewModels;
+
+namespace SchoolPortal.Services
+{
+    public interface ILoginService
+    {
+        public UserDetailsOutput? AuthenticateUser(string userName, string password);
+        public string ChangePassword(string userName, string oldPassword, string newPassword);
+    }
+}

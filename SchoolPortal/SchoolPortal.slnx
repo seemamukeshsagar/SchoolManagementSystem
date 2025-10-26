@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="DBAccess/DBAccess.csproj" Id="06c46e69-2643-401f-9d84-8d31baf6a4ee">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="SchholPortal.Services/SchoolPortal.Services.csproj" />
+  <Project Path="Schoolortal.Entities/SchoolPortal.Entities.csproj" />
+  <Project Path="SchoolPortalApp/SchoolPortalApp.csproj" />
+</Solution>

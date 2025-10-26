@@ -1,0 +1,220 @@
+  <style>
+	.nav-sidebar .nav-link {
+	  color: white;
+	  padding: 10px 20px;
+	}
+
+	.nav-sidebar .nav-link:hover,
+	.nav-sidebar .nav-link.active {
+	  background-color: #495057;
+	}
+  </style>
+
+  <!-- Sidebar -->
+  <div class="d-flex flex-column">
+	<ul class="nav nav-pills flex-column mb-auto">
+	  <li class="nav-item">
+		<a href="#" class="nav-link active" data-tooltip="Home">
+		  <i class="bi bi-house-door"></i> <span>Home</span>
+		</a>
+	  </li>
+
+	  <div class="accordion" id="sidebarAccordion">
+	  <li>
+		<a href="#submenu-general" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-general" aria-expanded="false" aria-controls="submenu-general" data-tooltip="General">
+		  <i class="bi bi-gear"></i> <span>General</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-general" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Company")" class="nav-link">Companies</a></li>
+		  <li><a href="@Url.Action("Index", "School")" class="nav-link">School</a></li>
+		  <li><a href="@Url.Action("Index", "Users")" class="nav-link">Users</a></li>
+		  <li><a href="@Url.Action("Index", "Roles")" class="nav-link">Roles</a></li>
+		  <li><a href="@Url.Action("Index", "Privileges")" class="nav-link">Privileges</a></li>
+		  <li><a href="@Url.Action("Index", "SystemParameter")" class="nav-link">System Parameters</a></li>
+		  <li><a href="@Url.Action("Index", "TaskSchedules")" class="nav-link">Schedules</a></li>
+		  <li><a href="@Url.Action("Index", "Holiday")" class="nav-link">Holiday</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-masters" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-masters" aria-expanded="false" aria-controls="submenu-masters" data-tooltip="Masters">
+		  <i class="bi bi-gear"></i> <span>Masters</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-masters" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Categories")" class="nav-link">Categories</a></li>
+		  <li><a href="@Url.Action("Index", "StudentCategories")" class="nav-link">Student Categories</a></li>
+		  <li><a href="@Url.Action("Index", "Class", new { area = "" })" class="nav-link">Classes</a></li>
+		  <li><a href="@Url.Action("Index", "Section")" class="nav-link">Sections</a></li>
+		  <li><a href="@Url.Action("Index", "Subject")" class="nav-link">Subjects</a></li>
+		  <li><a href="@Url.Action("SubCategory", "Subject")" class="nav-link">Subjects - Sub Categories</a></li>
+		  <li><a href="@Url.Action("Index", "Professions")" class="nav-link">Professions</a></li>
+		  <li><a href="@Url.Action("Index", "Qualification")" class="nav-link">Qualifications</a></li>
+		  <li><a href="@Url.Action("Index", "FeesCategory")" class="nav-link">Fees Categories</a></li>
+		  <li><a href="@Url.Action("Index", "DiscountCategory")" class="nav-link">Discount Categories</a></li>
+		  <li><a href="@Url.Action("Index", "Assessments")" class="nav-link">Assesments</a></li>
+		  <li><a href="@Url.Action("Index", "AttendenceReason")" class="nav-link">Attendance Reasons</a></li>
+		</ul>
+	  </li>
+	  
+	  @* <li>
+		<a href="#submenu-classes" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-classes" aria-expanded="false" aria-controls="submenu-classes" data-tooltip="Classes">
+		  <i class="bi bi-folder"></i> <span>Classes</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-classes" data-bs-parent="#sidebarAccordion">
+		  <li><a href="#" class="nav-link">View</a></li>
+		  <li><a href="#" class="nav-link">Create</a></li>
+		</ul>
+	  </li> *@
+	  
+	  <li>
+		<a href="#submenu-students" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-students" aria-expanded="false" aria-controls="submenu-students" data-tooltip="Students">
+		  <i class="bi bi-people"></i> <span>Students</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-students" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Students")" class="nav-link">Students</a></li>
+		  <li><a href="@Url.Action("Index", "Students", new { type = "Admission" })" class="nav-link">Admissions</a></li>
+		  <li><a href="@Url.Action("Index", "Students", new { type = "Promotion" })" class="nav-link">Promote Students</a></li>
+		  <li><a href="@Url.Action("BulkUpload", "Students")" class="nav-link">Bulk Upload</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-staff" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-staff" aria-expanded="false" aria-controls="submenu-staff" data-tooltip="Staff">
+		  <i class="bi bi-person-badge"></i> <span>Staff</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-staff" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Teacher")" class="nav-link">Staff</a></li>
+		  <li><a href="@Url.Action("Create", "Teacher")" class="nav-link">Add New Staff</a></li>
+		  <li><a href="@Url.Action("BulkUpload", "Teacher")" class="nav-link">Bulk Upload</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-attendance" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-attendance" aria-expanded="false" aria-controls="submenu-attendance" data-tooltip="Attendance">
+		  <i class="bi bi-calendar3"></i> <span>Attendance</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-attendance" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("StudentAttendance", "Attendance")" class="nav-link">Student Attendance</a></li>
+		  <li><a href="@Url.Action("StaffAttendance", "Attendance")" class="nav-link">Staff Attendance</a></li>
+		  <li><a href="@Url.Action("Reports", "Attendance")" class="nav-link">Attendance Reports</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-examinations" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-examinations" aria-expanded="false" aria-controls="submenu-examinations" data-tooltip="Examinations">
+		  <i class="bi bi-journal-text"></i> <span>Examinations</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-examinations" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Examination")" class="nav-link">Exam Schedule</a></li>
+		  <li><a href="@Url.Action("MarksEntry", "Examination")" class="nav-link">Marks Entry</a></li>
+		  <li><a href="@Url.Action("Results", "Examination")" class="nav-link">Results</a></li>
+		  <li><a href="@Url.Action("ReportCard", "Examination")" class="nav-link">Report Cards</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-fees" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-fees" aria-expanded="false" aria-controls="submenu-fees" data-tooltip="Fees">
+		  <i class="bi bi-cash-coin"></i> <span>Fees</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-fees" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("CollectFees", "Fees")" class="nav-link">Collect Fees</a></li>
+		  <li><a href="@Url.Action("ViewTransactions", "Fees")" class="nav-link">Transactions</a></li>
+		  <li><a href="@Url.Action("FeeDefaulters", "Fees")" class="nav-link">Fee Defaulters</a></li>
+		  <li><a href="@Url.Action("Reports", "Fees")" class="nav-link">Fee Reports</a></li>
+		</ul>
+	  </li>
+
+	  <li>
+		<a href="#submenu-timetable" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-timetable" aria-expanded="false" aria-controls="submenu-timetable" data-tooltip="Timetable">
+		  <i class="bi bi-calendar-week"></i> <span>Timetable</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-timetable" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "TimeTable")" class="nav-link">TimeTable Setup</a></li>
+		  <li><a href="@Url.Action("TimeTablePeriods", "TimeTable")" class="nav-link">TimeTable Periods</a></li>
+		  <li><a href="@Url.Action("TimeTableClassPeriods", "TimeTable")" class="nav-link">Setup TimeTable Class Periods</a></li>
+		  <li><a href="@Url.Action("Generate", "TimeTable")" class="nav-link">Generate TimeTable Data</a></li>
+		  <li><a href="@Url.Action("TimeTableByClass", "TimeTable")" class="nav-link">TimeTable By Class</a></li>
+		  <li><a href="@Url.Action("TimeTableByTeacher", "TimeTable")" class="nav-link">TimeTable By Teacher</a></li>
+		  <li><a href="@Url.Action("TimeTableSubstitution", "TimeTable")" class="nav-link">TimeTable Substitution</a></li>
+		  <li><a href="@Url.Action("TimeTableReport", "TimeTable")" class="nav-link">TimeTable Substitution Report</a></li>
+		  <li><a href="@Url.Action("TimeTableByClassHistory", "TimeTable")" class="nav-link">History TimeTable By Class</a></li>
+		  <li><a href="@Url.Action("TimeTableByTeacherHistory", "TimeTable")" class="nav-link">History TimeTable By Teacher</a></li>
+		</ul>
+	  </li>
+	  
+	  <li>
+		<a href="#submenu-bills" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-bills" aria-expanded="false" aria-controls="submenu-bills" data-tooltip="Bills">
+		  <i class="bi bi-gear"></i> <span>Bills</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-bills" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "ExpenseCategory")" class="nav-link">Expense Categories</a></li>
+		  <li><a href="@Url.Action("Index", "Vendor")" class="nav-link">Vendors</a></li>
+		  <li><a href="@Url.Action("Index", "Bill")" class="nav-link">Bills</a></li>
+		  <li><a href="@Url.Action("Create", "Bill")" class="nav-link">Create Bill</a></li>
+		  <li><a href="@Url.Action("Index", "Voucher")" class="nav-link">Vouchers</a></li>
+		  <li><a href="@Url.Action("Create", "Voucher")" class="nav-link">Create Voucher</a></li>
+		</ul>
+	  </li>
+	  
+	  <li>
+		<a href="#submenu-fees-management" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-fees-management" aria-expanded="false" aria-controls="submenu-fees-management" data-tooltip="Fees Management">
+		  <i class="bi bi-gear"></i> <span>Fees Management</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-fees-management" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Fees")" class="nav-link">Fees Categories Classes</a></li>
+		  <li><a href="@Url.Action("GenerateData", "Fees")" class="nav-link">Generate Fees Data</a></li>
+		  <li><a href="@Url.Action("ViewPayments", "Fees")" class="nav-link">Fees Payment</a></li>
+		  <li><a href="@Url.Action("Edit", "Fees")" class="nav-link">Edit Fees Amount</a></li>
+		  <li><a href="@Url.Action("CommitFees", "Fees")" class="nav-link">Commit Fees Data</a></li>
+		  <li><a href="@Url.Action("FeesHistory", "Fees")" class="nav-link">Fees History Data</a></li>
+		  <li><a href="@Url.Action("FeesCollection", "Fees")" class="nav-link">Fees Collection Data</a></li>
+		  <li><a href="@Url.Action("Receipts", "Fees")" class="nav-link">Fees Receipt</a></li>
+		</ul>
+	  </li>
+	  
+	  <li>
+		<a href="#submenu-transport" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-transport" aria-expanded="false" aria-controls="submenu-transport" data-tooltip="Transport">
+		  <i class="bi bi-gear"></i> <span>Transport</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-transport" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Locations", "Transport")" class="nav-link">Locations</a></li>
+		  <li><a href="@Url.Action("Index", "Transport")" class="nav-link">Vehicles</a></li>
+		  <li><a href="@Url.Action("Drivers", "Transport")" class="nav-link">Drivers</a></li>
+		  <li><a href="@Url.Action("Cleaners", "Transport")" class="nav-link">Cleaners</a></li>
+		  <li><a href="@Url.Action("Routes", "Transport")" class="nav-link">Routes</a></li>
+		  </ul>
+	  </li>
+	  
+	  <li>
+		<a href="#submenu-inventory" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-inventory" aria-expanded="false" aria-controls="submenu-inventory" data-tooltip="Inventory">
+		  <i class="bi bi-gear"></i> <span>Inventory</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-inventory" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("ItemTypes", "Inventory")" class="nav-link">Item Types</a></li>
+		  <li><a href="@Url.Action("ItemLocation", "Inventory")" class="nav-link">Item Locations</a></li>
+		  <li><a href="@Url.Action("Index", "Inventory")" class="nav-link">Items</a></li>
+		  <li><a href="@Url.Action("ViewInventory", "Inventory")" class="nav-link">Inventory</a></li>
+		</ul>
+	  </li>
+	  
+	  <li>
+		<a href="#submenu-library" data-bs-toggle="collapse" class="nav-link" data-bs-target="#submenu-library" aria-expanded="false" aria-controls="submenu-library" data-tooltip="Library">
+		  <i class="bi bi-gear"></i> <span>Library</span>
+		</a>
+		<ul class="collapse nav flex-column ms-3" id="submenu-library" data-bs-parent="#sidebarAccordion">
+		  <li><a href="@Url.Action("Index", "Library")" class="nav-link">Book Types</a></li>
+		  <li><a href="@Url.Action("BookCategory", "Library")" class="nav-link">Book Categories</a></li>
+		  <li><a href="@Url.Action("Authors", "Library")" class="nav-link">Authors</a></li>
+		  <li><a href="@Url.Action("Publishers", "Library")" class="nav-link">Publishers</a></li>
+		  <li><a href="@Url.Action("Suppliers", "Library")" class="nav-link">Suppliers</a></li>
+		  <li><a href="@Url.Action("ViewBooks", "Library")" class="nav-link">Books</a></li>
+		  <li><a href="@Url.Action("ViewTransactions", "Library")" class="nav-link">Book Transactions</a></li>
+		</ul>
+	  </li>
+	  </div>
+	</ul>
+  </div>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
