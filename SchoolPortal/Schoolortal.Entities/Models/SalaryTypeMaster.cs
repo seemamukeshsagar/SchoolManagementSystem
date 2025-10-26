@@ -30,14 +30,4 @@ public partial class SalaryTypeMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<SalaryHeadMaster> SalaryHeadMaster { get; set; } = new List<SalaryHeadMaster>();
-
-    // public virtual SchoolMaster School { get; set; }
 }

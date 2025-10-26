@@ -32,16 +32,4 @@ public partial class ExpenseCategoryMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ICollection<BillDetails> BillDetails { get; set; } = new List<BillDetails>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<VoucherMaster> VoucherMaster { get; set; } = new List<VoucherMaster>();
 }

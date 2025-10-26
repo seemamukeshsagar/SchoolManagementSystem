@@ -38,18 +38,4 @@ public partial class SalaryHeadMaster
     public Guid? SchoolId { get; set; }
 
     public Guid? CompanyId { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpSalaryDetails> EmpSalaryDetails { get; set; } = new List<EmpSalaryDetails>();
-
-    // public virtual ICollection<EmpSalaryDetailsHistory> EmpSalaryDetailsHistory { get; set; } = new List<EmpSalaryDetailsHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SalaryTypeMaster SalaryType { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

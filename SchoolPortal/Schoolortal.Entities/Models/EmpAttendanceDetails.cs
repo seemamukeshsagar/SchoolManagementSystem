@@ -44,18 +44,4 @@ public partial class EmpAttendanceDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual LeaveTypeMaster AttendenceLeaveType { get; set; }
-
-    // public virtual EmpAttendanceDetails Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual EmpMaster Employee { get; set; }
-
-    // public virtual ICollection<EmpAttendanceDetails> InverseCompany { get; set; } = new List<EmpAttendanceDetails>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

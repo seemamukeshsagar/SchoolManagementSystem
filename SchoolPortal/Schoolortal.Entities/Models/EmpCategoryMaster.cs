@@ -33,21 +33,4 @@ public partial class EmpCategoryMaster
 
     public string StatusMessage { get; set; }
 
-    // public virtual EmpCategoryMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpLeaveDetails> EmpLeaveDetails { get; set; } = new List<EmpLeaveDetails>();
-
-    // public virtual ICollection<EmpLeaveDetailsHistory> EmpLeaveDetailsHistory { get; set; } = new List<EmpLeaveDetailsHistory>();
-
-    // public virtual ICollection<EmpMaster> EmpMasterCategory { get; set; } = new List<EmpMaster>();
-
-    // public virtual ICollection<EmpMaster> EmpMasterEmployeeCategory { get; set; } = new List<EmpMaster>();
-
-    // public virtual ICollection<EmpCategoryMaster> InverseCompany { get; set; } = new List<EmpCategoryMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

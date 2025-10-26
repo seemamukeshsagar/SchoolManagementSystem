@@ -36,22 +36,4 @@ public partial class RouteDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CleanerMaster Cleaner { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DriverMaster Driver { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual RouteMaster Route { get; set; }
-
-    // public virtual ICollection<RouteStopDetails> RouteStopDetails { get; set; } = new List<RouteStopDetails>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual VehicleMaster Vehicle { get; set; }
 }

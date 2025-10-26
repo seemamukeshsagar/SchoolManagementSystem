@@ -26,10 +26,4 @@ public partial class RelationTypeMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<ParentMaster> ParentMaster { get; set; } = new List<ParentMaster>();
 }

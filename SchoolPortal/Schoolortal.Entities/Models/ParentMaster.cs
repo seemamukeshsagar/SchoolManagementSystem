@@ -80,36 +80,4 @@ public partial class ParentMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual CountryMaster Country { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DesigMaster Designation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual CityMaster OfficeCity { get; set; }
-
-    // public virtual CountryMaster OfficeCountry { get; set; }
-
-    // public virtual StateMaster OfficeState { get; set; }
-
-    // public virtual QualificationMaster Qualification { get; set; }
-
-    // public virtual RelationTypeMaster RelationType { get; set; }
-
-    // public virtual ICollection<SMSTaskHistory> SMSTaskHistoryParent { get; set; } = new List<SMSTaskHistory>();
-
-    // public virtual ICollection<SMSTaskHistory> SMSTaskHistoryReceiver { get; set; } = new List<SMSTaskHistory>();
-
-    // public virtual ICollection<ScholasticMaster> ScholasticMaster { get; set; } = new List<ScholasticMaster>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual StateMaster State { get; set; }
 }

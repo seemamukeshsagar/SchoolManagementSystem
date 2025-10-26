@@ -26,18 +26,4 @@ public partial class GenderMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpMaster> EmpMaster { get; set; } = new List<EmpMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RegistrationMaster> RegistrationMaster { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual ICollection<StudentMaster> StudentMaster { get; set; } = new List<StudentMaster>();
-
-    // public virtual ICollection<StudentMasterHistory> StudentMasterHistory { get; set; } = new List<StudentMasterHistory>();
-
-    // public virtual ICollection<TeacherMaster> TeacherMaster { get; set; } = new List<TeacherMaster>();
 }

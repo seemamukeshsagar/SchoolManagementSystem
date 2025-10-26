@@ -51,19 +51,4 @@ public partial class AuthorMaster
 
     public string StatusMessage { get; set; }
 
-    // // public virtual ICollection<BookMaster> BookMaster { get; set; } = new List<BookMaster>();
-
-    // // public virtual CityMaster City { get; set; }
-
-    // // public virtual CompanyMaster Company { get; set; }
-
-    // // public virtual CountryMaster Country { get; set; }
-
-    // // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // // public virtual SchoolMaster School { get; set; }
-
-    // // public virtual StateMaster State { get; set; }
 }

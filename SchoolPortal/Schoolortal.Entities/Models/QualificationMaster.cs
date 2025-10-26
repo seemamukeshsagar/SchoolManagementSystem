@@ -28,14 +28,4 @@ public partial class QualificationMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<DriverMaster> DriverMaster { get; set; } = new List<DriverMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<ParentMaster> ParentMaster { get; set; } = new List<ParentMaster>();
-
-    // public virtual ICollection<TeacherQualificationDetails> TeacherQualificationDetails { get; set; } = new List<TeacherQualificationDetails>();
 }

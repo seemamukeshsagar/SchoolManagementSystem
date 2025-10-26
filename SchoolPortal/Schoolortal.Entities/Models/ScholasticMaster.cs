@@ -38,24 +38,4 @@ public partial class ScholasticMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ICollection<ClassScholasticDetail> ClassScholasticDetail { get; set; } = new List<ClassScholasticDetail>();
-
-    // public virtual ICollection<ClassScholasticDetailHistory> ClassScholasticDetailHistory { get; set; } = new List<ClassScholasticDetailHistory>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ParentMaster Parent { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual ICollection<StudentGradeDetailsHistory> StudentGradeDetailsHistory { get; set; } = new List<StudentGradeDetailsHistory>();
-
-    // public virtual SubjectMaster Subject { get; set; }
 }

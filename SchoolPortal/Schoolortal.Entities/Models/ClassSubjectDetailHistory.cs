@@ -34,18 +34,4 @@ public partial class ClassSubjectDetailHistory
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ClassMaster ClassMaster { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual SubjectMaster Subject { get; set; }
 }

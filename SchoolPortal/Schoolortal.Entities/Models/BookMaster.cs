@@ -66,24 +66,4 @@ public partial class BookMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual AuthorMaster Author { get; set; }
-
-    // public virtual ICollection<BookTransactionDetails> BookTransactionDetails { get; set; } = new List<BookTransactionDetails>();
-
-    // public virtual BookCategoryMaster Category { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual PublisherMaster Publisher { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SupplierMaster Supplier { get; set; }
-
-    // public virtual BookTypeMaster Type { get; set; }
 }

@@ -32,42 +32,4 @@ public partial class SubjectMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ICollection<ClassSubjectDetail> ClassSubjectDetail { get; set; } = new List<ClassSubjectDetail>();
-
-    // public virtual ICollection<ClassSubjectDetailHistory> ClassSubjectDetailHistory { get; set; } = new List<ClassSubjectDetailHistory>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<ScholasticMaster> ScholasticMaster { get; set; } = new List<ScholasticMaster>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<StudentMarksDetails> StudentMarksDetails { get; set; } = new List<StudentMarksDetails>();
-
-    // public virtual ICollection<StudentMarksDetailsHistory> StudentMarksDetailsHistory { get; set; } = new List<StudentMarksDetailsHistory>();
-
-    // public virtual ICollection<StudentReportCardDetails> StudentReportCardDetails { get; set; } = new List<StudentReportCardDetails>();
-
-    // public virtual ICollection<StudentReportCardDetailsHistory> StudentReportCardDetailsHistory { get; set; } = new List<StudentReportCardDetailsHistory>();
-
-    // public virtual ICollection<TeacherClassDetails> TeacherClassDetails { get; set; } = new List<TeacherClassDetails>();
-
-    // public virtual ICollection<TeacherSectionDetails> TeacherSectionDetails { get; set; } = new List<TeacherSectionDetails>();
-
-    // public virtual ICollection<TeacherSubjectDetails> TeacherSubjectDetails { get; set; } = new List<TeacherSubjectDetails>();
-
-    // public virtual ICollection<TimeTableClassPeriodDetails> TimeTableClassPeriodDetails { get; set; } = new List<TimeTableClassPeriodDetails>();
-
-    // public virtual ICollection<TimeTableClassPeriodDetailsHistory> TimeTableClassPeriodDetailsHistory { get; set; } = new List<TimeTableClassPeriodDetailsHistory>();
-
-    // public virtual ICollection<TimeTableDetailsHistory> TimeTableDetailsHistory { get; set; } = new List<TimeTableDetailsHistory>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetails> TimeTableSubstitutionDetails { get; set; } = new List<TimeTableSubstitutionDetails>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistory { get; set; } = new List<TimeTableSubstitutionDetailsHistory>();
 }

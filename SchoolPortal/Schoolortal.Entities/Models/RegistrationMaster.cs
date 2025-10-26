@@ -128,44 +128,4 @@ public partial class RegistrationMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual BloodGroupMaster BloodGroup { get; set; }
-
-    // public virtual CategoryMaster Category { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual ClassMaster Class { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual CountryMaster Country { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DesigMaster FathersDesignation { get; set; }
-
-    // public virtual RegistrationMaster FathersQualification { get; set; }
-
-    // public virtual GenderMaster GenderNavigation { get; set; }
-
-    // public virtual ICollection<RegistrationMaster> InverseFathersQualification { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual ICollection<RegistrationMaster> InverseMothersQualification { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual DesigMaster MothersDesignation { get; set; }
-
-    // public virtual RegistrationMaster MothersQualification { get; set; }
-
-    // public virtual ReligionMaster Religion { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual ClassMaster SiblingClassMaster { get; set; }
-
-    // public virtual StateMaster State { get; set; }
 }

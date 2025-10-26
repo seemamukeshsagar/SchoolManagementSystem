@@ -38,24 +38,4 @@ public partial class TimeTablePeriodMaster
     public string StatusMessage { get; set; }
 
     public string PeriodNumber { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual ICollection<TimeTableClassPeriodDetails> TimeTableClassPeriodDetails { get; set; } = new List<TimeTableClassPeriodDetails>();
-
-    // public virtual ICollection<TimeTableClassPeriodDetailsHistory> TimeTableClassPeriodDetailsHistory { get; set; } = new List<TimeTableClassPeriodDetailsHistory>();
-
-    // public virtual ICollection<TimeTableDetailsHistory> TimeTableDetailsHistory { get; set; } = new List<TimeTableDetailsHistory>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetails> TimeTableSubstitutionDetails { get; set; } = new List<TimeTableSubstitutionDetails>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistory { get; set; } = new List<TimeTableSubstitutionDetailsHistory>();
 }

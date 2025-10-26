@@ -29,9 +29,4 @@ public partial class Audit
 
     public Guid? CompanyId { get; set; }
 
-    // // public virtual UserDetails ChangeUser { get; set; }
-
-    // // public virtual CompanyMaster Company { get; set; }
-
-    // // public virtual SchoolMaster School { get; set; }
 }

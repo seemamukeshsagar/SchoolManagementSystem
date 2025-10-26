@@ -30,14 +30,4 @@ public partial class BookTransactionType
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ICollection<BookTransactionDetails> BookTransactionDetails { get; set; } = new List<BookTransactionDetails>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

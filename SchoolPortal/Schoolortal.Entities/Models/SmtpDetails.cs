@@ -44,14 +44,4 @@ public partial class SmtpDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<SmtpDetails> InverseSchool { get; set; } = new List<SmtpDetails>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SmtpDetails School { get; set; }
 }

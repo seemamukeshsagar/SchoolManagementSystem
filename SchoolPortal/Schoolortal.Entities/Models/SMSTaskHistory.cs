@@ -46,20 +46,4 @@ public partial class SMSTaskHistory
     public Guid ModifiedBy { get; set; }
 
     public DateTime ModifiedDate { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<SMSTaskHistory> InverseSchool { get; set; } = new List<SMSTaskHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ParentMaster Parent { get; set; }
-
-    // public virtual ParentMaster Receiver { get; set; }
-
-    // public virtual SMSTaskHistory School { get; set; }
-
-    // public virtual SMSTaskSchedule Task { get; set; }
 }

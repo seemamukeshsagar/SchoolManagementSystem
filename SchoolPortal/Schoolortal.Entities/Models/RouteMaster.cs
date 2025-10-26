@@ -40,26 +40,4 @@ public partial class RouteMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual RouteLocationMaster EndLocation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RouteDetails> RouteDetails { get; set; } = new List<RouteDetails>();
-
-    // public virtual ICollection<RouteStopDetails> RouteStopDetails { get; set; } = new List<RouteStopDetails>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual RouteLocationMaster StartLocation { get; set; }
-
-    // public virtual ICollection<StudentMaster> StudentMaster { get; set; } = new List<StudentMaster>();
-
-    // public virtual ICollection<StudentMasterHistory> StudentMasterHistory { get; set; } = new List<StudentMasterHistory>();
 }

@@ -42,14 +42,4 @@ public partial class SMSTaskSchedule
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<SMSTaskHistory> SMSTaskHistory { get; set; } = new List<SMSTaskHistory>();
-
-    // public virtual ICollection<SMSTaskSmtpDetails> SMSTaskSmtpDetails { get; set; } = new List<SMSTaskSmtpDetails>();
 }

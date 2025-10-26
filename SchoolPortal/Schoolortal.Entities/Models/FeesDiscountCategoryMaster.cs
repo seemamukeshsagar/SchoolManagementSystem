@@ -38,18 +38,4 @@ public partial class FeesDiscountCategoryMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual FeesCategoryMaster FeeCategory { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<StudentMaster> StudentMaster { get; set; } = new List<StudentMaster>();
-
-    // public virtual ICollection<StudentMasterHistory> StudentMasterHistory { get; set; } = new List<StudentMasterHistory>();
 }

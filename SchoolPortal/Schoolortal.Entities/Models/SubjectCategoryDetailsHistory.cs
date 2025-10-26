@@ -40,20 +40,4 @@ public partial class SubjectCategoryDetailsHistory
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<SubjectCategoryDetailsHistory> InverseSubject { get; set; } = new List<SubjectCategoryDetailsHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual SubjectCategoryDetailsHistory Subject { get; set; }
-
-    // public virtual SubjectCategoryDetails SubjectCategory { get; set; }
 }

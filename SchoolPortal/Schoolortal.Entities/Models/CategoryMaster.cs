@@ -26,18 +26,4 @@ public partial class CategoryMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RegistrationMaster> RegistrationMaster { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual ICollection<StudentGradeDetails> StudentGradeDetails { get; set; } = new List<StudentGradeDetails>();
-
-    // public virtual ICollection<StudentGradeDetailsHistory> StudentGradeDetailsHistory { get; set; } = new List<StudentGradeDetailsHistory>();
-
-    // public virtual ICollection<StudentMaster> StudentMaster { get; set; } = new List<StudentMaster>();
-
-    // public virtual ICollection<StudentMasterHistory> StudentMasterHistory { get; set; } = new List<StudentMasterHistory>();
 }

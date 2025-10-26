@@ -66,44 +66,4 @@ public partial class TeacherMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual CountryMaster Country { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual GenderMaster GenderNavigation { get; set; }
-
-    // public virtual MaritalStatus MaritalStatus { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual StateMaster State { get; set; }
-
-    // public virtual ICollection<StudentMaster> StudentMaster { get; set; } = new List<StudentMaster>();
-
-    // public virtual ICollection<StudentMasterHistory> StudentMasterHistory { get; set; } = new List<StudentMasterHistory>();
-
-    // public virtual ICollection<TeacherDocumentDetails> TeacherDocumentDetails { get; set; } = new List<TeacherDocumentDetails>();
-
-    // public virtual ICollection<TeacherQualificationDetails> TeacherQualificationDetails { get; set; } = new List<TeacherQualificationDetails>();
-
-    // public virtual ICollection<TeacherSectionDetails> TeacherSectionDetails { get; set; } = new List<TeacherSectionDetails>();
-
-    // public virtual ICollection<TeacherSubjectDetails> TeacherSubjectDetails { get; set; } = new List<TeacherSubjectDetails>();
-
-    // public virtual ICollection<TimeTableDetailsHistory> TimeTableDetailsHistory { get; set; } = new List<TimeTableDetailsHistory>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistoryTeacher { get; set; } = new List<TimeTableSubstitutionDetailsHistory>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistoryTeacherNew { get; set; } = new List<TimeTableSubstitutionDetailsHistory>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetails> TimeTableSubstitutionDetailsTeacher { get; set; } = new List<TimeTableSubstitutionDetails>();
-
-    // public virtual ICollection<TimeTableSubstitutionDetails> TimeTableSubstitutionDetailsTeacherNew { get; set; } = new List<TimeTableSubstitutionDetails>();
 }

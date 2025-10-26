@@ -40,30 +40,4 @@ public partial class LeaveTypeMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpAttendanceDetails> EmpAttendanceDetails { get; set; } = new List<EmpAttendanceDetails>();
-
-    // public virtual ICollection<EmpAttendanceDetailsHistory> EmpAttendanceDetailsHistory { get; set; } = new List<EmpAttendanceDetailsHistory>();
-
-    // public virtual ICollection<EmpCatLeaveDetails> EmpCatLeaveDetailsEmpCatLeaveCategory { get; set; } = new List<EmpCatLeaveDetails>();
-
-    // public virtual ICollection<EmpCatLeaveDetailsHistory> EmpCatLeaveDetailsHistoryEmpCatLeaveCategory { get; set; } = new List<EmpCatLeaveDetailsHistory>();
-
-    // public virtual ICollection<EmpCatLeaveDetailsHistory> EmpCatLeaveDetailsHistoryLeaveType { get; set; } = new List<EmpCatLeaveDetailsHistory>();
-
-    // public virtual ICollection<EmpCatLeaveDetails> EmpCatLeaveDetailsLeaveType { get; set; } = new List<EmpCatLeaveDetails>();
-
-    // public virtual ICollection<EmpLeaveAvailDetails> EmpLeaveAvailDetails { get; set; } = new List<EmpLeaveAvailDetails>();
-
-    // public virtual ICollection<EmpLeaveDetails> EmpLeaveDetails { get; set; } = new List<EmpLeaveDetails>();
-
-    // public virtual ICollection<EmpLeaveDetailsHistory> EmpLeaveDetailsHistory { get; set; } = new List<EmpLeaveDetailsHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

@@ -16,8 +16,4 @@ public partial class ErrorType
     public Guid CompanyId { get; set; }
 
     public Guid SchoolId { get; set; }
-
-    // public virtual ICollection<Error> Error { get; set; } = new List<Error>();
-
-    // public virtual SchoolMaster School { get; set; }
 }

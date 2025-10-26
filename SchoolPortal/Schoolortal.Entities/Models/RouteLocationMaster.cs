@@ -36,18 +36,4 @@ public partial class RouteLocationMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RouteMaster> RouteMasterEndLocation { get; set; } = new List<RouteMaster>();
-
-    // public virtual ICollection<RouteMaster> RouteMasterStartLocation { get; set; } = new List<RouteMaster>();
-
-    // public virtual SchoolMaster School { get; set; }
 }

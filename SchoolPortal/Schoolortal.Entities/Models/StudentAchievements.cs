@@ -36,18 +36,4 @@ public partial class StudentAchievements
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<StudentAchievements> InverseSchool { get; set; } = new List<StudentAchievements>();
-
-    // public virtual ICollection<StudentAchievements> InverseSessionNavigation { get; set; } = new List<StudentAchievements>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual StudentAchievements School { get; set; }
-
-    // public virtual StudentAchievements SessionNavigation { get; set; }
 }

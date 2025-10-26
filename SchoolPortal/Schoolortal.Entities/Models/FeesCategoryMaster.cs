@@ -28,16 +28,4 @@ public partial class FeesCategoryMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<FeeClassDetails> FeeClassDetails { get; set; } = new List<FeeClassDetails>();
-
-    // public virtual ICollection<FeeClassDetailsHistory> FeeClassDetailsHistory { get; set; } = new List<FeeClassDetailsHistory>();
-
-    // public virtual ICollection<FeesDiscountCategoryMaster> FeesDiscountCategoryMaster { get; set; } = new List<FeesDiscountCategoryMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<StudentFeeDetailsHistory> StudentFeeDetailsHistory { get; set; } = new List<StudentFeeDetailsHistory>();
 }

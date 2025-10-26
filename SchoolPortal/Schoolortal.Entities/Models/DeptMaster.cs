@@ -32,22 +32,4 @@ public partial class DeptMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<DeptDesigDetails> DeptDesigDetails { get; set; } = new List<DeptDesigDetails>();
-
-    // public virtual ICollection<EmpMaster> EmpMaster { get; set; } = new List<EmpMaster>();
-
-    // public virtual ICollection<EmpSalaryMaster> EmpSalaryMaster { get; set; } = new List<EmpSalaryMaster>();
-
-    // public virtual ICollection<EmpSalaryMasterHistory> EmpSalaryMasterHistory { get; set; } = new List<EmpSalaryMasterHistory>();
-
-    // public virtual ICollection<HolidayDeptDetails> HolidayDeptDetails { get; set; } = new List<HolidayDeptDetails>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

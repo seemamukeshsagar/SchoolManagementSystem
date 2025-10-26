@@ -54,20 +54,4 @@ public partial class VisitorMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual CountryMaster Country { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<VisitorMaster> InverseState { get; set; } = new List<VisitorMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual VisitorMaster State { get; set; }
 }

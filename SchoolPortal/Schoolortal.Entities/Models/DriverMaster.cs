@@ -70,24 +70,4 @@ public partial class DriverMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual DriverMaster Company { get; set; }
-
-    // public virtual CountryMaster Country { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<DriverMaster> InverseCompany { get; set; } = new List<DriverMaster>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual QualificationMaster Qualification { get; set; }
-
-    // public virtual ICollection<RouteDetails> RouteDetails { get; set; } = new List<RouteDetails>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual StateMaster State { get; set; }
 }

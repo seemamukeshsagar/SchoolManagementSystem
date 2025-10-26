@@ -16,10 +16,4 @@ public partial class ErrorDetail
     public Guid CompanyId { get; set; }
 
     public Guid SchoolId { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual Error Error { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

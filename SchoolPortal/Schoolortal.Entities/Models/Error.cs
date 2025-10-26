@@ -24,14 +24,4 @@ public partial class Error
     public Guid SchoolId { get; set; }
 
     public DateTime ServerTimeStamp { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual ICollection<ErrorDetail> ErrorDetail { get; set; } = new List<ErrorDetail>();
-
-    // public virtual ErrorType ErrorType { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual UserDetails User { get; set; }
 }

@@ -30,20 +30,4 @@ public partial class SalaryCode
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpSalaryDetails> EmpSalaryDetails { get; set; } = new List<EmpSalaryDetails>();
-
-    // public virtual ICollection<EmpSalaryDetailsHistory> EmpSalaryDetailsHistory { get; set; } = new List<EmpSalaryDetailsHistory>();
-
-    // public virtual ICollection<EmpSalaryStructureDetails> EmpSalaryStructureDetails { get; set; } = new List<EmpSalaryStructureDetails>();
-
-    // public virtual ICollection<EmpSalaryStructureDetailsHistory> EmpSalaryStructureDetailsHistory { get; set; } = new List<EmpSalaryStructureDetailsHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

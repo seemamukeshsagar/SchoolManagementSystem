@@ -34,18 +34,4 @@ public partial class LocationMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CityMaster City { get; set; }
-
-    // public virtual ICollection<ClassSectionDetail> ClassSectionDetail { get; set; } = new List<ClassSectionDetail>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RouteStopDetails> RouteStopDetails { get; set; } = new List<RouteStopDetails>();
-
-    // public virtual SchoolMaster School { get; set; }
 }

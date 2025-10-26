@@ -42,24 +42,4 @@ public partial class TimeTableDetailsHistory
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ClassMaster Class { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual TimeTablePeriodMaster Period { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SectionMaster Section { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
-
-    // public virtual SubjectMaster Subject { get; set; }
-
-    // public virtual TeacherMaster Teacher { get; set; }
 }

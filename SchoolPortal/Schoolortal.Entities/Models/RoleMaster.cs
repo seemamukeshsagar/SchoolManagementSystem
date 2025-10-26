@@ -32,16 +32,4 @@ public partial class RoleMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RolePrivileges> RolePrivileges { get; set; } = new List<RolePrivileges>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<UserDetails> UserDetails { get; set; } = new List<UserDetails>();
 }

@@ -32,16 +32,4 @@ public partial class TeacherQualificationDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual QualificationMaster Qualification { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual TeacherMaster Teacher { get; set; }
 }

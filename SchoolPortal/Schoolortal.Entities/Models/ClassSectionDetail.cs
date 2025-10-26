@@ -34,18 +34,4 @@ public partial class ClassSectionDetail
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ClassMaster ClassMaster { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual LocationMaster Location { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SectionMaster SectionMaster { get; set; }
 }

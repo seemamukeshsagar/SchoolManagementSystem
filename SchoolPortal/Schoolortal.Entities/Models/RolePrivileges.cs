@@ -28,12 +28,4 @@ public partial class RolePrivileges
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual Privileges Privilege { get; set; }
-
-    // public virtual RoleMaster Role { get; set; }
 }

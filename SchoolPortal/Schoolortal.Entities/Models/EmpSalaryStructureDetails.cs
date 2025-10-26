@@ -44,22 +44,4 @@ public partial class EmpSalaryStructureDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DesigGradeDetails DesignationGrade { get; set; }
-
-    // public virtual EmpMaster Employee { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SalaryCode SalaryCode { get; set; }
-
-    // public virtual SalaryType SalaryType { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster SessionNavigation { get; set; }
 }

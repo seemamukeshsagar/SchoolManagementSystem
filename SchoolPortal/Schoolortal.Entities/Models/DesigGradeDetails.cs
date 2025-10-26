@@ -32,28 +32,4 @@ public partial class DesigGradeDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DesigMaster Designation { get; set; }
-
-    // public virtual ICollection<EmpSalaryMaster> EmpSalaryMaster { get; set; } = new List<EmpSalaryMaster>();
-
-    // public virtual ICollection<EmpSalaryMasterHistory> EmpSalaryMasterHistory { get; set; } = new List<EmpSalaryMasterHistory>();
-
-    // public virtual ICollection<EmpSalaryStructureDetails> EmpSalaryStructureDetails { get; set; } = new List<EmpSalaryStructureDetails>();
-
-    // public virtual ICollection<EmpSalaryStructureDetailsHistory> EmpSalaryStructureDetailsHistory { get; set; } = new List<EmpSalaryStructureDetailsHistory>();
-
-    // public virtual GradeMaster Grade { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<SalaryDesigGradeDetails> SalaryDesigGradeDetails { get; set; } = new List<SalaryDesigGradeDetails>();
-
-    // public virtual ICollection<SalaryDesigGradeDetailsHistory> SalaryDesigGradeDetailsHistory { get; set; } = new List<SalaryDesigGradeDetailsHistory>();
-
-    // public virtual SchoolMaster School { get; set; }
 }

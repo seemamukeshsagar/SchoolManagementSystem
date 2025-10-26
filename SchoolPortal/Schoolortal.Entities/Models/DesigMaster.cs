@@ -32,30 +32,4 @@ public partial class DesigMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<DeptDesigDetails> DeptDesigDetails { get; set; } = new List<DeptDesigDetails>();
-
-    // public virtual ICollection<DesigGradeDetails> DesigGradeDetails { get; set; } = new List<DesigGradeDetails>();
-
-    // public virtual ICollection<EmpMaster> EmpMaster { get; set; } = new List<EmpMaster>();
-
-    // public virtual ICollection<EmpSalaryMaster> EmpSalaryMaster { get; set; } = new List<EmpSalaryMaster>();
-
-    // public virtual ICollection<EmpSalaryMasterHistory> EmpSalaryMasterHistory { get; set; } = new List<EmpSalaryMasterHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<ParentMaster> ParentMaster { get; set; } = new List<ParentMaster>();
-
-    // public virtual ICollection<RegistrationMaster> RegistrationMasterFathersDesignation { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual ICollection<RegistrationMaster> RegistrationMasterMothersDesignation { get; set; } = new List<RegistrationMaster>();
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<UserDetails> UserDetails { get; set; } = new List<UserDetails>();
 }

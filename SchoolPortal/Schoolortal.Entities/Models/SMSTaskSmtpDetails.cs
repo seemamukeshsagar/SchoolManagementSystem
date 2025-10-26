@@ -46,16 +46,4 @@ public partial class SMSTaskSmtpDetails
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<SMSTaskSmtpDetails> InverseSchool { get; set; } = new List<SMSTaskSmtpDetails>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SMSTaskSmtpDetails School { get; set; }
-
-    // public virtual SMSTaskSchedule Task { get; set; }
 }

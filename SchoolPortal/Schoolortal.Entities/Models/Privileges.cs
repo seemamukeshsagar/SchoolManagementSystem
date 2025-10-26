@@ -28,10 +28,4 @@ public partial class Privileges
     public string StatusMessage { get; set; }
 
     public Guid? PrivilegeParentId { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual ICollection<RolePrivileges> RolePrivileges { get; set; } = new List<RolePrivileges>();
 }

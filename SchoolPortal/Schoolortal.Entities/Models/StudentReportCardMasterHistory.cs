@@ -44,20 +44,4 @@ public partial class StudentReportCardMasterHistory
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ClassMaster Class { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual StudentReportCardMaster ReportCard { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SectionMaster Section { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
 }

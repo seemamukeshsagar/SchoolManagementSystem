@@ -46,14 +46,4 @@ public partial class SMSTask
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ICollection<ClassSMSTasksDetails> ClassSMSTasksDetails { get; set; } = new List<ClassSMSTasksDetails>();
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
 }

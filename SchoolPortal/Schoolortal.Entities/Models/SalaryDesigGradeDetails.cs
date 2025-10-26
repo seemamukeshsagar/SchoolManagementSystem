@@ -34,16 +34,4 @@ public partial class SalaryDesigGradeDetails
     public Guid? SchoolId { get; set; }
 
     public Guid? CompanyId { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual DesigGradeDetails DesignationGrade { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual SessionMaster Session { get; set; }
 }

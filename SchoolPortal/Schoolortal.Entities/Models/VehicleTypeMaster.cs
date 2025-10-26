@@ -30,16 +30,4 @@ public partial class VehicleTypeMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual CompanyMaster Company { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
-
-    // public virtual SchoolMaster School { get; set; }
-
-    // public virtual ICollection<VehicleExpenseDetails> VehicleExpenseDetails { get; set; } = new List<VehicleExpenseDetails>();
-
-    // public virtual ICollection<VehicleMaster> VehicleMaster { get; set; } = new List<VehicleMaster>();
 }

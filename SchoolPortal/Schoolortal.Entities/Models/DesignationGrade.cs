@@ -24,12 +24,4 @@ public partial class DesignationGrade
     public Guid? ModifiedBy { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual ICollection<EmpSalaryDetails> EmpSalaryDetails { get; set; } = new List<EmpSalaryDetails>();
-
-    // public virtual ICollection<EmpSalaryDetailsHistory> EmpSalaryDetailsHistory { get; set; } = new List<EmpSalaryDetailsHistory>();
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
 }

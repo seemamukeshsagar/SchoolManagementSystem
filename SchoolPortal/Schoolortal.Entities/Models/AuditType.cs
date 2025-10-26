@@ -18,8 +18,4 @@ public partial class AuditType
     public Guid? SchoolId { get; set; }
 
     public Guid? CompanyId { get; set; }
-
-    // // public virtual CompanyMaster Company { get; set; }
-
-    // // public virtual SchoolMaster School { get; set; }
 }

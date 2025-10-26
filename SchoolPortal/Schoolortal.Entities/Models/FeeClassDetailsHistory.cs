@@ -34,12 +34,4 @@ public partial class FeeClassDetailsHistory
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
-
-    // public virtual ClassMaster ClassMaster { get; set; }
-
-    // public virtual UserDetails CreatedByNavigation { get; set; }
-
-    // public virtual FeesCategoryMaster FeesCategory { get; set; }
-
-    // public virtual UserDetails ModifiedByNavigation { get; set; }
 }
