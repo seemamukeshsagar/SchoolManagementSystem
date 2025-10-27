@@ -26,7 +26,7 @@ namespace SchoolPortal.DBAccess.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SAGAR\\\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Nam" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SAGAR\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Nam" +
             "e=Unity Enterprise;Integrated Security=True")]
         public string DefaultConnectionString {
             get {
@@ -46,7 +46,7 @@ namespace SchoolPortal.DBAccess.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SAGAR\\\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Nam" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SAGAR\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Nam" +
             "e=Unity Enterprise;Integrated Security=True;ApplicationIntent=ReadOnly")]
         public string ReadOnlyDefaultConnectionString {
             get {

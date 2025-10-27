@@ -1,0 +1,1428 @@
+﻿ <div class="bg-center">
+		<!-- header -->
+		<header>
+		
+			   
+		  <div class="extra-wrap">
+		 
+		   <h1><a href="#">Prabhaat</a></h1>
+
+	 <table class="listNew">
+			
+		   <tr>
+		   <td>
+		   <asp:Label ID="lblCOmpany" runat="server" CssClass="UserMessage" Text="Company"></asp:Label>
+		  
+		  
+			<telerik:RadComboBox ID="cmbCompany" runat="server"   AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="cmbCompany_SelectedIndexChanged">
+											<Items>
+												<telerik:RadComboBoxItem Text="-----Select-----" Value="0" />
+											</Items>
+										</telerik:RadComboBox>
+			 </td>     
+				   
+			   <td> 
+				 <asp:Label ID="lblSchool" runat="server" CssClass="UserMessage" Text="School"></asp:Label>
+			 <telerik:RadComboBox ID="cmbSchool" runat="server"   AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="cmbSchool_SelectedIndexChanged">
+											<Items>
+												<telerik:RadComboBoxItem Text="-----Select-----" Value="0" />
+											</Items>
+										</telerik:RadComboBox>
+									  
+		   </td>
+		   </tr>
+		   <tr>
+		   <td align="right" colspan="2">
+		 
+		   <br />
+				<asp:Label ID="ltUSerInfo" runat="server" CssClass="UserMessagenew" style="text-align:right"></asp:Label>  
+			 
+			   
+			  
+				
+			
+		   </td>
+		   </tr>
+		   <tr>
+		   <td colspan="2"  align="right">
+		   
+			
+		 
+			  
+				 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Home"))
+					{
+					 %>
+				<a href="display.aspx"  style="color:White;">Home&nbsp;|&nbsp;</a>
+				<% } %>
+			 
+				<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Logout"))
+				   {
+					 %>
+					 
+					 <asp:LinkButton id="lnkLogout" style="color:White;" runat="server" OnClick="lnkLogout_click">Logout</asp:LinkButton>
+				
+			   <% } %>
+			 
+			
+			
+		   </td>
+		  
+		   </tr>
+				   
+				
+		   
+		  
+		  
+			
+		  
+		   
+		 
+
+		
+			 
+	   </table>
+				
+		  </div>
+		  
+		  <div class="clear">
+   
+
+
+			<table width="1200" border="1" cellspacing="0" cellpadding="0">
+			  <tr>
+				<td>
+					<ul id="css3menu1" class="topmenu">
+				  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+					  <td>
+
+
+					   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage General"))
+						  {
+					 %>
+							<li class="topmenu"><a href="#" style="height:25px;line-height:25px;">General</a>
+							<ul>
+								
+							
+						   
+								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Companies"))
+								 {
+								%>
+								 <li class="subfirst"> 
+											<a href="#" style="height:25px;line-height:25px;">Companies</a> 
+											<ul>
+												<li class="subfirst"> 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Companies"))
+													{
+														%>
+														 <a href="frmCompanyMaster.aspx">View List</a> 
+													<%
+													}   
+													%>
+													  </li>
+											<li > 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Company"))
+														{
+															%>
+													   <a href="frmCompanyDetails.aspx?Mode=N">Create New</a>
+													<%
+													}   
+													%>
+											</li>
+									 </ul>
+							 
+							 </li>
+							  <%
+						  }
+						 %>
+						
+							
+								 
+								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Schools"))
+											 {
+								%>
+								<li> 
+											<a href="#" style="height:25px;line-height:25px;">Schools</a> 
+											<ul>
+												<li class="subfirst"> 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Schools"))
+													{
+														%>
+														 <a href="frmSchoolMaster.aspx">View List</a> 
+											   
+													<%
+														}   
+													%>
+													  </li>
+											<li > 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create School"))
+														{
+															%>
+													   <a href="frmSchoolDetails.aspx?mode=N">Create New</a>
+													<%
+													}   
+													%>
+											</li>
+									 </ul>
+							 </li>
+
+
+							<%
+								}   
+							%>
+
+
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Users"))
+											 {
+								%>
+								<li> 
+											<a href="#" style="height:25px;line-height:25px;">Users</a> 
+											<ul>
+												<li class="subfirst"> 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Users"))
+													{
+														%>
+														 <a href="frmUsersList.aspx">View List</a> 
+												
+													<%
+														}   
+													%>
+													 </li>
+											<li > 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create User"))
+														{
+															%>
+													   <a href="frmUserDetails.aspx?Mode=N">Create New</a>
+													<%
+													}   
+													%>
+											</li>
+									 </ul>
+							 </li>
+
+
+							<%
+								}   
+							%>
+
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Roles"))
+											 {
+								%>
+								<li> 
+											<a href="#" style="height:25px;line-height:25px;">Roles</a> 
+											<ul>
+												<li class="subfirst"> 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Roles"))
+													{
+														%>
+														 <a href="frmRoleMaster.aspx">View List</a> 
+											   
+													<%
+														}   
+													%>
+													  </li>
+											<li > 
+													<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Role"))
+														{
+															%>
+													   <a href="frmRoleDetails.aspx?mode=N">Create New</a>
+													<%
+													}   
+													%>
+											</li>
+									 </ul>
+							 </li>
+
+
+							<%
+								}   
+							%>
+						 
+						  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Edit System Parameters"))
+											 {
+								%>
+								<li> 
+											<a href="frmSystemParameters.aspx" style="height:25px;line-height:25px;">System Parameters</a> 
+								  <%
+								}   
+							%>
+							  </li>
+							 
+
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Task Schedules"))
+											 {
+								%>
+								<li> 
+											<a href="#" style="height:25px;line-height:25px;">Task Schedules</a> 
+											
+											 <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Task Schedules"))
+								{
+							 %>
+							 <a href="frmTaskSchedules.aspx">View Task Schedules</a>
+						   
+							<%} %>
+							</li>
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Task Schedule"))
+								{
+							 %>
+							 <a href="frmTaskScheduleDetails.aspx?Mode=N">Create New </a>
+							<%} %>
+							</li>
+
+							</ul>
+							 </li>
+							 <%
+								}   
+							%>
+						   
+					 
+
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Holidays"))
+											 {
+								%>
+								<li> 
+											<a href="#" style="height:25px;line-height:25px;">Holidays</a> 
+											
+											 <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Holiday Type"))
+								{
+							 %>
+							 <a href="frmHolidayTypeMaster.aspx">View Types</a>
+						   
+							<%} %>
+							</li>
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Holidays"))
+								{
+							 %>
+							 <a href="frmSelectSession.aspx?Mode=H">View List</a>
+							<%} %>
+							</li>
+
+							</ul>
+
+
+
+
+							 </li>
+
+
+							<%
+								}   
+							%>
+						</ul>
+
+						</li>
+						<%
+						  }
+						 %>
+
+
+
+
+
+
+
+					   
+
+						 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Masters"))
+								 {
+							 %>
+
+						 <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Masters</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Categories"))
+								{
+							 %>
+							<a href="frmCategoryMaster.aspx">Student Categories</a>
+							<%} %>
+							</li>
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Classes"))
+								{
+							 %>
+							<a href="frmClassMaster.aspx">Classes</a>
+							<%} %>
+							</li>
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Sections"))
+							   {
+							 %>
+							<a href="frmSectionMaster.aspx">Sections</a>
+							<%} %>
+							</li>
+
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Subjects"))
+							   {
+							 %>
+							<a href="frmSubjectMaster.aspx">Subjects</a>
+							<%} %>
+							</li>
+
+							 <li>
+						   
+							<a href="frmSubCategoryMaster.aspx">Subjects - Sub Categories</a>
+						   
+							</li>
+
+						 
+
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Professions"))
+							   {
+							 %>
+							<a href="frmProfessionMaster.aspx">Professions</a>
+							<%} %>
+							</li>
+							<li>
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Qualifications"))
+								{
+							 %>
+							<a href="frmQualificationMaster.aspx">Qualifications</a>
+							<%} %>
+							</li>
+					  
+						   <li >
+						<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Categories"))
+					   {
+							 %>
+							<a href="frmFeesCategoriesList.aspx">Fees Categories</a>
+							<%} %>
+							</li>
+
+							  <li >
+						<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Discount Categories"))
+					   {
+							 %>
+							<a href="frmDiscountCategoriesList.aspx">Discount Categories</a>
+							<%} %>
+							</li>
+
+							 <li >
+								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Assesments"))
+					   {
+							 %>
+							<a href="frmAssesmentMaster.aspx">Assesment Types</a>
+							<%} %>
+							</li>
+						  
+							<li >
+								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Attendance Reasons"))
+								{
+							 %>
+							<a href="frmAttendanceReasonMaster.aspx">Attendance Reasons</a>
+							<%} %>
+							</li>
+
+						  </ul>
+						</li>
+						<%} %>
+					 
+					 <!----------------------------Classes Start--------------------------------->
+					  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Classes"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Classes</span></a>
+						  
+						<asp:Literal id="ltClassesMenu" runat="server" ></asp:Literal>
+
+						</li>
+						<%} %>
+
+						<!----------------------------Classes End--------------------------------->
+
+
+
+
+
+
+
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Students"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Students</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Students"))
+					   {
+							 %>
+							<a href="frmStudentList.aspx">View List</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Student"))
+								{
+							 %>
+							<a href="frmStudentDetails.aspx?Mode=N&Refer=STU">Create New</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Parents"))
+								{
+							 %>
+							<a href="frmParentsList.aspx">Parents</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Attendance"))
+								{
+							 %>
+							<a href="frmSelectAttendanceDetails.aspx?Mode=A">Attendance</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Delete Attendance"))
+								{
+							 %>
+							<a href="frmSelectAttendanceDetails.aspx?Mode=D">Delete Attendance Data</a>
+							<%} %>
+							</li>
+
+							  <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Commit Student Attendance"))
+								{
+							 %>
+							<a href="frmSelectAttendanceDetails.aspx?Mode=C">Commit Attendance Data</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Attendance History"))
+								{
+							 %>
+							<a href="frmSelectAttendanceDetails.aspx?Mode=H">View Attendance History</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Absent Notification"))
+								{
+							 %>
+							<a href="frmAbsentNotificationList.aspx">Absent Notification</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Student History"))
+								{
+							 %>
+							<a href="frmSelectStudentHistory.aspx">View History</a>
+							<%} %>
+							</li>
+						  </ul>
+						</li>
+						<%} %>
+
+
+					   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Teachers"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Teachers</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Teachers"))
+					   {
+							 %>
+							<a href="frmTeacherMaster.aspx">View List</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Teacher"))
+								{
+							 %>
+							<a href="frmEmpDetails.aspx?Mode=N&ECT=1&Refer=TM">Create New</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Teacher Classes"))
+								{
+							 %>
+							<a href="frmTeacherClassSubjectList.aspx">Teacher Class Subject Details</a>
+							<%} %>
+							</li>
+						  </ul>
+						</li>
+						<%} %>
+
+
+						   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Exams"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Exams</span></a>
+						  <ul>
+
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Edit Marks"))
+					   {
+							 %>
+							<a href="frmSelectClassMarksDetails.aspx">Data Entry Marks</a>
+							<%} %>
+							</li>
+
+							<li >
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate Report Cards"))
+					   {
+							 %>
+							<a href="frmReportCardsDetails.aspx?Mode=C">Generate Report Cards</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Report Cards"))
+								{
+							 %>
+							<a href="frmReportCardsDetails.aspx?Mode=D">View Report Cards</a>
+							<%} %>
+							</li>
+						  
+						  <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Commit To History"))
+								{
+							 %>
+							<a href="frmReportCardsDetails.aspx?Mode=H">Commit To History</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View History"))
+								{
+							 %>
+							<a href="frmReportCardsHistoryDetails.aspx?Mode=D">View History</a>
+							<%} %>
+							</li>
+
+
+
+						  </ul>
+						</li>
+						<%} %>
+
+
+
+						   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Time Table"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Time Table</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable Setup"))
+					   {
+							 %>
+							 <a href="frmTimeTableSetupDetails.aspx" style="height:25px;line-height:25px;">Global Settings</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable Periods"))
+								{
+							 %>
+							<a href="frmTimeTablePeriodMaster.aspx">View Periods</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Setup TimeTable Class Periods"))
+								{
+							 %>
+							<a href="frmSelectTimeTablePeriodClass.aspx?Mode=P">Setup Class Periods</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate TimeTable Data"))
+								{
+							 %>
+							<a href="frmSelectTimeTablePeriodClass.aspx?Mode=G">Generate Time Table Data</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable By Class"))
+								{
+							 %>
+							<a href="frmTimeTableClass.aspx">View By Class</a>
+							<%} %>
+							</li>
+						
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable By Teacher"))
+								{
+							 %>
+							<a href="frmTimeTableTeacher.aspx">View By Teacher</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable Substitution"))
+								{
+							 %>
+							<a href="frmSelectTimeTableSubstitution.aspx">Substitutions</a>
+							<%} %>
+							</li>
+						
+						<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("TimeTable Substitution Report"))
+								{
+							 %>
+							<a href="frmTimeTableSubstitutionReport.aspx">Substitution Report</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View History TimeTable By Class"))
+								{
+							 %>
+							<a href="frmTimeTableClassHistory.aspx">View History By Class</a>
+							<%} %>
+							</li>
+
+							
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View History TimeTable By Teacher"))
+								{
+							 %>
+							<a href="frmTimeTableTeacherHistory.aspx">View History By Teacher</a>
+							<%} %>
+							</li>
+
+						  </ul>
+						</li>
+						<%} %>
+
+
+
+						 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Bills"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Bills</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Expense Categories"))
+					   {
+							 %>
+							<a href="frmExpenseCategoryMaster.aspx">Expense Categories</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Vendors"))
+								{
+							 %>
+							<a href="frmVendorMaster.aspx?Mode=N">Vendors</a>
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Bills"))
+								{
+							 %>
+							<a href="frmBillMaster.aspx">View Bills</a>
+							<%} %>
+							</li>
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Bill"))
+								{
+							 %>
+							<a href="frmNewBillDetails.aspx?UPD=N&Mode=N">Create New</a>
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Vouchers"))
+								{
+							 %>
+							<a href="frmVoucherMaster.aspx">View Vouchers</a>
+							<%} %>
+							</li>
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Create Voucher"))
+								{
+							 %>
+							<a href="frmVoucherDetails.aspx?Mode=N">Create New Voucher</a>
+							<%} %>
+							</li>
+
+
+						  </ul>
+						</li>
+						<%} %>
+
+
+
+
+
+							   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Fees"))
+					   {
+							 %>
+						  <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Fees</span></a>
+						  <ul>
+							
+							<li class="subfirst">
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Categories Classes"))
+								 {
+							 %>
+							<a href="frmFeesClassCategoryList.aspx">Applicable Fees by Class</a>
+							<% }%>
+							</li>
+							<li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate Fees Data"))
+								 {
+							 %>
+							<a href="frmGenStudentFeesData.aspx">Generate Student Fee Data</a>
+							<%} %>
+							</li>
+							<li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Payment"))
+								 {
+							 %>
+							<a href="frmStudentFeesList.aspx">Fees Payment</a>
+							<%} %>
+							</li>
+
+							 <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Edit Fees Amount"))
+								 {
+							 %>
+							<a href="frmSelectEditFees.aspx">Edit Fees</a>
+							<%} %>
+							</li>
+
+							 <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Payment"))
+								 {
+							 %>
+							<a href="frmAssignFeesCategoryToStudents.aspx">Assign Fees Category To Students</a>
+							<%} %>
+							</li>
+
+
+							  <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Commit Fees Data"))
+								 {
+							 %>
+							<a href="frmSelectFeesHistory.aspx?mode=C">Commit Fees Data</a>
+							<%} %>
+							</li>
+
+							 <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees History Data"))
+								 {
+							 %>
+							<a href="frmSelectFeesHistory.aspx?mode=H">View Fees History Data</a>
+							<%} %>
+							</li>
+
+							  <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Collection Data"))
+								 {
+							 %>
+							<a href="frmFeesCollectionReport.aspx">View Fees Collection</a>
+							<%} %>
+							</li>
+
+							  <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Receipt"))
+								 {
+							 %>
+							<a href="frmSelectFeesHistory.aspx?mode=FR">View Fees Receipt</a>
+							<%} %>
+							</li>
+						  </ul>
+						</li>
+						<%} %>
+
+						<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Transport"))
+								 {
+							 %>
+						 <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Transport</span></a>
+						  <ul>
+							
+								 <li class="subfirst">
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Locations"))
+								{
+							 %>
+							<a href="frmLocationMaster.aspx">Locations</a>
+							<%} %>
+							</li>
+							<li >
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Vehicles"))
+								 {
+							 %>
+							<a href="frmVehicleMaster.aspx">Vehicles</a>
+							<%} %>
+							</li>
+							
+						   
+							<li> 
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Drivers"))
+								 {
+							 %>
+							<a href="frmDriverMaster.aspx">Drivers</a>
+							<%} %>
+							</li>
+							 <li> 
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Cleaners"))
+								 {
+							 %>
+							<a href="frmCleanerMaster.aspx">Cleaners</a>
+							<%} %>
+							</li>
+
+							<li >
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Routes"))
+								 {
+							 %>
+							<a href="frmRouteMaster.aspx">Routes</a>
+							<%} %>
+							</li>
+						   
+						  </ul>
+						</li>
+						<%} %>
+
+
+
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Inventory"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Inventory</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Item Types"))
+					   {
+							 %>
+							<a href="frmItemTypeMasterList.aspx">Item Types</a>
+							<%} %>
+							</li>
+
+						   
+						   
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Item Locations"))
+								{
+							 %>
+							<a href="frmItemLocationMasterList.aspx">Locations</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Items"))
+								{
+							 %>
+							<a href="frmItemMasterList.aspx">Items</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Inventory"))
+								{
+							 %>
+							<a href="frmInventoryMasterList.aspx">Inventory</a>
+							<%} %>
+							</li>
+
+						   
+						  </ul>
+						</li>
+						<%} %>
+
+
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Library"))
+					   {
+							 %>
+
+						<li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Library</span></a>
+						  <ul>
+							<li class="subfirst">
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Book Types"))
+					   {
+							 %>
+							<a href="frmBookTypeMasterList.aspx">Book Types</a>
+							<%} %>
+							</li>
+
+						   
+						   
+							<li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Book Categories"))
+					   {
+							 %>
+							<a href="frmBookCategoryMasterList.aspx">Book Categories</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Authors"))
+								{
+							 %>
+							<a href="frmAuthorMaster.aspx">Authors</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Publishers"))
+								{
+							 %>
+							<a href="frmPublisherMaster.aspx">Publishers</a>
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Suppliers"))
+								{
+							 %>
+							<a href="frmSupplierMaster.aspx">Suppliers</a>
+							<%} %>
+							</li>
+						   
+						   <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Books"))
+								{
+							 %>
+							<a href="frmBooksSearch.aspx">View Books</a>
+							  <%} %>
+							</li>
+
+							 <li>
+							  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Book Transactions"))
+								{
+							  %>
+									<a href="frmBooksTransType.aspx">View Book Transactions</a>
+								<%} %>
+							</li>
+						  </ul>
+						</li>
+						<%} %>
+
+
+
+						<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Payroll"))
+					   {
+							 %>
+
+							 <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Payroll</span></a>
+							 <ul>
+
+								<li class="subfirst">
+									
+								   <a href="#" style="height:25px;line-height:25px;">Masters</a> 
+								   <ul>
+										  <li class="subfirst">
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Departments"))
+										 {
+										 %>
+										<a href="frmDeptMasterList.aspx">Departments</a>
+										<%} %>
+										</li>
+
+										 <li>
+											  <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Designations"))
+												{
+											 %>
+											<a href="frmDesigMasterList.aspx">Designations</a>
+											<%} %>
+											</li>
+
+										 <li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Payment Modes"))
+											{
+										 %>
+										<a href="frmPaymentModeMasterList.aspx">Payment Modes</a>
+										<%} %>
+										</li>
+
+										 <li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Grades"))
+											{
+										 %>
+										<a href="frmGradeMasterList.aspx">Grades</a>
+										<%} %>
+										</li>
+
+										 <li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Employee Types"))
+											{
+										 %>
+										<a href="frmEmpTypeMasterList.aspx">Employee Types</a>
+										<%} %>
+										</li>
+						   
+										<li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Employee Categories"))
+											{
+										 %>
+										<a href="frmEmpCatMasterList.aspx">Employee Categories</a>
+										<%} %>
+										</li>
+
+								   </ul><!--End of Inner UL -->
+								  
+								</li> <!--End of Outer LI of Masters -->
+
+							   
+
+						   
+						   
+							  
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Employee List"))
+								{
+							 %>
+							<a href="frmSelectEmpCategory.aspx">Employees</a>
+							<%} %>
+							</li>
+
+							   <li>
+							 <a href="#" style="height:25px;line-height:25px;">Attendance</a> 
+							
+							<ul>
+									 <li class="subfirst">
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Employee Attendance"))
+												{
+											 %>
+											 <a href="frmSelectEmpAttendanceDetails.aspx?Mode=A">View</a>
+											<%} %>
+											</li>
+
+											 <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Delete Employee Attendance"))
+												{
+											 %>
+											<a href="frmSelectEmpAttendanceDetails.aspx?Mode=D">Delete</a>
+											<%} %>
+											</li>
+
+											 <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Commit Employee Attendance"))
+												{
+											 %>
+											<a href="frmSelectEmpAttendanceDetails.aspx?Mode=C">Commit To History</a>
+											<%} %>
+											</li>
+
+											 <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Emp Attendance History"))
+												{
+											 %>
+											<a href="frmSelectEmpAttendanceDetails.aspx?Mode=H">View History</a>
+											<%} %>
+											</li>
+
+											  <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Emp Attendance Report"))
+												{
+											 %>
+											<a href="frmEmpSalaryDetails.aspx?Mode=A">Report</a>
+											<%} %>
+											</li>
+
+										 
+									</ul>
+						  
+							</li>
+
+							  <li>
+							  <a href="#" style="height:25px;line-height:25px;">Leaves</a> 
+								   <ul>
+
+									 <li class="subfirst">
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Leave Types"))
+											{
+										 %>
+										<a href="frmLeaveTypeMasterList.aspx">Types</a>
+										<%} %>
+										</li>
+
+										<li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Category Leave Types"))
+											{
+										 %>
+										<a href="frmAssignCatLeaveDetails.aspx?Mode=EL">Assign Category - Leave Types</a>
+										<%} %>
+										</li>
+
+										<li>
+										 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate Employee Leaves"))
+											{
+										 %>
+										<a href="frmAssignCatLeaveDetails.aspx?Mode=GL">Generate Employee Leaves</a>
+										<%} %>
+										</li>
+
+
+
+								   </ul>
+							 </li>
+						  
+							   <li>
+							  <a href="#" style="height:25px;line-height:25px;">Salary</a> 
+								   <ul>
+									 <li class="subfirst">
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Salary Heads"))
+												{
+											 %>
+											<a href="frmSalaryHeadmasterList.aspx">Salary Heads</a>
+											<%} %>
+											</li>
+
+
+											  <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Salary Desig Grades"))
+												{
+											 %>
+											<a href="frmAssignCatLeaveDetails.aspx?Mode=SL">Assign Salary Head - Desig Grades</a>
+											<%} %>
+											</li>
+
+											 <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate Emp Salary Structure"))
+												{
+											 %>
+											<a href="frmAssignEmpSalaryStructDetails.aspx?Mode=SL">Generate Employee - Salary Structure</a>
+											<%} %>
+										 </li>
+
+										  <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Generate Emp Salary Data"))
+												{
+											 %>
+											<a href="frmEmpSalaryDetails.aspx?Mode=C">Generate Pay Slips</a>
+											<%} %>
+										 </li>
+
+										  <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Emp Salary Data"))
+												{
+											 %>
+											<a href="frmEmpSalaryDetails.aspx?Mode=D">View Pay Slips</a>
+											<%} %>
+										 </li>
+
+										  <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Commit Emp Salary Data"))
+												{
+											 %>
+											<a href="frmEmpSalaryDetails.aspx?Mode=CH">Commit To History</a>
+											<%} %>
+										 </li>
+
+										   <li>
+											 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Emp Salary History Data"))
+												{
+											 %>
+											<a href="frmEmpSalaryDetails.aspx?Mode=H">View History</a>
+											<%} %>
+										 </li>
+									</ul>
+							 </li>
+
+							 
+
+						  </ul>
+						</li>
+						<%
+							} 
+						 %>
+
+
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Reception"))
+								 {
+							 %>
+						 <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Reception</span></a>
+						  <ul>
+							
+								 <li class="subfirst">
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Visitors"))
+								{
+							 %>
+							<a href="frmVisitorMaster.aspx">Visitors</a>
+							<%} %>
+							</li>
+						   
+						  
+							<li >
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Registrations"))
+								 {
+							 %>
+							<a href="frmRegistrationMaster.aspx">Registrations</a>
+							<%} %>
+							</li>
+						   
+							<li >
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Registration Report"))
+								 {
+							 %>
+							<a href="frmRegistrationStatusReport.aspx">Registration Status Report</a>
+							<%} %>
+							</li>
+						  </ul>
+						</li>
+						<%} %>
+
+						<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Reports"))
+								 {
+							 %>
+						 <li class="topmenu"><a href="#" style="height:25px;line-height:25px;"><span>Reports</span></a>
+						  <ul>
+							<li class="subfirst">
+							<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Fees Defaulters"))
+								 {
+							 %>
+							 
+							 <a href="frmFeeDefaultersList.aspx">Fees Defaulters</a>
+						  
+							<%} %>
+							</li>
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Student ICards"))
+								{
+							 %>
+
+							 <a href="frmSelectClass.aspx">Student I Card generation</a>
+						
+
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Student ICards"))
+								{
+							 %>
+
+							 <a href="frmSelectMultipleClass.aspx">I Card generation - Different Classes</a>
+						
+
+							<%} %>
+							</li>
+
+						   <li>
+							<a href="frmSelectRoute.aspx">Transport Route Wise Student Details</a>
+						   </li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Gendor Report"))
+								{
+							 %>
+
+							<a href="frmGendorReport.aspx" >Gendor Report</a>
+
+							<%} %>
+							</li>
+
+							   <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Attendance Report"))
+								{
+							 %>
+
+							<a href="frmAttendanceReport.aspx" >Student Attendance Report</a>
+
+							<%} %>
+							</li>
+
+							<li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Attendance Summary Report"))
+								{
+							 %>
+
+							<a href="frmAttendanceSummaryReport.aspx" >Student Attendance Summary Report</a>
+
+							<%} %>
+							</li>
+
+							  <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Age Grade Report"))
+								{
+							 %>
+
+							<a href="frmGradeReport.aspx?Mode=A">Age Grade Report</a>
+
+							<%} %>
+							</li>
+
+							 <li>
+							 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Student Summary Report"))
+								{
+							 %>
+
+							<a href="frmGradeReport.aspx?Mode=S">Enrollment Summary Report</a>
+
+							<%} %>
+							</li>
+						  
+									 <li >
+											   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable By Class"))
+										{
+									 %>
+									<a href="frmTimeTableReport.aspx?Mode=C">Time Table - By Class</a>
+									<%} %>
+									</li>
+						
+									<li>
+									 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable By Teacher"))
+										{
+									 %>
+									<a href="frmTimeTableReport.aspx?Mode=T">Time Table - By Teacher</a>
+									<%} %>
+									</li>
+								   
+								   <li>
+									 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable All Teacher"))
+										{
+									 %>
+									<a href="frmTimeTableReport.aspx?Mode=AT">Time Table - By All Teachers</a>
+									<%} %>
+									</li> 
+								  
+								  <li>
+									 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View TimeTable School"))
+										{
+									 %>
+									<a href="frmTimeTableReport.aspx?Mode=S">Time Table - By School</a>
+									<%} %>
+									</li> 
+
+									 <li>
+									 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Teachers Report"))
+										{
+									 %>
+								   <a href="frmTeachersReportPopup.aspx" onclick="OpenPopUp(this.href,'mywin','950','655','yes','center');return false"
+													onfocus="this.blur()">
+													View Teachers Detail 
+												</a>
+
+									<%} %>
+									</li> 
+
+
+									
+						  </ul>
+						</li>
+						<%} %>
+					   
+						
+						</td>
+					 
+					  <td align = "right" valign="middle"  >&nbsp;</td>
+
+					</tr>
+				  </table>
+				  </ul></td>
+			  </tr>
+			</table>
+
+ 
+		  </div>
+  </header>
