@@ -164,4 +164,3 @@ namespace SchoolPortalApp.Controllers
         }
     }
 }
-
