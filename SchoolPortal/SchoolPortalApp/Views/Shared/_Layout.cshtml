@@ -65,6 +65,14 @@
 			color: #6c757d;
 			margin-right: 8px;
 		}
+		
+		/* Inline user info row */
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
 	</style>
 	<style>
 		body {
@@ -279,7 +287,7 @@
                 <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
                     <i class="bi bi-list"></i>
                 </button>
-                <a class="navbar-brand ms-2" asp-area="" asp-page="/Index">SchoolPortal.Web</a>
+                <a class="navbar-brand ms-2" asp-area="" asp-page="/Index">School Management System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -312,10 +320,16 @@
                                         });
                                     });
                                 </script>
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-                                </form>
+								<span class="user-info me-3">
+									<span id="userFullName"></span>
+									<span id="userRole"></span>
+									<span id="userDepartment"></span>
+									<span id="userEmail"></span>
+								</span>
+								<form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+									@Html.AntiForgeryToken()
+									<button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+								</form>
                             </li>
                         }
                         else
@@ -363,9 +377,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const userDropdown = document.getElementById('userDropdown');
-
-            userDropdown?.addEventListener('shown.bs.dropdown', async function () {
+            (async () => {
                 try {
                     const response = await fetch('/Account/GetUserProfile');
                     if (!response.ok) throw new Error('Failed to load profile');
@@ -373,22 +385,35 @@
                     const data = await response.json();
                     if (data.success) {
                         const userData = data.data || {};
-                        document.getElementById('userFullName').textContent = userData.fullName || 'Not available';
-                        document.getElementById('userRole').textContent = userData.role || 'Not specified';
-                        document.getElementById('userDepartment').textContent = userData.department || 'Not specified';
-                        document.getElementById('userEmail').textContent = userData.email || 'Not available';
+                        const setText = (id, val) => {
+                            const el = document.getElementById(id);
+                            if (el) el.textContent = val;
+                        };
+                        setText('userFullName', userData.fullName || 'Not available');
+                        setText('userRole', userData.role || 'Not specified');
+                        setText('userDepartment', userData.department || 'Not specified');
+                        setText('userEmail', userData.email || 'Not available');
 
                         const avatar = document.querySelector('.user-avatar');
                         if (avatar && userData.fullName) {
                             avatar.textContent = userData.fullName.charAt(0).toUpperCase();
                         }
+                        const ids = ['userFullName', 'userRole', 'userDepartment', 'userEmail'];
+                        const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+                        if (els.length > 0) {
+                            const sameParent = els.every(e => e.parentElement === els[0].parentElement);
+                            const parent = sameParent ? els[0].parentElement : null;
+                            if (parent) parent.classList.add('user-info');
+                        }
                     } else {
-                        document.getElementById('userRole').textContent = data.message || 'Error loading profile';
+                        const roleEl = document.getElementById('userRole');
+                        if (roleEl) roleEl.textContent = data.message || 'Error loading profile';
                     }
                 } catch (err) {
-                    document.getElementById('userRole').textContent = 'Error loading profile';
+                    const roleEl = document.getElementById('userRole');
+                    if (roleEl) roleEl.textContent = 'Error loading profile';
                 }
-            });
+            })();
 
             const sidebar = document.getElementById('sidebar');
             const content = document.getElementById('content');

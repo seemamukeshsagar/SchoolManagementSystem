@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using SchoolPortal.Services.ServiceViewModels;
 using SchoolPortal.Services.IServices;
 
@@ -16,83 +17,57 @@ namespace SchoolPortal.Services
         public UserDetailsOutput? AuthenticateUser(string userName, string password)
         {
             Proc p = new Proc("AuthenticateUser");
+            p.Timeout = 10;
             p["@userName"] = userName;
             p["@password"] = password;
-            p["@IsAuthenticated"] = false; // Initialize OUTPUT parameter
-            p["@UserId"] = Guid.Empty; // Initialize OUTPUT parameter
-            
-            // Create DataTables to hold the results
-            DataTable userDetailsTable = new DataTable();
-            DataTable privilegesTable = new DataTable();
-            
-            DataSet resultSet = new DataSet();
-            resultSet.Tables.Add(userDetailsTable);
-            resultSet.Tables.Add(privilegesTable);
-            
-            p.Exec(resultSet);
-            
-            // Check the @IsAuthenticated OUTPUT parameter
-            var authResult = p.Parameters["@IsAuthenticated"].Value;
-            bool isAuthenticated = authResult != null && authResult != DBNull.Value && Convert.ToBoolean(authResult);
-            
-            if (!isAuthenticated)
+            p["@IsAuthenticated"] = false;
+            p["@UserId"] = Guid.Empty;
+
+            var result = (UserDetailsOutput?)p.LoanReader((reader, args) =>
             {
-                return null;
-            }
-            
-            // Build UserDetails object from results
-            UserDetailsOutput userDetails = new UserDetailsOutput();
-            
-            // Local helpers to safely read varying column names
-            string GetString(DataRow r, params string[] names)
-            {
-                foreach (var n in names)
+                if (!reader.Read())
                 {
-                    if (r.Table.Columns.Contains(n))
-                    {
-                        var v = r[n];
-                        if (v != null && v != DBNull.Value) return v.ToString() ?? string.Empty;
-                    }
+                    return null;
                 }
-                return string.Empty;
-            }
-            
-            // Get user details from first result set (guard for missing tables/columns)
-            if (resultSet.Tables.Count > 0 && resultSet.Tables[2].Rows.Count > 0)
-            {
-                var userRow = resultSet.Tables[2].Rows[0];
-                
-                // Id: try UserId, then Id
-                var idStr = GetString(userRow, "UserId", "Id");
+
+                var userDetails = new UserDetailsOutput();
+
+                string GetStringSafe(params string[] names)
+                {
+                    foreach (var n in names)
+                    {
+                        int ord;
+                        try { ord = reader.GetOrdinal(n); }
+                        catch (IndexOutOfRangeException) { continue; }
+                        if (!reader.IsDBNull(ord)) return reader.GetValue(ord)?.ToString() ?? string.Empty;
+                    }
+                    return string.Empty;
+                }
+
+                var idStr = GetStringSafe("UserId", "Id");
                 if (Guid.TryParse(idStr, out var parsedId))
                 {
                     userDetails.Id = parsedId;
                 }
-                
-                // Username variants
-                userDetails.UserName = GetString(userRow, "UserName", "Username", "Login");
-                
-                // FullName or compose from FirstName/LastName
-                var full = GetString(userRow, "FullName");
+
+                userDetails.UserName = GetStringSafe("UserName", "Username", "Login");
+
+                var full = GetStringSafe("FullName");
                 if (string.IsNullOrWhiteSpace(full))
                 {
-                    var fn = GetString(userRow, "FirstName", "First_Name", "First");
-                    var ln = GetString(userRow, "LastName", "Last_Name", "Last");
+                    var fn = GetStringSafe("FirstName", "First_Name", "First");
+                    var ln = GetStringSafe("LastName", "Last_Name", "Last");
                     full = string.Join(" ", new[] { fn, ln }.Where(s => !string.IsNullOrWhiteSpace(s)));
                 }
                 userDetails.FullName = full;
-                
-                // Email variants
-                userDetails.EmailAddress = GetString(userRow, "Email", "EmailAddress", "EmailId", "EmailID");
-                
-                // Get DesignationName
-                userDetails.DesignationName = GetString(userRow, "DesignationName", "Designation", "DesigName");
 
-                // Get RoleName
-                userDetails.RoleName = GetString(userRow, "RoleName", "RoleName", "RoleName");
-                
-                // IsActive variants (bool or 0/1)
-                var activeStr = GetString(userRow, "IsActive", "Active");
+                userDetails.EmailAddress = GetStringSafe("Email", "EmailAddress", "EmailId", "EmailID");
+
+                userDetails.DesignationName = GetStringSafe("DesignationName", "Designation", "DesigName");
+
+                userDetails.RoleName = GetStringSafe("RoleName");
+
+                var activeStr = GetStringSafe("IsActive", "Active");
                 if (bool.TryParse(activeStr, out var activeBool))
                 {
                     userDetails.IsActive = activeBool;
@@ -101,22 +76,152 @@ namespace SchoolPortal.Services
                 {
                     userDetails.IsActive = activeInt != 0;
                 }
-            }
-            
-            // Get privileges from second result set
-            if (resultSet.Tables.Count > 1 && resultSet.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow row in resultSet.Tables[0].Rows)
+
+                if (reader.NextResult())
                 {
-                    var privilegeName = GetString(row, "PrivilegeName", "Privilege", "Name");
-                    if (!string.IsNullOrEmpty(privilegeName))
+                    while (reader.Read())
                     {
-                        userDetails.Privileges.Add(privilegeName);
+                        string GetPrivilegeName()
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                var name = reader.GetName(i);
+                                if (name.Equals("PrivilegeName", StringComparison.OrdinalIgnoreCase) ||
+                                    name.Equals("Privilege", StringComparison.OrdinalIgnoreCase) ||
+                                    name.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    return reader.IsDBNull(i) ? string.Empty : reader.GetValue(i)?.ToString() ?? string.Empty;
+                                }
+                            }
+                            return string.Empty;
+                        }
+
+                        var privilegeName = GetPrivilegeName();
+                        if (!string.IsNullOrEmpty(privilegeName))
+                        {
+                            userDetails.Privileges.Add(privilegeName);
+                        }
                     }
                 }
+
+                return userDetails;
+            }, primeReader: false);
+
+            var authObj = p.Parameters["@IsAuthenticated"].Value;
+            bool isAuthenticated = authObj != null && authObj != DBNull.Value && Convert.ToBoolean(authObj);
+            if (!isAuthenticated)
+            {
+                return null;
             }
-            
-            return userDetails;
+
+            return result;
+        }
+
+        public Task<UserDetailsOutput?> AuthenticateUserAsync(string userName, string password)
+        {
+            var tcs = new TaskCompletionSource<UserDetailsOutput?>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            Proc p = new Proc("AuthenticateUser");
+            p.Timeout = 10;
+            p["@userName"] = userName;
+            p["@password"] = password;
+            p["@IsAuthenticated"] = false;
+            p["@UserId"] = Guid.Empty;
+
+            AsyncDelegate onCompleted = (cmd, reader, state) =>
+            {
+                try
+                {
+                    if (!reader.Read())
+                    {
+                        tcs.TrySetResult(null);
+                        return;
+                    }
+
+                    var userDetails = new UserDetailsOutput();
+
+                    string GetStringSafe(params string[] names)
+                    {
+                        foreach (var n in names)
+                        {
+                            int ord;
+                            try { ord = reader.GetOrdinal(n); }
+                            catch (IndexOutOfRangeException) { continue; }
+                            if (!reader.IsDBNull(ord)) return reader.GetValue(ord)?.ToString() ?? string.Empty;
+                        }
+                        return string.Empty;
+                    }
+
+                    var idStr = GetStringSafe("UserId", "Id");
+                    if (Guid.TryParse(idStr, out var parsedId))
+                    {
+                        userDetails.Id = parsedId;
+                    }
+
+                    userDetails.UserName = GetStringSafe("UserName", "Username", "Login");
+
+                    var full = GetStringSafe("FullName");
+                    if (string.IsNullOrWhiteSpace(full))
+                    {
+                        var fn = GetStringSafe("FirstName", "First_Name", "First");
+                        var ln = GetStringSafe("LastName", "Last_Name", "Last");
+                        full = string.Join(" ", new[] { fn, ln }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    }
+                    userDetails.FullName = full;
+
+                    userDetails.EmailAddress = GetStringSafe("Email", "EmailAddress", "EmailId", "EmailID");
+                    userDetails.DesignationName = GetStringSafe("DesignationName", "Designation", "DesigName");
+                    userDetails.RoleName = GetStringSafe("RoleName");
+
+                    var activeStr = GetStringSafe("IsActive", "Active");
+                    if (bool.TryParse(activeStr, out var activeBool))
+                    {
+                        userDetails.IsActive = activeBool;
+                    }
+                    else if (int.TryParse(activeStr, out var activeInt))
+                    {
+                        userDetails.IsActive = activeInt != 0;
+                    }
+
+                    if (reader.NextResult())
+                    {
+                        while (reader.Read())
+                        {
+                            string privilegeName = string.Empty;
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                var name = reader.GetName(i);
+                                if (name.Equals("PrivilegeName", StringComparison.OrdinalIgnoreCase) ||
+                                    name.Equals("Privilege", StringComparison.OrdinalIgnoreCase) ||
+                                    name.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    privilegeName = reader.IsDBNull(i) ? string.Empty : reader.GetValue(i)?.ToString() ?? string.Empty;
+                                    break;
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(privilegeName))
+                            {
+                                userDetails.Privileges.Add(privilegeName);
+                            }
+                        }
+                    }
+
+                    tcs.TrySetResult(userDetails);
+                }
+                catch (Exception ex)
+                {
+                    tcs.TrySetException(ex);
+                }
+            };
+
+            AsyncErrorDelegate onError = (cmd, ex) =>
+            {
+                tcs.TrySetException(ex);
+            };
+
+            p.ExecAsync(asyncState: null, callbackDelegate: onCompleted, errorDel: onError, synchronizationContext: new SynchronizationContext());
+
+            return tcs.Task;
         }
 
         public string ChangePassword(string userName, string oldPassword, string newPassword)

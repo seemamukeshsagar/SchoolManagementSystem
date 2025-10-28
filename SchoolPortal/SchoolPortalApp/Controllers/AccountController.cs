@@ -63,7 +63,7 @@ namespace SchoolPortalApp.Controllers
                 }
 
                 _logger.LogInformation("Authenticating user: {UserName}", model?.UserName ?? string.Empty);
-                var userDetails = _loginService.AuthenticateUser(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+                var userDetails = await _loginService.AuthenticateUserAsync(model.UserName ?? string.Empty, model.Password ?? string.Empty);
 
                 if (userDetails != null)
                 {

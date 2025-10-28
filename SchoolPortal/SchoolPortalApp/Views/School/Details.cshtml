@@ -1,19 +1,41 @@
-@model SchoolPortal.Entities.Models.SchoolMaster
+@model SchoolPortalApp.Models.SchoolDetailsViewModel
 @{
     ViewData["Title"] = "School Details";
 }
 <h2>School Details</h2>
 <dl class="row">
-    <dt class="col-sm-2">Name</dt>
-    <dd class="col-sm-10">@Model.Name</dd>
-    <dt class="col-sm-2">Email</dt>
-    <dd class="col-sm-10">@Model.Email</dd>
-    <dt class="col-sm-2">Address1</dt>
-    <dd class="col-sm-10">@Model.Address1</dd>
-    <dt class="col-sm-2">Address2</dt>
-    <dd class="col-sm-10">@Model.Address2</dd>
-    <dt class="col-sm-2">Active</dt>
-    <dd class="col-sm-10">@Model.IsActive</dd>
+    <dt class="col-sm-3">Id</dt>
+    <dd class="col-sm-9">@Model.Id</dd>
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+    <dt class="col-sm-3">Address1</dt>
+    <dd class="col-sm-9">@Model.Address1</dd>
+    <dt class="col-sm-3">Address2</dt>
+    <dd class="col-sm-9">@Model.Address2</dd>
+    <dt class="col-sm-3">City</dt>
+    <dd class="col-sm-9">@Model.CityName</dd>
+    <dt class="col-sm-3">State</dt>
+    <dd class="col-sm-9">@Model.StateName</dd>
+    <dt class="col-sm-3">Country</dt>
+    <dd class="col-sm-9">@Model.CountryName</dd>
+    <dt class="col-sm-3">ZipCode</dt>
+    <dd class="col-sm-9">@Model.ZipCode</dd>
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Model.Phone</dd>
+    <dt class="col-sm-3">Establishment Year</dt>
+    <dd class="col-sm-9">@Model.EstablishmentYear</dd>
+    <dt class="col-sm-3">Mobile</dt>
+    <dd class="col-sm-9">@Model.Mobile</dd>
+    <dt class="col-sm-3">Jurisdiction City</dt>
+    <dd class="col-sm-9">@Model.JudistrictionCityName</dd>
+    <dt class="col-sm-3">Jurisdiction State</dt>
+    <dd class="col-sm-9">@Model.JudistrictionStateName</dd>
+    <dt class="col-sm-3">Jurisdiction Country</dt>
+    <dd class="col-sm-9">@Model.JudistrictionCountryName</dd>
 </dl>
 <p>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
