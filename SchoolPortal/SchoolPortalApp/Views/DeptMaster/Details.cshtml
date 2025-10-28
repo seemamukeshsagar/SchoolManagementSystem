@@ -1,0 +1,36 @@
+@model Schoolortal.Entities.Models.DeptMaster
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Department Details</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Department Code</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.DeptCode)</dd>
+
+            <dt class="col-sm-3">Department Name</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.DeptName)</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Active</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactive</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

@@ -85,6 +85,12 @@ namespace SchoolPortal.Services
                 // Email variants
                 userDetails.EmailAddress = GetString(userRow, "Email", "EmailAddress", "EmailId", "EmailID");
                 
+                // Get DesignationName
+                userDetails.DesignationName = GetString(userRow, "DesignationName", "Designation", "DesigName");
+
+                // Get RoleName
+                userDetails.RoleName = GetString(userRow, "RoleName", "RoleName", "RoleName");
+                
                 // IsActive variants (bool or 0/1)
                 var activeStr = GetString(userRow, "IsActive", "Active");
                 if (bool.TryParse(activeStr, out var activeBool))

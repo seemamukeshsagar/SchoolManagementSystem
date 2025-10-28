@@ -52,70 +52,82 @@ namespace SchoolPortalApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
-            _logger.LogInformation("POST Login method called. UserName: {UserName}", model?.UserName);
-            
+            _logger.LogInformation("POST Login initiated for user: {UserName}", model?.UserName);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid login model state for user: {UserName}", model?.UserName);
+                return View(model);
+            }
+
             try
             {
-                if (!ModelState.IsValid)
+                var username = model.UserName?.Trim() ?? string.Empty;
+                var password = model.Password ?? string.Empty;
+
+                var userDetails = _loginService.AuthenticateUser(username, password);
+                if (userDetails == null)
                 {
-                    _logger.LogWarning("ModelState is invalid");
+                    _logger.LogWarning("Authentication failed for user: {UserName}", username);
+                    ModelState.AddModelError(string.Empty, "Invalid username or password.");
                     return View(model);
                 }
 
-                _logger.LogInformation("Authenticating user: {UserName}", model?.UserName ?? string.Empty);
-                var userDetails = _loginService.AuthenticateUser(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+                _logger.LogInformation("Authentication successful for {UserName}.", username);
 
-                if (userDetails != null)
+                // Prepare key session values
+                var fullName = userDetails.FullName ?? $"{userDetails.FirstName} {userDetails.LastName}".Trim();
+                var role = userDetails.RoleName ?? "Guest";
+                var designation = userDetails.DesignationName ?? "Not Specified";
+                var privileges = string.Join(",", userDetails.Privileges ?? Enumerable.Empty<string>());
+
+                // Store in session
+                var session = HttpContext.Session;
+                session.SetString("UserId", userDetails.Id.ToString());
+                session.SetString("UserName", username);
+                session.SetString("FullName", fullName);
+                session.SetString("Privileges", privileges);
+                session.SetString("UserRole", role);
+                session.SetString("Designation", designation);
+
+                // Build claims
+                var claims = new List<Claim>
                 {
-                    _logger.LogInformation("Authentication successful for user: {UserName}. Privileges: {Privileges}", 
-                        userDetails.UserName ?? string.Empty, string.Join(", ", userDetails.Privileges ?? Enumerable.Empty<string>()));
-                    
-                    // Store user details in session (you may want to use proper authentication/session management)
-                    HttpContext.Session.SetString("UserId", userDetails.Id.ToString());
-                    HttpContext.Session.SetString("UserName", userDetails.UserName ?? string.Empty);
-                    HttpContext.Session.SetString("FullName", userDetails.FullName ?? string.Empty);
-                    HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges ?? Enumerable.Empty<string>()));
+                    new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()),
+                    new Claim(ClaimTypes.Name, fullName),
+                    new Claim("UserName", username),
+                    new Claim("Designation", designation),
+                    new Claim(ClaimTypes.Role, role),
+                    new Claim("UserRole", role),
+                    new Claim("UserDesignation", designation)
+                };
 
-                    // Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()),
-                        new Claim(ClaimTypes.Name, userDetails.FullName ?? userDetails.UserName ?? string.Empty),
-                        new Claim("UserName", userDetails.UserName ?? string.Empty)
-                    };
-                    // Add role/privilege claims if needed
-                    foreach (var p in userDetails.Privileges ?? Enumerable.Empty<string>())
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, p));
-                    }
-
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        AllowRefresh = true
-                    });
-                    
-                    // Redirect to home or returnUrl if provided
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    return RedirectToAction("Index", "Home");
+                // Add privilege claims
+                if (userDetails.Privileges != null)
+                {
+                    claims.AddRange(userDetails.Privileges.Select(p => new Claim(ClaimTypes.Role, p)));
                 }
 
-                _logger.LogWarning("Authentication failed for user: {UserName}", model.UserName ?? string.Empty);
-                ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                return View(model);
+                // Sign-in user
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
+                    new AuthenticationProperties { IsPersistent = true, AllowRefresh = true });
+
+                // Redirect to target
+                if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return Redirect(returnUrl);
+
+                return RedirectToAction("Index", "Home");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "Error in Login POST method");
+                _logger.LogError(ex, "Error occurred during login for user: {UserName}", model?.UserName);
                 ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
                 return View(model);
             }
         }
+
 
         [HttpGet]
         [Route("ChangePassword")]
