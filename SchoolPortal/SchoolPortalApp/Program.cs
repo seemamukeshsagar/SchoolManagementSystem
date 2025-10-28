@@ -3,6 +3,18 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Detect environment automatically
+var hostName = System.Environment.MachineName;
+
+if (hostName.Equals("SAGAR\\SQl2025", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Configuration.AddJsonFile("appsettings.Home.json", optional: true);
+}
+else if (hostName.Equals("DESKTOP-L9I46P8", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Configuration.AddJsonFile("appsettings.Office.json", optional: true);
+}
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
