@@ -3,10 +3,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Schoolortal.Entities.Models;
+using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
-using SchoolPortal.Entities.Models;
 
 namespace SchoolPortalApp.Controllers
 {

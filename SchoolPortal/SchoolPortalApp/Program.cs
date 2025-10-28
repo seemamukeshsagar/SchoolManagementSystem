@@ -1,7 +1,18 @@
 using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var envName = builder.Environment.EnvironmentName;
+var serverNameRaw = Environment.GetEnvironmentVariable("APP_SERVER_NAME") ?? Environment.MachineName;
+var serverName = Regex.Replace(serverNameRaw, "[^A-Za-z0-9_.-]", "_");
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{envName}.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DBAccess\DBAccess.csproj" />
-    <ProjectReference Include="..\SchholPortal.Services\SchoolPortal.Services.csproj" />
-    <ProjectReference Include="..\Schoolortal.Entities\SchoolPortal.Entities.csproj" />
+    <ProjectReference Include="..\SchoolPortal.Entities\SchoolPortal.Entities.csproj" />
+    <ProjectReference Include="..\SchoolPortal.Services\SchoolPortal.Services.csproj" />
   </ItemGroup>
 
 </Project>
