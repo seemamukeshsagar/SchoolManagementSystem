@@ -54,5 +54,69 @@ namespace SchoolPortal.Services
             p.Exec(dt);
             return Map(dt, "Id", "CityName");
         }
+
+        public List<LookupItem> GetDepartments()
+        {
+            try
+            {
+                Proc p = new Proc("Department_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "DepartmentName");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetDesignations()
+        {
+            try
+            {
+                Proc p = new Proc("Designation_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "DesignationName");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetCompanies()
+        {
+            try
+            {
+                Proc p = new Proc("Company_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "CompanyName");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetSchools()
+        {
+            try
+            {
+                Proc p = new Proc("School_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "SchoolName");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
     }
 }

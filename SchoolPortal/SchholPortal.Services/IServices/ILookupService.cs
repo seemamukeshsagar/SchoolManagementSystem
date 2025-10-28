@@ -15,5 +15,9 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetCountries();
         List<LookupItem> GetStates(Guid countryId);
         List<LookupItem> GetCities(Guid stateId);
+        List<LookupItem> GetDepartments();
+        List<LookupItem> GetDesignations();
+        List<LookupItem> GetCompanies();
+        List<LookupItem> GetSchools();
     }
 }

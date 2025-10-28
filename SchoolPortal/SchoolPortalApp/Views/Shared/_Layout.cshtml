@@ -1,3 +1,4 @@
+@using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -290,7 +291,27 @@
                         @if (isAuthenticated)
                         {
                             <li class="nav-item d-flex align-items-center">
-                                <span class="navbar-text me-3">Welcome, @displayName</span>
+								@{
+									var userName = Context.Session.GetString("UserName") ?? "Guest";
+									var role = Context.Session.GetString("UserRole") ?? "Guest";
+									var designation = Context.Session.GetString("Designation") ?? "Not Specified";
+									var fullName = Context.Session.GetString("FullName") ?? userName;
+								}
+								<span class="navbar-text me-3"
+									  data-bs-toggle="tooltip"
+									  data-bs-placement="bottom"
+									  title="Name: @fullName&#10;Role: @role&#10;Designation: @designation">
+									Welcome, @displayName
+								</span>
+                                <script>
+                                    // Initialize tooltips
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                        tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                            return new bootstrap.Tooltip(tooltipTriggerEl);
+                                        });
+                                    });
+                                </script>
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
