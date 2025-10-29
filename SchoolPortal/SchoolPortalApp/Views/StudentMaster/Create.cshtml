@@ -56,7 +56,21 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="Gender"></label>
-                        <select asp-for="Gender" asp-items="Model.Genders" class="form-control"></select>
+                        <div class="d-flex mt-2">
+                            @foreach (var gender in Model.Genders)
+                            {
+                                <div class="form-check mr-3">
+                                    <input class="form-check-input" type="radio" 
+                                           asp-for="Gender" 
+                                           id="gender-@gender.Value" 
+                                           value="@gender.Value"
+                                           @(gender.Selected ? "checked" : "")>
+                                    <label class="form-check-label" for="gender-@gender.Value">
+                                        @gender.Text
+                                    </label>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -133,25 +147,29 @@
         <!-- Academic Details Tab -->
         <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
             <div class="row">
-                <div class="col-md-6">
+                <!--<div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="SchoolId"></label>
                         <select asp-for="SchoolId" asp-items="Model.Schools" class="form-control"></select>
                         <span asp-validation-for="SchoolId" class="text-danger"></span>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ClassId"></label>
-                        <select asp-for="ClassId" asp-items="Model.Classes" class="form-control"></select>
+                        <select asp-for="ClassId" asp-items="Model.Classes" class="form-control" id="ClassId">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                        <span asp-validation-for="ClassId" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="SectionId"></label>
-                        <select asp-for="SectionId" asp-items="Model.Sections" class="form-control"></select>
+                        <select asp-for="SectionId" class="form-control" id="SectionId" disabled>
+                            <option value="">-- Select Section --</option>
+                        </select>
+                        <span asp-validation-for="SectionId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -218,20 +236,29 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label asp-for="BirthCityId"></label>
-                            <select asp-for="BirthCityId" asp-items="Model.BirthCities" class="form-control"></select>
+                            <label asp-for="BirthCountryId"></label>
+                            <select asp-for="BirthCountryId" asp-items="Model.BirthCountries" class="form-control" id="BirthCountryId">
+                                <option value="">-- Select Country --</option>
+                            </select>
+                            <span asp-validation-for="BirthCountryId" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="BirthStateId"></label>
-                            <select asp-for="BirthStateId" asp-items="Model.BirthStates" class="form-control"></select>
+                            <select asp-for="BirthStateId" class="form-control" id="BirthStateId" disabled>
+                                <option value="">-- Select State --</option>
+                            </select>
+                            <span asp-validation-for="BirthStateId" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label asp-for="BirthCountryId"></label>
-                            <select asp-for="BirthCountryId" asp-items="Model.BirthCountries" class="form-control"></select>
+                            <label asp-for="BirthCityId"></label>
+                            <select asp-for="BirthCityId" class="form-control" id="BirthCityId" disabled>
+                                <option value="">-- Select City --</option>
+                            </select>
+                            <span asp-validation-for="BirthCityId" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -324,8 +351,12 @@
                 <input asp-for="Hobbies" class="form-control" placeholder="Student's hobbies/interests" />
             </div>
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" asp-for="SiblingsIfAny" id="siblingsCheckbox" />
-                <label class="form-check-label" for="siblingsCheckbox" asp-for="SiblingsIfAny"></label>
+                <input class="form-check-input" type="checkbox" id="siblingsCheckbox" 
+                       name="@Html.NameFor(m => m.SiblingsIfAny)" 
+                       value="true"
+                       @(Model.SiblingsIfAny == true ? "checked" : "") />
+                <input type="hidden" name="@Html.NameFor(m => m.SiblingsIfAny)" value="false" />
+                <label class="form-check-label" for="siblingsCheckbox">@Html.DisplayNameFor(m => m.SiblingsIfAny)</label>
             </div>
             <div class="form-group" id="siblingClassGroup">
                 <label asp-for="SiblingClassId"></label>
@@ -334,8 +365,12 @@
                 </select>
             </div>
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" asp-for="AvailTransport" id="transportCheckbox" />
-                <label class="form-check-label" for="transportCheckbox" asp-for="AvailTransport"></label>
+                <input class="form-check-input" type="checkbox" id="transportCheckbox" 
+                       name="@Html.NameFor(m => m.AvailTransport)" 
+                       value="true"
+                       @(Model.AvailTransport == true ? "checked" : "") />
+                <input type="hidden" name="@Html.NameFor(m => m.AvailTransport)" value="false" />
+                <label class="form-check-label" for="transportCheckbox">@Html.DisplayNameFor(m => m.AvailTransport)</label>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId"></label>
@@ -343,7 +378,7 @@
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" asp-for="IsActive" id="isActiveCheckbox" />
-                <label class="form-check-label" for="isActiveCheckbox" asp-for="IsActive"></label>
+                <label class="form-check-label" for="isActiveCheckbox">@Html.DisplayNameFor(m => m.IsActive)</label>
             </div>
         </div>
     </div>
@@ -353,75 +388,141 @@
         <button type="submit" class="btn btn-primary">Save</button>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label asp-for="RouteId"></label>
-            <select asp-for="RouteId" asp-items="Model.Routes" class="form-control"></select>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="RouteStopDetailsId"></label>
-            <select asp-for="RouteStopDetailsId" asp-items="Model.RouteStops" class="form-control"></select>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="ClassTeacherId"></label>
-            <select asp-for="ClassTeacherId" asp-items="Model.ClassTeachers" class="form-control"></select>
-        </div>
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="RoutePickAndDrop" />
-        <label class="form-check-label" asp-for="RoutePickAndDrop"></label>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label asp-for="FeesDiscountCategoryMasterId"></label>
-            <select asp-for="FeesDiscountCategoryMasterId" asp-items="Model.FeesDiscountCategories" class="form-control"></select>
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="TutionFees"></label>
-            <input asp-for="TutionFees" class="form-control" />
-        </div>
-        <div class="form-group col-md-4">
-            <label asp-for="AnnualFees"></label>
-            <input asp-for="AnnualFees" class="form-control" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label asp-for="TransportFees"></label>
-            <input asp-for="TransportFees" class="form-control" />
-        </div>
-        <div class="form-group col-md-6">
-            <label asp-for="UseTransportFees"></label>
-            <input class="form-check-input" type="checkbox" asp-for="UseTransportFees" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label asp-for="SessionId"></label>
-            <select asp-for="SessionId" asp-items="Model.Sessions" class="form-control"></select>
-        </div>
-        <div class="form-group col-md-6">
-            <label asp-for="HouseAllotted"></label>
-            <select asp-for="HouseAllotted" asp-items="Model.Houses" class="form-control"></select>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label asp-for="CompanyId"></label>
-            <input asp-for="CompanyId" class="form-control" />
-        </div>
-        <div class="form-group col-md-6">
-            <label asp-for="IsDeleted"></label>
-            <input class="form-check-input" type="checkbox" asp-for="IsDeleted" />
-        </div>
-    </div>    
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     <script>
+        // Initialize tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            localStorage.setItem('lastTab', $(e.target).attr('id'));
+        });
+
+        // Restore last active tab if available
+        var lastTab = localStorage.getItem('lastTab');
+        if (lastTab) {
+            $('#' + lastTab).tab('show');
+        } else {
+            // Show first tab by default
+            $('#basic-tab').tab('show');
+        }
+
+        // Function to load states by country
+        function loadStates(countryId, targetElement, selectedId) {
+            var $stateDropdown = $(targetElement);
+            
+            if (!countryId) {
+                $stateDropdown.empty().append('<option value="">-- Select State --</option>').prop('disabled', true);
+                // Also clear and disable city dropdown
+                if (targetElement === '#BirthStateId') {
+                    $('#BirthCityId').empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                }
+                return;
+            }
+            
+            $.get('/StudentMaster/GetStatesByCountry/' + countryId, function(states) {
+                $stateDropdown.empty().append($('<option>', {
+                    value: '',
+                    text: '-- Select State --'
+                }));
+                
+                if (states && states.length > 0) {
+                    $.each(states, function(i, state) {
+                        $stateDropdown.append($('<option>', {
+                            value: state.value,
+                            text: state.text,
+                            selected: selectedId && state.value === selectedId
+                        }));
+                    });
+                    $stateDropdown.prop('disabled', false);
+                } else {
+                    $stateDropdown.append($('<option>', {
+                        value: '',
+                        text: 'No states available'
+                    }));
+                }
+                
+                // If it's birth state and we have a selected state, load its cities
+                if (targetElement === '#BirthStateId' && selectedId) {
+                    loadCities(selectedId, '#BirthCityId', '@Model?.BirthCityId');
+                }
+            }).fail(function() {
+                console.error('Failed to load states');
+                $stateDropdown.empty().append('<option value="">-- Error loading states --</option>');
+            });
+        }
+        
+        // Function to load cities by state
+        function loadCities(stateId, targetElement, selectedId) {
+            var $cityDropdown = $(targetElement);
+            
+            if (!stateId) {
+                $cityDropdown.empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                return;
+            }
+            
+            $.get('/StudentMaster/GetCitiesByState/' + stateId, function(cities) {
+                $cityDropdown.empty().append($('<option>', {
+                    value: '',
+                    text: '-- Select City --'
+                }));
+                
+                if (cities && cities.length > 0) {
+                    $.each(cities, function(i, city) {
+                        $cityDropdown.append($('<option>', {
+                            value: city.value,
+                            text: city.text,
+                            selected: selectedId && city.value === selectedId
+                        }));
+                    });
+                    $cityDropdown.prop('disabled', false);
+                } else {
+                    $cityDropdown.append($('<option>', {
+                        value: '',
+                        text: 'No cities available'
+                    }));
+                }
+            }).fail(function() {
+                console.error('Failed to load cities');
+                $cityDropdown.empty().append('<option value="">-- Error loading cities --</option>');
+            });
+        }
+        
+        // Function to load sections by class
+        function loadSections(classId) {
+            var $sectionDropdown = $("#SectionId");
+            
+            if (!classId) {
+                $sectionDropdown.empty().append('<option value="">-- Select Section --</option>').prop('disabled', true);
+                return;
+            }
+            
+            $.get('/StudentMaster/GetSectionsByClass/' + classId, function(sections) {
+                $sectionDropdown.empty().append($('<option>', {
+                    value: '',
+                    text: '-- Select Section --'
+                }));
+                
+                $.each(sections, function(i, section) {
+                    $sectionDropdown.append($('<option>', {
+                        value: section.value,
+                        text: section.text
+                    }));
+                });
+                
+                // Enable the section dropdown
+                $sectionDropdown.prop('disabled', false);
+                
+                // If there's a previously selected value, try to set it
+                var selectedSectionId = '@Model?.SectionId';
+                if (selectedSectionId) {
+                    $sectionDropdown.val(selectedSectionId);
+                }
+            }).fail(function() {
+                console.error('Failed to load sections');
+                $sectionDropdown.empty().append('<option value="">-- Error loading sections --</option>');
+            });
+        }
+        
         $(document).ready(function() {
             // Toggle sibling class field based on checkbox
             toggleSiblingClass();
@@ -439,15 +540,43 @@
                 }
             }
             
-            // Initialize tabs
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                localStorage.setItem('lastTab', $(this).attr('id'));
+            // Tab initialization moved to the top of the script
+            
+            // Handle class change event
+            $("#ClassId").change(function() {
+                var classId = $(this).val();
+                loadSections(classId);
             });
             
-            // Restore last active tab if available
-            var lastTab = localStorage.getItem('lastTab');
-            if (lastTab) {
-                $('#' + lastTab).tab('show');
+            // Handle birth country change event
+            $("#BirthCountryId").change(function() {
+                var countryId = $(this).val();
+                loadStates(countryId, '#BirthStateId');
+            });
+            
+            // Handle birth state change event
+            $("#BirthStateId").change(function() {
+                var stateId = $(this).val();
+                loadCities(stateId, '#BirthCityId');
+            });
+            
+            // Initialize sections dropdown if class is already selected
+            var selectedClassId = $("#ClassId").val();
+            if (selectedClassId) {
+                loadSections(selectedClassId);
+            }
+            
+            // Initialize birth location dropdowns if values exist
+            var selectedBirthCountryId = $("#BirthCountryId").val();
+            var selectedBirthStateId = '@Model?.BirthStateId';
+            var selectedBirthCityId = '@Model?.BirthCityId';
+            
+            if (selectedBirthCountryId) {
+                loadStates(selectedBirthCountryId, '#BirthStateId', selectedBirthStateId);
+                
+                if (selectedBirthStateId) {
+                    loadCities(selectedBirthStateId, '#BirthCityId', selectedBirthCityId);
+                }
             }
             
             // Initialize form validation

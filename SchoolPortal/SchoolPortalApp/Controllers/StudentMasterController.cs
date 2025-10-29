@@ -43,6 +43,69 @@ namespace SchoolPortalApp.Controllers
             _env = env;
         }
 
+        [HttpGet]
+        [Route("GetSectionsByClass/{classId}")]
+        public IActionResult GetSectionsByClass(Guid classId)
+        {
+            try
+            {
+                var sections = _sectionService.GetSectionsByClassId(classId);
+                var result = sections.Select(s => new 
+                { 
+                    value = s.Id.ToString(), 
+                    text = s.Name 
+                });
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting sections for class {ClassId}", classId);
+                return StatusCode(500, "Error loading sections");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetStatesByCountry/{countryId}")]
+        public IActionResult GetStatesByCountry(Guid countryId)
+        {
+            try
+            {
+                var states = _lookupService.GetStates(countryId);
+                var result = states.Select(s => new 
+                { 
+                    value = s.Id.ToString(), 
+                    text = s.Name 
+                });
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting states for country {CountryId}", countryId);
+                return StatusCode(500, "Error loading states");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetCitiesByState/{stateId}")]
+        public IActionResult GetCitiesByState(Guid stateId)
+        {
+            try
+            {
+                var cities = _lookupService.GetCities(stateId);
+                var result = cities.Select(c => new 
+                { 
+                    value = c.Id.ToString(), 
+                    text = c.Name 
+                });
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting cities for state {StateId}", stateId);
+                return StatusCode(500, "Error loading cities");
+            }
+        }
+
         private void PopulateDropdowns(StudentViewModel vm)
         {
             var schools = _schoolService.GetAll();
