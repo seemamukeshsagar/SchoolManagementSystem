@@ -24,13 +24,13 @@ namespace SchoolPortalApp.Controllers
             _logger = logger;
         }
 
-        private void PopulateDropdowns(SystemParameterViewModel vm)
-        {
-            var companies = _lookup.GetCompanies();
-            vm.Companies = companies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CompanyId }).ToList();
-            var schools = _lookup.GetSchools();
-            vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
-        }
+        //private void PopulateDropdowns(SystemParameterViewModel vm)
+        //{
+        //    var companies = _lookup.GetCompanies();
+        //    vm.Companies = companies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CompanyId }).ToList();
+        //    var schools = _lookup.GetSchools();
+        //    vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
+        //}
 
         [HttpGet]
         [Route("")]
@@ -66,7 +66,7 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Create()
         {
             var vm = new SystemParameterViewModel();
-            PopulateDropdowns(vm);
+            //PopulateDropdowns(vm);
             return View(vm);
         }
 
@@ -77,14 +77,14 @@ namespace SchoolPortalApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
             var userIdStr = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
             {
                 ModelState.AddModelError(string.Empty, "Please login to create system parameter.");
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
 
@@ -105,7 +105,7 @@ namespace SchoolPortalApp.Controllers
             if (newId == Guid.Empty)
             {
                 ModelState.AddModelError(string.Empty, "Failed to create system parameter.");
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
             return RedirectToAction("Details", new { id = newId });
@@ -127,7 +127,7 @@ namespace SchoolPortalApp.Controllers
                 SchoolId = item.SchoolId,
                 IsActive = item.IsActive,
             };
-            PopulateDropdowns(vm);
+            //PopulateDropdowns(vm);
             return View(vm);
         }
 
@@ -139,7 +139,7 @@ namespace SchoolPortalApp.Controllers
             if (id != model.Id) return BadRequest();
             if (!ModelState.IsValid)
             {
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
 
@@ -147,7 +147,7 @@ namespace SchoolPortalApp.Controllers
             if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
             {
                 ModelState.AddModelError(string.Empty, "Please login to update system parameter.");
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
 
@@ -167,7 +167,7 @@ namespace SchoolPortalApp.Controllers
             if (!_service.Update(entity))
             {
                 ModelState.AddModelError(string.Empty, "Failed to update system parameter.");
-                PopulateDropdowns(model);
+                //PopulateDropdowns(model);
                 return View(model);
             }
             return RedirectToAction("Details", new { id });
