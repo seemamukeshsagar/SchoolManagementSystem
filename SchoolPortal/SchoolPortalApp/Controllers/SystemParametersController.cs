@@ -24,14 +24,6 @@ namespace SchoolPortalApp.Controllers
             _logger = logger;
         }
 
-        //private void PopulateDropdowns(SystemParameterViewModel vm)
-        //{
-        //    var companies = _lookup.GetCompanies();
-        //    vm.Companies = companies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CompanyId }).ToList();
-        //    var schools = _lookup.GetSchools();
-        //    vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
-        //}
-
         [HttpGet]
         [Route("")]
         [Route("Index")]
@@ -88,14 +80,25 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
+            // Get CompanyId and SchoolId from session
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            
+            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
+                return View(model);
+            }
+
             var entity = new SystemParameters
             {
                 Id = Guid.Empty,
                 ParameterName = model.ParameterName,
                 ParameterValue = model.ParameterValue ?? string.Empty,
                 Description = model.Description ?? string.Empty,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
                 CreatedBy = userId,
                 CreatedDate = DateTime.UtcNow,
@@ -117,14 +120,25 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
+
+            // Get CompanyId and SchoolId from session
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            
+            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
+                return View();
+            }
             var vm = new SystemParameterViewModel
             {
                 Id = item.Id,
                 ParameterName = item.ParameterName,
                 ParameterValue = item.ParameterValue,
                 Description = item.Description,
-                CompanyId = item.CompanyId,
-                SchoolId = item.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = item.IsActive,
             };
             //PopulateDropdowns(vm);
@@ -151,14 +165,25 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
+            // Get CompanyId and SchoolId from session
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            
+            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
+                return View(model);
+            }
+
             var entity = new SystemParameters
             {
                 Id = id,
                 ParameterName = model.ParameterName,
                 ParameterValue = model.ParameterValue ?? string.Empty,
                 Description = model.Description ?? string.Empty,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
                 ModifiedBy = userId,
                 ModifiedDate = DateTime.UtcNow,
