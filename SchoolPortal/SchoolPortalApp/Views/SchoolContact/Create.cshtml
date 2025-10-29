@@ -35,21 +35,6 @@
         <span asp-validation-for="MobilePhone" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="CountryId"></label>
-        <select asp-for="CountryId" asp-items="Model.Countries" class="form-control" id="country"></select>
-        <span asp-validation-for="CountryId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="StateId"></label>
-        <select asp-for="StateId" asp-items="Model.States" class="form-control" id="state"></select>
-        <span asp-validation-for="StateId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="CityId"></label>
-        <select asp-for="CityId" asp-items="Model.Cities" class="form-control" id="city"></select>
-        <span asp-validation-for="CityId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
         <label asp-for="AddressLine1"></label>
         <input asp-for="AddressLine1" class="form-control" />
         <span asp-validation-for="AddressLine1" class="text-danger"></span>
@@ -59,6 +44,42 @@
         <input asp-for="AddressLine2" class="form-control" />
         <span asp-validation-for="AddressLine2" class="text-danger"></span>
     </div>
+    @* <div class="form-group">
+        <label asp-for="CountryId"></label>
+        <select asp-for="CountryId" asp-items="Model.Countries" class="form-control" id="country"></select>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div> *@
+    <div class="col-md-4 mb-3">
+        <label asp-for="CountryId" class="form-label"></label>
+        <select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
+            <option value="">-- Select Country --</option>
+        </select>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div>
+    @* <div class="form-group">
+        <label asp-for="StateId"></label>
+        <select asp-for="StateId" asp-items="Model.States" class="form-control" id="state"></select>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+    </div> *@
+    <div class="col-md-4 mb-3">
+        <label asp-for="StateId" class="form-label"></label>
+        <select asp-for="StateId" class="form-select" asp-items="Model.States">
+            <option value="">-- Select State --</option>
+        </select>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+    </div>
+    @* <div class="form-group">
+        <label asp-for="CityId"></label>
+        <select asp-for="CityId" asp-items="Model.Cities" class="form-control" id="city"></select>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+    </div> *@
+    <div class="col-md-4 mb-3">
+            <label asp-for="CityId" class="form-label"></label>
+            <select asp-for="CityId" class="form-select" asp-items="Model.Cities">
+                <option value="">-- Select City --</option>
+            </select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
+    </div>
     <div class="form-group form-check">
         <input class="form-check-input" asp-for="IsActive" />
         <label class="form-check-label" asp-for="IsActive"></label>
@@ -66,33 +87,48 @@
     <button type="submit" class="btn btn-primary">Save</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-@section Scripts{
-<script>
-    const country = document.getElementById('country');
-    const state = document.getElementById('state');
-    const city = document.getElementById('city');
-    country.addEventListener('change', async (e) => {
-        const countryId = e.target.value;
-        state.innerHTML = '';
-        city.innerHTML = '';
-        if (!countryId) return;
-        const res = await fetch(`/SchoolContact/GetStates?countryId=${countryId}`);
-        const data = await res.json();
-        data.forEach(x => {
-            const opt = document.createElement('option');
-            opt.value = x.id; opt.text = x.name; state.add(opt);
-        });
-    });
-    state.addEventListener('change', async (e) => {
-        const stateId = e.target.value;
-        city.innerHTML = '';
-        if (!stateId) return;
-        const res = await fetch(`/SchoolContact/GetCities?stateId=${stateId}`);
-        const data = await res.json();
-        data.forEach(x => {
-            const opt = document.createElement('option');
-            opt.value = x.id; opt.text = x.name; city.add(opt);
-        });
-    });
-</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function() {
+            const country = document.getElementById('CountryId');
+            const state = document.getElementById('StateId');
+            const city = document.getElementById('CityId');
+ 
+            function clearOptions(sel, placeholder) {
+                sel.innerHTML = '';
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = placeholder;
+                sel.appendChild(opt);
+            }
+
+            country?.addEventListener('change', async () => {
+                clearOptions(state, '-- Select State --');
+                clearOptions(city, '-- Select City --');
+                const val = country.value;
+                if (!val) return;
+                const res = await fetch(`/Company/GetStates?countryId=${val}`);
+                const data = await res.json();
+                data.forEach(x => {
+                    const o = document.createElement('option');
+                    o.value = x.id;
+                    o.textContent = x.name;
+                    state.appendChild(o);
+                });
+            });
+
+            state?.addEventListener('change', async () => {
+                clearOptions(city, '-- Select City --');
+                const val = state.value;
+                if (!val) return;
+                const res = await fetch(`/Company/GetCities?stateId=${val}`);
+                const data = await res.json();
+                data.forEach(x => {
+                    const o1 = document.createElement('option');
+                    o1.value = x.id; o1.textContent = x.name; city.appendChild(o1);
+                });
+            });
+        })();
+    </script>
 }

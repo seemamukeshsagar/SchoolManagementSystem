@@ -1,6 +1,6 @@
 using System;
 using System.Data.SqlClient;
-using Properties = SchoolPortal.DBAccess.Properties;
+//using Properties = SchoolPortal.DBAccess.Properties;
 
 namespace SchoolPortal.DBAccess
 {
@@ -14,14 +14,16 @@ namespace SchoolPortal.DBAccess
 			set { _queryLogger = value; }
 		}
 
-		private static readonly ReadOnlyConnectionManager _defaultConnectionManager = new ReadOnlyConnectionManager(Properties.Settings.Default.ReadOnlyDefaultConnectionString);
+		//private static readonly ReadOnlyConnectionManager _defaultConnectionManager = new ReadOnlyConnectionManager();
+		//Properties.Settings.Default.ReadOnlyDefaultConnectionString);
 
 		public new static ReadOnlyConnectionManager DefaultConnectionManager
 		{
 			get
 			{
-				return _defaultConnectionManager;
-			}
+				//return _defaultConnectionManager;
+				return new ReadOnlyConnectionManager(ConnectionManager.DefaultConnectionManager.ConnectionString);
+            }
 		}
 
 		public new string ConnectionString { get; private set; }

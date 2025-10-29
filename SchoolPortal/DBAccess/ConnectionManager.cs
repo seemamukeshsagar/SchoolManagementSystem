@@ -2,7 +2,7 @@
 using System;
 using System.Data.SqlClient;
 using System.IO;
-using Properties = SchoolPortal.DBAccess.Properties;
+//using Properties = SchoolPortal.DBAccess.Properties;
 
 namespace SchoolPortal.DBAccess
 {
@@ -37,7 +37,8 @@ namespace SchoolPortal.DBAccess
 							catch (Exception ex)
 							{
 								System.Diagnostics.Debug.WriteLine($"Error creating DefaultConnectionManager: {ex.Message}");
-								_defaultConnectionManager = new ConnectionManager("Data Source=SAGAR\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True");
+								string machineName = Environment.MachineName;
+								_defaultConnectionManager = new ConnectionManager($"Data Source={machineName}\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True");
 							}
 						}
 					}
@@ -57,12 +58,26 @@ namespace SchoolPortal.DBAccess
 		{
 			try
 			{
-				return Properties.Settings.Default.DefaultConnectionString;
+				//string connectionString = Properties.Settings.Default.DefaultConnectionString;
+				// Replace any environment variables in the connection string
+				string connectionString = string.Empty;
+				string machineName = Environment.MachineName;
+				if (machineName.Equals("DESKTOP-L9I46P8"))
+				{
+					connectionString = "Data Source=DESKTOP-L9I46P8;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+                }
+				else
+				{
+					//connectionString = connectionString.Replace("${ServerName}", machineName + "\\SQl2025");
+					connectionString = "Data Source=" + machineName + "\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+                }
+				return connectionString;
 			}
 			catch (Exception ex)
 			{
 				System.Diagnostics.Debug.WriteLine($"Error accessing Settings.Default.DefaultConnectionString: {ex.Message}");
-				return "Data Source=SAGAR\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+				string machineName = Environment.MachineName;
+				return $"Data Source={machineName}\\SQl2025;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
 			}
 		}
 
@@ -73,7 +88,7 @@ namespace SchoolPortal.DBAccess
 
 		public void ResetConnectionString(string dataSource, string user, string pw)
 		{
-			ResetConnectionString(dataSource, user, pw, "Mercury");
+			ResetConnectionString(dataSource, user, pw, "SchoolManagementSystem");
 		}
 
 		/// <summary>
@@ -83,7 +98,7 @@ namespace SchoolPortal.DBAccess
 		{
 			SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
 			{
-				ApplicationName = "Unity Enterprise",
+				ApplicationName = "SchoolManagementSystem",
 				DataSource = dataSource,
 				InitialCatalog = dataBase,
 				AsynchronousProcessing = true

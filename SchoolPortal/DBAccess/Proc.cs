@@ -4,7 +4,6 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.Threading;
-using Properties = SchoolPortal.DBAccess.Properties;
 
 namespace SchoolPortal.DBAccess
 {
@@ -71,7 +70,8 @@ namespace SchoolPortal.DBAccess
 			_command = new SqlCommand(_procName)
 						{
 							CommandType = CommandType.StoredProcedure,
-							CommandTimeout = Properties.Settings.Default.Timeout
+							//CommandTimeout = Properties.Settings.Default.Timeout
+							CommandTimeout = 30
 						};
 			if (prefetchParms)
 			{
