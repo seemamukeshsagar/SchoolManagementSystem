@@ -46,4 +46,10 @@ public partial class SchoolContactMaster
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
+
+    // Navigation properties
+    public virtual CityMaster City { get; set; }
+    public virtual StateMaster State { get; set; }
+    public virtual CountryMaster Country { get; set; }
+    public virtual SchoolMaster School { get; set; }
 }

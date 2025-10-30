@@ -20,7 +20,7 @@
 @foreach (var item in Model)
 {
     <tr>
-        <td>@item.Name</td>
+        <td>@item.School.Name</td>
         <td>@(item.FirstName + (string.IsNullOrWhiteSpace(item.LastName) ? "" : (" " + item.LastName)))</td>
         <td>@item.Email</td>
         <td>@item.IsActive</td>
