@@ -73,35 +73,33 @@ namespace SchoolPortalApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(SubjectViewModel model)
         {
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-            if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
-            {
-                ModelState.Remove(nameof(SubjectViewModel.SchoolId));
-                model.SchoolId = schoolId;
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
             var userIdStr = HttpContext.Session.GetString("UserId");
+           
+            // Get CompanyId and SchoolId from session
             var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            
+            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
             {
-                ModelState.AddModelError(string.Empty, "Please login and select company to create subject.");
+                ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
                 return View(model);
             }
-
+            
             var entity = new SubjectMaster
             {
                 Id = Guid.Empty,
                 SubjectName = model.SubjectName,
                 IsScholastic = model.IsScholastic ?? false,
                 IsActive = model.IsActive,
-                CompanyId = companyId,
-                SchoolId = model.SchoolId,
-                CreatedBy = userId,
+                CompanyId = Guid.Parse(companyIdStr),
+                SchoolId = Guid.Parse(schoolIdStr),
+                CreatedBy = Guid.Parse(userIdStr),
                 CreatedDate = DateTime.UtcNow
             };
 
