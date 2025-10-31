@@ -30,6 +30,35 @@ namespace SchoolPortal.Services
             return c;
         }
 
+        // Helper methods to map DataTable to model classes
+        private List<ClassMaster> MapToClassMasterList(DataTable dt)
+        {
+            var list = new List<ClassMaster>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var item = new ClassMaster
+                {
+                    Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                    Name = row["Name"]?.ToString() ?? string.Empty,
+                    ExamAssessment = row["ExamAssessment"]?.ToString() ?? string.Empty,
+                    IsGradePointApplicable = row["IsGradePointApplicable"] != DBNull.Value ? (bool)row["IsGradePointApplicable"] : false,
+                    IsActive = row["IsActive"] != DBNull.Value ? (bool)row["IsActive"] : false,
+                    IsDeleted = row["IsDeleted"] != DBNull.Value ? (bool)row["IsDeleted"] : false,
+                    CompanyId = row["CompanyId"] != DBNull.Value ? (Guid)row["CompanyId"] : Guid.Empty,
+                    SchoolId = row["SchoolId"] != DBNull.Value ? (Guid)row["SchoolId"] : Guid.Empty,
+                    CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                    CreatedDate = row["CreatedDate"] != DBNull.Value ? (DateTime)row["CreatedDate"] : DateTime.MinValue,
+                    ModifiedBy = row["ModifiedBy"] != DBNull.Value ? (Guid)row["ModifiedBy"] : Guid.Empty,
+                    ModifiedDate = row["ModifiedDate"] != DBNull.Value ? (DateTime)row["ModifiedDate"] : DateTime.MinValue,
+                    OrderBy = row["OrderBy"] != DBNull.Value ? (int)row["OrderBy"] : 0,
+                    Status = row["Status"]?.ToString() ?? string.Empty,
+                    StatusMessage = row["StatusMessage"]?.ToString() ?? string.Empty
+                };
+                list.Add(item);
+            }
+            return list;
+        }
+
         public List<ClassMaster> GetAll()
         {
             var list = new List<ClassMaster>();

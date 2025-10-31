@@ -32,4 +32,8 @@ public partial class ClassSubjectDetail
     public string Status { get; set; }
 
     public string StatusMessage { get; set; }
+
+    // Add these navigation properties
+    public virtual ClassMaster? ClassMaster { get; set; }
+    public virtual SubjectMaster? Subject { get; set; }
 }

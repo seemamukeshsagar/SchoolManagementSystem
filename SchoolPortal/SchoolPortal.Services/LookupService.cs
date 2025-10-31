@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Services.IServices;
+using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services
 {
@@ -133,6 +134,107 @@ namespace SchoolPortal.Services
                 // Log the exception if needed
                 return new List<LookupItem>();
             }
+        }
+
+        public IEnumerable<ClassMaster> GetClasses()
+        {
+            try
+            {
+                Proc p = new Proc("ClassMaster_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return MapToClassMasterList(dt);
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<ClassMaster>();
+            }
+        }
+
+        public IEnumerable<SectionMaster> GetSections()
+        {
+            try
+            {
+                Proc p = new Proc("SectionMaster_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return MapToSectionMasterList(dt);
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<SectionMaster>();
+            }
+        }
+
+        public IEnumerable<LocationMaster> GetLocations()
+        {
+            try
+            {
+                Proc p = new Proc("LocationMaster_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return MapToLocationList(dt);
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LocationMaster>();
+            }
+        }
+
+        private List<ClassMaster> MapToClassMasterList(DataTable dt)
+        {
+            var list = new List<ClassMaster>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var item = new ClassMaster();
+                if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
+                item.Name = row["Name"]?.ToString() ?? string.Empty;
+                // Map other properties as needed
+                list.Add(item);
+            }
+            return list;
+        }
+
+        private List<SectionMaster> MapToSectionMasterList(DataTable dt)
+        {
+            var list = new List<SectionMaster>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var item = new SectionMaster();
+                if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
+                item.Name = row["Name"]?.ToString() ?? string.Empty;
+                // Map other properties as needed
+                list.Add(item);
+            }
+            return list;
+        }
+
+        private List<LocationMaster> MapToLocationList(DataTable dt)
+        {
+            var list = new List<LocationMaster>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var item = new LocationMaster();
+                if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
+                item.Name = row["Name"]?.ToString() ?? string.Empty;
+                item.Code = row["Code"]?.ToString() ?? string.Empty;
+                if (Guid.TryParse(row["CityId"]?.ToString(), out var cityId)) item.CityId = cityId;
+                if (Guid.TryParse(row["CompanyId"]?.ToString(), out var companyId)) item.CompanyId = companyId;
+                if (Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId)) item.SchoolId = schoolId;
+                if (bool.TryParse(row["IsActive"]?.ToString(), out var isActive)) item.IsActive = isActive;
+                if (bool.TryParse(row["IsDeleted"]?.ToString(), out var isDeleted)) item.IsDeleted = isDeleted;
+                if (Guid.TryParse(row["CreatedBy"]?.ToString(), out var createdBy)) item.CreatedBy = createdBy;
+                if (DateTime.TryParse(row["CreatedDate"]?.ToString(), out var createdDate)) item.CreatedDate = createdDate;
+                if (row["ModifiedBy"] != DBNull.Value && Guid.TryParse(row["ModifiedBy"]?.ToString(), out var modifiedBy)) item.ModifiedBy = modifiedBy;
+                if (row["ModifiedDate"] != DBNull.Value && DateTime.TryParse(row["ModifiedDate"]?.ToString(), out var modifiedDate)) item.ModifiedDate = modifiedDate;
+                item.Status = row["Status"]?.ToString();
+                item.StatusMessage = row["StatusMessage"]?.ToString();
+                list.Add(item);
+            }
+            return list;
         }
     }
 }

@@ -1,3 +1,4 @@
+#nullable enable
 using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
@@ -75,6 +76,8 @@ builder.Services.AddScoped<ITeacherClassDetailsService, SchoolPortal.Services.Te
 builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
 builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMasterService>();
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
+builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
+builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
 
 var app = builder.Build();
 

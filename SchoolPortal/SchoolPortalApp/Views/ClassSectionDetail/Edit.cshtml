@@ -1,0 +1,55 @@
+@model ClassSectionDetailViewModel
+
+@{
+    ViewData["Title"] = "Edit Class Section";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="ClassMasterId" class="control-label">Class</label>
+                <select asp-for="ClassMasterId" class="form-control" asp-items="Model.Classes">
+                    <option value="">-- Select Class --</option>
+                </select>
+                <span asp-validation-for="ClassMasterId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="SectionMasterId" class="control-label">Section</label>
+                <select asp-for="SectionMasterId" class="form-control" asp-items="Model.Sections">
+                    <option value="">-- Select Section --</option>
+                </select>
+                <span asp-validation-for="SectionMasterId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="LocationId" class="control-label">Location</label>
+                <select asp-for="LocationId" class="form-control" asp-items="Model.Locations">
+                    <option value="">-- Select Location --</option>
+                </select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group form-check mb-3">
+                <input class="form-check-input" asp-for="IsActive" />
+                <label class="form-check-label" asp-for="IsActive"></label>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

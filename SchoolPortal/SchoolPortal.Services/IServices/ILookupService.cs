@@ -1,3 +1,4 @@
+using SchoolPortal.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,5 +21,8 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetCompanies();
         List<LookupItem> GetSchools();
         List<LookupItem> GetGenders();
+        IEnumerable<ClassMaster> GetClasses();
+        IEnumerable<SectionMaster> GetSections();
+        IEnumerable<LocationMaster> GetLocations();
     }
 }

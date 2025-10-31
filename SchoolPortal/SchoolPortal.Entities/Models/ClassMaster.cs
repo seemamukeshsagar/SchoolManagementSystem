@@ -9,9 +9,9 @@ public partial class ClassMaster
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string ExamAssessment { get; set; }
+    public string ExamAssessment { get; set; } = string.Empty;
 
     public bool? IsGradePointApplicable { get; set; }
 

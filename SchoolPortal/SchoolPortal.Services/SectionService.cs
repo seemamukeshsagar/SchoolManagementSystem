@@ -27,6 +27,31 @@ namespace SchoolPortal.Services
             return s;
         }
 
+        private List<SectionMaster> MapToSectionMasterList(DataTable dt)
+        {
+            var list = new List<SectionMaster>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var item = new SectionMaster
+                {
+                    Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                    Name = row["Name"]?.ToString() ?? string.Empty,
+                    IsActive = row["IsActive"] != DBNull.Value ? (bool)row["IsActive"] : false,
+                    IsDeleted = row["IsDeleted"] != DBNull.Value ? (bool)row["IsDeleted"] : false,
+                    CompanyId = row["CompanyId"] != DBNull.Value ? (Guid)row["CompanyId"] : Guid.Empty,
+                    SchoolId = row["SchoolId"] != DBNull.Value ? (Guid)row["SchoolId"] : Guid.Empty,
+                    CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                    CreatedDate = row["CreatedDate"] != DBNull.Value ? (DateTime)row["CreatedDate"] : DateTime.MinValue,
+                    ModifiedBy = row["ModifiedBy"] != DBNull.Value ? (Guid)row["ModifiedBy"] : Guid.Empty,
+                    ModifiedDate = row["ModifiedDate"] != DBNull.Value ? (DateTime)row["ModifiedDate"] : DateTime.MinValue,
+                    Status = row["Status"]?.ToString() ?? string.Empty,
+                    StatusMessage = row["StatusMessage"]?.ToString() ?? string.Empty
+                };
+                list.Add(item);
+            }
+            return list;
+        }
+
         public List<SectionMaster> GetAll()
         {
             var list = new List<SectionMaster>();
