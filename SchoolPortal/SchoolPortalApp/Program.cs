@@ -2,6 +2,7 @@
 using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
+using SchoolPortal.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,15 @@ builder.Services.AddAntiforgery(o =>
         : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
     o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
     o.Cookie.HttpOnly = true;
+});
+
+// Add this in ConfigureServices method
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped(provider => 
+{
+    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+    AuthorizedManager.Configure(accessor);
+    return accessor;
 });
 
 // DI registrations

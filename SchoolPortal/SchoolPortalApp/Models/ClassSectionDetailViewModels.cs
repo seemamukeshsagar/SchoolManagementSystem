@@ -37,10 +37,10 @@ namespace SchoolPortalApp.Models
     public class ClassSectionDetailListItemViewModel
     {
         public Guid Id { get; set; }
-        public string ClassName { get; set; }
-        public string SectionName { get; set; }
-        public string LocationName { get; set; }
+        public string? ClassName { get; set; }
+        public string? SectionName { get; set; }
+        public string? LocationName { get; set; }
         public bool IsActive { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 }
