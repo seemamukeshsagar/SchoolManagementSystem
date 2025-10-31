@@ -118,5 +118,21 @@ namespace SchoolPortal.Services
                 return new List<LookupItem>();
             }
         }
+
+        public List<LookupItem> GetGenders()
+        {
+            try
+            {
+                Proc p = new Proc("Gender_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "Gender");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
     }
 }

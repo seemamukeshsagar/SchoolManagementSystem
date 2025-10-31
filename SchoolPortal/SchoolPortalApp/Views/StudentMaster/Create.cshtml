@@ -54,23 +54,20 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="Gender"></label>
-                        <div class="d-flex mt-2">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.Gender)</label>
+                        <div class="d-flex gap-3 mt-2">
                             @foreach (var gender in Model.Genders)
                             {
-                                <div class="form-check mr-3">
-                                    <input class="form-check-input" type="radio" 
-                                           asp-for="Gender" 
-                                           id="gender-@gender.Value" 
-                                           value="@gender.Value"
-                                           @(gender.Selected ? "checked" : "")>
+                                <div class="form-check">
+                                    <input asp-for="Gender" class="form-check-input" type="radio" value="@gender.Value" id="gender-@gender.Value">
                                     <label class="form-check-label" for="gender-@gender.Value">
                                         @gender.Text
                                     </label>
                                 </div>
                             }
                         </div>
+                        <span asp-validation-for="Gender" class="text-danger small"></span>
                     </div>
                 </div>
                 <div class="col-md-4">

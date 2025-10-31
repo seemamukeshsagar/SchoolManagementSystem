@@ -8,6 +8,7 @@ namespace SchoolPortal.Services.IServices
     {
         List<SectionMaster> GetAll();
         SectionMaster? GetById(Guid id);
+        List<SectionMaster> GetSectionsByClassId(Guid classId);
         Guid Create(SectionMaster section);
         bool Update(SectionMaster section);
         bool Delete(Guid id);

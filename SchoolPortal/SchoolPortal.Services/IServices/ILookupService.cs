@@ -19,5 +19,6 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetDesignations();
         List<LookupItem> GetCompanies();
         List<LookupItem> GetSchools();
+        List<LookupItem> GetGenders();
     }
 }

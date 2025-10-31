@@ -516,30 +516,30 @@ namespace SchoolPortalApp.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult GetStatesByCountry(Guid countryId)
-        {
-            var states = _lookupService.GetStates(countryId)
-                .Select(x => new 
-                { 
-                    value = x.Id.ToString(), 
-                    text = x.Name,
-                    selected = false
-                });
-            return Json(states);
-        }
+        //[HttpGet]
+        //public IActionResult GetStatesByCountry(Guid countryId)
+        //{
+        //    var states = _lookupService.GetStates(countryId)
+        //        .Select(x => new 
+        //        { 
+        //            value = x.Id.ToString(), 
+        //            text = x.Name,
+        //            selected = false
+        //        });
+        //    return Json(states);
+        //}
 
-        [HttpGet]
-        public IActionResult GetCitiesByState(Guid stateId)
-        {
-            var cities = _lookupService.GetCities(stateId)
-                .Select(x => new 
-                { 
-                    value = x.Id.ToString(), 
-                    text = x.Name,
-                    selected = false
-                });
-            return Json(cities);
-        }
+        //[HttpGet]
+        //public IActionResult GetCitiesByState(Guid stateId)
+        //{
+        //    var cities = _lookupService.GetCities(stateId)
+        //        .Select(x => new 
+        //        { 
+        //            value = x.Id.ToString(), 
+        //            text = x.Name,
+        //            selected = false
+        //        });
+        //    return Json(cities);
+        //}
     }
 }

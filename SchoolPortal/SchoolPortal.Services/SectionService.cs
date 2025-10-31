@@ -85,6 +85,20 @@ namespace SchoolPortal.Services
             return code == 1;
         }
 
+        public List<SectionMaster> GetSectionsByClassId(Guid classId)
+        {
+            var list = new List<SectionMaster>();
+            Proc p = new Proc("Section_GetByClassId");
+            p["@ClassId"] = classId;
+            var dt = new DataTable();
+            p.Exec(dt);
+            foreach (DataRow r in dt.Rows)
+            {
+                list.Add(Map(r));
+            }
+            return list;
+        }
+
         public bool Delete(Guid id)
         {
             Proc p = new Proc("Section_Delete");
