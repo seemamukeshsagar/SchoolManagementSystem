@@ -129,7 +129,6 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-
             var countries = _lookup.GetCountries();
             var countryDict = countries.ToDictionary(c => c.Id, c => c.Name);
 
@@ -244,8 +243,12 @@ namespace SchoolPortalApp.Controllers
                 StateId = model.StateId,
                 CountryId = model.CountryId,
                 ZipCode = model.ZipCode ?? string.Empty,
+                Phone = model.Phone ?? string.Empty,
                 EstablishmentYear = model.EstablishmentYear ?? string.Empty,
+                Mobile = model.Mobile ?? string.Empty,
                 JudistrictionCityId = model.JudistrictionCityId,
+                JudistrictionStateId = model.StateId,
+                JudistrictionCountryId = model.CountryId,
                 IsActive = model.IsActive,
                 CompanyId = companyId,
                 CreatedBy = userId,
@@ -282,7 +285,9 @@ namespace SchoolPortalApp.Controllers
                 ZipCode = item.ZipCode,
                 EstablishmentYear = item.EstablishmentYear,
                 JudistrictionCityId = item.JudistrictionCityId ?? Guid.Empty,
-                IsActive = item.IsActive
+                IsActive = item.IsActive,
+                Phone = item.Phone,
+                Mobile = item.Mobile
             };
             PopulateDropdowns(vm);
             return View(vm);
@@ -320,8 +325,12 @@ namespace SchoolPortalApp.Controllers
                 StateId = model.StateId,
                 CountryId = model.CountryId,
                 ZipCode = model.ZipCode ?? string.Empty,
+                Phone = model.Phone ?? string.Empty,
                 EstablishmentYear = model.EstablishmentYear ?? string.Empty,
+                Mobile = model.Mobile ?? string.Empty,
                 JudistrictionCityId = model.JudistrictionCityId,
+                JudistrictionStateId = model.StateId,
+                JudistrictionCountryId = model.CountryId,
                 IsActive = model.IsActive,
                 ModifiedBy = userId,
                 ModifiedDate = DateTime.UtcNow

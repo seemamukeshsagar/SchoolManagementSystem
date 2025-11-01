@@ -50,14 +50,16 @@ namespace SchoolPortal.Services
             return MapToClassSectionDetailList(dt);
         }
 
-        public ClassSectionDetail GetById(Guid id)
+        public ClassSectionDetail? GetById(Guid id)
         {
-            Proc p = new Proc("ClassSectionDetail_GetById");
+            if (id == Guid.Empty)
+                return null;
+
+            Proc p = new("ClassSectionDetail_GetById");
             p["@Id"] = id;
             var dt = new DataTable();
             p.Exec(dt);
-            if (dt.Rows.Count == 0) return null;
-            return Map(dt.Rows[0]);
+            return dt.Rows.Count > 0 ? Map(dt.Rows[0]) : null;
         }
 
         public Guid Create(ClassSectionDetail entity)

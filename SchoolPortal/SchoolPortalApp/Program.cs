@@ -3,6 +3,7 @@ using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
 using SchoolPortal.Services.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,21 +54,15 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAntiforgery(o =>
 {
-    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment() 
-        ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None 
+    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
         : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
     o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
     o.Cookie.HttpOnly = true;
 });
 
-// Add this in ConfigureServices method
+// Register IHttpContextAccessor (singleton)
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped(provider => 
-{
-    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
-    AuthorizedManager.Configure(accessor);
-    return accessor;
-});
 
 // DI registrations
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
@@ -88,6 +83,7 @@ builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMaste
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
 builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
 builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
+builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
 
 var app = builder.Build();
 
@@ -130,5 +126,13 @@ app.MapControllerRoute(
 // Map Razor Pages (must be after controller routes to avoid conflicts)
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Add this before app.Run()
+app.Use(async (context, next) =>
+{
+    // This ensures the AuthorizedManager is configured per-request
+    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
+    await next();
+});
 
 app.Run();

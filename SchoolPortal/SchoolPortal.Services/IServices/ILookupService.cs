@@ -21,6 +21,11 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetCompanies();
         List<LookupItem> GetSchools();
         List<LookupItem> GetGenders();
+        List<LookupItem> GetPaymentModes();
+        List<LookupItem> GetEmployeeTypes();
+        List<LookupItem> GetEmployeeCategories();
+        List<LookupItem> GetGrades();
+        List<LookupItem> GetBloodGroups();
         IEnumerable<ClassMaster> GetClasses();
         IEnumerable<SectionMaster> GetSections();
         IEnumerable<LocationMaster> GetLocations();

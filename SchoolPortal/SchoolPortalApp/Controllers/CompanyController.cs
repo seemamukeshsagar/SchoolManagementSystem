@@ -87,7 +87,30 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-            return View(item);
+
+            var countries = _lookup.GetCountries();
+            var country = countries.FirstOrDefault(c => c.Id == item.CountryId);
+            var states = _lookup.GetStates(item.CountryId);
+            var state = states.FirstOrDefault(s => s.Id == item.StateId);
+            var cities = _lookup.GetCities(item.StateId);
+            var city = cities.FirstOrDefault(ci => ci.Id == item.CityId);
+            var juris = cities.FirstOrDefault(ci => ci.Id == item.JudistrictionArea);
+
+            var vm = new CompanyDetailsViewModel
+            {
+                Id = item.Id,
+                CompanyName = item.CompanyName ?? string.Empty,
+                Email = item.Email ?? string.Empty,
+                IsActive = item.IsActive,
+                Address = item.Address ?? string.Empty,
+                ZipCode = item.ZipCode ?? string.Empty,
+                EstablishmentYear = item.EstablishmentYear ?? string.Empty,
+                CountryName = country?.Name ?? string.Empty,
+                StateName = state?.Name ?? string.Empty,
+                CityName = city?.Name ?? string.Empty,
+                JurisdictionAreaName = juris?.Name ?? string.Empty,
+            };
+            return View(vm);
         }
 
         [HttpGet]

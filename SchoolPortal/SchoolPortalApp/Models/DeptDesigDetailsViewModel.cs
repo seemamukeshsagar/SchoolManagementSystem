@@ -12,8 +12,8 @@ namespace SchoolPortalApp.Models
         public Guid CompanyId { get; set; }
         public Guid SchoolId { get; set; }
         public bool IsActive { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public string StatusMessage { get; set; } = string.Empty;
+        public string Status { get; set; } = "INC";
+        public string StatusMessage { get; set; } = "In Process....";
 
         // For dropdowns
         public List<SelectListItem> Departments { get; set; } = new();
@@ -30,7 +30,7 @@ namespace SchoolPortalApp.Models
         public string CompanyName { get; set; } = string.Empty;
         public string SchoolName { get; set; } = string.Empty;
         public bool IsActive { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public string StatusMessage { get; set; } = string.Empty;
+        public string Status { get; set; } = "INC";
+        public string StatusMessage { get; set; } = "In Process....";
     }
 }

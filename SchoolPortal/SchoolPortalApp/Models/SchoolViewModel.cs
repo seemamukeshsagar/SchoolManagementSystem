@@ -46,6 +46,12 @@ namespace SchoolPortalApp.Models
         [Display(Name = "Jurisdiction (City)")]
         public Guid JudistrictionCityId { get; set; }
 
+        [Display(Name = "Phone")]
+        public string? Phone { get; set; }
+
+        [Display(Name = "Mobile")]
+        public string? Mobile { get; set; }
+
         public IEnumerable<SelectListItem> Countries { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> States { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> Cities { get; set; } = Array.Empty<SelectListItem>();

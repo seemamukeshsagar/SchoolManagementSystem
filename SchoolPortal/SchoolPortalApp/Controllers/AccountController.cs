@@ -75,6 +75,8 @@ namespace SchoolPortalApp.Controllers
                     HttpContext.Session.SetString("UserName", userDetails.UserName ?? string.Empty);
                     HttpContext.Session.SetString("FullName", userDetails.FullName ?? string.Empty);
                     HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges ?? Enumerable.Empty<string>()));
+                    HttpContext.Session.SetString("SchoolId", userDetails.SchoolId?.ToString() ?? string.Empty);
+                    HttpContext.Session.SetString("CompanyId", userDetails.CompanyId?.ToString() ?? string.Empty);
 
                     // Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
                     var claims = new List<Claim>

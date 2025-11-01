@@ -98,7 +98,8 @@
 			min-height: calc(100vh - 56px); /* Full viewport height minus header */
 			margin-top: 56px;
 			transition: all 0.3s ease;
-			overflow: hidden; /* Prevent content overflow */
+			overflow-x: hidden; /* Prevent horizontal overflow */
+			overflow-y: auto; /* Allow vertical scrolling when content exceeds viewport */
 		}
 
 		/* Full width content when sidebar is hidden */
@@ -237,7 +238,7 @@
 			margin-left: 240px;
 			transition: margin-left 0.3s ease;
 			width: calc(100% - 240px);
-			overflow-y: visible; /* allow body to handle vertical scroll to avoid right gutter */
+			overflow-y: auto; /* enable internal vertical scrolling within content area */
 			height: calc(100vh - 112px); /* Viewport height minus header and footer */
 			position: relative;
 			box-sizing: border-box; /* ensure padding doesn't reduce usable width */

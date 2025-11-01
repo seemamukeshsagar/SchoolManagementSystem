@@ -7,7 +7,7 @@ namespace SchoolPortal.Services.Common
 {
     public static class AuthorizedManager
     {
-        private static IHttpContextAccessor _httpContextAccessor;
+        private static IHttpContextAccessor? _httpContextAccessor;
 
         /// <summary>
         /// Configures the AuthorizedManager with an IHttpContextAccessor instance.

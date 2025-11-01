@@ -136,6 +136,81 @@ namespace SchoolPortal.Services
             }
         }
 
+        public List<LookupItem> GetPaymentModes()
+        {
+            try
+            {
+                Proc p = new Proc("PaymentMode_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetEmployeeTypes()
+        {
+            try
+            {
+                Proc p = new Proc("EmployeeType_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetEmployeeCategories()
+        {
+            try
+            {
+                Proc p = new Proc("EmployeeCategory_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetGrades()
+        {
+            try
+            {
+                Proc p = new Proc("Grade_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetBloodGroups()
+        {
+            try
+            {
+                Proc p = new Proc("BloodGroup_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
         public IEnumerable<ClassMaster> GetClasses()
         {
             try

@@ -94,14 +94,15 @@ namespace SchoolPortalApp.Controllers
 
             var userIdStr = HttpContext.Session.GetString("UserId");
             var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || 
-                string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || 
-                model.SchoolId == Guid.Empty)
-            {
-                ModelState.AddModelError(string.Empty, "Please login and select company to create department.");
-                PopulateDropdowns(model);
-                return View(model);
-            }
+
+            //if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || 
+            //    string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || 
+            //    model.SchoolId == Guid.Empty)
+            //{
+            //    ModelState.AddModelError(string.Empty, "Please login and select company to create department.");
+            //    PopulateDropdowns(model);
+            //    return View(model);
+            //}
 
             var entity = new DeptMaster
             {
@@ -109,9 +110,9 @@ namespace SchoolPortalApp.Controllers
                 DeptCode = model.DeptCode,
                 DeptName = model.DeptName,
                 IsActive = model.IsActive,
-                CompanyId = companyId,
-                SchoolId = model.SchoolId,
-                CreatedBy = userId,
+                CompanyId = Guid.Parse(companyIdStr),
+                SchoolId = Guid.Parse(schoolIdStr),
+                CreatedBy = Guid.Parse(userIdStr),
                 CreatedDate = DateTime.UtcNow
             };
 

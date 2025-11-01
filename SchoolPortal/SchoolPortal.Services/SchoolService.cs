@@ -22,8 +22,12 @@ namespace SchoolPortal.Services
             if (r.Table.Columns.Contains("StateId") && Guid.TryParse(r["StateId"].ToString(), out var state)) s.StateId = state;
             if (r.Table.Columns.Contains("CountryId") && Guid.TryParse(r["CountryId"].ToString(), out var country)) s.CountryId = country;
             s.ZipCode = r.Table.Columns.Contains("ZipCode") ? r["ZipCode"].ToString() ?? string.Empty : string.Empty;
+            s.Phone = r.Table.Columns.Contains("Phone") ? r["Phone"].ToString() ?? string.Empty : string.Empty;
             s.EstablishmentYear = r.Table.Columns.Contains("EstablishmentYear") ? r["EstablishmentYear"].ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("JudistrictionCityId") && Guid.TryParse(r["JudistrictionCityId"].ToString(), out var juris)) s.JudistrictionCityId = juris;
+            s.Mobile = r.Table.Columns.Contains("Mobile") ? r["Mobile"].ToString() ?? string.Empty : string.Empty;
+            if (r.Table.Columns.Contains("JudistrictionCountryId") && Guid.TryParse(r["JudistrictionCountryId"].ToString(), out var jurisCountry)) s.JudistrictionCountryId = jurisCountry;
+            if (r.Table.Columns.Contains("JudistrictionStateId") && Guid.TryParse(r["JudistrictionStateId"].ToString(), out var jurisState)) s.JudistrictionStateId = jurisState;
+            if (r.Table.Columns.Contains("JudistrictionCityId") && Guid.TryParse(r["JudistrictionCityId"].ToString(), out var jurisCity)) s.JudistrictionCityId = jurisCity;
             if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
             if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
             if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"].ToString(), out var createdBy)) s.CreatedBy = createdBy;
@@ -32,6 +36,8 @@ namespace SchoolPortal.Services
             if (r.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(r["ModifiedDate"].ToString(), out var modifiedDate)) s.ModifiedDate = modifiedDate;
             s.Status = r.Table.Columns.Contains("Status") ? r["Status"].ToString() ?? string.Empty : string.Empty;
             s.StatusMessage = r.Table.Columns.Contains("StatusMessage") ? r["StatusMessage"].ToString() ?? string.Empty : string.Empty;
+
+            
             return s;
         }
 

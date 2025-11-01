@@ -120,6 +120,18 @@ namespace SchoolPortalApp.Controllers
                 Status = DefaultStatus,
                 StatusMessage = string.Empty
             };
+
+            // Prefill CompanyId and SchoolId from session
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
+            {
+                vm.CompanyId = companyId;
+            }
+            if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                vm.SchoolId = schoolId;
+            }
             PopulateDropdowns(vm);
             return View(vm);
         }
@@ -129,6 +141,21 @@ namespace SchoolPortalApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(DeptDesigDetailsViewModel model)
         {
+            // Take CompanyId and SchoolId from session
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                ModelState.AddModelError(string.Empty, "Please login and select company and school before creating the entry.");
+                PopulateDropdowns(model);
+                return View(model);
+            }
+
+            // Ensure model validation does not expect user-provided values for these
+            ModelState.Remove(nameof(DeptDesigDetailsViewModel.CompanyId));
+            ModelState.Remove(nameof(DeptDesigDetailsViewModel.SchoolId));
+
             if (!ModelState.IsValid)
             {
                 PopulateDropdowns(model);
@@ -148,8 +175,8 @@ namespace SchoolPortalApp.Controllers
                 Id = Guid.Empty,
                 DepartmentId = model.DepartmentId,
                 DesignationId = model.DesignationId,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
                 CreatedBy = userId,
                 CreatedDate = DateTime.UtcNow,
@@ -198,6 +225,20 @@ namespace SchoolPortalApp.Controllers
         {
             if (id != model.Id) return BadRequest();
             
+            // Take CompanyId and SchoolId from session and override model values
+            var companyIdStr = HttpContext.Session.GetString("CompanyId");
+            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+            if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+                string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            {
+                ModelState.AddModelError(string.Empty, "Please login and select company and school before updating the entry.");
+                PopulateDropdowns(model);
+                return View(model);
+            }
+
+            ModelState.Remove(nameof(DeptDesigDetailsViewModel.CompanyId));
+            ModelState.Remove(nameof(DeptDesigDetailsViewModel.SchoolId));
+
             if (!ModelState.IsValid)
             {
                 PopulateDropdowns(model);
@@ -220,8 +261,8 @@ namespace SchoolPortalApp.Controllers
                 Id = id,
                 DepartmentId = model.DepartmentId,
                 DesignationId = model.DesignationId,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
                 CreatedBy = existingItem.CreatedBy,
                 CreatedDate = existingItem.CreatedDate,
