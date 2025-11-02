@@ -84,6 +84,7 @@ builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterS
 builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
 builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
 builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
+builder.Services.AddScoped<IParentService, SchoolPortal.Services.ParentService>();
 
 var app = builder.Build();
 

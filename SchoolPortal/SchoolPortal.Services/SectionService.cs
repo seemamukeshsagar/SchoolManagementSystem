@@ -112,16 +112,24 @@ namespace SchoolPortal.Services
 
         public List<SectionMaster> GetSectionsByClassId(Guid classId)
         {
-            var list = new List<SectionMaster>();
-            Proc p = new Proc("Section_GetByClassId");
-            p["@ClassId"] = classId;
-            var dt = new DataTable();
-            p.Exec(dt);
-            foreach (DataRow r in dt.Rows)
+            try
             {
-                list.Add(Map(r));
+                var list = new List<SectionMaster>();
+                Proc p = new Proc("Section_GetByClassId");
+                p["@ClassId"] = classId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                foreach (DataRow r in dt.Rows)
+                {
+                    list.Add(Map(r));
+                }
+                return list;
             }
-            return list;
+            catch
+            {
+                // Fallback: avoid throwing to prevent 500 in controller
+                return new List<SectionMaster>();
+            }
         }
 
         public bool Delete(Guid id)

@@ -7,23 +7,26 @@
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <ul class="nav nav-tabs" id="studentTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Basic Information</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Address & Contact</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false">Address & Contact</button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="academic-tab" data-toggle="tab" href="#academic" role="tab" aria-controls="academic" aria-selected="false">Academic Details</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="parents-tab" data-bs-toggle="tab" data-bs-target="#parents" type="button" role="tab" aria-controls="parents" aria-selected="false">Parents</button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="medical-tab" data-toggle="tab" href="#medical" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">Academic Details</button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="previous-school-tab" data-toggle="tab" href="#previous-school" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</button>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" id="additional-tab" data-toggle="tab" href="#additional" role="tab" aria-controls="additional" aria-selected="false">Additional Info</a>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="previous-school-tab" data-bs-toggle="tab" data-bs-target="#previous-school" type="button" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="additional-tab" data-bs-toggle="tab" data-bs-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="false">Additional Info</button>
         </li>
     </ul>
 
@@ -103,19 +106,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="CountryId"></label>
-                        <select asp-for="CountryId" asp-items="Model.Countries" class="form-control" id="countryDropdown"></select>
+                        <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="StateId"></label>
-                        <select asp-for="StateId" asp-items="Model.States" class="form-control" id="stateDropdown"></select>
+                        <select asp-for="StateId" asp-items="Model.States" class="form-control"></select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="CityId"></label>
-                        <select asp-for="CityId" asp-items="Model.Cities" class="form-control" id="cityDropdown"></select>
+                        <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
                     </div>
                 </div>
             </div>
@@ -141,16 +144,125 @@
             </div>
         </div>
 
+        <!-- Parents Tab -->
+        <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentFirstName"></label>
+                        <input asp-for="ParentFirstName" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentLastName"></label>
+                        <input asp-for="ParentLastName" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentRelationTypeId"></label>
+                        <select asp-for="ParentRelationTypeId" asp-items="Model.ParentRelationTypes" class="form-control">
+                            <option value="">-- Select Relation --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentQualificationId"></label>
+                        <select asp-for="ParentQualificationId" asp-items="Model.ParentQualifications" class="form-control">
+                            <option value="">-- Select Qualification --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentDesignationId"></label>
+                        <select asp-for="ParentDesignationId" asp-items="Model.ParentDesignations" class="form-control">
+                            <option value="">-- Select Designation --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentOccupation"></label>
+                        <input asp-for="ParentOccupation" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentAnnualIncome"></label>
+                        <input asp-for="ParentAnnualIncome" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentDOB"></label>
+                        <input asp-for="ParentDOB" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentPhone"></label>
+                        <input asp-for="ParentPhone" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentEmail"></label>
+                        <input asp-for="ParentEmail" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentAddress1"></label>
+                <input asp-for="ParentAddress1" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentAddress2"></label>
+                <input asp-for="ParentAddress2" class="form-control" />
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentCountryId"></label>
+                        <select asp-for="ParentCountryId" asp-items="Model.ParentCountries" class="form-control" id="ParentCountryId">
+                            <option value="">-- Select Country --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentStateId"></label>
+                        <select asp-for="ParentStateId" asp-items="Model.ParentStates" class="form-control" id="ParentStateId" disabled>
+                            <option value="">-- Select State --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentCityId"></label>
+                        <select asp-for="ParentCityId" asp-items="Model.ParentCities" class="form-control" id="ParentCityId" disabled>
+                            <option value="">-- Select City --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" type="checkbox" asp-for="ParentIsActive" id="ParentIsActive" />
+                <label class="form-check-label" for="ParentIsActive">@Html.DisplayNameFor(m => m.ParentIsActive)</label>
+            </div>
+        </div>
+
         <!-- Academic Details Tab -->
         <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
             <div class="row">
-                <!--<div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="SchoolId"></label>
-                        <select asp-for="SchoolId" asp-items="Model.Schools" class="form-control"></select>
-                        <span asp-validation-for="SchoolId" class="text-danger"></span>
-                    </div>
-                </div> -->
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="ClassId"></label>
@@ -389,18 +501,22 @@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Initialize tabs
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            localStorage.setItem('lastTab', $(e.target).attr('id'));
+        // Initialize tabs (Bootstrap 5)
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (el) {
+            el.addEventListener('shown.bs.tab', function (e) {
+                localStorage.setItem('lastTab', e.target.id);
+            });
         });
 
         // Restore last active tab if available
         var lastTab = localStorage.getItem('lastTab');
         if (lastTab) {
-            $('#' + lastTab).tab('show');
+            var lastEl = document.getElementById(lastTab);
+            if (lastEl) new bootstrap.Tab(lastEl).show();
         } else {
             // Show first tab by default
-            $('#basic-tab').tab('show');
+            var firstEl = document.getElementById('basic-tab');
+            if (firstEl) new bootstrap.Tab(firstEl).show();
         }
 
         // Function to load states by country
@@ -487,40 +603,43 @@
         // Function to load sections by class
         function loadSections(classId) {
             var $sectionDropdown = $("#SectionId");
-            
             if (!classId) {
                 $sectionDropdown.empty().append('<option value="">-- Select Section --</option>').prop('disabled', true);
                 return;
             }
-            
-            $.get('/StudentMaster/GetSectionsByClass/' + classId, function(sections) {
-                $sectionDropdown.empty().append($('<option>', {
-                    value: '',
-                    text: '-- Select Section --'
-                }));
-                
-                $.each(sections, function(i, section) {
-                    $sectionDropdown.append($('<option>', {
-                        value: section.value,
-                        text: section.text
-                    }));
+            $.get('/StudentMaster/GetSectionsByClass/' + encodeURIComponent(classId), function(sections) {
+                $sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
+                $.each(sections || [], function(i, section) {
+                    $sectionDropdown.append($('<option>', { value: section.value, text: section.text }));
                 });
-                
-                // Enable the section dropdown
-                $sectionDropdown.prop('disabled', false);
-                
-                // If there's a previously selected value, try to set it
-                var selectedSectionId = '@Model?.SectionId';
-                if (selectedSectionId) {
-                    $sectionDropdown.val(selectedSectionId);
+                $sectionDropdown.prop('disabled', false).trigger('change');
+                if ($.fn.select2 && $sectionDropdown.hasClass('select2-hidden-accessible')) {
+                    $sectionDropdown.trigger('change.select2');
                 }
-            }).fail(function() {
-                console.error('Failed to load sections');
-                $sectionDropdown.empty().append('<option value="">-- Error loading sections --</option>');
+            }).fail(function(xhr) {
+                console.error('Failed to load sections', xhr);
+                $sectionDropdown.empty().append('<option value="">-- Error loading sections --</option>').prop('disabled', true);
             });
         }
         
         $(document).ready(function() {
+            // Helper: generate GUID v4
+            function generateGuid() {
+                // RFC4122 version 4 compliant
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            // Helper: generate Registration Number
+            function generateRegNo() {
+                var now = new Date();
+                var y = now.getFullYear().toString().slice(-2);
+                var m = ('0' + (now.getMonth() + 1)).slice(-2);
+                var d = ('0' + now.getDate()).slice(-2);
+                var rand = Math.floor(Math.random() * 9000 + 1000);
+                return 'REG-' + y + m + d + '-' + rand;
+            }
             // Toggle sibling class field based on checkbox
             toggleSiblingClass();
             $("#siblingsCheckbox").change(function() {
@@ -542,7 +661,30 @@
             // Handle class change event
             $("#ClassId").change(function() {
                 var classId = $(this).val();
+                 $("#SectionId").prop('disabled', true).empty()
+                    .append('<option value="">-- Select Section --</option>');   
                 loadSections(classId);
+                // Auto-generate RollNumber when class is selected (if empty)
+                var $roll = $("#RollNumber");
+                if (classId && $roll.length && !$roll.val()) {
+                    $roll.val(generateGuid());
+                }
+            });
+            
+            // Handle section change event: generate RollNumber and RegistrationNumber if empty
+            $("#SectionId").change(function() {
+                var sectionId = $(this).val();
+                if (!sectionId) return;
+                
+                var $roll = $("#RollNumber");
+                if ($roll.length && !$roll.val()) {
+                    $roll.val(generateGuid());
+                }
+                
+                var $reg = $("#RegistrationNumber");
+                if ($reg.length && !$reg.val()) {
+                    $reg.val(generateRegNo());
+                }
             });
             
             // Handle birth country change event
@@ -561,6 +703,11 @@
             var selectedClassId = $("#ClassId").val();
             if (selectedClassId) {
                 loadSections(selectedClassId);
+                // Ensure RollNumber is set on initial load if empty
+                var $rollOnInit = $("#RollNumber");
+                if ($rollOnInit.length && !$rollOnInit.val()) {
+                    $rollOnInit.val(generateGuid());
+                }
             }
             
             // Initialize birth location dropdowns if values exist
@@ -609,7 +756,8 @@
                         var $tabPane = $firstError.closest('.tab-pane');
                         if ($tabPane.length) {
                             var tabId = $tabPane.attr('id') + '-tab';
-                            $('#' + tabId).tab('show');
+                            var trig = document.getElementById(tabId);
+                            if (trig) new bootstrap.Tab(trig).show();
                             // Scroll to the error
                             $('html, body').animate({
                                 scrollTop: $firstError.offset().top - 100
@@ -648,7 +796,8 @@
                 $('.is-invalid').removeClass('is-invalid');
                 $('.field-validation-error').remove();
                 // Reset tabs to first tab
-                $('#basic-tab').tab('show');
+                var resetEl = document.getElementById('basic-tab');
+                if (resetEl) new bootstrap.Tab(resetEl).show();
                 // Reset any custom UI elements
                 toggleSiblingClass();
             });
@@ -660,14 +809,14 @@
                 var $cityDropdown = $("#CityId");
                 
                 // Reset and disable dependent dropdowns
-                $stateDropdown.empty().append($('<option>', { value: '', text: '-- Select State --' }));
-                $cityDropdown.empty().append($('<option>', { value: '', text: '-- Select City --' }));
+                $stateDropdown.empty().append($("<option>", { value: '', text: '-- Select State --' }));
+                $cityDropdown.empty().append($("<option>", { value: '', text: '-- Select City --' }));
                 
                 if (countryId) {
-                    // Make AJAX call to get states for the selected country
-                    $.get('/StudentMaster/GetStatesByCountry', { countryId: countryId }, function(states) {
+                    // Make AJAX call to get states for the selected country (Bootstrap route expects URL segment)
+                    $.get('/StudentMaster/GetStatesByCountry/' + countryId, function(states) {
                         $.each(states, function(i, state) {
-                            $stateDropdown.append($('<option>', { 
+                            $stateDropdown.append($("<option>", { 
                                 value: state.value, 
                                 text: state.text,
                                 selected: state.selected
@@ -686,13 +835,13 @@
                 var $cityDropdown = $("#CityId");
                 
                 // Reset city dropdown
-                $cityDropdown.empty().append($('<option>', { value: '', text: '-- Select City --' }));
+                $cityDropdown.empty().append($("<option>", { value: '', text: '-- Select City --' }));
                 
                 if (stateId) {
-                    // Make AJAX call to get cities for the selected state
-                    $.get('/StudentMaster/GetCitiesByState', { stateId: stateId }, function(cities) {
+                    // Make AJAX call to get cities for the selected state (URL segment)
+                    $.get('/StudentMaster/GetCitiesByState/' + stateId, function(cities) {
                         $.each(cities, function(i, city) {
-                            $cityDropdown.append($('<option>', { 
+                            $cityDropdown.append($("<option>", { 
                                 value: city.value, 
                                 text: city.text,
                                 selected: city.selected
@@ -712,6 +861,32 @@
             if (!$("#CountryId").val()) {
                 $("#StateId").prop('disabled', true);
                 $("#CityId").prop('disabled', true);
+            }
+
+            // Preload states and cities if values already exist (e.g., on edit or postback)
+            var initCountryId = $("#CountryId").val();
+            var initStateId = $("#StateId").val();
+            var initCityId = $("#CityId").val();
+            if (initCountryId) {
+                $.get('/StudentMaster/GetStatesByCountry/' + initCountryId, function(states) {
+                    var $stateDropdown = $("#StateId");
+                    $stateDropdown.empty().append($("<option>", { value: '', text: '-- Select State --' }));
+                    $.each(states, function(i, state) {
+                        $stateDropdown.append($("<option>", { value: state.value, text: state.text, selected: initStateId && state.value === initStateId }));
+                    });
+                    $stateDropdown.prop('disabled', false);
+
+                    if (initStateId) {
+                        $.get('/StudentMaster/GetCitiesByState/' + initStateId, function(cities) {
+                            var $cityDropdown = $("#CityId");
+                            $cityDropdown.empty().append($("<option>", { value: '', text: '-- Select City --' }));
+                            $.each(cities, function(i, city) {
+                                $cityDropdown.append($("<option>", { value: city.value, text: city.text, selected: initCityId && city.value === initCityId }));
+                            });
+                            $cityDropdown.prop('disabled', false);
+                        });
+                    }
+                });
             }
         });
     </script>

@@ -144,3 +144,34 @@ BEGIN
     RETURN 1;
 END
 GO
+
+-- Section_GetByClassId
+IF OBJECT_ID(N'[dbo].[Section_GetByClassId]', N'P') IS NOT NULL
+    DROP PROCEDURE [dbo].[Section_GetByClassId];
+GO
+CREATE PROCEDURE [dbo].[Section_GetByClassId]
+    @ClassId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        S.Id,
+        S.Name,
+        S.IsActive,
+        S.IsDeleted,
+        S.CompanyId,
+        S.SchoolId,
+        S.CreatedBy,
+        S.CreatedDate,
+        S.ModifiedBy,
+        S.ModifiedDate,
+        S.[Status],
+        S.StatusMessage
+    FROM [dbo].[SectionMaster] AS S
+    INNER JOIN [dbo].[ClassSectionDetail] AS CSD
+        ON CSD.SectionMasterId = S.Id
+    WHERE CSD.ClassMasterId = @ClassId
+        AND S.IsDeleted = 0;
+END
+GO

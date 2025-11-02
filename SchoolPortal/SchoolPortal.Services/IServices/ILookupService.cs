@@ -18,14 +18,18 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetCities(Guid stateId);
         List<LookupItem> GetDepartments();
         List<LookupItem> GetDesignations();
+        List<LookupItem> GetQualifications();
+        List<LookupItem> GetRelationTypes();
         List<LookupItem> GetCompanies();
         List<LookupItem> GetSchools();
         List<LookupItem> GetGenders();
         List<LookupItem> GetPaymentModes();
         List<LookupItem> GetEmployeeTypes();
         List<LookupItem> GetEmployeeCategories();
+        List<LookupItem> GetCategories();
         List<LookupItem> GetGrades();
         List<LookupItem> GetBloodGroups();
+        List<LookupItem> GetReligions();
         IEnumerable<ClassMaster> GetClasses();
         IEnumerable<SectionMaster> GetSections();
         IEnumerable<LocationMaster> GetLocations();

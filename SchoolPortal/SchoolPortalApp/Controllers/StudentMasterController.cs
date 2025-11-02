@@ -22,6 +22,7 @@ namespace SchoolPortalApp.Controllers
         private readonly ILookupService _lookupService;
         private readonly ILogger<StudentMasterController> _logger;
         private readonly IWebHostEnvironment _env;
+        private readonly IParentService _parentService;
 
         public StudentMasterController(
             IStudentService service,
@@ -30,6 +31,7 @@ namespace SchoolPortalApp.Controllers
             ISectionService sectionService,
             ITeacherService teacherService,
             ILookupService lookupService,
+            IParentService parentService,
             ILogger<StudentMasterController> logger,
             IWebHostEnvironment env)
         {
@@ -41,6 +43,7 @@ namespace SchoolPortalApp.Controllers
             _lookupService = lookupService;
             _logger = logger;
             _env = env;
+            _parentService = parentService;
         }
 
         [HttpGet]
@@ -123,11 +126,27 @@ namespace SchoolPortalApp.Controllers
             var teachers = _teacherService.GetAll();
             vm.ClassTeachers = teachers.Select(t => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = t.Id.ToString(), Text = string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))), Selected = vm.ClassTeacherId.HasValue && t.Id == vm.ClassTeacherId.Value }).ToList();
 
+            // Genders
+            var genders = _lookupService.GetGenders();
+            vm.Genders = genders.Select(g => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = vm.Gender.HasValue && g.Id == vm.Gender.Value }).ToList();
+
             // Countries / States / Cities
             var countries = _lookupService.GetCountries();
             vm.Countries = countries.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.CountryId }).ToList();
             vm.BirthCountries = countries.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.BirthCountryId }).ToList();
             vm.Nationalities = countries.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.Nationality }).ToList();
+
+            // Categories (CategoryMaster)
+            var categories = _lookupService.GetCategories();
+            vm.Categories = categories.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CategoryId }).ToList();
+
+            // Blood Groups
+            var bloodGroups = _lookupService.GetBloodGroups();
+            vm.BloodGroups = bloodGroups.Select(b => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = b.Id.ToString(), Text = b.Name, Selected = b.Id == vm.BloodGroupId }).ToList();
+
+            // Religions
+            var religions = _lookupService.GetReligions();
+            vm.Religions = religions.Select(r => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = r.Id.ToString(), Text = r.Name, Selected = r.Id == vm.ReligionId }).ToList();
 
             if (vm.CountryId != Guid.Empty)
             {
@@ -148,6 +167,31 @@ namespace SchoolPortalApp.Controllers
                 {
                     var birthCities = _lookupService.GetCities(vm.BirthStateId);
                     vm.BirthCities = birthCities.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.BirthCityId }).ToList();
+                }
+            }
+
+            // Parents tab lookups
+            var relationTypes = _lookupService.GetRelationTypes();
+            vm.ParentRelationTypes = relationTypes.Select(r => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = r.Id.ToString(), Text = r.Name, Selected = vm.ParentRelationTypeId.HasValue && r.Id == vm.ParentRelationTypeId.Value }).ToList();
+
+            var qualifications = _lookupService.GetQualifications();
+            vm.ParentQualifications = qualifications.Select(q => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = q.Id.ToString(), Text = q.Name, Selected = vm.ParentQualificationId.HasValue && q.Id == vm.ParentQualificationId.Value }).ToList();
+
+            // Reuse designations
+            var parentDesignations = _lookupService.GetDesignations();
+            vm.ParentDesignations = parentDesignations.Select(d => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = d.Id.ToString(), Text = d.Name, Selected = vm.ParentDesignationId.HasValue && d.Id == vm.ParentDesignationId.Value }).ToList();
+
+            // Parent address dropdowns
+            vm.ParentCountries = _lookupService.GetCountries()
+                .Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.ParentCountryId.HasValue && c.Id == vm.ParentCountryId.Value }).ToList();
+            if (vm.ParentCountryId.HasValue && vm.ParentCountryId.Value != Guid.Empty)
+            {
+                var pstates = _lookupService.GetStates(vm.ParentCountryId.Value);
+                vm.ParentStates = pstates.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = vm.ParentStateId.HasValue && s.Id == vm.ParentStateId.Value }).ToList();
+                if (vm.ParentStateId.HasValue && vm.ParentStateId.Value != Guid.Empty)
+                {
+                    var pcities = _lookupService.GetCities(vm.ParentStateId.Value);
+                    vm.ParentCities = pcities.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.ParentCityId.HasValue && c.Id == vm.ParentCityId.Value }).ToList();
                 }
             }
         }
@@ -306,6 +350,38 @@ namespace SchoolPortalApp.Controllers
                 ModelState.AddModelError(string.Empty, "Failed to create student.");
                 PopulateDropdowns(model);
                 return View(model);
+            }
+
+            // Save Parent information (non-blocking on error)
+            try
+            {
+                _parentService.CreateForStudent(
+                    newId,
+                    model.SchoolId,
+                    companyId,
+                    userId,
+                    model.ParentFirstName,
+                    model.ParentLastName,
+                    model.ParentDOB,
+                    model.ParentRelationTypeId,
+                    model.ParentQualificationId,
+                    model.ParentOccupation,
+                    model.ParentAnnualIncome,
+                    model.ParentDesignationId,
+                    model.ParentPhone,
+                    model.ParentEmail,
+                    model.ParentAddress1,
+                    model.ParentAddress2,
+                    model.ParentCountryId,
+                    model.ParentStateId,
+                    model.ParentCityId,
+                    model.ParentZipCode,
+                    model.ParentIsActive
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Student created {StudentId} but failed to save Parent information.", newId);
             }
             return RedirectToAction("Details", new { id = newId });
         }

@@ -88,6 +88,36 @@ namespace SchoolPortal.Services
             }
         }
 
+        public List<LookupItem> GetQualifications()
+        {
+            try
+            {
+                Proc p = new Proc("Qualification_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "QualificationName");
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetRelationTypes()
+        {
+            try
+            {
+                Proc p = new Proc("RelationType_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "Name");
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
         public List<LookupItem> GetCompanies()
         {
             try
@@ -196,11 +226,42 @@ namespace SchoolPortal.Services
             }
         }
 
+        public List<LookupItem> GetCategories()
+        {
+            try
+            {
+                Proc p = new Proc("Category_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                // CategoryMaster has columns Id, Name
+                return Map(dt, "Id", "Name");
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
         public List<LookupItem> GetBloodGroups()
         {
             try
             {
                 Proc p = new Proc("BloodGroup_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetReligions()
+        {
+            try
+            {
+                Proc p = new Proc("Religion_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
                 return Map(dt); // assume columns Id, Name

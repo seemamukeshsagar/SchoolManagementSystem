@@ -223,6 +223,66 @@ namespace SchoolPortalApp.Models
         [Display(Name = "House Allotted")]
         public Guid? HouseAllotted { get; set; }
         public IEnumerable<SelectListItem> Houses { get; set; } = Array.Empty<SelectListItem>();
+
+        // Parent fields (single parent)
+        [Display(Name = "Parent First Name")]
+        public string? ParentFirstName { get; set; }
+
+        [Display(Name = "Parent Last Name")]
+        public string? ParentLastName { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Parent Date of Birth")]
+        public DateTime? ParentDOB { get; set; }
+
+        [Display(Name = "Relation Type")]
+        public Guid? ParentRelationTypeId { get; set; }
+        public IEnumerable<SelectListItem> ParentRelationTypes { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "Qualification")]
+        public Guid? ParentQualificationId { get; set; }
+        public IEnumerable<SelectListItem> ParentQualifications { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "Designation")]
+        public Guid? ParentDesignationId { get; set; }
+        public IEnumerable<SelectListItem> ParentDesignations { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "Occupation")]
+        public string? ParentOccupation { get; set; }
+
+        [Display(Name = "Annual Income")]
+        public decimal? ParentAnnualIncome { get; set; }
+
+        [Display(Name = "Phone")]
+        public string? ParentPhone { get; set; }
+
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string? ParentEmail { get; set; }
+
+        [Display(Name = "Address Line 1")]
+        public string? ParentAddress1 { get; set; }
+
+        [Display(Name = "Address Line 2")]
+        public string? ParentAddress2 { get; set; }
+
+        [Display(Name = "Country")]
+        public Guid? ParentCountryId { get; set; }
+        public IEnumerable<SelectListItem> ParentCountries { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "State")]
+        public Guid? ParentStateId { get; set; }
+        public IEnumerable<SelectListItem> ParentStates { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "City")]
+        public Guid? ParentCityId { get; set; }
+        public IEnumerable<SelectListItem> ParentCities { get; set; } = Array.Empty<SelectListItem>();
+
+        [Display(Name = "Zip Code")]
+        public string? ParentZipCode { get; set; }
+
+        [Display(Name = "Is Active (Parent)")]
+        public bool ParentIsActive { get; set; } = true;
     }
 }
 
