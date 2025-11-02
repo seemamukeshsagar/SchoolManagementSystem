@@ -5,7 +5,8 @@
 
 <h2>Create Student</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-controller="StudentMaster" asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
     <ul class="nav nav-tabs" id="studentTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
@@ -528,6 +529,8 @@
                 // Also clear and disable city dropdown
                 if (targetElement === '#BirthStateId') {
                     $('#BirthCityId').empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                } else if (targetElement === '#ParentStateId') {
+                    $('#ParentCityId').empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
                 }
                 return;
             }
@@ -557,6 +560,10 @@
                 // If it's birth state and we have a selected state, load its cities
                 if (targetElement === '#BirthStateId' && selectedId) {
                     loadCities(selectedId, '#BirthCityId', '@Model?.BirthCityId');
+                }
+                // If it's parent state and we have a selected state, load its cities
+                if (targetElement === '#ParentStateId' && selectedId) {
+                    loadCities(selectedId, '#ParentCityId', '@Model?.ParentCityId');
                 }
             }).fail(function() {
                 console.error('Failed to load states');
@@ -720,6 +727,28 @@
                 
                 if (selectedBirthStateId) {
                     loadCities(selectedBirthStateId, '#BirthCityId', selectedBirthCityId);
+                }
+            }
+
+            // Parent address cascading
+            $("#ParentCountryId").change(function () {
+                var countryId = $(this).val();
+                loadStates(countryId, '#ParentStateId');
+            });
+
+            $("#ParentStateId").change(function () {
+                var stateId = $(this).val();
+                loadCities(stateId, '#ParentCityId');
+            });
+
+            // Initialize parent location dropdowns if values exist
+            var selectedParentCountryId = $("#ParentCountryId").val();
+            var selectedParentStateId = '@Model?.ParentStateId';
+            var selectedParentCityId = '@Model?.ParentCityId';
+            if (selectedParentCountryId) {
+                loadStates(selectedParentCountryId, '#ParentStateId', selectedParentStateId);
+                if (selectedParentStateId) {
+                    loadCities(selectedParentStateId, '#ParentCityId', selectedParentCityId);
                 }
             }
             

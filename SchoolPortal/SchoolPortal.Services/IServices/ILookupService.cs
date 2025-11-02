@@ -30,6 +30,7 @@ namespace SchoolPortal.Services.IServices
         List<LookupItem> GetGrades();
         List<LookupItem> GetBloodGroups();
         List<LookupItem> GetReligions();
+        List<LookupItem> GetSchoolBoards();
         IEnumerable<ClassMaster> GetClasses();
         IEnumerable<SectionMaster> GetSections();
         IEnumerable<LocationMaster> GetLocations();

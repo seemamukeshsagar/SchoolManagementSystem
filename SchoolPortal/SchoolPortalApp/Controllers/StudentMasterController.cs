@@ -117,6 +117,8 @@ namespace SchoolPortalApp.Controllers
             // Classes
             var classes = _classService.GetAll();
             vm.Classes = classes.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.ClassId }).ToList();
+            // Previous School Classes (reuse class list)
+            vm.PreviousSchoolClasses = classes.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.PreviousSchoolClassId.HasValue && c.Id == vm.PreviousSchoolClassId.Value }).ToList();
 
             // Sections
             var sections = _sectionService.GetAll();
@@ -147,6 +149,10 @@ namespace SchoolPortalApp.Controllers
             // Religions
             var religions = _lookupService.GetReligions();
             vm.Religions = religions.Select(r => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = r.Id.ToString(), Text = r.Name, Selected = r.Id == vm.ReligionId }).ToList();
+
+            // School Boards
+            var boards = _lookupService.GetSchoolBoards();
+            vm.PreviousSchoolBoards = boards.Select(b => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = b.Id.ToString(), Text = b.Name, Selected = b.Id == vm.PreviousSchoolBoardId }).ToList();
 
             if (vm.CountryId != Guid.Empty)
             {

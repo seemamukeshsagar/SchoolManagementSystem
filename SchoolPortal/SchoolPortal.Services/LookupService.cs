@@ -79,7 +79,7 @@ namespace SchoolPortal.Services
                 Proc p = new Proc("Designation_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
-                return Map(dt, "Id", "DesignationName");
+                return Map(dt, "Id", "Name");
             }
             catch (Exception)
             {
@@ -265,6 +265,21 @@ namespace SchoolPortal.Services
                 var dt = new DataTable();
                 p.Exec(dt);
                 return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetSchoolBoards()
+        {
+            try
+            {
+                Proc p = new Proc("SchoolBoard_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "BoardName");
             }
             catch (Exception)
             {

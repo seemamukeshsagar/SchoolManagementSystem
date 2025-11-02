@@ -47,9 +47,25 @@ BEGIN
     SET NOCOUNT ON;
     SELECT 
         d.[Id],
-        d.[DesignationName]
+        d.[Name]
     FROM dbo.[DesigMaster] d
-    ORDER BY d.[DesignationName];
+    ORDER BY d.[Name];
+END
+GO
+
+-- Category_GetAll
+IF OBJECT_ID(N'[dbo].[Category_GetAll]', N'P') IS NULL
+    EXEC('CREATE PROCEDURE [dbo].[Category_GetAll] AS SET NOCOUNT ON;');
+GO
+ALTER PROCEDURE [dbo].[Category_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT 
+        c.[Id],
+        c.[Name]
+    FROM dbo.[CategoryMaster] c
+    ORDER BY c.[Name];
 END
 GO
 
