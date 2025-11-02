@@ -77,6 +77,18 @@ namespace SchoolPortal.Services
                     userDetails.IsActive = activeInt != 0;
                 }
 
+                var companyIdStr = GetStringSafe("CompanyId");
+                if (Guid.TryParse(companyIdStr, out var parsedCompanyId))
+                {
+                    userDetails.CompanyId = parsedCompanyId;
+                }
+
+                var schoolIdStr = GetStringSafe("SchoolId");
+                if (Guid.TryParse(schoolIdStr, out var parsedSchoolId))
+                {
+                    userDetails.SchoolId = parsedSchoolId;
+                }
+
                 if (reader.NextResult())
                 {
                     while (reader.Read())
@@ -181,6 +193,18 @@ namespace SchoolPortal.Services
                     else if (int.TryParse(activeStr, out var activeInt))
                     {
                         userDetails.IsActive = activeInt != 0;
+                    }
+
+                    var companyIdStr = GetStringSafe("CompanyId");
+                    if (Guid.TryParse(companyIdStr, out var parsedCompanyId))
+                    {
+                        userDetails.CompanyId = parsedCompanyId;
+                    }
+
+                    var schoolIdStr = GetStringSafe("SchoolId");
+                    if (Guid.TryParse(schoolIdStr, out var parsedSchoolId))
+                    {
+                        userDetails.SchoolId = parsedSchoolId;
                     }
 
                     if (reader.NextResult())

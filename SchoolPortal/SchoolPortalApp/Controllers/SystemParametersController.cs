@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -65,54 +65,69 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public IActionResult Create(SystemParameterViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                //PopulateDropdowns(model);
                 return View(model);
-            }
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+
+            // Validate session user
+            if (!TryGetSessionGuid("UserId", out var userId))
             {
-                ModelState.AddModelError(string.Empty, "Please login to create system parameter.");
-                //PopulateDropdowns(model);
+                ModelState.AddModelError(string.Empty, "Please login to create a system parameter.");
                 return View(model);
             }
 
-            // Get CompanyId and SchoolId from session
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-            
-            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            // Validate company and school
+            if (!TryGetSessionGuid("CompanyId", out var companyId) ||
+                !TryGetSessionGuid("SchoolId", out var schoolId))
             {
                 ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
                 return View(model);
             }
 
+            // Map ViewModel → Entity
             var entity = new SystemParameters
             {
                 Id = Guid.Empty,
-                ParameterName = model.ParameterName,
-                ParameterValue = model.ParameterValue ?? string.Empty,
-                Description = model.Description ?? string.Empty,
+                ParameterName = model.ParameterName.Trim(),
+                ParameterValue = model.ParameterValue?.Trim() ?? string.Empty,
+                Description = model.Description?.Trim() ?? string.Empty,
                 CompanyId = companyId,
                 SchoolId = schoolId,
                 IsActive = model.IsActive,
                 CreatedBy = userId,
-                CreatedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow
             };
 
-            var newId = _service.Create(entity);
-            if (newId == Guid.Empty)
+            try
             {
-                ModelState.AddModelError(string.Empty, "Failed to create system parameter.");
-                //PopulateDropdowns(model);
+                var newId = _service.Create(entity);
+                if (newId == Guid.Empty)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to create system parameter. Please try again.");
+                    return View(model);
+                }
+
+                TempData["SuccessMessage"] = "System parameter created successfully.";
+                return RedirectToAction("Details", new { id = newId });
+            }
+            catch (Exception ex)
+            {
+                // Log the error for debugging
+                _logger.LogError(ex, "Error creating system parameter");
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred while creating the system parameter.");
                 return View(model);
             }
-            return RedirectToAction("Details", new { id = newId });
         }
+
+        private bool TryGetSessionGuid(string key, out Guid guid)
+        {
+            guid = Guid.Empty;
+            var value = HttpContext.Session.GetString(key);
+            return !string.IsNullOrWhiteSpace(value) && Guid.TryParse(value, out guid);
+        }
+
 
         [HttpGet]
         [Route("Edit/{id}")]
