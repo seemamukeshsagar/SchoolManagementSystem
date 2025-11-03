@@ -509,16 +509,10 @@
             });
         });
 
-        // Restore last active tab if available
-        var lastTab = localStorage.getItem('lastTab');
-        if (lastTab) {
-            var lastEl = document.getElementById(lastTab);
-            if (lastEl) new bootstrap.Tab(lastEl).show();
-        } else {
-            // Show first tab by default
-            var firstEl = document.getElementById('basic-tab');
-            if (firstEl) new bootstrap.Tab(firstEl).show();
-        }
+        // Always show Basic Information tab by default on first load
+        localStorage.removeItem('lastTab');
+        var firstEl = document.getElementById('basic-tab');
+        if (firstEl) new bootstrap.Tab(firstEl).show();
 
         // Function to load states by country
         function loadStates(countryId, targetElement, selectedId) {

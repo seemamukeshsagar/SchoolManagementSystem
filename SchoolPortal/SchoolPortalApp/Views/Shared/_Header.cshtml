@@ -19,7 +19,7 @@
 												<telerik:RadComboBoxItem Text="-----Select-----" Value="0" />
 											</Items>
 										</telerik:RadComboBox>
-			 </td>     
+			 </td>    
 				   
 			   <td> 
 				 <asp:Label ID="lblSchool" runat="server" CssClass="UserMessage" Text="School"></asp:Label>
@@ -28,7 +28,6 @@
 												<telerik:RadComboBoxItem Text="-----Select-----" Value="0" />
 											</Items>
 										</telerik:RadComboBox>
-									  
 		   </td>
 		   </tr>
 		   <tr>
@@ -40,11 +39,7 @@
 		   </td>
 		   </tr>
 		   <tr>
-		   <td colspan="2"  align="right">
-		   
-			
-		 
-			  
+		   <td colspan="2"  align="right">			  
 				 <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Home"))
 					{
 					 %>
@@ -53,44 +48,18 @@
 			 
 				<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("View Logout"))
 				   {
-					 %>
-					 
-					 <asp:LinkButton id="lnkLogout" style="color:White;" runat="server" OnClick="lnkLogout_click">Logout</asp:LinkButton>
-				
+					 %>					 
+					 <asp:LinkButton id="lnkLogout" style="color:White;" runat="server" OnClick="lnkLogout_click">Logout</asp:LinkButton>				
 			   <% } %>
-			 
-			
-			
-		   </td>
-		  
-		   </tr>
-				   
-				
-		   
-		  
-		  
-			
-		  
-		   
-		 
-
-		
-			 
-	   </table>
-				
-		  </div>
-		  
+		   </td>		  
+		   </tr>			 
+	   </table>				
+		  </div>		  
 		  <div class="clear">
-   
-
-
 			<table width="1200" border="1" cellspacing="0" cellpadding="0">
 			  <tr>
 				<td>
 					<ul id="css3menu1" class="topmenu">
-				  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-					<tr>
-					  <td>
 
 
 					   <% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage General"))
@@ -98,8 +67,6 @@
 					 %>
 							<li class="topmenu"><a href="#" style="height:25px;line-height:25px;">General</a>
 							<ul>
-								
-							
 						   
 								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Companies"))
 								 {
@@ -125,15 +92,11 @@
 													}   
 													%>
 											</li>
-									 </ul>
-							 
+									 </ul>							 
 							 </li>
 							  <%
 						  }
-						 %>
-						
-							
-								 
+						 %>								 
 								<% if (SchoolManagementSystem.Classes.AuthorizedManager.HasPrivilege("Manage Schools"))
 											 {
 								%>
@@ -1398,27 +1361,15 @@
 													onfocus="this.blur()">
 													View Teachers Detail 
 												</a>
-
 									<%} %>
 									</li> 
-
-
-									
 						  </ul>
 						</li>
 						<%} %>
 					   
-						
-						</td>
-					 
-					  <td align = "right" valign="middle"  >&nbsp;</td>
-
-					</tr>
-				  </table>
 				  </ul></td>
 			  </tr>
 			</table>
-
- 
 		  </div>
   </header>
+</div>

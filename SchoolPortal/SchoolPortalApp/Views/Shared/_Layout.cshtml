@@ -1,4 +1,5 @@
 @using System.Security.Claims
+@inject SchoolPortal.Services.IServices.ILookupService Lookup
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -307,11 +308,33 @@
 									var designation = Context.Session.GetString("Designation") ?? "Not Specified";
 									var fullName = Context.Session.GetString("FullName") ?? userName;
 								}
-								<span class="navbar-text me-3"
+                                <span class="navbar-text me-3"
 									  data-bs-toggle="tooltip"
 									  data-bs-placement="bottom"
 									  title="Name: @fullName&#10;Role: @role&#10;Designation: @designation">
-									Welcome, @displayName
+                                    @{ 
+                                        var companyIdStr = Context.Session.GetString("CompanyId");
+                                        var schoolIdStr = Context.Session.GetString("SchoolId");
+                                        var companyName = string.Empty;
+                                        var schoolName = string.Empty;
+                                        if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
+                                        {
+                                            var companies = Lookup.GetCompanies();
+                                            var comp = companies.FirstOrDefault(c => c.Id == companyId);
+                                            companyName = comp?.Name ?? string.Empty;
+                                        }
+                                        if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+                                        {
+                                            var schools = Lookup.GetSchools();
+                                            var sch = schools.FirstOrDefault(s => s.Id == schoolId);
+                                            schoolName = sch?.Name ?? string.Empty;
+                                        }
+                                        if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
+                                        {
+                                            <text>@companyName@(string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(schoolName) ? "" : " | ")@schoolName&nbsp;&nbsp;</text>
+                                        }
+                                    }
+                                    Welcome, @displayName
 								</span>
                                 <script>
                                     // Initialize tooltips
