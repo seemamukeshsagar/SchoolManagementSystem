@@ -1,0 +1,58 @@
+@model SchoolPortalApp.Models.RoleMasterViewModel
+
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Edit Role</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group row">
+                <label asp-for="RoleName" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <input asp-for="RoleName" class="form-control" />
+                    <span asp-validation-for="RoleName" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label asp-for="Description" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label asp-for="IsActive" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label class="form-check-label" asp-for="IsActive"></label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,41 @@
+@model IEnumerable<SchoolPortalApp.Models.PrivilegeListItemViewModel>
+
+@{
+    ViewData["Title"] = "Privileges";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Privileges</h3>
+        <div class="card-tools">
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@(item.IsActive ? "Yes" : "No")</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-xs">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-xs">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-xs">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

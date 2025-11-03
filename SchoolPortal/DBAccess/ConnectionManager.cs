@@ -7,7 +7,7 @@ using System.IO;
 namespace SchoolPortal.DBAccess
 {
 	#region ConnectionManager class
-	public class ConnectionManager
+	public class ConnectionManager : IDisposable
 	{
 		private IQueryLogger? _queryLogger;
 
@@ -161,6 +161,42 @@ namespace SchoolPortal.DBAccess
 				_queryLogger.Log(proc.ToString());
 			}
 		}
+
+		#region IDisposable Implementation
+		private bool _disposed = false;
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					// Dispose managed resources here
+					// For example:
+					// if (_someDisposableResource != null)
+					// {
+					//     _someDisposableResource.Dispose();
+					// }
+				}
+
+				// Free unmanaged resources here
+				// (if any)
+				
+				_disposed = true;
+			}
+		}
+
+		~ConnectionManager()
+		{
+			Dispose(false);
+		}
+		#endregion
 	}
 	#endregion ConnectionManager
 }

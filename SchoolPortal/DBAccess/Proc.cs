@@ -10,13 +10,14 @@ namespace SchoolPortal.DBAccess
 	public delegate object BorrowReader(SqlDataReader reader, object[] args);
 
 	#region Proc class
-	public class Proc
+	public class Proc : IDisposable
 	{
 		private const int TRANSPORT_ERROR_RETRY_COUNT = 3;
 		private static readonly Hashtable _parmCache = Hashtable.Synchronized(new Hashtable());
 		private string _hashkey;
 		private readonly ConnectionManager _connectionManager;
 
+		 private bool disposed = false;
 
 		private readonly string _procName = string.Empty;
 		private readonly SqlCommand _command;
@@ -839,6 +840,37 @@ namespace SchoolPortal.DBAccess
 
 			return sb.ToString();
 		}
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources
+                    if (_command != null)
+                    {
+                        _command.Dispose();
+                    }
+                    if (_connectionManager != null)
+                    {
+                        _connectionManager.Dispose();
+                    }
+                }
+                disposed = true;
+            }
+        }
+
+        ~Proc()
+        {
+            Dispose(false);
+        }        
 	}
 
 	#endregion Proc class

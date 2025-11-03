@@ -1,0 +1,50 @@
+@model SchoolPortalApp.Models.RoleMasterDetailsViewModel
+
+@{
+    ViewData["Title"] = "Role Details";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Role Details</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.RoleName)</dt>
+            <dd class="col-sm-9">@Model.RoleName</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "N/A" : Model.Description)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Status)</dt>
+            <dd class="col-sm-9">
+                <span class="badge @(Model.IsActive ? "badge-success" : "badge-danger")">
+                    @Model.Status
+                </span>
+            </dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedBy)</dt>
+            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.CreatedBy) ? "N/A" : Model.CreatedBy)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+            <dd class="col-sm-9">@Model.CreatedDate.ToString("dd/MM/yyyy hh:mm tt")</dd>
+
+            @if (Model.ModifiedDate.HasValue)
+            {
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedBy)</dt>
+                <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.ModifiedBy) ? "N/A" : Model.ModifiedBy)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedDate)</dt>
+                <dd class="col-sm-9">@Model.ModifiedDate.Value.ToString("dd/MM/yyyy hh:mm tt")</dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
