@@ -35,6 +35,7 @@ namespace SchoolPortalApp.Controllers
                         Name = p.PrivilegeName,
                         IsActive = p.IsActive
                     })
+                    .OrderBy(x => x.Name)
                     .ToList();
 
                 return View(privileges);

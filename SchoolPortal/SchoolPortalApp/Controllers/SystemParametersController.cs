@@ -37,6 +37,7 @@ namespace SchoolPortalApp.Controllers
                 Id = item.Id,
                 ParameterName = item.ParameterName,
                 ParameterValue = item.ParameterValue,
+                Description = item.Description,
                 IsActive = item.IsActive,
                 CompanyName = companies.FirstOrDefault(c => c.Id == item.CompanyId)?.Name ?? string.Empty,
                 SchoolName = schools.FirstOrDefault(s => s.Id == item.SchoolId)?.Name ?? string.Empty,
