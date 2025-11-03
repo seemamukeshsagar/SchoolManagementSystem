@@ -375,6 +375,17 @@ namespace SchoolPortalApp.Controllers
 			}
 		}
 
+		private string GetInnerExceptionMessages(Exception ex)
+		{
+			var messages = new List<string>();
+			while (ex != null)
+			{
+				messages.Add(ex.Message);
+				ex = ex.InnerException;
+			}
+			return string.Join(" ", messages);
+		}
+
 		[HttpPost]
 		[Route("Import")]
 		[ValidateAntiForgeryToken]
@@ -419,55 +430,99 @@ namespace SchoolPortalApp.Controllers
 					// Copy the file to a memory stream
 					await model.ExcelFile.CopyToAsync(memoryStream);
             
+					// Check if the file is empty
+					if (memoryStream.Length == 0)
+					{
+						ModelState.AddModelError("", "The uploaded file is empty.");
+						return View(model);
+					}
+
 					// Reset the position to the beginning of the stream
 					memoryStream.Position = 0;
 
 					try
 					{
-						using (var workbook = new XLWorkbook(memoryStream))
+						// Ensure the stream is at the beginning
+						memoryStream.Position = 0;
+
+						try
 						{
-							var worksheet = workbook.Worksheet(1) ?? workbook.Worksheet(0);
-							if (worksheet == null)
+							using (var workbook = new XLWorkbook(memoryStream))
 							{
-								ModelState.AddModelError("", "The Excel file does not contain any worksheets.");
-								return View(model);
-							}
-
-							var rows = worksheet.RowsUsed().Skip(1); // Skip header row
-
-							foreach (var row in rows)
-							{
-								var deptCode = row.Cell(1).GetString()?.Trim() ?? "";
-								var deptName = row.Cell(2).GetString()?.Trim() ?? "";
-								var schoolName = row.Cell(3).GetString()?.Trim() ?? "";
-								var isActive = row.Cell(4).GetString()?.Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase) ?? false;
-
-								if (string.IsNullOrEmpty(deptCode) || string.IsNullOrEmpty(deptName) || string.IsNullOrEmpty(schoolName))
-									continue;
-
-								var school = schools.FirstOrDefault(s =>
-									s.Name.Equals(schoolName, StringComparison.OrdinalIgnoreCase));
-								if (school == null) continue;
-
-								var dept = new DeptMaster
+								var worksheet = workbook.Worksheet(1) ?? workbook.Worksheet(0);
+								if (worksheet == null)
 								{
-									Id = Guid.NewGuid(),
-									DeptCode = deptCode,
-									DeptName = deptName,
-									SchoolId = school.Id,
-									IsActive = isActive,
-									CreatedBy = userId,
-									CompanyId = companyId
-								};
+									ModelState.AddModelError("", "The Excel file does not contain any worksheets.");
+									return View(model);
+								}
 
-								departments.Add(dept);
+								var rows = worksheet.RowsUsed().Skip(1); // Skip header row
+
+								foreach (var row in rows)
+								{
+									var deptCode = row.Cell(1).GetString()?.Trim() ?? "";
+									var deptName = row.Cell(2).GetString()?.Trim() ?? "";
+									var schoolName = row.Cell(3).GetString()?.Trim() ?? "";
+									var isActive = row.Cell(4).GetString()?.Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase) ?? false;
+
+									if (string.IsNullOrEmpty(deptCode) || string.IsNullOrEmpty(deptName) || string.IsNullOrEmpty(schoolName))
+										continue;
+
+									var school = schools.FirstOrDefault(s =>
+										s.Name.Equals(schoolName, StringComparison.OrdinalIgnoreCase));
+									if (school == null) continue;
+
+									var dept = new DeptMaster
+									{
+										Id = Guid.NewGuid(),
+										DeptCode = deptCode,
+										DeptName = deptName,
+										SchoolId = school.Id,
+										IsActive = isActive,
+										CreatedBy = userId,
+										CompanyId = companyId
+									};
+
+									departments.Add(dept);
+								}
 							}
 						}
+						catch (FileFormatException ex) when (ex.Message.Contains("corrupted"))
+						{
+							_logger.LogError(ex, "Corrupted Excel file detected");
+							ModelState.AddModelError("", "The uploaded Excel file appears to be corrupted. Please ensure it's a valid Excel file and try again.");
+							return View(model);
+						}
 					}
-					catch (Exception ex) when (ex is FormatException || ex is InvalidOperationException)
+					catch (FileFormatException ex)
 					{
 						_logger.LogError(ex, "Invalid Excel file format");
-						ModelState.AddModelError("", "The uploaded file is not a valid Excel file or is corrupted.");
+						ModelState.AddModelError("", "The uploaded file is not a valid Excel file or is corrupted. Please upload a valid .xlsx or .xls file.");
+						return View(model);
+					}
+					catch (IOException ex)
+					{
+						_logger.LogError(ex, "I/O error while reading Excel file");
+						ModelState.AddModelError("", "An error occurred while reading the file. Please try again or use a different file.");
+						return View(model);	
+					}
+					catch (Exception ex)
+					{
+						_logger.LogError(ex, "Error processing Excel file");
+						// Try to get more specific error information
+						string errorDetails = GetInnerExceptionMessages(ex);
+						_logger.LogError("Error details: {ErrorDetails}", errorDetails);
+						
+						// Provide a more specific error message if possible
+						if (errorDetails.Contains("corrupted", StringComparison.OrdinalIgnoreCase))
+						{
+							ModelState.AddModelError("", "The uploaded file appears to be corrupted. Please ensure it's a valid Excel file and try again.");
+						}
+						else
+						{
+							ModelState.AddModelError("", $"An error occurred while processing the file: {errorDetails}");
+						}
+						
 						return View(model);
 					}
 				}
@@ -483,6 +538,10 @@ namespace SchoolPortalApp.Controllers
 			}
 			catch (Exception ex)
 			{
+				// Log the full exception details for debugging
+				_logger.LogError(ex, "Error in Import action");
+				string errorDetails = GetInnerExceptionMessages(ex);
+				_logger.LogError("Full error details: {ErrorDetails}", errorDetails);
 				_logger.LogError(ex, "Error importing departments from Excel");
 				ModelState.AddModelError("", "An error occurred while importing departments. Please check the file format and try again.");
 				return View(model);
