@@ -6,7 +6,7 @@ namespace SchoolPortalApp.Models.RolePrivilege
     public class RolePrivilegeIndexViewModel
     {
         public List<SelectListItem> Roles { get; set; } = new List<SelectListItem>();
-        public string SelectedRoleId { get; set; }
+        public string? SelectedRoleId { get; set; }
     }
 
     public class RolePrivilegeUpdateRequestModel

@@ -84,10 +84,21 @@ namespace SchoolPortalApp.Controllers
             var companyIdStr = HttpContext.Session.GetString("CompanyId");
             var schoolIdStr = HttpContext.Session.GetString("SchoolId");
             
-            if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-                string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+            // Check if required session values are present
+            if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
             {
-                ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
+                ModelState.AddModelError(string.Empty, "Missing required session data.");
+                PopulateDropdowns(model);
+                return View(model);
+            }
+
+            // Parse all GUIDs in a single check
+            if (!Guid.TryParse(companyIdStr, out var companyId) || 
+                !Guid.TryParse(schoolIdStr, out var schoolId) || 
+                !Guid.TryParse(userIdStr, out var userId))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid session data format.");
+                PopulateDropdowns(model);
                 return View(model);
             }
             
@@ -97,9 +108,9 @@ namespace SchoolPortalApp.Controllers
                 SubjectName = model.SubjectName,
                 IsScholastic = model.IsScholastic ?? false,
                 IsActive = model.IsActive,
-                CompanyId = Guid.Parse(companyIdStr),
-                SchoolId = Guid.Parse(schoolIdStr),
-                CreatedBy = Guid.Parse(userIdStr),
+                CompanyId = companyId,
+                SchoolId = schoolId,
+                CreatedBy = userId,
                 CreatedDate = DateTime.UtcNow
             };
 

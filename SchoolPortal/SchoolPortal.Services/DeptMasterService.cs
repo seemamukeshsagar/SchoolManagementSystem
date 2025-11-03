@@ -4,6 +4,9 @@ using System.Data;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using System.Data.Common;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchoolPortal.Services
 {
@@ -95,6 +98,44 @@ namespace SchoolPortal.Services
             var ret = p.Parameters["@RETURN_VALUE"].Value;
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
             return code == 1;
+        }
+
+        public void BulkInsert(IEnumerable<DeptMaster> departments)
+        {
+            if (departments == null || !departments.Any())
+                return;
+
+            // Create a DataTable to hold the department data
+            var table = new DataTable();
+            table.Columns.Add("Id", typeof(Guid));
+            table.Columns.Add("DeptCode", typeof(string));
+            table.Columns.Add("DeptName", typeof(string));
+            table.Columns.Add("SchoolId", typeof(Guid));
+            table.Columns.Add("IsActive", typeof(bool));
+            table.Columns.Add("CreatedBy", typeof(Guid));
+            table.Columns.Add("CreatedOn", typeof(DateTime));
+            table.Columns.Add("CompanyId", typeof(Guid));
+            
+            // Add rows to DataTable
+            foreach (var dept in departments)
+            {
+                table.Rows.Add(
+                    dept.Id,
+                    dept.DeptCode,
+                    dept.DeptName,
+                    dept.SchoolId,
+                    dept.IsActive,
+                    dept.CreatedBy,
+                    dept.CompanyId
+                );
+            }
+
+            // Use the same pattern as other methods with a stored procedure
+            using (var p = new Proc("DeptMaster_BulkInsert"))
+            {
+                p["@Departments"] = table;
+                p.Exec();
+            }
         }
     }
 }

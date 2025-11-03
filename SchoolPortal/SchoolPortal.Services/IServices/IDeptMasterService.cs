@@ -11,5 +11,6 @@ namespace SchoolPortal.Services.IServices
         Guid Create(DeptMaster dept);
         bool Update(DeptMaster dept);
         bool Delete(Guid id);
+        void BulkInsert(IEnumerable<DeptMaster> departments);
     }
 }

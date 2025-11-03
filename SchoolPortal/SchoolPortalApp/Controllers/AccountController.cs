@@ -52,6 +52,12 @@ namespace SchoolPortalApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
+            if (model == null)
+            {
+                _logger.LogWarning("Login called with null model");
+                return View(new LoginViewModel());
+            }
+
             _logger.LogInformation("POST Login method called. UserName: {UserName}", model?.UserName);
             
             try
@@ -62,8 +68,18 @@ namespace SchoolPortalApp.Controllers
                     return View(model);
                 }
 
-                _logger.LogInformation("Authenticating user: {UserName}", model?.UserName ?? string.Empty);
-                var userDetails = await _loginService.AuthenticateUserAsync(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+                if (model == null)
+                {
+                    _logger.LogWarning("Login attempt with null model");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(new LoginViewModel());
+                }
+
+                _logger.LogInformation("Authenticating user: {UserName}", model.UserName ?? string.Empty);
+                var userDetails = await _loginService.AuthenticateUserAsync(
+                    model.UserName ?? string.Empty, 
+                    model.Password ?? string.Empty
+                );
 
                 if (userDetails != null)
                 {

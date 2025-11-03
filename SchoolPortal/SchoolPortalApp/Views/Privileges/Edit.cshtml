@@ -1,7 +1,8 @@
 @model SchoolPortalApp.Models.PrivilegeViewModel
 
 @{
-    ViewData["Title"] = ViewContext.RouteData.Values["action"].ToString() + " Privilege";
+    var actionName = ViewContext.RouteData.Values["action"]?.ToString() ?? "Edit";
+    ViewData["Title"] = $"{actionName} Privilege";
 }
 
 <div class="card">
@@ -9,10 +10,10 @@
         <h3 class="card-title">@ViewData["Title"]</h3>
     </div>
     <div class="card-body">
-        <form asp-action="@ViewContext.RouteData.Values["action"].ToString()">
+        <form asp-action="@actionName">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            @if (ViewContext.RouteData.Values["action"].ToString() == "Edit")
+            @if (string.Equals(actionName, "Edit", StringComparison.OrdinalIgnoreCase))
             {
                 <input type="hidden" asp-for="Id" />
             }
