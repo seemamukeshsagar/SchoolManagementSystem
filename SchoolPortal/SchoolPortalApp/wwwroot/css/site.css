@@ -29,3 +29,20 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.privilege-tree .table-primary {
+    background-color: #e9ecef;
+}
+
+.privilege-tree tr:not(.table-primary) {
+    background-color: #fff;
+}
+
+.privilege-tree .form-check {
+    margin-bottom: 0;
+}
+
+.privilege-tree .form-check-label {
+    cursor: pointer;
+    padding-left: 0.25rem;
+}

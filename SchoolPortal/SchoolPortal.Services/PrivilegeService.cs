@@ -31,7 +31,7 @@ namespace SchoolPortal.Services
             return list;
         }
 
-        public Privileges GetById(Guid id)
+        public Privileges? GetById(Guid id)
         {
             using (var p = new Proc(_connectionManager, "sp_Privilege_GetById"))
             {

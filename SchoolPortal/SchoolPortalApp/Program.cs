@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
 using SchoolPortal.Services.Common;
 using Microsoft.Extensions.DependencyInjection;
+using SchoolPortal.DBAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,8 @@ builder.Services.AddAntiforgery(o =>
 builder.Services.AddHttpContextAccessor();
 
 // DI registrations
+builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
+    SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
@@ -87,6 +90,7 @@ builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
 builder.Services.AddScoped<IParentService, SchoolPortal.Services.ParentService>();
 builder.Services.AddScoped<IRoleMasterService, SchoolPortal.Services.RoleMasterService>();
 builder.Services.AddScoped<IPrivilegeService, SchoolPortal.Services.PrivilegeService>();
+builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePrivilegeService>();
 
 var app = builder.Build();
 

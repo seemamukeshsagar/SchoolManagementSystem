@@ -61,7 +61,7 @@ namespace SchoolPortal.Services
             return list;
         }
 
-        public RoleMaster GetById(Guid id)
+        public RoleMaster? GetById(Guid id)
         {
             var p = new Proc("RoleMaster_GetById");
             try
