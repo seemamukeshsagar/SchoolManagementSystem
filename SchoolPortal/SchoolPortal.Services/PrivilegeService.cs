@@ -51,7 +51,7 @@ namespace SchoolPortal.Services
                 p.Parameters.AddWithValue("IsActive", entity.IsActive);
                 p.Parameters.AddWithValue("CreatedBy", entity.CreatedBy);
                 p.Parameters.AddWithValue("PrivilegeParentId", 
-                    (object)entity.PrivilegeParentId ?? DBNull.Value);
+                    entity.PrivilegeParentId.HasValue ? (object)entity.PrivilegeParentId.Value : DBNull.Value);
 
                 var dt = new DataTable();
                 p.Exec(dt);
@@ -70,8 +70,8 @@ namespace SchoolPortal.Services
                 p.Parameters.AddWithValue("PrivilegeName", entity.PrivilegeName);
                 p.Parameters.AddWithValue("IsActive", entity.IsActive);
                 p.Parameters.AddWithValue("ModifiedBy", entity.ModifiedBy.Value);
-                p.Parameters.AddWithValue("PrivilegeParentId", 
-                    (object)entity.PrivilegeParentId ?? DBNull.Value);
+                p.Parameters.AddWithValue("PrivilegeParentId",
+                    entity.PrivilegeParentId.HasValue ? (object)entity.PrivilegeParentId.Value : DBNull.Value);
 
                 p.Exec();
                 return true;

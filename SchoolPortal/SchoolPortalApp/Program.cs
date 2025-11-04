@@ -91,6 +91,7 @@ builder.Services.AddScoped<IParentService, SchoolPortal.Services.ParentService>(
 builder.Services.AddScoped<IRoleMasterService, SchoolPortal.Services.RoleMasterService>();
 builder.Services.AddScoped<IPrivilegeService, SchoolPortal.Services.PrivilegeService>();
 builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePrivilegeService>();
+builder.Services.AddScoped<IHolidayMasterService, SchoolPortal.Services.HolidayMasterService>();
 
 var app = builder.Build();
 

@@ -376,15 +376,16 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		private string GetInnerExceptionMessages(Exception ex)
-		{
-			var messages = new List<string>();
-			while (ex != null)
-			{
-				messages.Add(ex.Message);
-				ex = ex.InnerException;
-			}
-			return string.Join(" ", messages);
-		}
+        {
+            var messages = new List<string>();
+            Exception? current = ex;
+            while (current != null)
+            {
+                messages.Add(current.Message);
+                current = current.InnerException;
+            }
+            return string.Join(" ", messages);
+        }
 
 		[HttpPost]
 		[Route("Import")]

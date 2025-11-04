@@ -11,7 +11,7 @@ namespace SchoolPortal.Services
     {
         private DesigMaster Map(DataRow row)
         {
-            if (row == null) return null;
+            if (row == null) return new DesigMaster();
             
             return new DesigMaster
             {

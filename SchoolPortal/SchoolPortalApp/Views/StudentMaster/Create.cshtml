@@ -385,12 +385,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="PreviousSchoolClassId"></label>
-                        <select asp-for="PreviousSchoolClassId" class="form-control">
+                        <select asp-for="PreviousSchoolClassId" asp-items="Model.PreviousSchoolClasses" class="form-control">
                             <option value="">-- Select Class --</option>
-                            @foreach (var item in Model.PreviousSchoolClasses)
-                            {
-                                <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">@item.Text</option>
-                            }
                         </select>
                         <span asp-validation-for="PreviousSchoolClassId" class="text-danger"></span>
                     </div>
@@ -398,12 +394,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="PreviousSchoolBoardId"></label>
-                        <select asp-for="PreviousSchoolBoardId" class="form-control">
+                        <select asp-for="PreviousSchoolBoardId" asp-items="Model.PreviousSchoolBoards" class="form-control">
                             <option value="">-- Select Board --</option>
-                            @foreach (var item in Model.PreviousSchoolBoards)
-                            {
-                                <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">@item.Text</option>
-                            }
                         </select>
                         <span asp-validation-for="PreviousSchoolBoardId" class="text-danger"></span>
                     </div>
