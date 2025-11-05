@@ -1,23 +1,167 @@
-@model SchoolPortal.Entities.Models.StudentMaster
+@model SchoolPortalApp.Models.StudentViewModel
 @{
     ViewData["Title"] = "Student Details";
 }
 <h2>Student Details</h2>
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@string.Join(" ", new[] { Model.FirstName, Model.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)))</dd>
-        <dt class="col-sm-2">DOB</dt>
-        <dd class="col-sm-10">@Model.DOB.ToString("yyyy-MM-dd")</dd>
-        <dt class="col-sm-2">Email</dt>
-        <dd class="col-sm-10">@Model.Email</dd>
-        <dt class="col-sm-2">Phone</dt>
-        <dd class="col-sm-10">@Model.Phone</dd>
-        <dt class="col-sm-2">Active</dt>
-        <dd class="col-sm-10">@Model.IsActive</dd>
-    </dl>
+
+<ul class="nav nav-tabs" id="studentTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false">Address & Contact</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="parents-tab" data-bs-toggle="tab" data-bs-target="#parents" type="button" role="tab" aria-controls="parents" aria-selected="false">Parents</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">Academic Details</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="previous-school-tab" data-bs-toggle="tab" data-bs-target="#previous-school" type="button" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="additional-tab" data-bs-toggle="tab" data-bs-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="false">Additional Info</button>
+    </li>
+    
+    
+</ul>
+
+<div class="tab-content p-3 border border-top-0 rounded-bottom" id="studentTabsContent">
+    <!-- Basic Information Tab -->
+    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+        <dl class="row">
+            <dt class="col-sm-3">First Name</dt><dd class="col-sm-9">@Model.FirstName</dd>
+            <dt class="col-sm-3">Last Name</dt><dd class="col-sm-9">@Model.LastName</dd>
+            <dt class="col-sm-3">Date of Birth</dt><dd class="col-sm-9">@Model.DOB.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-3">Gender</dt><dd class="col-sm-9">@(Model.Genders?.FirstOrDefault(x => x.Value == Model.Gender?.ToString())?.Text ?? Model.Gender?.ToString())</dd>
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
+            <dt class="col-sm-3">Image</dt><dd class="col-sm-9">@Model.Image</dd>
+        </dl>
+    </div>
+
+    <!-- Address & Contact Tab -->
+    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Address</dt><dd class="col-sm-9">@Model.Address</dd>
+            <dt class="col-sm-3">Country</dt><dd class="col-sm-9">@(Model.Countries?.FirstOrDefault(x => x.Value == Model.CountryId.ToString())?.Text ?? Model.CountryId.ToString())</dd>
+            <dt class="col-sm-3">State</dt><dd class="col-sm-9">@(Model.States?.FirstOrDefault(x => x.Value == Model.StateId.ToString())?.Text ?? Model.StateId.ToString())</dd>
+            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@(Model.Cities?.FirstOrDefault(x => x.Value == Model.CityId.ToString())?.Text ?? Model.CityId.ToString())</dd>
+            <dt class="col-sm-3">Zip Code</dt><dd class="col-sm-9">@Model.ZipCode</dd>
+            <dt class="col-sm-3">Contact Number</dt><dd class="col-sm-9">@Model.ContactNumber</dd>
+            <dt class="col-sm-3">Emergency Contact</dt><dd class="col-sm-9">@Model.EmergencyContactNumber</dd>
+        </dl>
+    </div>
+
+    <!-- Parents Tab -->
+    <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Parent First Name</dt><dd class="col-sm-9">@Model.ParentFirstName</dd>
+            <dt class="col-sm-3">Parent Last Name</dt><dd class="col-sm-9">@Model.ParentLastName</dd>
+            <dt class="col-sm-3">Relation Type</dt><dd class="col-sm-9">@(Model.ParentRelationTypes?.FirstOrDefault(x => x.Value == Model.ParentRelationTypeId?.ToString())?.Text ?? Model.ParentRelationTypeId?.ToString())</dd>
+            <dt class="col-sm-3">Qualification</dt><dd class="col-sm-9">@(Model.ParentQualifications?.FirstOrDefault(x => x.Value == Model.ParentQualificationId?.ToString())?.Text ?? Model.ParentQualificationId?.ToString())</dd>
+            <dt class="col-sm-3">Designation</dt><dd class="col-sm-9">@(Model.ParentDesignations?.FirstOrDefault(x => x.Value == Model.ParentDesignationId?.ToString())?.Text ?? Model.ParentDesignationId?.ToString())</dd>
+            <dt class="col-sm-3">Occupation</dt><dd class="col-sm-9">@Model.ParentOccupation</dd>
+            <dt class="col-sm-3">Annual Income</dt><dd class="col-sm-9">@Model.ParentAnnualIncome</dd>
+            <dt class="col-sm-3">Parent DOB</dt><dd class="col-sm-9">@(Model.ParentDOB?.ToString("yyyy-MM-dd"))</dd>
+            <dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.ParentPhone</dd>
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.ParentEmail</dd>
+            <dt class="col-sm-3">Address 1</dt><dd class="col-sm-9">@Model.ParentAddress1</dd>
+            <dt class="col-sm-3">Address 2</dt><dd class="col-sm-9">@Model.ParentAddress2</dd>
+            <dt class="col-sm-3">Country</dt><dd class="col-sm-9">@(Model.ParentCountries?.FirstOrDefault(x => x.Value == Model.ParentCountryId?.ToString())?.Text ?? Model.ParentCountryId?.ToString())</dd>
+            <dt class="col-sm-3">State</dt><dd class="col-sm-9">@(Model.ParentStates?.FirstOrDefault(x => x.Value == Model.ParentStateId?.ToString())?.Text ?? Model.ParentStateId?.ToString())</dd>
+            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@(Model.ParentCities?.FirstOrDefault(x => x.Value == Model.ParentCityId?.ToString())?.Text ?? Model.ParentCityId?.ToString())</dd>
+            <dt class="col-sm-3">Zip Code</dt><dd class="col-sm-9">@Model.ParentZipCode</dd>
+            <dt class="col-sm-3">Is Active</dt><dd class="col-sm-9">@Model.ParentIsActive</dd>
+        </dl>
+    </div>
+
+    <!-- Academic Details Tab -->
+    <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Class</dt><dd class="col-sm-9">@(Model.Classes?.FirstOrDefault(x => x.Value == Model.ClassId.ToString())?.Text ?? Model.ClassId.ToString())</dd>
+            <dt class="col-sm-3">Section</dt><dd class="col-sm-9">@(Model.Sections?.FirstOrDefault(x => x.Value == Model.SectionId.ToString())?.Text ?? Model.SectionId.ToString())</dd>
+            <dt class="col-sm-3">Roll Number</dt><dd class="col-sm-9">@Model.RollNumber</dd>
+            <dt class="col-sm-3">Registration Number</dt><dd class="col-sm-9">@Model.RegistrationNumber</dd>
+            <dt class="col-sm-3">DOJ</dt><dd class="col-sm-9">@Model.DOJ.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-3">Class Teacher</dt><dd class="col-sm-9">@(ViewBag.ClassTeacherName as string ?? Model.ClassTeacherId?.ToString())</dd>
+        </dl>
+    </div>
+
+    <!-- Medical & Background Tab -->
+    <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Blood Group</dt><dd class="col-sm-9">@(Model.BloodGroups?.FirstOrDefault(x => x.Value == Model.BloodGroupId.ToString())?.Text ?? Model.BloodGroupId.ToString())</dd>
+            <dt class="col-sm-3">Nationality</dt><dd class="col-sm-9">@(Model.Nationalities?.FirstOrDefault(x => x.Value == Model.Nationality.ToString())?.Text ?? Model.Nationality.ToString())</dd>
+            <dt class="col-sm-3">Religion</dt><dd class="col-sm-9">@(Model.Religions?.FirstOrDefault(x => x.Value == Model.ReligionId.ToString())?.Text ?? Model.ReligionId.ToString())</dd>
+            <dt class="col-sm-3">Disability</dt><dd class="col-sm-9">@Model.DisabilityAny</dd>
+            <dt class="col-sm-3">Medical Allergy</dt><dd class="col-sm-9">@Model.MedicalAlleryAny</dd>
+            <dt class="col-sm-3">Birth Country</dt><dd class="col-sm-9">@Model.BirthCountryId</dd>
+            <dt class="col-sm-3">Birth State</dt><dd class="col-sm-9">@Model.BirthStateId</dd>
+            <dt class="col-sm-3">Birth City</dt><dd class="col-sm-9">@Model.BirthCityId</dd>
+        </dl>
+    </div>
+
+    <!-- Previous School Tab -->
+    <div class="tab-pane fade" id="previous-school" role="tabpanel" aria-labelledby="previous-school-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Previous School</dt><dd class="col-sm-9">@Model.PreviousSchoolAttended</dd>
+            <dt class="col-sm-3">Class</dt><dd class="col-sm-9">@(Model.PreviousSchoolClasses?.FirstOrDefault(x => x.Value == Model.PreviousSchoolClassId?.ToString())?.Text ?? Model.PreviousSchoolClassId?.ToString())</dd>
+            <dt class="col-sm-3">Board</dt><dd class="col-sm-9">@(Model.PreviousSchoolBoards?.FirstOrDefault(x => x.Value == Model.PreviousSchoolBoardId.ToString())?.Text ?? Model.PreviousSchoolBoardId.ToString())</dd>
+            <dt class="col-sm-3">Percentage</dt><dd class="col-sm-9">@Model.PreviousSchoolPercentage</dd>
+            <dt class="col-sm-3">Rank</dt><dd class="col-sm-9">@Model.PreviousSchoolRank</dd>
+            <dt class="col-sm-3">From Date</dt><dd class="col-sm-9">@(Model.PreviousSchoolFromDate?.ToString("yyyy-MM-dd"))</dd>
+            <dt class="col-sm-3">To Date</dt><dd class="col-sm-9">@(Model.PreviousSchoolToDate?.ToString("yyyy-MM-dd"))</dd>
+            <dt class="col-sm-3">Withdrawn Date</dt><dd class="col-sm-9">@(Model.WithdrawnDate?.ToString("yyyy-MM-dd"))</dd>
+            <dt class="col-sm-3">Withdrawn Reason</dt><dd class="col-sm-9">@Model.WithdrawnReason</dd>
+        </dl>
+    </div>
+
+    <!-- Additional Info Tab -->
+    <div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
+        <dl class="row">
+            <dt class="col-sm-3">Hobbies</dt><dd class="col-sm-9">@Model.Hobbies</dd>
+            <dt class="col-sm-3">Siblings If Any</dt><dd class="col-sm-9">@Model.SiblingsIfAny</dd>
+            <dt class="col-sm-3">Sibling Class</dt><dd class="col-sm-9">@(Model.SiblingClasses?.FirstOrDefault(x => x.Value == Model.SiblingClassId?.ToString())?.Text ?? Model.SiblingClassId?.ToString())</dd>
+            <dt class="col-sm-3">Avail Transport</dt><dd class="col-sm-9">@Model.AvailTransport</dd>
+            <dt class="col-sm-3">Category</dt><dd class="col-sm-9">@(Model.Categories?.FirstOrDefault(x => x.Value == Model.CategoryId.ToString())?.Text ?? Model.CategoryId.ToString())</dd>
+            <dt class="col-sm-3">Route</dt><dd class="col-sm-9">@Model.RouteId</dd>
+            <dt class="col-sm-3">Route Stop</dt><dd class="col-sm-9">@Model.RouteStopDetailsId</dd>
+            <dt class="col-sm-3">Route Pick And Drop</dt><dd class="col-sm-9">@Model.RoutePickAndDrop</dd>
+            <dt class="col-sm-3">Fees Discount Category</dt><dd class="col-sm-9">@Model.FeesDiscountCategoryMasterId</dd>
+            <dt class="col-sm-3">Tuition Fees</dt><dd class="col-sm-9">@Model.TutionFees</dd>
+            <dt class="col-sm-3">Annual Fees</dt><dd class="col-sm-9">@Model.AnnualFees</dd>
+            <dt class="col-sm-3">Transport Fees</dt><dd class="col-sm-9">@Model.TransportFees</dd>
+            <dt class="col-sm-3">Use Transport Fees</dt><dd class="col-sm-9">@Model.UseTransportFees</dd>
+            <dt class="col-sm-3">Session</dt><dd class="col-sm-9">@Model.SessionId</dd>
+            <dt class="col-sm-3">Company</dt><dd class="col-sm-9">@(ViewBag.CompanyName as string ?? Model.CompanyId.ToString())</dd>
+            <dt class="col-sm-3">School</dt><dd class="col-sm-9">@(ViewBag.SchoolName as string ?? Model.SchoolId.ToString())</dd>
+            <dt class="col-sm-3">Is Active</dt><dd class="col-sm-9">@Model.IsActive</dd>
+            <dt class="col-sm-3">Is Deleted</dt><dd class="col-sm-9">@Model.IsDeleted</dd>
+            <dt class="col-sm-3">Status</dt><dd class="col-sm-9">@Model.Status</dd>
+            <dt class="col-sm-3">Status Message</dt><dd class="col-sm-9">@Model.StatusMessage</dd>
+            <dt class="col-sm-3">House Allotted</dt><dd class="col-sm-9">@Model.HouseAllotted</dd>
+        </dl>
+    </div>
 </div>
-<p>
+
+<div class="mt-4">
     <a class="btn btn-secondary" asp-action="Index">Back to List</a>
     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-</p>
+    
+</div>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var firstEl = document.getElementById('basic-tab');
+            if (firstEl && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+                new bootstrap.Tab(firstEl).show();
+            }
+        });
+    </script>
+}

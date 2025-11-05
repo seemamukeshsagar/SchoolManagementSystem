@@ -117,5 +117,16 @@ namespace SchoolPortal.Services
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
             return code == 1;
         }
+
+        public string CompanyNameById(Guid id)
+        {
+            Proc p = new Proc("Company_GetById");
+            p["@Id"] = id;
+            var dt = new DataTable();
+            p.Exec(dt);
+            if (dt.Rows.Count == 0) return string.Empty;
+            var nameObj = dt.Rows[0]["CompanyName"];
+            return nameObj?.ToString() ?? string.Empty;
+        }
     }
 }

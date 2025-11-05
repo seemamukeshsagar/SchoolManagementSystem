@@ -13,5 +13,6 @@ namespace SchoolPortal.Services.IServices
         Guid Create(CompanyMaster company);
         bool Update(CompanyMaster company);
         bool Delete(Guid id);
+        string CompanyNameById(Guid id);
     }
 }

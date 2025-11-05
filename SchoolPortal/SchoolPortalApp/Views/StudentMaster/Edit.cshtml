@@ -3,42 +3,656 @@
     ViewData["Title"] = "Edit Student";
 }
 <h2>Edit Student</h2>
-<form asp-action="Edit" method="post">
+<form asp-controller="StudentMaster" asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+
+    <ul class="nav nav-tabs" id="studentTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false">Address & Contact</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="parents-tab" data-bs-toggle="tab" data-bs-target="#parents" type="button" role="tab" aria-controls="parents" aria-selected="false">Parents</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">Academic Details</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="previous-school-tab" data-bs-toggle="tab" data-bs-target="#previous-school" type="button" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="additional-tab" data-bs-toggle="tab" data-bs-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="false">Additional Info</button>
+        </li>
+    </ul>
+
+    <div class="tab-content p-3 border border-top-0 rounded-bottom" id="studentTabsContent">
+        <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="DOB"></label>
+                        <input asp-for="DOB" type="date" class="form-control" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">@Html.DisplayNameFor(m => m.Gender)</label>
+                        <div class="d-flex gap-3 mt-2">
+                            @foreach (var gender in Model.Genders)
+                            {
+                                <div class="form-check">
+                                    <input asp-for="Gender" class="form-check-input" type="radio" value="@gender.Value" id="gender-@gender.Value">
+                                    <label class="form-check-label" for="gender-@gender.Value">
+                                        @gender.Text
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ImageFile"></label>
+                        <input asp-for="ImageFile" type="file" class="form-control-file" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Phone"></label>
+                        <input asp-for="Phone" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="CountryId"></label>
+                        <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="StateId"></label>
+                        <select asp-for="StateId" asp-items="Model.States" class="form-control" id="StateId"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="CityId"></label>
+                        <select asp-for="CityId" asp-items="Model.Cities" class="form-control" id="CityId"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ZipCode"></label>
+                        <input asp-for="ZipCode" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ContactNumber"></label>
+                        <input asp-for="ContactNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="EmergencyContactNumber"></label>
+                        <input asp-for="EmergencyContactNumber" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentFirstName"></label>
+                        <input asp-for="ParentFirstName" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ParentLastName"></label>
+                        <input asp-for="ParentLastName" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentRelationTypeId"></label>
+                        <select asp-for="ParentRelationTypeId" asp-items="Model.ParentRelationTypes" class="form-control">
+                            <option value="">-- Select Relation --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentQualificationId"></label>
+                        <select asp-for="ParentQualificationId" asp-items="Model.ParentQualifications" class="form-control">
+                            <option value="">-- Select Qualification --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentDesignationId"></label>
+                        <select asp-for="ParentDesignationId" asp-items="Model.ParentDesignations" class="form-control">
+                            <option value="">-- Select Designation --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentOccupation"></label>
+                        <input asp-for="ParentOccupation" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentAnnualIncome"></label>
+                        <input asp-for="ParentAnnualIncome" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentDOB"></label>
+                        <input asp-for="ParentDOB" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentAddress1"></label>
+                <input asp-for="ParentAddress1" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentAddress2"></label>
+                <input asp-for="ParentAddress2" class="form-control" />
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentCountryId"></label>
+                        <select asp-for="ParentCountryId" asp-items="Model.ParentCountries" class="form-control" id="ParentCountryId">
+                            <option value="">-- Select Country --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentStateId"></label>
+                        <select asp-for="ParentStateId" asp-items="Model.ParentStates" class="form-control" id="ParentStateId">
+                            <option value="">-- Select State --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ParentCityId"></label>
+                        <select asp-for="ParentCityId" asp-items="Model.ParentCities" class="form-control" id="ParentCityId">
+                            <option value="">-- Select City --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" type="checkbox" asp-for="ParentIsActive" id="ParentIsActive" />
+                <label class="form-check-label" for="ParentIsActive">@Html.DisplayNameFor(m => m.ParentIsActive)</label>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ClassId"></label>
+                        <select asp-for="ClassId" asp-items="Model.Classes" class="form-control" id="ClassId">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                        <span asp-validation-for="ClassId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="SectionId"></label>
+                        <select asp-for="SectionId" asp-items="Model.Sections" class="form-control" id="SectionId">
+                            <option value="">-- Select Section --</option>
+                        </select>
+                        <span asp-validation-for="SectionId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RollNumber"></label>
+                        <input asp-for="RollNumber" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="RegistrationNumber"></label>
+                        <input asp-for="RegistrationNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DOJ"></label>
+                        <input asp-for="DOJ" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="BloodGroupId"></label>
+                        <select asp-for="BloodGroupId" asp-items="Model.BloodGroups" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Nationality"></label>
+                        <select asp-for="Nationality" asp-items="Model.Nationalities" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ReligionId"></label>
+                        <select asp-for="ReligionId" asp-items="Model.Religions" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DisabilityAny"></label>
+                        <input asp-for="DisabilityAny" class="form-control" placeholder="If any, please specify" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="MedicalAlleryAny"></label>
+                        <input asp-for="MedicalAlleryAny" class="form-control" placeholder="If any, please specify" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Birth Details</label>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="BirthCountryId"></label>
+                            <select asp-for="BirthCountryId" asp-items="Model.BirthCountries" class="form-control" id="BirthCountryId">
+                                <option value="">-- Select Country --</option>
+                            </select>
+                            <span asp-validation-for="BirthCountryId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="BirthStateId"></label>
+                            <select asp-for="BirthStateId" class="form-control" id="BirthStateId">
+                                <option value="">-- Select State --</option>
+                            </select>
+                            <span asp-validation-for="BirthStateId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="BirthCityId"></label>
+                            <select asp-for="BirthCityId" class="form-control" id="BirthCityId">
+                                <option value="">-- Select City --</option>
+                            </select>
+                            <span asp-validation-for="BirthCityId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="previous-school" role="tabpanel" aria-labelledby="previous-school-tab">
+            <div class="form-group">
+                <label asp-for="PreviousSchoolAttended"></label>
+                <input asp-for="PreviousSchoolAttended" class="form-control" placeholder="Name of the previous school" />
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolClassId"></label>
+                        <select asp-for="PreviousSchoolClassId" asp-items="Model.PreviousSchoolClasses" class="form-control">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                        <span asp-validation-for="PreviousSchoolClassId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolBoardId"></label>
+                        <select asp-for="PreviousSchoolBoardId" asp-items="Model.PreviousSchoolBoards" class="form-control">
+                            <option value="">-- Select Board --</option>
+                        </select>
+                        <span asp-validation-for="PreviousSchoolBoardId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolPercentage"></label>
+                        <div class="input-group">
+                            <input asp-for="PreviousSchoolPercentage" class="form-control" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolFromDate"></label>
+                        <input type="date" asp-for="PreviousSchoolFromDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolToDate"></label>
+                        <input type="date" asp-for="PreviousSchoolToDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PreviousSchoolRank"></label>
+                        <input asp-for="PreviousSchoolRank" class="form-control" placeholder="If applicable" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="WithdrawnDate"></label>
+                        <input asp-for="WithdrawnDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="WithdrawnReason"></label>
+                <textarea asp-for="WithdrawnReason" class="form-control" rows="2" placeholder="Reason for leaving previous school"></textarea>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
+            <div class="form-group">
+                <label asp-for="Hobbies"></label>
+                <input asp-for="Hobbies" class="form-control" placeholder="Student's hobbies/interests" />
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="siblingsCheckbox" 
+                       name="@Html.NameFor(m => m.SiblingsIfAny)" 
+                       value="true"
+                       @(Model.SiblingsIfAny == true ? "checked" : "") />
+                <input type="hidden" name="@Html.NameFor(m => m.SiblingsIfAny)" value="false" />
+                <label class="form-check-label" for="siblingsCheckbox">@Html.DisplayNameFor(m => m.SiblingsIfAny)</label>
+            </div>
+            <div class="form-group" id="siblingClassGroup">
+                <label asp-for="SiblingClassId"></label>
+                <select asp-for="SiblingClassId" asp-items="Model.SiblingClasses" class="form-control">
+                    <option value="">-- Select Sibling's Class --</option>
+                </select>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="transportCheckbox" 
+                       name="@Html.NameFor(m => m.AvailTransport)" 
+                       value="true"
+                       @(Model.AvailTransport == true ? "checked" : "") />
+                <input type="hidden" name="@Html.NameFor(m => m.AvailTransport)" value="false" />
+                <label class="form-check-label" for="transportCheckbox">@Html.DisplayNameFor(m => m.AvailTransport)</label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" asp-for="IsActive" id="isActiveCheckbox" />
+                <label class="form-check-label" for="isActiveCheckbox">@Html.DisplayNameFor(m => m.IsActive)</label>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
-    <div class="form-group">
-        <label asp-for="DOB"></label>
-        <input asp-for="DOB" class="form-control" />
-        <span asp-validation-for="DOB" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Phone"></label>
-        <input asp-for="Phone" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="SchoolId"></label>
-        <select asp-for="SchoolId" asp-items="Model.Schools" class="form-control"></select>
-        <span asp-validation-for="SchoolId" class="text-danger"></span>
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="IsActive" />
-        <label class="form-check-label" asp-for="IsActive"></label>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Tab remember
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (el) {
+            el.addEventListener('shown.bs.tab', function (e) {
+                localStorage.setItem('lastTab', e.target.id);
+            });
+        });
+        var firstEl = document.getElementById('basic-tab');
+        if (firstEl) new bootstrap.Tab(firstEl).show();
+
+        function loadStates(countryId, targetElement, selectedId) {
+            var $stateDropdown = $(targetElement);
+            if (!countryId) {
+                $stateDropdown.empty().append('<option value="">-- Select State --</option>').prop('disabled', true);
+                if (targetElement === '#BirthStateId') {
+                    $('#BirthCityId').empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                } else if (targetElement === '#ParentStateId') {
+                    $('#ParentCityId').empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                }
+                return;
+            }
+            $.get('/StudentMaster/GetStatesByCountry/' + countryId, function (states) {
+                $stateDropdown.empty().append($('<option>', { value: '', text: '-- Select State --' }));
+                if (states && states.length > 0) {
+                    $.each(states, function (i, state) {
+                        $stateDropdown.append($('<option>', { value: state.value, text: state.text, selected: selectedId && state.value === selectedId }));
+                    });
+                    $stateDropdown.prop('disabled', false);
+                } else {
+                    $stateDropdown.append($('<option>', { value: '', text: 'No states available' }));
+                }
+                if (targetElement === '#BirthStateId' && selectedId) {
+                    loadCities(selectedId, '#BirthCityId', '@Model?.BirthCityId');
+                }
+                if (targetElement === '#ParentStateId' && selectedId) {
+                    loadCities(selectedId, '#ParentCityId', '@Model?.ParentCityId');
+                }
+            }).fail(function () {
+                console.error('Failed to load states');
+                $stateDropdown.empty().append('<option value="">-- Error loading states --</option>');
+            });
+        }
+
+        function loadCities(stateId, targetElement, selectedId) {
+            var $cityDropdown = $(targetElement);
+            if (!stateId) {
+                $cityDropdown.empty().append('<option value="">-- Select City --</option>').prop('disabled', true);
+                return;
+            }
+            $.get('/StudentMaster/GetCitiesByState/' + stateId, function (cities) {
+                $cityDropdown.empty().append($('<option>', { value: '', text: '-- Select City --' }));
+                if (cities && cities.length > 0) {
+                    $.each(cities, function (i, city) {
+                        $cityDropdown.append($('<option>', { value: city.value, text: city.text, selected: selectedId && city.value === selectedId }));
+                    });
+                    $cityDropdown.prop('disabled', false);
+                } else {
+                    $cityDropdown.append($('<option>', { value: '', text: 'No cities available' }));
+                }
+            }).fail(function () {
+                console.error('Failed to load cities');
+                $cityDropdown.empty().append('<option value="">-- Error loading cities --</option>');
+            });
+        }
+
+        function loadSections(classId, selectedId) {
+            var $sectionDropdown = $("#SectionId");
+            if (!classId) {
+                $sectionDropdown.empty().append('<option value="">-- Select Section --</option>').prop('disabled', true);
+                return;
+            }
+            $.get('/StudentMaster/GetSectionsByClass/' + encodeURIComponent(classId), function (sections) {
+                $sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
+                $.each(sections || [], function (i, section) {
+                    $sectionDropdown.append($('<option>', { value: section.value, text: section.text }));
+                });
+                if (selectedId) {
+                    $sectionDropdown.val(selectedId);
+                }
+                $sectionDropdown.prop('disabled', false).trigger('change');
+                if ($.fn.select2 && $sectionDropdown.hasClass('select2-hidden-accessible')) {
+                    $sectionDropdown.trigger('change.select2');
+                }
+            }).fail(function (xhr) {
+                console.error('Failed to load sections', xhr);
+                $sectionDropdown.empty().append('<option value="">-- Error loading sections --</option>').prop('disabled', true);
+            });
+        }
+
+        $(document).ready(function () {
+            function toggleSiblingClass() {
+                if ($("#siblingsCheckbox").is(":checked")) {
+                    $("#siblingClassGroup").show();
+                } else {
+                    $("#siblingClassGroup").hide();
+                    $("#SiblingClassId").val('');
+                }
+            }
+            toggleSiblingClass();
+            $("#siblingsCheckbox").change(toggleSiblingClass);
+
+            $("#ClassId").change(function () {
+                var classId = $(this).val();
+                $("#SectionId").prop('disabled', true).empty().append('<option value="">-- Select Section --</option>');
+                loadSections(classId);
+            });
+
+            $("#BirthCountryId").change(function () {
+                var countryId = $(this).val();
+                loadStates(countryId, '#BirthStateId');
+            });
+            $("#BirthStateId").change(function () {
+                var stateId = $(this).val();
+                loadCities(stateId, '#BirthCityId');
+            });
+
+            var selectedClassId = $("#ClassId").val();
+            var currentSectionId = '@Model.SectionId';
+            if (selectedClassId) {
+                loadSections(selectedClassId, currentSectionId);
+            }
+
+            var selectedBirthCountryId = $("#BirthCountryId").val();
+            var selectedBirthStateId = '@Model?.BirthStateId';
+            var selectedBirthCityId = '@Model?.BirthCityId';
+            if (selectedBirthCountryId) {
+                loadStates(selectedBirthCountryId, '#BirthStateId', selectedBirthStateId);
+                if (selectedBirthStateId) {
+                    loadCities(selectedBirthStateId, '#BirthCityId', selectedBirthCityId);
+                }
+            }
+
+            $("#ParentCountryId").change(function () {
+                var countryId = $(this).val();
+                loadStates(countryId, '#ParentStateId');
+            });
+            $("#ParentStateId").change(function () {
+                var stateId = $(this).val();
+                loadCities(stateId, '#ParentCityId');
+            });
+            var selectedParentCountryId = $("#ParentCountryId").val();
+            var selectedParentStateId = '@Model?.ParentStateId';
+            var selectedParentCityId = '@Model?.ParentCityId';
+            if (selectedParentCountryId) {
+                loadStates(selectedParentCountryId, '#ParentStateId', selectedParentStateId);
+                if (selectedParentStateId) {
+                    loadCities(selectedParentStateId, '#ParentCityId', selectedParentCityId);
+                }
+            }
+
+            var $form = $('form');
+            $form.validate({
+                ignore: ':hidden:not(.validate-required)',
+                errorElement: 'span',
+                errorClass: 'text-danger',
+                highlight: function (element, errorClass) { $(element).addClass('is-invalid'); },
+                unhighlight: function (element, errorClass) { $(element).removeClass('is-invalid'); },
+                errorPlacement: function (error, element) { error.addClass('invalid-feedback d-block'); error.insertAfter(element); }
+            });
+            if ($.validator && $.validator.unobtrusive) { $.validator.unobtrusive.parse($form); }
+
+            $form.on('submit', function (e) {
+                var currentTab = $('.nav-tabs .nav-link.active').attr('id');
+                localStorage.setItem('lastTab', currentTab);
+                var isValid = $form.valid();
+                console.log('Edit form valid:', isValid);
+                if (!isValid) {
+                    var $firstError = $('.field-validation-error').first();
+                    if ($firstError.length) {
+                        var $tabPane = $firstError.closest('.tab-pane');
+                        if ($tabPane.length) {
+                            var tabId = $tabPane.attr('id') + '-tab';
+                            var trig = document.getElementById(tabId);
+                            if (trig) new bootstrap.Tab(trig).show();
+                            $('html, body').animate({ scrollTop: $firstError.offset().top - 100 }, 500);
+                        }
+                    }
+                    e.preventDefault();
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
 }

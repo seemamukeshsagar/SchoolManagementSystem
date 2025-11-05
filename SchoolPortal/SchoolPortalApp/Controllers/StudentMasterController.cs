@@ -119,6 +119,8 @@ namespace SchoolPortalApp.Controllers
             vm.Classes = classes.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.ClassId }).ToList();
             // Previous School Classes (reuse class list)
             vm.PreviousSchoolClasses = classes.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.PreviousSchoolClassId.HasValue && c.Id == vm.PreviousSchoolClassId.Value }).ToList();
+            // Sibling Classes (reuse class list)
+            vm.SiblingClasses = classes.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.SiblingClassId.HasValue && c.Id == vm.SiblingClassId.Value }).ToList();
 
             // Sections
             var sections = _sectionService.GetAll();
@@ -231,7 +233,86 @@ namespace SchoolPortalApp.Controllers
         {
             var item = _service.GetById(id);
             if (item == null) return NotFound();
-            return View(item);
+            var vm = new StudentViewModel
+            {
+                Id = item.Id,
+                RollNumber = item.RollNumber,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Address = item.Address,
+                CityId = item.CityId,
+                StateId = item.StateId,
+                CountryId = item.CountryId,
+                ZipCode = item.ZipCode,
+                ContactNumber = item.ContactNumber,
+                EmergencyContactNumber = item.EmergencyContactNumber,
+                DOB = item.DOB,
+                DOJ = item.DOJ,
+                RegistrationNumber = item.RegistrationNumber,
+                ClassId = item.ClassId,
+                SectionId = item.SectionId,
+                AvailTransport = item.AvailTransport,
+                Image = item.Image,
+                Email = item.Email,
+                Phone = item.Phone,
+                CategoryId = item.CategoryId,
+                SiblingsIfAny = item.SiblingsIfAny,
+                SiblingClassId = item.SiblingClassId,
+                Gender = item.Gender,
+                DisabilityAny = item.DisabilityAny,
+                MedicalAlleryAny = item.MedicalAlleryAny,
+                BirthCityId = item.BirthCityId,
+                BirthStateId = item.BirthStateId,
+                BirthCountryId = item.BirthCountryId,
+                PreviousSchoolAttended = item.PreviousSchoolAttended,
+                PreviousSchoolClassId = item.PreviousSchoolClassId,
+                PreviousSchoolPercentage = item.PreviousSchoolPercentage,
+                PreviousSchoolRank = item.PreviousSchoolRank,
+                PreviousSchoolBoardId = item.PreviousSchoolBoardId,
+                PreviousSchoolFromDate = item.PreviousSchoolFromDate,
+                PreviousSchoolToDate = item.PreviousSchoolToDate,
+                WithdrawnDate = item.WithdrawnDate,
+                WithdrawnReason = item.WithdrawnReason,
+                BloodGroupId = item.BloodGroupId,
+                Nationality = item.Nationality,
+                Hobbies = item.Hobbies,
+                ReligionId = item.ReligionId,
+                RouteId = item.RouteId,
+                RouteStopDetailsId = item.RouteStopDetailsId,
+                ClassTeacherId = item.ClassTeacherId,
+                RoutePickAndDrop = item.RoutePickAndDrop,
+                FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
+                TutionFees = item.TutionFees,
+                AnnualFees = item.AnnualFees,
+                TransportFees = item.TransportFees,
+                UseTransportFees = item.UseTransportFees,
+                SessionId = item.SessionId,
+                CompanyId = item.CompanyId,
+                SchoolId = item.SchoolId,
+                IsActive = item.IsActive,
+                IsDeleted = item.IsDeleted,
+                Status = item.Status,
+                StatusMessage = item.StatusMessage,
+                HouseAllotted = item.HouseAllotted
+            };
+            PopulateDropdowns(vm);
+            // Resolve company friendly name for Details view
+            try
+            {
+                var companies = _lookupService.GetCompanies();
+                var comp = companies.FirstOrDefault(c => c.Id == item.CompanyId);
+                ViewBag.CompanyName = comp?.Name ?? string.Empty;
+
+                var schools = _lookupService.GetSchools();
+                var sch = schools.FirstOrDefault(s => s.Id == item.SchoolId);
+                ViewBag.SchoolName = sch?.Name ?? string.Empty;
+
+                var teachers = _teacherService.GetAll();
+                var t = teachers.FirstOrDefault(x => x.Id == item.ClassTeacherId);
+                ViewBag.ClassTeacherName = t == null ? string.Empty : string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
+            }
+            catch { /* ignore lookup failures for details */ }
+            return View(vm);
         }
 
         [HttpGet]
@@ -255,10 +336,18 @@ namespace SchoolPortalApp.Controllers
                 model.SchoolId = schoolId;
             }
 
-            if (!ModelState.IsValid)
+            // Server-side required validations for location fields
+            if (model.CountryId == Guid.Empty)
             {
-                PopulateDropdowns(model);
-                return View(model);
+                ModelState.AddModelError(nameof(StudentViewModel.CountryId), "Country is required.");
+            }
+            if (model.StateId == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(StudentViewModel.StateId), "State is required.");
+            }
+            if (model.CityId == Guid.Empty)
+            {
+                ModelState.AddModelError(nameof(StudentViewModel.CityId), "City is required.");
             }
 
             var userIdStr = HttpContext.Session.GetString("UserId");
@@ -451,6 +540,9 @@ namespace SchoolPortalApp.Controllers
                 TransportFees = item.TransportFees,
                 UseTransportFees = item.UseTransportFees,
                 SessionId = item.SessionId,
+                CompanyId = item.CompanyId,
+                SchoolId = item.SchoolId,
+                IsActive = item.IsActive,
                 IsDeleted = item.IsDeleted,
                 Status = item.Status,
                 StatusMessage = item.StatusMessage,
@@ -597,31 +689,5 @@ namespace SchoolPortalApp.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        //[HttpGet]
-        //public IActionResult GetStatesByCountry(Guid countryId)
-        //{
-        //    var states = _lookupService.GetStates(countryId)
-        //        .Select(x => new 
-        //        { 
-        //            value = x.Id.ToString(), 
-        //            text = x.Name,
-        //            selected = false
-        //        });
-        //    return Json(states);
-        //}
-
-        //[HttpGet]
-        //public IActionResult GetCitiesByState(Guid stateId)
-        //{
-        //    var cities = _lookupService.GetCities(stateId)
-        //        .Select(x => new 
-        //        { 
-        //            value = x.Id.ToString(), 
-        //            text = x.Name,
-        //            selected = false
-        //        });
-        //    return Json(cities);
-        //}
     }
 }

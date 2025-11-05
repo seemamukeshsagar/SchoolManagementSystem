@@ -12,5 +12,6 @@ namespace SchoolPortal.Services.IServices
         Guid Create(SectionMaster section);
         bool Update(SectionMaster section);
         bool Delete(Guid id);
+        string SectionNameById(Guid id);
     }
 }

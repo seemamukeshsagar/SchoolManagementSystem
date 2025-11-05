@@ -34,6 +34,8 @@ namespace SchoolPortalApp.Models
         [Display(Name = "School")]
         public Guid SchoolId { get; set; }
 
+        public string? SchoolName { get; set; }
+
         public IEnumerable<SelectListItem> Schools { get; set; } = Array.Empty<SelectListItem>();
 
         [Display(Name = "Roll Number")]
@@ -44,14 +46,17 @@ namespace SchoolPortalApp.Models
         [Display(Name = "City")]
         public Guid CityId { get; set; }
         public IEnumerable<SelectListItem> Cities { get; set; } = Array.Empty<SelectListItem>();
+        public string? CityName { get; set; }
 
         [Display(Name = "State")]
         public Guid StateId { get; set; }
         public IEnumerable<SelectListItem> States { get; set; } = Array.Empty<SelectListItem>();
+        public string? StateName { get; set; }
 
         [Display(Name = "Country")]
         public Guid CountryId { get; set; }
         public IEnumerable<SelectListItem> Countries { get; set; } = Array.Empty<SelectListItem>();
+        public string? CountryName { get; set; }
 
         [Display(Name = "Zip Code")]
         public string? ZipCode { get; set; }
@@ -72,10 +77,12 @@ namespace SchoolPortalApp.Models
         [Display(Name = "Class")]
         public Guid ClassId { get; set; }
         public IEnumerable<SelectListItem> Classes { get; set; } = Array.Empty<SelectListItem>();
+        public string? ClassName { get; set; }
 
         [Display(Name = "Section")]
         public Guid SectionId { get; set; }
         public IEnumerable<SelectListItem> Sections { get; set; } = Array.Empty<SelectListItem>();
+        public string? SectionName { get; set; }
 
         [Display(Name = "Avail Transport")]
         public bool? AvailTransport { get; set; }
@@ -87,6 +94,8 @@ namespace SchoolPortalApp.Models
         [Display(Name = "Category")]
         public Guid CategoryId { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; } = Array.Empty<SelectListItem>();
+
+        public string? CategoryName { get; set; }
 
         [Display(Name = "Siblings If Any")]
         public bool? SiblingsIfAny { get; set; }
@@ -108,14 +117,17 @@ namespace SchoolPortalApp.Models
         [Display(Name = "Birth City")]
         public Guid BirthCityId { get; set; }
         public IEnumerable<SelectListItem> BirthCities { get; set; } = Array.Empty<SelectListItem>();
+        public string? BirthCityName { get; set; }
 
         [Display(Name = "Birth State")]
         public Guid BirthStateId { get; set; }
         public IEnumerable<SelectListItem> BirthStates { get; set; } = Array.Empty<SelectListItem>();
+        public string? BirthStateName { get; set; }
 
         [Display(Name = "Birth Country")]
         public Guid BirthCountryId { get; set; }
         public IEnumerable<SelectListItem> BirthCountries { get; set; } = Array.Empty<SelectListItem>();
+        public string? BirthCountryName { get; set; }
 
         [Display(Name = "Previous School Attended")]
         public string? PreviousSchoolAttended { get; set; }
@@ -152,6 +164,7 @@ namespace SchoolPortalApp.Models
         [Display(Name = "Blood Group")]
         public Guid BloodGroupId { get; set; }
         public IEnumerable<SelectListItem> BloodGroups { get; set; } = Array.Empty<SelectListItem>();
+        public string? BloodGroupName { get; set; }
 
         [Display(Name = "Nationality")]
         public Guid Nationality { get; set; }
@@ -201,6 +214,7 @@ namespace SchoolPortalApp.Models
 
         [Display(Name = "Company")]
         public Guid CompanyId { get; set; }
+        public string? CompanyName { get; set; }
 
         [Display(Name = "Is Deleted")]
         public bool IsDeleted { get; set; }

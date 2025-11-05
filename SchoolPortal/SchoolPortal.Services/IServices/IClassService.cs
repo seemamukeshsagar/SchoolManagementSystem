@@ -11,5 +11,6 @@ namespace SchoolPortal.Services.IServices
         Guid Create(ClassMaster cls);
         bool Update(ClassMaster cls);
         bool Delete(Guid id);
+        string ClassNameById(Guid id);
     }
 }
