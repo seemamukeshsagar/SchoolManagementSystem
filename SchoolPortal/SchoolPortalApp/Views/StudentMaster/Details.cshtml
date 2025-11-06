@@ -69,39 +69,60 @@
             </dd>
             <dt class="col-sm-3">Country</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.CountryName as string))
+                @{
+                    var countryName = ViewBag.CountryName as string;
+                    if (string.IsNullOrEmpty(countryName) && Model.CountryId != Guid.Empty)
+                    {
+                        countryName = Model.Countries?.FirstOrDefault(x => x.Value == Model.CountryId.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(countryName))
                 {
-                    @ViewBag.CountryName
+                    @countryName
                 }
                 else
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.CountryId != null ? ViewBag.CountryId.ToString() : (Model.CountryId != Guid.Empty ? Model.CountryId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.CountryId != null ? ViewBag.CountryId.ToString() : (Model.CountryId != Guid.Empty ? Model.CountryId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">State</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.StateName as string))
+                @{
+                    var stateName = ViewBag.StateName as string;
+                    if (string.IsNullOrEmpty(stateName) && Model.StateId != Guid.Empty)
+                    {
+                        stateName = Model.States?.FirstOrDefault(x => x.Value == Model.StateId.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(stateName))
                 {
-                    @ViewBag.StateName
+                    @stateName
                 }
                 else
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.StateId != null ? ViewBag.StateId.ToString() : (Model.StateId != Guid.Empty ? Model.StateId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.StateId != null ? ViewBag.StateId.ToString() : (Model.StateId != Guid.Empty ? Model.StateId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">City</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.CityName as string))
+                @{
+                    var cityName = ViewBag.CityName as string;
+                    if (string.IsNullOrEmpty(cityName) && Model.CityId != Guid.Empty)
+                    {
+                        cityName = Model.Cities?.FirstOrDefault(x => x.Value == Model.CityId.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(cityName))
                 {
-                    @ViewBag.CityName
+                    @cityName
                 }
                 else
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.CityId != null ? ViewBag.CityId.ToString() : (Model.CityId != Guid.Empty ? Model.CityId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.CityId != null ? ViewBag.CityId.ToString() : (Model.CityId != Guid.Empty ? Model.CityId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">Zip Code</dt>
             <dd class="col-sm-9">
@@ -328,27 +349,41 @@
         <dl class="row">
             <dt class="col-sm-3">Class</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.ClassName as string))
+                @{
+                    var className = ViewBag.ClassName as string;
+                    if (string.IsNullOrEmpty(className) && Model.ClassId != Guid.Empty)
+                    {
+                        className = Model.Classes?.FirstOrDefault(x => x.Value == Model.ClassId.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(className))
                 {
-                    @ViewBag.ClassName
+                    @className
                 }
                 else
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.ClassId != null ? ViewBag.ClassId.ToString() : (Model.ClassId != Guid.Empty ? Model.ClassId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.ClassId != null ? ViewBag.ClassId.ToString() : (Model.ClassId != Guid.Empty ? Model.ClassId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">Section</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.SectionName as string))
+                @{
+                    var sectionName = ViewBag.SectionName as string;
+                    if (string.IsNullOrEmpty(sectionName) && Model.SectionId != Guid.Empty)
+                    {
+                        sectionName = Model.Sections?.FirstOrDefault(x => x.Value == Model.SectionId.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(sectionName))
                 {
-                    @ViewBag.SectionName
+                    @sectionName
                 }
                 else
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.SectionId != null ? ViewBag.SectionId.ToString() : (Model.SectionId != Guid.Empty ? Model.SectionId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.SectionId != null ? ViewBag.SectionId.ToString() : (Model.SectionId != Guid.Empty ? Model.SectionId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">Roll Number</dt>
             <dd class="col-sm-9">
@@ -385,9 +420,16 @@
             </dd>
             <dt class="col-sm-3">Class Teacher</dt>
             <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.ClassTeacherName as string))
+                @{
+                    var teacherName = ViewBag.ClassTeacherName as string;
+                    if (string.IsNullOrEmpty(teacherName) && Model.ClassTeacherId.HasValue)
+                    {
+                        teacherName = Model.ClassTeachers?.FirstOrDefault(x => x.Value == Model.ClassTeacherId.Value.ToString())?.Text;
+                    }
+                }
+                @if (!string.IsNullOrEmpty(teacherName))
                 {
-                    @ViewBag.ClassTeacherName
+                    @teacherName
                 }
                 else if (Model.ClassTeacherId.HasValue)
                 {
@@ -406,9 +448,13 @@
         <dl class="row">
             <dt class="col-sm-3">Blood Group</dt>
             <dd class="col-sm-9">
-                @if (Model.BloodGroupId != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.BloodGroupName as string))
                 {
-                    @(Model.BloodGroups?.FirstOrDefault(x => x.Value == Model.BloodGroupId.ToString())?.Text ?? "N/A")
+                    @ViewBag.BloodGroupName @* <small class="text-muted">(ID: @(Model.BloodGroupId != Guid.Empty ? Model.BloodGroupId.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.BloodGroupId != Guid.Empty)
+                {
+                    @((Model.BloodGroups?.FirstOrDefault(x => x.Value == Model.BloodGroupId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BloodGroupId.ToString())</small> *@
                 }
                 else
                 {
@@ -417,9 +463,13 @@
             </dd>
             <dt class="col-sm-3">Nationality</dt>
             <dd class="col-sm-9">
-                @if (Model.Nationality != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.NationalityName as string))
                 {
-                    @(Model.Nationalities?.FirstOrDefault(x => x.Value == Model.Nationality.ToString())?.Text ?? "N/A")
+                    @ViewBag.NationalityName @* <small class="text-muted">(ID: @(Model.Nationality != Guid.Empty ? Model.Nationality.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.Nationality != Guid.Empty)
+                {
+                    @((Model.Nationalities?.FirstOrDefault(x => x.Value == Model.Nationality.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.Nationality.ToString())</small> *@
                 }
                 else
                 {
@@ -428,9 +478,13 @@
             </dd>
             <dt class="col-sm-3">Religion</dt>
             <dd class="col-sm-9">
-                @if (Model.ReligionId != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.ReligionName as string))
                 {
-                    @(Model.Religions?.FirstOrDefault(x => x.Value == Model.ReligionId.ToString())?.Text ?? "N/A")
+                    @ViewBag.ReligionName @* <small class="text-muted">(ID: @(Model.ReligionId != Guid.Empty ? Model.ReligionId.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.ReligionId != Guid.Empty)
+                {
+                    @((Model.Religions?.FirstOrDefault(x => x.Value == Model.ReligionId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.ReligionId.ToString())</small> *@
                 }
                 else
                 {
@@ -461,9 +515,13 @@
             </dd>
             <dt class="col-sm-3">Birth Country</dt>
             <dd class="col-sm-9">
-                @if (Model.BirthCountryId != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.BirthCountryName as string))
                 {
-                    @(Model.BirthCountries?.FirstOrDefault(x => x.Value == Model.BirthCountryId.ToString())?.Text ?? "N/A")
+                    @ViewBag.BirthCountryName @* <small class="text-muted">(ID: @(Model.BirthCountryId != Guid.Empty ? Model.BirthCountryId.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.BirthCountryId != Guid.Empty)
+                {
+                    @((Model.BirthCountries?.FirstOrDefault(x => x.Value == Model.BirthCountryId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCountryId.ToString())</small> *@
                 }
                 else
                 {
@@ -472,9 +530,13 @@
             </dd>
             <dt class="col-sm-3">Birth State</dt>
             <dd class="col-sm-9">
-                @if (Model.BirthStateId != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.BirthStateName as string))
                 {
-                    @(Model.BirthStates?.FirstOrDefault(x => x.Value == Model.BirthStateId.ToString())?.Text ?? "N/A")
+                    @ViewBag.BirthStateName @* <small class="text-muted">(ID: @(Model.BirthStateId != Guid.Empty ? Model.BirthStateId.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.BirthStateId != Guid.Empty)
+                {
+                    @((Model.BirthStates?.FirstOrDefault(x => x.Value == Model.BirthStateId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthStateId.ToString())</small> *@
                 }
                 else
                 {
@@ -483,9 +545,13 @@
             </dd>
             <dt class="col-sm-3">Birth City</dt>
             <dd class="col-sm-9">
-                @if (Model.BirthCityId != Guid.Empty)
+                @if (!string.IsNullOrEmpty(ViewBag.BirthCityName as string))
                 {
-                    @(Model.BirthCities?.FirstOrDefault(x => x.Value == Model.BirthCityId.ToString())?.Text ?? "N/A")
+                    @ViewBag.BirthCityName @* <small class="text-muted">(ID: @(Model.BirthCityId != Guid.Empty ? Model.BirthCityId.ToString() : "N/A"))</small> *@
+                }
+                else if (Model.BirthCityId != Guid.Empty)
+                {
+                    @((Model.BirthCities?.FirstOrDefault(x => x.Value == Model.BirthCityId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCityId.ToString())</small> *@
                 }
                 else
                 {
@@ -657,7 +723,7 @@
                 {
                     <span class="text-muted">N/A</span>
                 }
-                <small class="text-muted">(ID: @(ViewBag.CategoryId != null ? ViewBag.CategoryId.ToString() : (Model.CategoryId != Guid.Empty ? Model.CategoryId.ToString() : "N/A")))</small>
+                @* <small class="text-muted">(ID: @(ViewBag.CategoryId != null ? ViewBag.CategoryId.ToString() : (Model.CategoryId != Guid.Empty ? Model.CategoryId.ToString() : "N/A")))</small> *@
             </dd>
             <dt class="col-sm-3">Route</dt>
             <dd class="col-sm-9">
@@ -758,56 +824,11 @@
                     <span class="text-muted">N/A</span>
                 }
             </dd>
-            <dt class="col-sm-3">Company</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.CompanyName as string))
-                {
-                    @ViewBag.CompanyName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                <small class="text-muted">(ID: @(ViewBag.CompanyId != null ? ViewBag.CompanyId.ToString() : (Model.CompanyId != Guid.Empty ? Model.CompanyId.ToString() : "N/A")))</small>
-            </dd>
-            <dt class="col-sm-3">School</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.SchoolName as string))
-                {
-                    @ViewBag.SchoolName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                <small class="text-muted">(ID: @(ViewBag.SchoolId != null ? ViewBag.SchoolId.ToString() : (Model.SchoolId != Guid.Empty ? Model.SchoolId.ToString() : "N/A")))</small>
-            </dd>
+            
             <dt class="col-sm-3">Is Active</dt>
             <dd class="col-sm-9">@Model.IsActive</dd>
             <dt class="col-sm-3">Is Deleted</dt>
             <dd class="col-sm-9">@Model.IsDeleted</dd>
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.Status))
-                {
-                    @Model.Status
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Status Message</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.StatusMessage))
-                {
-                    @Model.StatusMessage
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
             <dt class="col-sm-3">House Allotted</dt>
             <dd class="col-sm-9">
                 @if (Model.HouseAllotted.HasValue && Model.HouseAllotted.Value != Guid.Empty)

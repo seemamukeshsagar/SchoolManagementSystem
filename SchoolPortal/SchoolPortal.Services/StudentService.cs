@@ -12,23 +12,100 @@ namespace SchoolPortal.Services
 		private static StudentMaster Map(DataRow r)
 		{
 			var s = new StudentMaster();
-			if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) s.Id = id;
-			if (r.Table.Columns.Contains("RollNumber") && Guid.TryParse(r["RollNumber"].ToString(), out var roll)) s.RollNumber = roll;
-			s.FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"].ToString() ?? string.Empty : string.Empty;
-			s.LastName = r.Table.Columns.Contains("LastName") ? r["LastName"].ToString() ?? string.Empty : string.Empty;
-			s.Email = r.Table.Columns.Contains("Email") ? r["Email"].ToString() ?? string.Empty : string.Empty;
-			s.Phone = r.Table.Columns.Contains("Phone") ? r["Phone"].ToString() ?? string.Empty : string.Empty;
-			if (r.Table.Columns.Contains("DOB") && DateTime.TryParse(r["DOB"].ToString(), out var dob)) s.DOB = dob;
-			if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
-			if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
-			if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"].ToString(), out var companyId)) s.CompanyId = companyId;
-			if (r.Table.Columns.Contains("SchoolId") && Guid.TryParse(r["SchoolId"].ToString(), out var schoolId)) s.SchoolId = schoolId;
-			if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"].ToString(), out var createdBy)) s.CreatedBy = createdBy;
-			if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"].ToString(), out var createdDate)) s.CreatedDate = createdDate;
-			if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"].ToString(), out var modifiedBy)) s.ModifiedBy = modifiedBy;
-			if (r.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(r["ModifiedDate"].ToString(), out var modifiedDate)) s.ModifiedDate = modifiedDate;
-			s.Status = r.Table.Columns.Contains("Status") ? r["Status"].ToString() ?? string.Empty : string.Empty;
-			s.StatusMessage = r.Table.Columns.Contains("StatusMessage") ? r["StatusMessage"].ToString() ?? string.Empty : string.Empty;
+
+			// Identifiers
+			if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"]?.ToString(), out var id)) s.Id = id;
+			if (r.Table.Columns.Contains("RollNumber") && Guid.TryParse(r["RollNumber"]?.ToString(), out var roll)) s.RollNumber = roll;
+
+			// Core info
+			s.FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty;
+			s.LastName = r.Table.Columns.Contains("LastName") ? r["LastName"]?.ToString() ?? string.Empty : string.Empty;
+			s.Email = r.Table.Columns.Contains("Email") ? r["Email"]?.ToString() ?? string.Empty : string.Empty;
+			s.Phone = r.Table.Columns.Contains("Phone") ? r["Phone"]?.ToString() ?? string.Empty : string.Empty;
+
+			// Address & contact
+			s.Address = r.Table.Columns.Contains("Address") ? r["Address"]?.ToString() ?? string.Empty : string.Empty;
+			if (r.Table.Columns.Contains("CityId") && Guid.TryParse(r["CityId"]?.ToString(), out var cityId)) s.CityId = cityId;
+			if (r.Table.Columns.Contains("StateId") && Guid.TryParse(r["StateId"]?.ToString(), out var stateId)) s.StateId = stateId;
+			if (r.Table.Columns.Contains("CountryId") && Guid.TryParse(r["CountryId"]?.ToString(), out var countryId)) s.CountryId = countryId;
+			s.ZipCode = r.Table.Columns.Contains("ZipCode") ? r["ZipCode"]?.ToString() ?? string.Empty : string.Empty;
+			s.ContactNumber = r.Table.Columns.Contains("ContactNumber") ? r["ContactNumber"]?.ToString() ?? string.Empty : string.Empty;
+			s.EmergencyContactNumber = r.Table.Columns.Contains("EmergencyContactNumber") ? r["EmergencyContactNumber"]?.ToString() ?? string.Empty : string.Empty;
+
+			// Dates & registration
+			if (r.Table.Columns.Contains("DOB") && DateTime.TryParse(r["DOB"]?.ToString(), out var dob)) s.DOB = dob;
+			if (r.Table.Columns.Contains("DOJ") && DateTime.TryParse(r["DOJ"]?.ToString(), out var doj)) s.DOJ = doj;
+			s.RegistrationNumber = r.Table.Columns.Contains("RegistrationNumber") ? r["RegistrationNumber"]?.ToString() ?? string.Empty : string.Empty;
+
+			// Academic
+			if (r.Table.Columns.Contains("ClassId") && Guid.TryParse(r["ClassId"]?.ToString(), out var classId)) s.ClassId = classId;
+			if (r.Table.Columns.Contains("SectionId") && Guid.TryParse(r["SectionId"]?.ToString(), out var sectionId)) s.SectionId = sectionId;
+
+			// Transport & image
+			if (r.Table.Columns.Contains("AvailTransport") && bool.TryParse(r["AvailTransport"]?.ToString(), out var availTransport)) s.AvailTransport = availTransport;
+			s.Image = r.Table.Columns.Contains("Image") ? r["Image"]?.ToString() ?? string.Empty : string.Empty;
+
+			// Category & flags
+			if (r.Table.Columns.Contains("CategoryId") && Guid.TryParse(r["CategoryId"]?.ToString(), out var categoryId)) s.CategoryId = categoryId;
+			if (r.Table.Columns.Contains("SiblingsIfAny") && bool.TryParse(r["SiblingsIfAny"]?.ToString(), out var siblingsIfAny)) s.SiblingsIfAny = siblingsIfAny;
+			if (r.Table.Columns.Contains("SiblingClassId") && Guid.TryParse(r["SiblingClassId"]?.ToString(), out var siblingClassId)) s.SiblingClassId = siblingClassId;
+			if (r.Table.Columns.Contains("Gender") && Guid.TryParse(r["Gender"]?.ToString(), out var gender)) s.Gender = gender;
+
+			// Medical & birth
+			s.DisabilityAny = r.Table.Columns.Contains("DisabilityAny") ? r["DisabilityAny"]?.ToString() ?? string.Empty : string.Empty;
+			s.MedicalAlleryAny = r.Table.Columns.Contains("MedicalAlleryAny") ? r["MedicalAlleryAny"]?.ToString() ?? string.Empty : string.Empty;
+			if (r.Table.Columns.Contains("BirthCityId") && Guid.TryParse(r["BirthCityId"]?.ToString(), out var birthCityId)) s.BirthCityId = birthCityId;
+			if (r.Table.Columns.Contains("BirthStateId") && Guid.TryParse(r["BirthStateId"]?.ToString(), out var birthStateId)) s.BirthStateId = birthStateId;
+			if (r.Table.Columns.Contains("BirthCountryId") && Guid.TryParse(r["BirthCountryId"]?.ToString(), out var birthCountryId)) s.BirthCountryId = birthCountryId;
+
+			// Previous school
+			s.PreviousSchoolAttended = r.Table.Columns.Contains("PreviousSchoolAttended") ? r["PreviousSchoolAttended"]?.ToString() ?? string.Empty : string.Empty;
+			if (r.Table.Columns.Contains("PreviousSchoolClassId") && Guid.TryParse(r["PreviousSchoolClassId"]?.ToString(), out var prevSchoolClassId)) s.PreviousSchoolClassId = prevSchoolClassId;
+			if (r.Table.Columns.Contains("PreviousSchoolPercentage") && decimal.TryParse(r["PreviousSchoolPercentage"]?.ToString(), out var prevPct)) s.PreviousSchoolPercentage = prevPct;
+			s.PreviousSchoolRank = r.Table.Columns.Contains("PreviousSchoolRank") ? r["PreviousSchoolRank"]?.ToString() ?? string.Empty : string.Empty;
+			if (r.Table.Columns.Contains("PreviousSchoolBoardId") && Guid.TryParse(r["PreviousSchoolBoardId"]?.ToString(), out var prevBoardId)) s.PreviousSchoolBoardId = prevBoardId;
+			if (r.Table.Columns.Contains("PreviousSchoolFromDate") && DateTime.TryParse(r["PreviousSchoolFromDate"]?.ToString(), out var prevFrom)) s.PreviousSchoolFromDate = prevFrom;
+			if (r.Table.Columns.Contains("PreviousSchoolToDate") && DateTime.TryParse(r["PreviousSchoolToDate"]?.ToString(), out var prevTo)) s.PreviousSchoolToDate = prevTo;
+			if (r.Table.Columns.Contains("WithdrawnDate") && DateTime.TryParse(r["WithdrawnDate"]?.ToString(), out var withdrawnDate)) s.WithdrawnDate = withdrawnDate;
+			s.WithdrawnReason = r.Table.Columns.Contains("WithdrawnReason") ? r["WithdrawnReason"]?.ToString() ?? string.Empty : string.Empty;
+
+			// Other info
+			if (r.Table.Columns.Contains("BloodGroupId") && Guid.TryParse(r["BloodGroupId"]?.ToString(), out var bloodGroupId)) s.BloodGroupId = bloodGroupId;
+			if (r.Table.Columns.Contains("Nationality") && Guid.TryParse(r["Nationality"]?.ToString(), out var nationality)) s.Nationality = nationality;
+			s.Hobbies = r.Table.Columns.Contains("Hobbies") ? r["Hobbies"]?.ToString() ?? string.Empty : string.Empty;
+			if (r.Table.Columns.Contains("ReligionId") && Guid.TryParse(r["ReligionId"]?.ToString(), out var religionId)) s.ReligionId = religionId;
+
+			// Transport route details
+			if (r.Table.Columns.Contains("RouteId") && Guid.TryParse(r["RouteId"]?.ToString(), out var routeId)) s.RouteId = routeId;
+			if (r.Table.Columns.Contains("RouteStopDetailsId") && Guid.TryParse(r["RouteStopDetailsId"]?.ToString(), out var routeStopDetailsId)) s.RouteStopDetailsId = routeStopDetailsId;
+			if (r.Table.Columns.Contains("ClassTeacherId") && Guid.TryParse(r["ClassTeacherId"]?.ToString(), out var classTeacherId)) s.ClassTeacherId = classTeacherId;
+			if (r.Table.Columns.Contains("RoutePickAndDrop") && bool.TryParse(r["RoutePickAndDrop"]?.ToString(), out var routePickAndDrop)) s.RoutePickAndDrop = routePickAndDrop;
+
+			// Fees
+			if (r.Table.Columns.Contains("FeesDiscountCategoryMasterId") && Guid.TryParse(r["FeesDiscountCategoryMasterId"]?.ToString(), out var feesDiscCatId)) s.FeesDiscountCategoryMasterId = feesDiscCatId;
+			if (r.Table.Columns.Contains("TutionFees") && decimal.TryParse(r["TutionFees"]?.ToString(), out var tutionFees)) s.TutionFees = tutionFees;
+			if (r.Table.Columns.Contains("AnnualFees") && decimal.TryParse(r["AnnualFees"]?.ToString(), out var annualFees)) s.AnnualFees = annualFees;
+			if (r.Table.Columns.Contains("TransportFees") && decimal.TryParse(r["TransportFees"]?.ToString(), out var transportFees)) s.TransportFees = transportFees;
+			if (r.Table.Columns.Contains("UseTransportFees") && bool.TryParse(r["UseTransportFees"]?.ToString(), out var useTransportFees)) s.UseTransportFees = useTransportFees;
+
+			// Session & ownership
+			if (r.Table.Columns.Contains("SessionId") && Guid.TryParse(r["SessionId"]?.ToString(), out var sessionId)) s.SessionId = sessionId;
+			if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"]?.ToString(), out var companyId)) s.CompanyId = companyId;
+			if (r.Table.Columns.Contains("SchoolId") && Guid.TryParse(r["SchoolId"]?.ToString(), out var schoolId)) s.SchoolId = schoolId;
+
+			// Status & audit
+			if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"]?.ToString(), out var isActive)) s.IsActive = isActive;
+			if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"]?.ToString(), out var isDeleted)) s.IsDeleted = isDeleted;
+			if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"]?.ToString(), out var createdBy)) s.CreatedBy = createdBy;
+			if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"]?.ToString(), out var createdDate)) s.CreatedDate = createdDate;
+			if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"]?.ToString(), out var modifiedBy)) s.ModifiedBy = modifiedBy;
+			if (r.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(r["ModifiedDate"]?.ToString(), out var modifiedDate)) s.ModifiedDate = modifiedDate;
+			s.Status = r.Table.Columns.Contains("Status") ? r["Status"]?.ToString() ?? string.Empty : string.Empty;
+			s.StatusMessage = r.Table.Columns.Contains("StatusMessage") ? r["StatusMessage"]?.ToString() ?? string.Empty : string.Empty;
+
+			// House
+			if (r.Table.Columns.Contains("HouseAllotted") && Guid.TryParse(r["HouseAllotted"]?.ToString(), out var houseAllotted)) s.HouseAllotted = houseAllotted;
+
 			return s;
 		}
 

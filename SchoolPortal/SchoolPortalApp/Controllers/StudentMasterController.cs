@@ -234,214 +234,290 @@ namespace SchoolPortalApp.Controllers
         [Route("Details/{id}")]
         public IActionResult Details(Guid id)
         {
-            var item = _service.GetById(id);
-            if (item == null) return NotFound();
-            var vm = new StudentViewModel
-            {
-                Id = item.Id,
-                RollNumber = item.RollNumber,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                Address = item.Address,
-                CityId = item.CityId,
-                StateId = item.StateId,
-                CountryId = item.CountryId,
-                ZipCode = item.ZipCode,
-                ContactNumber = item.ContactNumber,
-                EmergencyContactNumber = item.EmergencyContactNumber,
-                DOB = item.DOB,
-                DOJ = item.DOJ,
-                RegistrationNumber = item.RegistrationNumber,
-                ClassId = item.ClassId,
-                SectionId = item.SectionId,
-                AvailTransport = item.AvailTransport,
-                Image = item.Image,
-                Email = item.Email,
-                Phone = item.Phone,
-                CategoryId = item.CategoryId,
-                SiblingsIfAny = item.SiblingsIfAny,
-                SiblingClassId = item.SiblingClassId,
-                Gender = item.Gender,
-                DisabilityAny = item.DisabilityAny,
-                MedicalAlleryAny = item.MedicalAlleryAny,
-                BirthCityId = item.BirthCityId,
-                BirthStateId = item.BirthStateId,
-                BirthCountryId = item.BirthCountryId,
-                PreviousSchoolAttended = item.PreviousSchoolAttended,
-                PreviousSchoolClassId = item.PreviousSchoolClassId,
-                PreviousSchoolPercentage = item.PreviousSchoolPercentage,
-                PreviousSchoolRank = item.PreviousSchoolRank,
-                PreviousSchoolBoardId = item.PreviousSchoolBoardId,
-                PreviousSchoolFromDate = item.PreviousSchoolFromDate,
-                PreviousSchoolToDate = item.PreviousSchoolToDate,
-                WithdrawnDate = item.WithdrawnDate,
-                WithdrawnReason = item.WithdrawnReason,
-                BloodGroupId = item.BloodGroupId,
-                Nationality = item.Nationality,
-                Hobbies = item.Hobbies,
-                ReligionId = item.ReligionId,
-                RouteId = item.RouteId,
-                RouteStopDetailsId = item.RouteStopDetailsId,
-                ClassTeacherId = item.ClassTeacherId,
-                RoutePickAndDrop = item.RoutePickAndDrop,
-                FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
-                TutionFees = item.TutionFees,
-                AnnualFees = item.AnnualFees,
-                TransportFees = item.TransportFees,
-                UseTransportFees = item.UseTransportFees,
-                SessionId = item.SessionId,
-                CompanyId = item.CompanyId,
-                SchoolId = item.SchoolId,
-                IsActive = item.IsActive,
-                IsDeleted = item.IsDeleted,
-                Status = item.Status,
-                StatusMessage = item.StatusMessage,
-                HouseAllotted = item.HouseAllotted
-            };
-            
-            // Load parent data first
-            try
-            {
-                var parent = _parentService.GetByStudentId(id);
-                if (parent != null)
-                {
-                    vm.ParentFirstName = parent.ParentFirstName;
-                    vm.ParentLastName = parent.ParentLastName;
-                    vm.ParentDOB = parent.ParentDOB;
-                    vm.ParentRelationTypeId = parent.RelationTypeId != Guid.Empty ? parent.RelationTypeId : null;
-                    vm.ParentQualificationId = parent.QualificationId != Guid.Empty ? parent.QualificationId : null;
-                    vm.ParentDesignationId = parent.DesignationId != Guid.Empty ? parent.DesignationId : null;
-                    vm.ParentOccupation = parent.Occupation;
-                    vm.ParentAnnualIncome = parent.AnnualIncome;
-                    vm.ParentPhone = parent.Phone;
-                    vm.ParentEmail = parent.Email;
-                    vm.ParentAddress1 = parent.Address1;
-                    vm.ParentAddress2 = parent.Address2;
-                    vm.ParentCountryId = parent.CountryId != Guid.Empty ? parent.CountryId : null;
-                    vm.ParentStateId = parent.StateId != Guid.Empty ? parent.StateId : null;
-                    vm.ParentCityId = parent.CityId != Guid.Empty ? parent.CityId : null;
-                    vm.ParentZipCode = parent.ZipCode;
-                    vm.ParentIsActive = parent.IsActive;
-                }
-            }
-            catch { /* ignore parent load failures */ }
-            
-            PopulateDropdowns(vm);
-            
-            // Resolve friendly names for Details view along with IDs
-            try
-            {
-                // Company Name and ID
-                if (item.CompanyId != Guid.Empty)
-                {
-                    ViewBag.CompanyName = _companyService.CompanyNameById(item.CompanyId);
-                    ViewBag.CompanyId = item.CompanyId;
-                }
-                else
-                {
-                    ViewBag.CompanyName = string.Empty;
-                    ViewBag.CompanyId = Guid.Empty;
-                }
+	        if (id == Guid.Empty) return BadRequest();
 
-                // School Name and ID
-                if (item.SchoolId != Guid.Empty)
-                {
-                    ViewBag.SchoolName = _schoolService.SchoolNameById(item.SchoolId);
-                    ViewBag.SchoolId = item.SchoolId;
-                }
-                else
-                {
-                    ViewBag.SchoolName = string.Empty;
-                    ViewBag.SchoolId = Guid.Empty;
-                }
+	        var item = _service.GetById(id);
+	        if (item == null) return NotFound();
 
-                // City Name and ID
-                if (item.CityId != Guid.Empty)
-                {
-                    var cities = _lookupService.GetCities(item.StateId);
-                    var city = cities.FirstOrDefault(c => c.Id == item.CityId);
-                    ViewBag.CityName = city?.Name ?? string.Empty;
-                    ViewBag.CityId = item.CityId;
-                }
-                else
-                {
-                    ViewBag.CityName = string.Empty;
-                    ViewBag.CityId = Guid.Empty;
-                }
+	        var vm = new StudentViewModel
+	        {
+		        Id = item.Id,
+		        RollNumber = item.RollNumber,
+		        FirstName = item.FirstName,
+		        LastName = item.LastName,
+		        Address = item.Address,
+		        CityId = item.CityId,
+		        StateId = item.StateId,
+		        CountryId = item.CountryId,
+		        ZipCode = item.ZipCode,
+		        ContactNumber = item.ContactNumber,
+		        EmergencyContactNumber = item.EmergencyContactNumber,
+		        DOB = item.DOB,
+		        DOJ = item.DOJ,
+		        RegistrationNumber = item.RegistrationNumber,
+		        ClassId = item.ClassId,
+		        SectionId = item.SectionId,
+		        AvailTransport = item.AvailTransport,
+		        Image = item.Image,
+		        Email = item.Email,
+		        Phone = item.Phone,
+		        CategoryId = item.CategoryId,
+		        SiblingsIfAny = item.SiblingsIfAny,
+		        SiblingClassId = item.SiblingClassId,
+		        Gender = item.Gender,
+		        DisabilityAny = item.DisabilityAny,
+		        MedicalAlleryAny = item.MedicalAlleryAny,
+		        BirthCityId = item.BirthCityId,
+		        BirthStateId = item.BirthStateId,
+		        BirthCountryId = item.BirthCountryId,
+		        PreviousSchoolAttended = item.PreviousSchoolAttended,
+		        PreviousSchoolClassId = item.PreviousSchoolClassId,
+		        PreviousSchoolPercentage = item.PreviousSchoolPercentage,
+		        PreviousSchoolRank = item.PreviousSchoolRank,
+		        PreviousSchoolBoardId = item.PreviousSchoolBoardId,
+		        PreviousSchoolFromDate = item.PreviousSchoolFromDate,
+		        PreviousSchoolToDate = item.PreviousSchoolToDate,
+		        WithdrawnDate = item.WithdrawnDate,
+		        WithdrawnReason = item.WithdrawnReason,
+		        BloodGroupId = item.BloodGroupId,
+		        Nationality = item.Nationality,
+		        Hobbies = item.Hobbies,
+		        ReligionId = item.ReligionId,
+		        RouteId = item.RouteId,
+		        RouteStopDetailsId = item.RouteStopDetailsId,
+		        ClassTeacherId = item.ClassTeacherId,
+		        RoutePickAndDrop = item.RoutePickAndDrop,
+		        FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
+		        TutionFees = item.TutionFees,
+		        AnnualFees = item.AnnualFees,
+		        TransportFees = item.TransportFees,
+		        UseTransportFees = item.UseTransportFees,
+		        SessionId = item.SessionId,
+		        CompanyId = item.CompanyId,
+		        SchoolId = item.SchoolId,
+		        IsActive = item.IsActive,
+		        IsDeleted = item.IsDeleted,
+		        Status = item.Status,
+		        StatusMessage = item.StatusMessage,
+		        HouseAllotted = item.HouseAllotted
+	        };
 
-                // State Name and ID
-                if (item.StateId != Guid.Empty)
-                {
-                    var states = _lookupService.GetStates(item.CountryId);
-                    var state = states.FirstOrDefault(s => s.Id == item.StateId);
-                    ViewBag.StateName = state?.Name ?? string.Empty;
-                    ViewBag.StateId = item.StateId;
-                }
-                else
-                {
-                    ViewBag.StateName = string.Empty;
-                    ViewBag.StateId = Guid.Empty;
-                }
+	        // Load parent data (Parents tab)
+	        try
+	        {
+		        var parent = _parentService.GetByStudentId(id);
+		        if (parent != null)
+		        {
+			        vm.ParentFirstName = parent.ParentFirstName;
+			        vm.ParentLastName = parent.ParentLastName;
+			        vm.ParentDOB = parent.ParentDOB;
+			        vm.ParentRelationTypeId = parent.RelationTypeId != Guid.Empty ? parent.RelationTypeId : null;
+			        vm.ParentQualificationId = parent.QualificationId != Guid.Empty ? parent.QualificationId : null;
+			        vm.ParentDesignationId = parent.DesignationId != Guid.Empty ? parent.DesignationId : null;
+			        vm.ParentOccupation = parent.Occupation;
+			        vm.ParentAnnualIncome = parent.AnnualIncome;
+			        vm.ParentPhone = parent.Phone;
+			        vm.ParentEmail = parent.Email;
+			        vm.ParentAddress1 = parent.Address1;
+			        vm.ParentAddress2 = parent.Address2;
+			        vm.ParentCountryId = parent.CountryId != Guid.Empty ? parent.CountryId : null;
+			        vm.ParentStateId = parent.StateId != Guid.Empty ? parent.StateId : null;
+			        vm.ParentCityId = parent.CityId != Guid.Empty ? parent.CityId : null;
+			        vm.ParentZipCode = parent.ZipCode;
+			        vm.ParentIsActive = parent.IsActive;
+		        }
+	        }
+	        catch
+	        {
+		        // Non-blocking
+	        }
 
-                // Country Name and ID
-                if (item.CountryId != Guid.Empty)
-                {
-                    var countries = _lookupService.GetCountries();
-                    var country = countries.FirstOrDefault(c => c.Id == item.CountryId);
-                    ViewBag.CountryName = country?.Name ?? string.Empty;
-                    ViewBag.CountryId = item.CountryId;
-                }
-                else
-                {
-                    ViewBag.CountryName = string.Empty;
-                    ViewBag.CountryId = Guid.Empty;
-                }
+	        // Populate all dropdowns used across tabs
+	        PopulateDropdowns(vm);
 
-                // Class Name and ID
-                if (item.ClassId != Guid.Empty)
-                {
-                    ViewBag.ClassName = _classService.ClassNameById(item.ClassId);
-                    ViewBag.ClassId = item.ClassId;
-                }
-                else
-                {
-                    ViewBag.ClassName = string.Empty;
-                    ViewBag.ClassId = Guid.Empty;
-                }
+	        // Friendly names for IDs used by tabs
+	        try
+	        {
+		        // Company
+		        if (item.CompanyId != Guid.Empty)
+		        {
+			        ViewBag.CompanyName = _companyService.CompanyNameById(item.CompanyId);
+			        ViewBag.CompanyId = item.CompanyId;
+		        }
+		        else
+		        {
+			        ViewBag.CompanyName = string.Empty;
+			        ViewBag.CompanyId = Guid.Empty;
+		        }
 
-                // Section Name and ID
-                if (item.SectionId != Guid.Empty)
-                {
-                    ViewBag.SectionName = _sectionService.SectionNameById(item.SectionId);
-                    ViewBag.SectionId = item.SectionId;
-                }
-                else
-                {
-                    ViewBag.SectionName = string.Empty;
-                    ViewBag.SectionId = Guid.Empty;
-                }
+		        // School
+		        if (item.SchoolId != Guid.Empty)
+		        {
+			        ViewBag.SchoolName = _schoolService.SchoolNameById(item.SchoolId);
+			        ViewBag.SchoolId = item.SchoolId;
+		        }
+		        else
+		        {
+			        ViewBag.SchoolName = string.Empty;
+			        ViewBag.SchoolId = Guid.Empty;
+		        }
 
-                // Category Name and ID
-                if (item.CategoryId != Guid.Empty)
-                {
-                    var categories = _lookupService.GetCategories();
-                    var category = categories.FirstOrDefault(c => c.Id == item.CategoryId);
-                    ViewBag.CategoryName = category?.Name ?? string.Empty;
-                    ViewBag.CategoryId = item.CategoryId;
-                }
-                else
-                {
-                    ViewBag.CategoryName = string.Empty;
-                    ViewBag.CategoryId = Guid.Empty;
-                }
+		        // Country / State / City (Address tab)
+		        if (item.CountryId != Guid.Empty)
+		        {
+			        var countries = _lookupService.GetCountries();
+			        var country = countries.FirstOrDefault(c => c.Id == item.CountryId);
+			        ViewBag.CountryName = country?.Name ?? string.Empty;
+			        ViewBag.CountryId = item.CountryId;
+		        }
+		        else
+		        {
+			        ViewBag.CountryName = string.Empty;
+			        ViewBag.CountryId = Guid.Empty;
+		        }
 
-                // Class Teacher Name
-                var teachers = _teacherService.GetAll();
-                var t = teachers.FirstOrDefault(x => x.Id == item.ClassTeacherId);
-                ViewBag.ClassTeacherName = t == null ? string.Empty : string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
-            }
-            catch { /* ignore lookup failures for details */ }
-            return View(vm);
+		        if (item.StateId != Guid.Empty && item.CountryId != Guid.Empty)
+		        {
+			        var states = _lookupService.GetStates(item.CountryId);
+			        var state = states.FirstOrDefault(s => s.Id == item.StateId);
+			        ViewBag.StateName = state?.Name ?? string.Empty;
+			        ViewBag.StateId = item.StateId;
+		        }
+		        else
+		        {
+			        ViewBag.StateName = string.Empty;
+			        ViewBag.StateId = Guid.Empty;
+		        }
+
+		        if (item.CityId != Guid.Empty && item.StateId != Guid.Empty)
+		        {
+			        var cities = _lookupService.GetCities(item.StateId);
+			        var city = cities.FirstOrDefault(c => c.Id == item.CityId);
+			        ViewBag.CityName = city?.Name ?? string.Empty;
+			        ViewBag.CityId = item.CityId;
+		        }
+		        else
+		        {
+			        ViewBag.CityName = string.Empty;
+			        ViewBag.CityId = Guid.Empty;
+		        }
+
+		        // Class / Section (Academic tab)
+		        if (item.ClassId != Guid.Empty)
+		        {
+			        ViewBag.ClassName = _classService.ClassNameById(item.ClassId);
+			        ViewBag.ClassId = item.ClassId;
+		        }
+		        else
+		        {
+			        ViewBag.ClassName = string.Empty;
+			        ViewBag.ClassId = Guid.Empty;
+		        }
+
+		        if (item.SectionId != Guid.Empty)
+		        {
+			        ViewBag.SectionName = _sectionService.SectionNameById(item.SectionId);
+			        ViewBag.SectionId = item.SectionId;
+		        }
+		        else
+		        {
+			        ViewBag.SectionName = string.Empty;
+			        ViewBag.SectionId = Guid.Empty;
+		        }
+
+		        // Category (Additional tab)
+		        if (item.CategoryId != Guid.Empty)
+		        {
+			        var categories = _lookupService.GetCategories();
+			        var category = categories.FirstOrDefault(c => c.Id == item.CategoryId);
+			        ViewBag.CategoryName = category?.Name ?? string.Empty;
+			        ViewBag.CategoryId = item.CategoryId;
+		        }
+		        else
+		        {
+			        ViewBag.CategoryName = string.Empty;
+			        ViewBag.CategoryId = Guid.Empty;
+		        }
+
+		        // Medical & Background (Medical tab)
+		        if (item.BloodGroupId != Guid.Empty)
+		        {
+			        var bloodGroups = _lookupService.GetBloodGroups();
+			        var bg = bloodGroups.FirstOrDefault(b => b.Id == item.BloodGroupId);
+			        ViewBag.BloodGroupName = bg?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.BloodGroupName = string.Empty;
+		        }
+
+		        if (item.Nationality != Guid.Empty)
+		        {
+			        var countries = _lookupService.GetCountries();
+			        var nat = countries.FirstOrDefault(c => c.Id == item.Nationality);
+			        ViewBag.NationalityName = nat?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.NationalityName = string.Empty;
+		        }
+
+		        if (item.ReligionId != Guid.Empty)
+		        {
+			        var religions = _lookupService.GetReligions();
+			        var rel = religions.FirstOrDefault(r => r.Id == item.ReligionId);
+			        ViewBag.ReligionName = rel?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.ReligionName = string.Empty;
+		        }
+
+		        // Birth place names (Medical tab)
+		        if (item.BirthCountryId != Guid.Empty)
+		        {
+			        var countries = _lookupService.GetCountries();
+			        var bc = countries.FirstOrDefault(c => c.Id == item.BirthCountryId);
+			        ViewBag.BirthCountryName = bc?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.BirthCountryName = string.Empty;
+		        }
+
+		        if (item.BirthStateId != Guid.Empty && item.BirthCountryId != Guid.Empty)
+		        {
+			        var states = _lookupService.GetStates(item.BirthCountryId);
+			        var bs = states.FirstOrDefault(s => s.Id == item.BirthStateId);
+			        ViewBag.BirthStateName = bs?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.BirthStateName = string.Empty;
+		        }
+
+		        if (item.BirthCityId != Guid.Empty && item.BirthStateId != Guid.Empty)
+		        {
+			        var cities = _lookupService.GetCities(item.BirthStateId);
+			        var bcit = cities.FirstOrDefault(c => c.Id == item.BirthCityId);
+			        ViewBag.BirthCityName = bcit?.Name ?? string.Empty;
+		        }
+		        else
+		        {
+			        ViewBag.BirthCityName = string.Empty;
+		        }
+
+		        // Class teacher (Academic tab)
+		        var teachers = _teacherService.GetAll();
+		        var t = teachers.FirstOrDefault(x => x.Id == item.ClassTeacherId);
+		        ViewBag.ClassTeacherName = t == null ? string.Empty : string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
+	        }
+	        catch
+	        {
+		        // Non-blocking
+	        }
+
+	        return View(vm);
         }
 
         [HttpGet]
@@ -614,71 +690,104 @@ namespace SchoolPortalApp.Controllers
         [Route("Edit/{id}")]
         public IActionResult Edit(Guid id)
         {
-            var item = _service.GetById(id);
-            if (item == null) return NotFound();
-            var vm = new StudentViewModel
-            {
-                Id = item.Id,
-                RollNumber = item.RollNumber,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                Address = item.Address,
-                CityId = item.CityId,
-                StateId = item.StateId,
-                CountryId = item.CountryId,
-                ZipCode = item.ZipCode,
-                ContactNumber = item.ContactNumber,
-                EmergencyContactNumber = item.EmergencyContactNumber,
-                DOB = item.DOB,
-                DOJ = item.DOJ,
-                RegistrationNumber = item.RegistrationNumber,
-                ClassId = item.ClassId,
-                SectionId = item.SectionId,
-                AvailTransport = item.AvailTransport,
-                Image = item.Image,
-                Email = item.Email,
-                CategoryId = item.CategoryId,
-                SiblingsIfAny = item.SiblingsIfAny,
-                SiblingClassId = item.SiblingClassId,
-                Gender = item.Gender,
-                DisabilityAny = item.DisabilityAny,
-                MedicalAlleryAny = item.MedicalAlleryAny,
-                BirthCityId = item.BirthCityId,
-                BirthStateId = item.BirthStateId,
-                BirthCountryId = item.BirthCountryId,
-                PreviousSchoolAttended = item.PreviousSchoolAttended,
-                PreviousSchoolClassId = item.PreviousSchoolClassId,
-                PreviousSchoolPercentage = item.PreviousSchoolPercentage,
-                PreviousSchoolRank = item.PreviousSchoolRank,
-                PreviousSchoolBoardId = item.PreviousSchoolBoardId,
-                PreviousSchoolFromDate = item.PreviousSchoolFromDate,
-                PreviousSchoolToDate = item.PreviousSchoolToDate,
-                WithdrawnDate = item.WithdrawnDate,
-                WithdrawnReason = item.WithdrawnReason,
-                BloodGroupId = item.BloodGroupId,
-                Nationality = item.Nationality,
-                Hobbies = item.Hobbies,
-                ReligionId = item.ReligionId,
-                RouteId = item.RouteId,
-                RouteStopDetailsId = item.RouteStopDetailsId,
-                ClassTeacherId = item.ClassTeacherId,
-                RoutePickAndDrop = item.RoutePickAndDrop,
-                FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
-                TutionFees = item.TutionFees,
-                AnnualFees = item.AnnualFees,
-                TransportFees = item.TransportFees,
-                UseTransportFees = item.UseTransportFees,
-                SessionId = item.SessionId,
-                CompanyId = item.CompanyId,
-                SchoolId = item.SchoolId,
-                IsActive = item.IsActive,
-                IsDeleted = item.IsDeleted,
-                Status = item.Status,
-                StatusMessage = item.StatusMessage,
-                HouseAllotted = item.HouseAllotted
-            };
-            PopulateDropdowns(vm);
-            return View(vm);
+	        var item = _service.GetById(id);
+	        if (item == null) return NotFound();
+
+	        var vm = new StudentViewModel
+	        {
+		        Id = item.Id,
+		        RollNumber = item.RollNumber,
+		        FirstName = item.FirstName,
+		        LastName = item.LastName,
+		        Address = item.Address,
+		        CityId = item.CityId,
+		        StateId = item.StateId,
+		        CountryId = item.CountryId,
+		        ZipCode = item.ZipCode,
+		        ContactNumber = item.ContactNumber,
+		        EmergencyContactNumber = item.EmergencyContactNumber,
+		        DOB = item.DOB,
+		        DOJ = item.DOJ,
+		        RegistrationNumber = item.RegistrationNumber,
+		        ClassId = item.ClassId,
+		        SectionId = item.SectionId,
+		        AvailTransport = item.AvailTransport,
+		        Image = item.Image,
+		        Email = item.Email,
+		        Phone = item.Phone, // was missing
+		        CategoryId = item.CategoryId,
+		        SiblingsIfAny = item.SiblingsIfAny,
+		        SiblingClassId = item.SiblingClassId,
+		        Gender = item.Gender,
+		        DisabilityAny = item.DisabilityAny,
+		        MedicalAlleryAny = item.MedicalAlleryAny,
+		        BirthCityId = item.BirthCityId,
+		        BirthStateId = item.BirthStateId,
+		        BirthCountryId = item.BirthCountryId,
+		        PreviousSchoolAttended = item.PreviousSchoolAttended,
+		        PreviousSchoolClassId = item.PreviousSchoolClassId,
+		        PreviousSchoolPercentage = item.PreviousSchoolPercentage,
+		        PreviousSchoolRank = item.PreviousSchoolRank,
+		        PreviousSchoolBoardId = item.PreviousSchoolBoardId,
+		        PreviousSchoolFromDate = item.PreviousSchoolFromDate,
+		        PreviousSchoolToDate = item.PreviousSchoolToDate,
+		        WithdrawnDate = item.WithdrawnDate,
+		        WithdrawnReason = item.WithdrawnReason,
+		        BloodGroupId = item.BloodGroupId,
+		        Nationality = item.Nationality,
+		        Hobbies = item.Hobbies,
+		        ReligionId = item.ReligionId,
+		        RouteId = item.RouteId,
+		        RouteStopDetailsId = item.RouteStopDetailsId,
+		        ClassTeacherId = item.ClassTeacherId,
+		        RoutePickAndDrop = item.RoutePickAndDrop,
+		        FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
+		        TutionFees = item.TutionFees,
+		        AnnualFees = item.AnnualFees,
+		        TransportFees = item.TransportFees,
+		        UseTransportFees = item.UseTransportFees,
+		        SessionId = item.SessionId,
+		        CompanyId = item.CompanyId,
+		        SchoolId = item.SchoolId,
+		        IsActive = item.IsActive,
+		        IsDeleted = item.IsDeleted,
+		        Status = item.Status,
+		        StatusMessage = item.StatusMessage,
+		        HouseAllotted = item.HouseAllotted
+	        };
+
+	        // Load parent data (Parents tab)
+	        try
+	        {
+		        var parent = _parentService.GetByStudentId(id);
+		        if (parent != null)
+		        {
+			        vm.ParentFirstName = parent.ParentFirstName;
+			        vm.ParentLastName = parent.ParentLastName;
+			        vm.ParentDOB = parent.ParentDOB;
+			        vm.ParentRelationTypeId = parent.RelationTypeId != Guid.Empty ? parent.RelationTypeId : null;
+			        vm.ParentQualificationId = parent.QualificationId != Guid.Empty ? parent.QualificationId : null;
+			        vm.ParentDesignationId = parent.DesignationId != Guid.Empty ? parent.DesignationId : null;
+			        vm.ParentOccupation = parent.Occupation;
+			        vm.ParentAnnualIncome = parent.AnnualIncome;
+			        vm.ParentPhone = parent.Phone;
+			        vm.ParentEmail = parent.Email;
+			        vm.ParentAddress1 = parent.Address1;
+			        vm.ParentAddress2 = parent.Address2;
+			        vm.ParentCountryId = parent.CountryId != Guid.Empty ? parent.CountryId : null;
+			        vm.ParentStateId = parent.StateId != Guid.Empty ? parent.StateId : null;
+			        vm.ParentCityId = parent.CityId != Guid.Empty ? parent.CityId : null;
+			        vm.ParentZipCode = parent.ZipCode;
+			        vm.ParentIsActive = parent.IsActive;
+		        }
+	        }
+	        catch
+	        {
+		        // non-blocking
+	        }
+
+	        PopulateDropdowns(vm);
+	        return View(vm);
         }
 
         [HttpPost]
