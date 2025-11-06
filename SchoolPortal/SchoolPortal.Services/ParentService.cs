@@ -50,27 +50,6 @@ namespace SchoolPortal.Services
             }
             catch
             {
-                // If stored procedure doesn't exist, try direct query
-                try
-                {
-                    using (var conn = ConnectionManager.DefaultConnectionManager.GetConnection())
-                    {
-                        var cmd = new System.Data.SqlClient.SqlCommand(
-                            "SELECT TOP 1 * FROM dbo.ParentMaster WHERE StudentGUID = @StudentGUID AND IsDeleted = 0",
-                            conn);
-                        cmd.Parameters.AddWithValue("@StudentGUID", studentId);
-                        conn.Open();
-                        var adapter = new System.Data.SqlClient.SqlDataAdapter(cmd);
-                        var dt = new DataTable();
-                        adapter.Fill(dt);
-                        if (dt.Rows.Count > 0)
-                            return Map(dt.Rows[0]);
-                    }
-                }
-                catch
-                {
-                    // Return null if query fails
-                }
                 return null;
             }
         }

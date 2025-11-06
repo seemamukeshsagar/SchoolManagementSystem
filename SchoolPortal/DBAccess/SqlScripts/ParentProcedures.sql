@@ -72,3 +72,45 @@ BEGIN
     SELECT @NewId AS Id;
 END
 GO
+
+-- Parent_GetByStudentId
+IF OBJECT_ID(N'[dbo].[Parent_GetByStudentId]', N'P') IS NOT NULL
+    DROP PROCEDURE [dbo].[Parent_GetByStudentId];
+GO
+CREATE PROCEDURE [dbo].[Parent_GetByStudentId]
+    @StudentGUID UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT TOP 1
+        Id,
+        StudentGUID,
+        ParentFirstName,
+        ParentLastName,
+        ParentDOB,
+        QualificationId,
+        Occupation,
+        AnnualIncome,
+        DesignationId,
+        Phone,
+        Mobile,
+        Email,
+        Address1,
+        Address2,
+        CityId,
+        StateId,
+        CountryId,
+        ZipCode,
+        RelationTypeId,
+        SchoolId,
+        CompanyId,
+        IsActive,
+        IsDeleted
+    FROM 
+        dbo.ParentMaster
+    WHERE 
+        StudentGUID = @StudentGUID
+        AND IsDeleted = 0;
+END
+GO
