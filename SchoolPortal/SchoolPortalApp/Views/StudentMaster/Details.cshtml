@@ -48,9 +48,9 @@
     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
         <dl class="row">
             <dt class="col-sm-3">Address</dt><dd class="col-sm-9">@Model.Address</dd>
-            <dt class="col-sm-3">Country</dt><dd class="col-sm-9">@(Model.Countries?.FirstOrDefault(x => x.Value == Model.CountryId.ToString())?.Text ?? Model.CountryId.ToString())</dd>
-            <dt class="col-sm-3">State</dt><dd class="col-sm-9">@(Model.States?.FirstOrDefault(x => x.Value == Model.StateId.ToString())?.Text ?? Model.StateId.ToString())</dd>
-            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@(Model.Cities?.FirstOrDefault(x => x.Value == Model.CityId.ToString())?.Text ?? Model.CityId.ToString())</dd>
+            <dt class="col-sm-3">Country</dt><dd class="col-sm-9">@(ViewBag.CountryName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.CountryId != null ? ViewBag.CountryId.ToString() : Model.CountryId.ToString()))</small></dd>
+            <dt class="col-sm-3">State</dt><dd class="col-sm-9">@(ViewBag.StateName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.StateId != null ? ViewBag.StateId.ToString() : Model.StateId.ToString()))</small></dd>
+            <dt class="col-sm-3">City</dt><dd class="col-sm-9">@(ViewBag.CityName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.CityId != null ? ViewBag.CityId.ToString() : Model.CityId.ToString()))</small></dd>
             <dt class="col-sm-3">Zip Code</dt><dd class="col-sm-9">@Model.ZipCode</dd>
             <dt class="col-sm-3">Contact Number</dt><dd class="col-sm-9">@Model.ContactNumber</dd>
             <dt class="col-sm-3">Emergency Contact</dt><dd class="col-sm-9">@Model.EmergencyContactNumber</dd>
@@ -83,8 +83,8 @@
     <!-- Academic Details Tab -->
     <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
         <dl class="row">
-            <dt class="col-sm-3">Class</dt><dd class="col-sm-9">@(Model.Classes?.FirstOrDefault(x => x.Value == Model.ClassId.ToString())?.Text ?? Model.ClassId.ToString())</dd>
-            <dt class="col-sm-3">Section</dt><dd class="col-sm-9">@(Model.Sections?.FirstOrDefault(x => x.Value == Model.SectionId.ToString())?.Text ?? Model.SectionId.ToString())</dd>
+            <dt class="col-sm-3">Class</dt><dd class="col-sm-9">@(ViewBag.ClassName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.ClassId != null ? ViewBag.ClassId.ToString() : Model.ClassId.ToString()))</small></dd>
+            <dt class="col-sm-3">Section</dt><dd class="col-sm-9">@(ViewBag.SectionName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.SectionId != null ? ViewBag.SectionId.ToString() : Model.SectionId.ToString()))</small></dd>
             <dt class="col-sm-3">Roll Number</dt><dd class="col-sm-9">@Model.RollNumber</dd>
             <dt class="col-sm-3">Registration Number</dt><dd class="col-sm-9">@Model.RegistrationNumber</dd>
             <dt class="col-sm-3">DOJ</dt><dd class="col-sm-9">@Model.DOJ.ToString("yyyy-MM-dd")</dd>
@@ -128,7 +128,7 @@
             <dt class="col-sm-3">Siblings If Any</dt><dd class="col-sm-9">@Model.SiblingsIfAny</dd>
             <dt class="col-sm-3">Sibling Class</dt><dd class="col-sm-9">@(Model.SiblingClasses?.FirstOrDefault(x => x.Value == Model.SiblingClassId?.ToString())?.Text ?? Model.SiblingClassId?.ToString())</dd>
             <dt class="col-sm-3">Avail Transport</dt><dd class="col-sm-9">@Model.AvailTransport</dd>
-            <dt class="col-sm-3">Category</dt><dd class="col-sm-9">@(Model.Categories?.FirstOrDefault(x => x.Value == Model.CategoryId.ToString())?.Text ?? Model.CategoryId.ToString())</dd>
+            <dt class="col-sm-3">Category</dt><dd class="col-sm-9">@(ViewBag.CategoryName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.CategoryId != null ? ViewBag.CategoryId.ToString() : Model.CategoryId.ToString()))</small></dd>
             <dt class="col-sm-3">Route</dt><dd class="col-sm-9">@Model.RouteId</dd>
             <dt class="col-sm-3">Route Stop</dt><dd class="col-sm-9">@Model.RouteStopDetailsId</dd>
             <dt class="col-sm-3">Route Pick And Drop</dt><dd class="col-sm-9">@Model.RoutePickAndDrop</dd>
@@ -138,8 +138,8 @@
             <dt class="col-sm-3">Transport Fees</dt><dd class="col-sm-9">@Model.TransportFees</dd>
             <dt class="col-sm-3">Use Transport Fees</dt><dd class="col-sm-9">@Model.UseTransportFees</dd>
             <dt class="col-sm-3">Session</dt><dd class="col-sm-9">@Model.SessionId</dd>
-            <dt class="col-sm-3">Company</dt><dd class="col-sm-9">@(ViewBag.CompanyName as string ?? Model.CompanyId.ToString())</dd>
-            <dt class="col-sm-3">School</dt><dd class="col-sm-9">@(ViewBag.SchoolName as string ?? Model.SchoolId.ToString())</dd>
+            <dt class="col-sm-3">Company</dt><dd class="col-sm-9">@(ViewBag.CompanyName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.CompanyId != null ? ViewBag.CompanyId.ToString() : Model.CompanyId.ToString()))</small></dd>
+            <dt class="col-sm-3">School</dt><dd class="col-sm-9">@(ViewBag.SchoolName as string ?? string.Empty) <small class="text-muted">(ID: @(ViewBag.SchoolId != null ? ViewBag.SchoolId.ToString() : Model.SchoolId.ToString()))</small></dd>
             <dt class="col-sm-3">Is Active</dt><dd class="col-sm-9">@Model.IsActive</dd>
             <dt class="col-sm-3">Is Deleted</dt><dd class="col-sm-9">@Model.IsDeleted</dd>
             <dt class="col-sm-3">Status</dt><dd class="col-sm-9">@Model.Status</dd>

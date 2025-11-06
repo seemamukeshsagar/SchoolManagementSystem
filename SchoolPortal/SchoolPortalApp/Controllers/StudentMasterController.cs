@@ -20,6 +20,7 @@ namespace SchoolPortalApp.Controllers
         private readonly ISectionService _sectionService;
         private readonly ITeacherService _teacherService;
         private readonly ILookupService _lookupService;
+        private readonly ICompanyService _companyService;
         private readonly ILogger<StudentMasterController> _logger;
         private readonly IWebHostEnvironment _env;
         private readonly IParentService _parentService;
@@ -31,6 +32,7 @@ namespace SchoolPortalApp.Controllers
             ISectionService sectionService,
             ITeacherService teacherService,
             ILookupService lookupService,
+            ICompanyService companyService,
             IParentService parentService,
             ILogger<StudentMasterController> logger,
             IWebHostEnvironment env)
@@ -41,6 +43,7 @@ namespace SchoolPortalApp.Controllers
             _sectionService = sectionService;
             _teacherService = teacherService;
             _lookupService = lookupService;
+            _companyService = companyService;
             _logger = logger;
             _env = env;
             _parentService = parentService;
@@ -296,17 +299,114 @@ namespace SchoolPortalApp.Controllers
                 HouseAllotted = item.HouseAllotted
             };
             PopulateDropdowns(vm);
-            // Resolve company friendly name for Details view
+            // Resolve friendly names for Details view along with IDs
             try
             {
-                var companies = _lookupService.GetCompanies();
-                var comp = companies.FirstOrDefault(c => c.Id == item.CompanyId);
-                ViewBag.CompanyName = comp?.Name ?? string.Empty;
+                // Company Name and ID
+                if (item.CompanyId != Guid.Empty)
+                {
+                    ViewBag.CompanyName = _companyService.CompanyNameById(item.CompanyId);
+                    ViewBag.CompanyId = item.CompanyId;
+                }
+                else
+                {
+                    ViewBag.CompanyName = string.Empty;
+                    ViewBag.CompanyId = Guid.Empty;
+                }
 
-                var schools = _lookupService.GetSchools();
-                var sch = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-                ViewBag.SchoolName = sch?.Name ?? string.Empty;
+                // School Name and ID
+                if (item.SchoolId != Guid.Empty)
+                {
+                    ViewBag.SchoolName = _schoolService.SchoolNameById(item.SchoolId);
+                    ViewBag.SchoolId = item.SchoolId;
+                }
+                else
+                {
+                    ViewBag.SchoolName = string.Empty;
+                    ViewBag.SchoolId = Guid.Empty;
+                }
 
+                // City Name and ID
+                if (item.CityId != Guid.Empty)
+                {
+                    var cities = _lookupService.GetCities(item.StateId);
+                    var city = cities.FirstOrDefault(c => c.Id == item.CityId);
+                    ViewBag.CityName = city?.Name ?? string.Empty;
+                    ViewBag.CityId = item.CityId;
+                }
+                else
+                {
+                    ViewBag.CityName = string.Empty;
+                    ViewBag.CityId = Guid.Empty;
+                }
+
+                // State Name and ID
+                if (item.StateId != Guid.Empty)
+                {
+                    var states = _lookupService.GetStates(item.CountryId);
+                    var state = states.FirstOrDefault(s => s.Id == item.StateId);
+                    ViewBag.StateName = state?.Name ?? string.Empty;
+                    ViewBag.StateId = item.StateId;
+                }
+                else
+                {
+                    ViewBag.StateName = string.Empty;
+                    ViewBag.StateId = Guid.Empty;
+                }
+
+                // Country Name and ID
+                if (item.CountryId != Guid.Empty)
+                {
+                    var countries = _lookupService.GetCountries();
+                    var country = countries.FirstOrDefault(c => c.Id == item.CountryId);
+                    ViewBag.CountryName = country?.Name ?? string.Empty;
+                    ViewBag.CountryId = item.CountryId;
+                }
+                else
+                {
+                    ViewBag.CountryName = string.Empty;
+                    ViewBag.CountryId = Guid.Empty;
+                }
+
+                // Class Name and ID
+                if (item.ClassId != Guid.Empty)
+                {
+                    ViewBag.ClassName = _classService.ClassNameById(item.ClassId);
+                    ViewBag.ClassId = item.ClassId;
+                }
+                else
+                {
+                    ViewBag.ClassName = string.Empty;
+                    ViewBag.ClassId = Guid.Empty;
+                }
+
+                // Section Name and ID
+                if (item.SectionId != Guid.Empty)
+                {
+                    ViewBag.SectionName = _sectionService.SectionNameById(item.SectionId);
+                    ViewBag.SectionId = item.SectionId;
+                }
+                else
+                {
+                    ViewBag.SectionName = string.Empty;
+                    ViewBag.SectionId = Guid.Empty;
+                }
+
+                // Category Name and ID
+                if (item.CategoryId != Guid.Empty)
+                {
+                    var categories = _lookupService.GetCategories();
+                    var category = categories.FirstOrDefault(c => c.Id == item.CategoryId);
+                    ViewBag.CategoryName = category?.Name ?? string.Empty;
+                    ViewBag.CategoryId = item.CategoryId;
+                }
+                else
+                {
+                    ViewBag.CategoryName = string.Empty;
+                    ViewBag.CategoryId = Guid.Empty;
+                }
+
+                // Class Teacher Name
                 var teachers = _teacherService.GetAll();
                 var t = teachers.FirstOrDefault(x => x.Id == item.ClassTeacherId);
                 ViewBag.ClassTeacherName = t == null ? string.Empty : string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
