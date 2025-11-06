@@ -298,7 +298,36 @@ namespace SchoolPortalApp.Controllers
                 StatusMessage = item.StatusMessage,
                 HouseAllotted = item.HouseAllotted
             };
+            
+            // Load parent data first
+            try
+            {
+                var parent = _parentService.GetByStudentId(id);
+                if (parent != null)
+                {
+                    vm.ParentFirstName = parent.ParentFirstName;
+                    vm.ParentLastName = parent.ParentLastName;
+                    vm.ParentDOB = parent.ParentDOB;
+                    vm.ParentRelationTypeId = parent.RelationTypeId != Guid.Empty ? parent.RelationTypeId : null;
+                    vm.ParentQualificationId = parent.QualificationId != Guid.Empty ? parent.QualificationId : null;
+                    vm.ParentDesignationId = parent.DesignationId != Guid.Empty ? parent.DesignationId : null;
+                    vm.ParentOccupation = parent.Occupation;
+                    vm.ParentAnnualIncome = parent.AnnualIncome;
+                    vm.ParentPhone = parent.Phone;
+                    vm.ParentEmail = parent.Email;
+                    vm.ParentAddress1 = parent.Address1;
+                    vm.ParentAddress2 = parent.Address2;
+                    vm.ParentCountryId = parent.CountryId != Guid.Empty ? parent.CountryId : null;
+                    vm.ParentStateId = parent.StateId != Guid.Empty ? parent.StateId : null;
+                    vm.ParentCityId = parent.CityId != Guid.Empty ? parent.CityId : null;
+                    vm.ParentZipCode = parent.ZipCode;
+                    vm.ParentIsActive = parent.IsActive;
+                }
+            }
+            catch { /* ignore parent load failures */ }
+            
             PopulateDropdowns(vm);
+            
             // Resolve friendly names for Details view along with IDs
             try
             {

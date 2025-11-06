@@ -1,4 +1,5 @@
 using System;
+using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.IServices
 {
@@ -27,5 +28,7 @@ namespace SchoolPortal.Services.IServices
             string? zipCode,
             bool isActive
         );
+        
+        ParentMaster? GetByStudentId(Guid studentId);
     }
 }
