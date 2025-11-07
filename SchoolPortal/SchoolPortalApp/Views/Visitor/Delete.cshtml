@@ -1,0 +1,14 @@
+@model SchoolPortal.Entities.Models.VisitorMaster
+@{
+    ViewData["Title"] = "Delete Visitor";
+}
+<h3>Are you sure you want to delete this visitor entry?</h3>
+<div>
+    <strong>@Model.VehicleNumber</strong> - @Model.Purpose on @Model.DateOfEntry.ToString("yyyy-MM-dd")
+</div>
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
