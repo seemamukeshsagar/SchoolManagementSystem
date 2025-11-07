@@ -1,0 +1,43 @@
+@model IEnumerable<SchoolPortalApp.Models.VisitorListItemViewModel>
+@{
+    ViewData["Title"] = "Visitors";
+}
+<h2>Visitors</h2>
+<p><a class="btn btn-primary" asp-action="Create">Create New</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Vehicle Number</th>
+            <th>Vehicle Name</th>
+            <th>Date Of Entry</th>
+            <th>Purpose</th>
+            <th>Contact Person</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>City</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.VehicleNumber</td>
+            <td>@item.VehicleName</td>
+            <td>@item.DateOfEntry.ToString("yyyy-MM-dd")</td>
+            <td>@item.Purpose</td>
+            <td>@item.ContactPerson</td>
+            <td>@item.CountryName</td>
+            <td>@item.StateName</td>
+            <td>@item.CityName</td>
+            <td>@(item.IsActive ? "Yes" : "No")</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
