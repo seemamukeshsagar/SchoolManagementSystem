@@ -1,48 +1,48 @@
 @model SchoolPortalApp.Models.PrivilegeViewModel
 
 @{
-    var actionName = ViewContext.RouteData.Values["action"]?.ToString() ?? "Edit";
-    ViewData["Title"] = $"{actionName} Privilege";
+	var actionName = ViewContext.RouteData.Values["action"]?.ToString() ?? "Edit";
+	ViewData["Title"] = $"{actionName} Privilege";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">@ViewData["Title"]</h3>
-    </div>
-    <div class="card-body">
-        <form asp-action="@actionName">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            @if (string.Equals(actionName, "Edit", StringComparison.OrdinalIgnoreCase))
-            {
-                <input type="hidden" asp-for="Id" />
-            }
+	<div class="card-header">
+		<h3 class="card-title">@ViewData["Title"]</h3>
+	</div>
+	<div class="card-body">
+		<form asp-action="@actionName">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			
+			@if (string.Equals(actionName, "Edit", StringComparison.OrdinalIgnoreCase))
+			{
+				<input type="hidden" asp-for="Id" />
+			}
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				<label asp-for="Name" class="control-label"></label>
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				<label asp-for="Description" class="control-label"></label>
+				<textarea asp-for="Description" class="form-control" rows="3"></textarea>
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
 
-            <div class="form-group form-check">
-                <input class="form-check-input" asp-for="IsActive" />
-                <label class="form-check-label" asp-for="IsActive"></label>
-            </div>
+			<div class="form-group form-check">
+				<input class="form-check-input" asp-for="IsActive" />
+				<label class="form-check-label" asp-for="IsActive"></label>
+			</div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-default">Cancel</a>
-            </div>
-        </form>
-    </div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+				<a asp-action="Index" class="btn btn-default">Cancel</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

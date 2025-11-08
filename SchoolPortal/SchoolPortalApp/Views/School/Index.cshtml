@@ -1,46 +1,46 @@
 @model IEnumerable<SchoolPortalApp.Models.SchoolListItemViewModel>
 @{
-    ViewData["Title"] = "Schools";
+	ViewData["Title"] = "Schools";
 }
 <h2>Schools</h2>
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+	<a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Country</th>
-            <th>Establishment Year</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Country</th>
+			<th>Establishment Year</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
 @foreach (var item in Model)
 {
-    <tr>
-        <td>@item.Name</td>
-        <td>@item.Email</td>
-        <td>@(string.IsNullOrWhiteSpace(item.Address2) ? item.Address1 : ($"{item.Address1}, {item.Address2}"))</td>
-        <td>@item.CityName</td>
-        <td>@item.StateName</td>
-        <td>@item.CountryName</td>
-        <td>@item.EstablishmentYear</td>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-            <a asp-controller="SchoolContact" asp-action="Index">Contacts</a>
-            @if (!item.HasContact)
-            {
-                @: | <a asp-controller="SchoolContact" asp-action="Create" asp-route-schoolId="@item.Id">Add Contact</a>
-            }
-        </td>
-    </tr>
+	<tr>
+		<td>@item.Name</td>
+		<td>@item.Email</td>
+		<td>@(string.IsNullOrWhiteSpace(item.Address2) ? item.Address1 : ($"{item.Address1}, {item.Address2}"))</td>
+		<td>@item.CityName</td>
+		<td>@item.StateName</td>
+		<td>@item.CountryName</td>
+		<td>@item.EstablishmentYear</td>
+		<td>
+			<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+			<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+			<a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+			<a asp-controller="SchoolContact" asp-action="Index">Contacts</a>
+			@if (!item.HasContact)
+			{
+				@: | <a asp-controller="SchoolContact" asp-action="Create" asp-route-schoolId="@item.Id">Add Contact</a>
+			}
+		</td>
+	</tr>
 }
-    </tbody>
+	</tbody>
 </table>

@@ -1,31 +1,31 @@
 @model SchoolPortal.Entities.Models.HolidayMaster
 @{
-    ViewData["Title"] = "Holiday Details";
+	ViewData["Title"] = "Holiday Details";
 }
 <h2>Holiday Details</h2>
 <div>
-    <dl class="row">
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@Model.Name</dd>
-        <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
-        <dt class="col-sm-2">Type</dt>
-        <dd class="col-sm-10">@Model.TypeId</dd>
-        <dt class="col-sm-2">From</dt>
-        <dd class="col-sm-10">@Model.FromDate.ToString("yyyy-MM-dd")</dd>
-        <dt class="col-sm-2">To</dt>
-        <dd class="col-sm-10">@Model.ToDate.ToString("yyyy-MM-dd")</dd>
-        <dt class="col-sm-2">Year</dt>
-        <dd class="col-sm-10">@Model.Year</dd>
-        <dt class="col-sm-2">Session</dt>
-        <dd class="col-sm-10">@Model.SessionId</dd>
-        <dt class="col-sm-2">Staff Applicable</dt>
-        <dd class="col-sm-10">@(Model.IsStaffApplicable == true ? "Yes" : "No")</dd>
-        <dt class="col-sm-2">Active</dt>
-        <dd class="col-sm-10">@(Model.IsActive ? "Yes" : "No")</dd>
-    </dl>
+	<dl class="row">
+		<dt class="col-sm-2">Name</dt>
+		<dd class="col-sm-10">@Model.Name</dd>
+		<dt class="col-sm-2">Description</dt>
+		<dd class="col-sm-10">@Model.Description</dd>
+		<dt class="col-sm-2">Type</dt>
+		<dd class="col-sm-10">@Model.TypeId</dd>
+		<dt class="col-sm-2">From</dt>
+		<dd class="col-sm-10">@Model.FromDate.ToString("yyyy-MM-dd")</dd>
+		<dt class="col-sm-2">To</dt>
+		<dd class="col-sm-10">@Model.ToDate.ToString("yyyy-MM-dd")</dd>
+		<dt class="col-sm-2">Year</dt>
+		<dd class="col-sm-10">@Model.Year</dd>
+		<dt class="col-sm-2">Session</dt>
+		<dd class="col-sm-10">@Model.SessionId</dd>
+		<dt class="col-sm-2">Staff Applicable</dt>
+		<dd class="col-sm-10">@(Model.IsStaffApplicable == true ? "Yes" : "No")</dd>
+		<dt class="col-sm-2">Active</dt>
+		<dd class="col-sm-10">@(Model.IsActive ? "Yes" : "No")</dd>
+	</dl>
 </div>
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+	<a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </p>

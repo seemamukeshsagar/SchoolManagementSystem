@@ -1,12 +1,12 @@
 @model SchoolPortal.Entities.Models.SystemParameters
 @{
-    ViewData["Title"] = "Delete System Parameter";
+	ViewData["Title"] = "Delete System Parameter";
 }
 <h2>Delete System Parameter</h2>
 <div class="alert alert-warning">Are you sure you want to delete '@Model.ParameterName'?</div>
 <form asp-action="Delete" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	@Html.AntiForgeryToken()
+	<input type="hidden" asp-for="Id" />
+	<button type="submit" class="btn btn-danger">Delete</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>

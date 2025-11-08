@@ -1,78 +1,78 @@
 @model SchoolPortalApp.Models.DeptDesigDetailsViewModel
 
 @{
-    ViewData["Title"] = "Edit Department Designation";
+	ViewData["Title"] = "Edit Department Designation";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h4>Edit Department Designation</h4>
-    </div>
-    <div class="card-body">
-        <form asp-action="Edit" asp-route-id="@Model.Id">
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CompanyId" />
-            <input type="hidden" asp-for="SchoolId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="DepartmentId" class="control-label">Department</label>
-                        <select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
-                            <option value="">-- Select Department --</option>
-                        </select>
-                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="DesignationId" class="control-label">Designation</label>
-                        <select asp-for="DesignationId" class="form-control" asp-items="Model.Designations">
-                            <option value="">-- Select Designation --</option>
-                        </select>
-                        <span asp-validation-for="DesignationId" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+	<div class="card-header">
+		<h4>Edit Department Designation</h4>
+	</div>
+	<div class="card-body">
+		<form asp-action="Edit" asp-route-id="@Model.Id">
+			<input type="hidden" asp-for="Id" />
+			<input type="hidden" asp-for="CompanyId" />
+			<input type="hidden" asp-for="SchoolId" />
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="DepartmentId" class="control-label">Department</label>
+						<select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
+							<option value="">-- Select Department --</option>
+						</select>
+						<span asp-validation-for="DepartmentId" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="DesignationId" class="control-label">Designation</label>
+						<select asp-for="DesignationId" class="form-control" asp-items="Model.Designations">
+							<option value="">-- Select Designation --</option>
+						</select>
+						<span asp-validation-for="DesignationId" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-check">
-                        <input class="form-check-input" asp-for="IsActive" />
-                        <label class="form-check-label" asp-for="IsActive"></label>
-                    </div>
-                </div>
-            </div>
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-check">
+						<input class="form-check-input" asp-for="IsActive" />
+						<label class="form-check-label" asp-for="IsActive"></label>
+					</div>
+				</div>
+			</div>
 
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label asp-for="Status" class="control-label"></label>
-                        <input asp-for="Status" class="form-control" />
-                        <span asp-validation-for="Status" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="form-group">
+						<label asp-for="Status" class="control-label"></label>
+						<input asp-for="Status" class="form-control" />
+						<span asp-validation-for="Status" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
 
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label asp-for="StatusMessage" class="control-label">Status Message</label>
-                        <textarea asp-for="StatusMessage" class="form-control" rows="3"></textarea>
-                        <span asp-validation-for="StatusMessage" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="form-group">
+						<label asp-for="StatusMessage" class="control-label">Status Message</label>
+						<textarea asp-for="StatusMessage" class="form-control" rows="3"></textarea>
+						<span asp-validation-for="StatusMessage" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
-    </div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">Save</button>
+				<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

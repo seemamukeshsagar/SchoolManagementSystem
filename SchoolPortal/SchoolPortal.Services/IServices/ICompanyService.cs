@@ -6,13 +6,13 @@ using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.IServices
 {
-    public interface ICompanyService
-    {
-        List<CompanyMaster> GetAll();
-        CompanyMaster? GetById(Guid id);
-        Guid Create(CompanyMaster company);
-        bool Update(CompanyMaster company);
-        bool Delete(Guid id);
-        string CompanyNameById(Guid id);
-    }
+	public interface ICompanyService
+	{
+		List<CompanyMaster> GetAll();
+		CompanyMaster? GetById(Guid id);
+		Guid Create(CompanyMaster company);
+		bool Update(CompanyMaster company);
+		bool Delete(Guid id);
+		string CompanyNameById(Guid id);
+	}
 }

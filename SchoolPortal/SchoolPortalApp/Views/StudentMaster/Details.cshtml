@@ -1,862 +1,862 @@
 @model SchoolPortalApp.Models.StudentViewModel
 @{
-    ViewData["Title"] = "Student Details";
+	ViewData["Title"] = "Student Details";
 }
 <h2>Student Details</h2>
 
 <ul class="nav nav-tabs" id="studentTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false">Address & Contact</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="parents-tab" data-bs-toggle="tab" data-bs-target="#parents" type="button" role="tab" aria-controls="parents" aria-selected="false">Parents</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">Academic Details</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="previous-school-tab" data-bs-toggle="tab" data-bs-target="#previous-school" type="button" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="additional-tab" data-bs-toggle="tab" data-bs-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="false">Additional Info</button>
-    </li>
-    
-    
+	<li class="nav-item" role="presentation">
+		<button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Information</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab" aria-controls="address" aria-selected="false">Address & Contact</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="parents-tab" data-bs-toggle="tab" data-bs-target="#parents" type="button" role="tab" aria-controls="parents" aria-selected="false">Parents</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button" role="tab" aria-controls="academic" aria-selected="false">Academic Details</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="medical-tab" data-bs-toggle="tab" data-bs-target="#medical" type="button" role="tab" aria-controls="medical" aria-selected="false">Medical & Background</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="previous-school-tab" data-bs-toggle="tab" data-bs-target="#previous-school" type="button" role="tab" aria-controls="previous-school" aria-selected="false">Previous School</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="additional-tab" data-bs-toggle="tab" data-bs-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="false">Additional Info</button>
+	</li>
+	
+	
 </ul>
 
 <div class="tab-content p-3 border border-top-0 rounded-bottom" id="studentTabsContent">
-    <!-- Basic Information Tab -->
-    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
-        <dl class="row">
-            <dt class="col-sm-3">First Name</dt><dd class="col-sm-9">@Model.FirstName</dd>
-            <dt class="col-sm-3">Last Name</dt><dd class="col-sm-9">@Model.LastName</dd>
-            <dt class="col-sm-3">Date of Birth</dt><dd class="col-sm-9">@Model.DOB.ToString("yyyy-MM-dd")</dd>
-            <dt class="col-sm-3">Gender</dt><dd class="col-sm-9">@(Model.Gender.HasValue ? Model.Genders?.FirstOrDefault(x => x.Value == Model.Gender.Value.ToString())?.Text ?? "N/A" : "N/A")</dd>
-            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
-            <dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
-            <dt class="col-sm-3">Image</dt><dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.Image))
-                {
-                    <img src="@Model.Image" alt="Student Image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
-                }
-                else
-                {
-                    <span class="text-muted">No image available</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Basic Information Tab -->
+	<div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+		<dl class="row">
+			<dt class="col-sm-3">First Name</dt><dd class="col-sm-9">@Model.FirstName</dd>
+			<dt class="col-sm-3">Last Name</dt><dd class="col-sm-9">@Model.LastName</dd>
+			<dt class="col-sm-3">Date of Birth</dt><dd class="col-sm-9">@Model.DOB.ToString("yyyy-MM-dd")</dd>
+			<dt class="col-sm-3">Gender</dt><dd class="col-sm-9">@(Model.Gender.HasValue ? Model.Genders?.FirstOrDefault(x => x.Value == Model.Gender.Value.ToString())?.Text ?? "N/A" : "N/A")</dd>
+			<dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+			<dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
+			<dt class="col-sm-3">Image</dt><dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.Image))
+				{
+					<img src="@Model.Image" alt="Student Image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+				}
+				else
+				{
+					<span class="text-muted">No image available</span>
+				}
+			</dd>
+		</dl>
+	</div>
 
-    <!-- Address & Contact Tab -->
-    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Address</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.Address))
-                {
-                    @Model.Address
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Country</dt>
-            <dd class="col-sm-9">
-                @{
-                    var countryName = ViewBag.CountryName as string;
-                    if (string.IsNullOrEmpty(countryName) && Model.CountryId != Guid.Empty)
-                    {
-                        countryName = Model.Countries?.FirstOrDefault(x => x.Value == Model.CountryId.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(countryName))
-                {
-                    @countryName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.CountryId != null ? ViewBag.CountryId.ToString() : (Model.CountryId != Guid.Empty ? Model.CountryId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">State</dt>
-            <dd class="col-sm-9">
-                @{
-                    var stateName = ViewBag.StateName as string;
-                    if (string.IsNullOrEmpty(stateName) && Model.StateId != Guid.Empty)
-                    {
-                        stateName = Model.States?.FirstOrDefault(x => x.Value == Model.StateId.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(stateName))
-                {
-                    @stateName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.StateId != null ? ViewBag.StateId.ToString() : (Model.StateId != Guid.Empty ? Model.StateId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">City</dt>
-            <dd class="col-sm-9">
-                @{
-                    var cityName = ViewBag.CityName as string;
-                    if (string.IsNullOrEmpty(cityName) && Model.CityId != Guid.Empty)
-                    {
-                        cityName = Model.Cities?.FirstOrDefault(x => x.Value == Model.CityId.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(cityName))
-                {
-                    @cityName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.CityId != null ? ViewBag.CityId.ToString() : (Model.CityId != Guid.Empty ? Model.CityId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">Zip Code</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ZipCode))
-                {
-                    @Model.ZipCode
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Contact Number</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ContactNumber))
-                {
-                    @Model.ContactNumber
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Emergency Contact</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.EmergencyContactNumber))
-                {
-                    @Model.EmergencyContactNumber
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Address & Contact Tab -->
+	<div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Address</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.Address))
+				{
+					@Model.Address
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Country</dt>
+			<dd class="col-sm-9">
+				@{
+					var countryName = ViewBag.CountryName as string;
+					if (string.IsNullOrEmpty(countryName) && Model.CountryId != Guid.Empty)
+					{
+						countryName = Model.Countries?.FirstOrDefault(x => x.Value == Model.CountryId.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(countryName))
+				{
+					@countryName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.CountryId != null ? ViewBag.CountryId.ToString() : (Model.CountryId != Guid.Empty ? Model.CountryId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">State</dt>
+			<dd class="col-sm-9">
+				@{
+					var stateName = ViewBag.StateName as string;
+					if (string.IsNullOrEmpty(stateName) && Model.StateId != Guid.Empty)
+					{
+						stateName = Model.States?.FirstOrDefault(x => x.Value == Model.StateId.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(stateName))
+				{
+					@stateName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.StateId != null ? ViewBag.StateId.ToString() : (Model.StateId != Guid.Empty ? Model.StateId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">City</dt>
+			<dd class="col-sm-9">
+				@{
+					var cityName = ViewBag.CityName as string;
+					if (string.IsNullOrEmpty(cityName) && Model.CityId != Guid.Empty)
+					{
+						cityName = Model.Cities?.FirstOrDefault(x => x.Value == Model.CityId.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(cityName))
+				{
+					@cityName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.CityId != null ? ViewBag.CityId.ToString() : (Model.CityId != Guid.Empty ? Model.CityId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">Zip Code</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ZipCode))
+				{
+					@Model.ZipCode
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Contact Number</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ContactNumber))
+				{
+					@Model.ContactNumber
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Emergency Contact</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.EmergencyContactNumber))
+				{
+					@Model.EmergencyContactNumber
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+		</dl>
+	</div>
 
-    <!-- Parents Tab -->
-    <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Parent First Name</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentFirstName))
-                {
-                    @Model.ParentFirstName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Parent Last Name</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentLastName))
-                {
-                    @Model.ParentLastName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Relation Type</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentRelationTypeId.HasValue)
-                {
-                    @(Model.ParentRelationTypes?.FirstOrDefault(x => x.Value == Model.ParentRelationTypeId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Qualification</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentQualificationId.HasValue)
-                {
-                    @(Model.ParentQualifications?.FirstOrDefault(x => x.Value == Model.ParentQualificationId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Designation</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentDesignationId.HasValue)
-                {
-                    @(Model.ParentDesignations?.FirstOrDefault(x => x.Value == Model.ParentDesignationId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Occupation</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentOccupation))
-                {
-                    @Model.ParentOccupation
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Annual Income</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentAnnualIncome.HasValue)
-                {
-                    @Model.ParentAnnualIncome.Value.ToString("C")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Parent DOB</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentDOB.HasValue)
-                {
-                    @Model.ParentDOB.Value.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Phone</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentPhone))
-                {
-                    @Model.ParentPhone
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentEmail))
-                {
-                    @Model.ParentEmail
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Address 1</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentAddress1))
-                {
-                    @Model.ParentAddress1
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Address 2</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentAddress2))
-                {
-                    @Model.ParentAddress2
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Country</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentCountryId.HasValue)
-                {
-                    @(Model.ParentCountries?.FirstOrDefault(x => x.Value == Model.ParentCountryId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">State</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentStateId.HasValue)
-                {
-                    @(Model.ParentStates?.FirstOrDefault(x => x.Value == Model.ParentStateId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">City</dt>
-            <dd class="col-sm-9">
-                @if (Model.ParentCityId.HasValue)
-                {
-                    @(Model.ParentCities?.FirstOrDefault(x => x.Value == Model.ParentCityId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Zip Code</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.ParentZipCode))
-                {
-                    @Model.ParentZipCode
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Is Active</dt>
-            <dd class="col-sm-9">@Model.ParentIsActive</dd>
-        </dl>
-    </div>
+	<!-- Parents Tab -->
+	<div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Parent First Name</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentFirstName))
+				{
+					@Model.ParentFirstName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Parent Last Name</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentLastName))
+				{
+					@Model.ParentLastName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Relation Type</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentRelationTypeId.HasValue)
+				{
+					@(Model.ParentRelationTypes?.FirstOrDefault(x => x.Value == Model.ParentRelationTypeId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Qualification</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentQualificationId.HasValue)
+				{
+					@(Model.ParentQualifications?.FirstOrDefault(x => x.Value == Model.ParentQualificationId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Designation</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentDesignationId.HasValue)
+				{
+					@(Model.ParentDesignations?.FirstOrDefault(x => x.Value == Model.ParentDesignationId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Occupation</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentOccupation))
+				{
+					@Model.ParentOccupation
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Annual Income</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentAnnualIncome.HasValue)
+				{
+					@Model.ParentAnnualIncome.Value.ToString("C")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Parent DOB</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentDOB.HasValue)
+				{
+					@Model.ParentDOB.Value.ToString("yyyy-MM-dd")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Phone</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentPhone))
+				{
+					@Model.ParentPhone
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Email</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentEmail))
+				{
+					@Model.ParentEmail
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Address 1</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentAddress1))
+				{
+					@Model.ParentAddress1
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Address 2</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentAddress2))
+				{
+					@Model.ParentAddress2
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Country</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentCountryId.HasValue)
+				{
+					@(Model.ParentCountries?.FirstOrDefault(x => x.Value == Model.ParentCountryId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">State</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentStateId.HasValue)
+				{
+					@(Model.ParentStates?.FirstOrDefault(x => x.Value == Model.ParentStateId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">City</dt>
+			<dd class="col-sm-9">
+				@if (Model.ParentCityId.HasValue)
+				{
+					@(Model.ParentCities?.FirstOrDefault(x => x.Value == Model.ParentCityId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Zip Code</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.ParentZipCode))
+				{
+					@Model.ParentZipCode
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Is Active</dt>
+			<dd class="col-sm-9">@Model.ParentIsActive</dd>
+		</dl>
+	</div>
 
-    <!-- Academic Details Tab -->
-    <div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Class</dt>
-            <dd class="col-sm-9">
-                @{
-                    var className = ViewBag.ClassName as string;
-                    if (string.IsNullOrEmpty(className) && Model.ClassId != Guid.Empty)
-                    {
-                        className = Model.Classes?.FirstOrDefault(x => x.Value == Model.ClassId.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(className))
-                {
-                    @className
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.ClassId != null ? ViewBag.ClassId.ToString() : (Model.ClassId != Guid.Empty ? Model.ClassId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">Section</dt>
-            <dd class="col-sm-9">
-                @{
-                    var sectionName = ViewBag.SectionName as string;
-                    if (string.IsNullOrEmpty(sectionName) && Model.SectionId != Guid.Empty)
-                    {
-                        sectionName = Model.Sections?.FirstOrDefault(x => x.Value == Model.SectionId.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(sectionName))
-                {
-                    @sectionName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.SectionId != null ? ViewBag.SectionId.ToString() : (Model.SectionId != Guid.Empty ? Model.SectionId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">Roll Number</dt>
-            <dd class="col-sm-9">
-                @if (Model.RollNumber != Guid.Empty)
-                {
-                    @Model.RollNumber
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Registration Number</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.RegistrationNumber))
-                {
-                    @Model.RegistrationNumber
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">DOJ</dt>
-            <dd class="col-sm-9">
-                @if (Model.DOJ != default(DateTime))
-                {
-                    @Model.DOJ.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Class Teacher</dt>
-            <dd class="col-sm-9">
-                @{
-                    var teacherName = ViewBag.ClassTeacherName as string;
-                    if (string.IsNullOrEmpty(teacherName) && Model.ClassTeacherId.HasValue)
-                    {
-                        teacherName = Model.ClassTeachers?.FirstOrDefault(x => x.Value == Model.ClassTeacherId.Value.ToString())?.Text;
-                    }
-                }
-                @if (!string.IsNullOrEmpty(teacherName))
-                {
-                    @teacherName
-                }
-                else if (Model.ClassTeacherId.HasValue)
-                {
-                    <span class="text-muted">ID: @Model.ClassTeacherId.Value.ToString()</span>
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Academic Details Tab -->
+	<div class="tab-pane fade" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Class</dt>
+			<dd class="col-sm-9">
+				@{
+					var className = ViewBag.ClassName as string;
+					if (string.IsNullOrEmpty(className) && Model.ClassId != Guid.Empty)
+					{
+						className = Model.Classes?.FirstOrDefault(x => x.Value == Model.ClassId.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(className))
+				{
+					@className
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.ClassId != null ? ViewBag.ClassId.ToString() : (Model.ClassId != Guid.Empty ? Model.ClassId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">Section</dt>
+			<dd class="col-sm-9">
+				@{
+					var sectionName = ViewBag.SectionName as string;
+					if (string.IsNullOrEmpty(sectionName) && Model.SectionId != Guid.Empty)
+					{
+						sectionName = Model.Sections?.FirstOrDefault(x => x.Value == Model.SectionId.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(sectionName))
+				{
+					@sectionName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.SectionId != null ? ViewBag.SectionId.ToString() : (Model.SectionId != Guid.Empty ? Model.SectionId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">Roll Number</dt>
+			<dd class="col-sm-9">
+				@if (Model.RollNumber != Guid.Empty)
+				{
+					@Model.RollNumber
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Registration Number</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.RegistrationNumber))
+				{
+					@Model.RegistrationNumber
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">DOJ</dt>
+			<dd class="col-sm-9">
+				@if (Model.DOJ != default(DateTime))
+				{
+					@Model.DOJ.ToString("yyyy-MM-dd")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Class Teacher</dt>
+			<dd class="col-sm-9">
+				@{
+					var teacherName = ViewBag.ClassTeacherName as string;
+					if (string.IsNullOrEmpty(teacherName) && Model.ClassTeacherId.HasValue)
+					{
+						teacherName = Model.ClassTeachers?.FirstOrDefault(x => x.Value == Model.ClassTeacherId.Value.ToString())?.Text;
+					}
+				}
+				@if (!string.IsNullOrEmpty(teacherName))
+				{
+					@teacherName
+				}
+				else if (Model.ClassTeacherId.HasValue)
+				{
+					<span class="text-muted">ID: @Model.ClassTeacherId.Value.ToString()</span>
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+		</dl>
+	</div>
 
-    <!-- Medical & Background Tab -->
-    <div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Blood Group</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.BloodGroupName as string))
-                {
-                    @ViewBag.BloodGroupName @* <small class="text-muted">(ID: @(Model.BloodGroupId != Guid.Empty ? Model.BloodGroupId.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.BloodGroupId != Guid.Empty)
-                {
-                    @((Model.BloodGroups?.FirstOrDefault(x => x.Value == Model.BloodGroupId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BloodGroupId.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Nationality</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.NationalityName as string))
-                {
-                    @ViewBag.NationalityName @* <small class="text-muted">(ID: @(Model.Nationality != Guid.Empty ? Model.Nationality.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.Nationality != Guid.Empty)
-                {
-                    @((Model.Nationalities?.FirstOrDefault(x => x.Value == Model.Nationality.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.Nationality.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Religion</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.ReligionName as string))
-                {
-                    @ViewBag.ReligionName @* <small class="text-muted">(ID: @(Model.ReligionId != Guid.Empty ? Model.ReligionId.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.ReligionId != Guid.Empty)
-                {
-                    @((Model.Religions?.FirstOrDefault(x => x.Value == Model.ReligionId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.ReligionId.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Disability</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.DisabilityAny))
-                {
-                    @Model.DisabilityAny
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Medical Allergy</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.MedicalAlleryAny))
-                {
-                    @Model.MedicalAlleryAny
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Birth Country</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.BirthCountryName as string))
-                {
-                    @ViewBag.BirthCountryName @* <small class="text-muted">(ID: @(Model.BirthCountryId != Guid.Empty ? Model.BirthCountryId.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.BirthCountryId != Guid.Empty)
-                {
-                    @((Model.BirthCountries?.FirstOrDefault(x => x.Value == Model.BirthCountryId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCountryId.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Birth State</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.BirthStateName as string))
-                {
-                    @ViewBag.BirthStateName @* <small class="text-muted">(ID: @(Model.BirthStateId != Guid.Empty ? Model.BirthStateId.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.BirthStateId != Guid.Empty)
-                {
-                    @((Model.BirthStates?.FirstOrDefault(x => x.Value == Model.BirthStateId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthStateId.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Birth City</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.BirthCityName as string))
-                {
-                    @ViewBag.BirthCityName @* <small class="text-muted">(ID: @(Model.BirthCityId != Guid.Empty ? Model.BirthCityId.ToString() : "N/A"))</small> *@
-                }
-                else if (Model.BirthCityId != Guid.Empty)
-                {
-                    @((Model.BirthCities?.FirstOrDefault(x => x.Value == Model.BirthCityId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCityId.ToString())</small> *@
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Medical & Background Tab -->
+	<div class="tab-pane fade" id="medical" role="tabpanel" aria-labelledby="medical-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Blood Group</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.BloodGroupName as string))
+				{
+					@ViewBag.BloodGroupName @* <small class="text-muted">(ID: @(Model.BloodGroupId != Guid.Empty ? Model.BloodGroupId.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.BloodGroupId != Guid.Empty)
+				{
+					@((Model.BloodGroups?.FirstOrDefault(x => x.Value == Model.BloodGroupId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BloodGroupId.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Nationality</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.NationalityName as string))
+				{
+					@ViewBag.NationalityName @* <small class="text-muted">(ID: @(Model.Nationality != Guid.Empty ? Model.Nationality.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.Nationality != Guid.Empty)
+				{
+					@((Model.Nationalities?.FirstOrDefault(x => x.Value == Model.Nationality.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.Nationality.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Religion</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.ReligionName as string))
+				{
+					@ViewBag.ReligionName @* <small class="text-muted">(ID: @(Model.ReligionId != Guid.Empty ? Model.ReligionId.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.ReligionId != Guid.Empty)
+				{
+					@((Model.Religions?.FirstOrDefault(x => x.Value == Model.ReligionId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.ReligionId.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Disability</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.DisabilityAny))
+				{
+					@Model.DisabilityAny
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Medical Allergy</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.MedicalAlleryAny))
+				{
+					@Model.MedicalAlleryAny
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Birth Country</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.BirthCountryName as string))
+				{
+					@ViewBag.BirthCountryName @* <small class="text-muted">(ID: @(Model.BirthCountryId != Guid.Empty ? Model.BirthCountryId.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.BirthCountryId != Guid.Empty)
+				{
+					@((Model.BirthCountries?.FirstOrDefault(x => x.Value == Model.BirthCountryId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCountryId.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Birth State</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.BirthStateName as string))
+				{
+					@ViewBag.BirthStateName @* <small class="text-muted">(ID: @(Model.BirthStateId != Guid.Empty ? Model.BirthStateId.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.BirthStateId != Guid.Empty)
+				{
+					@((Model.BirthStates?.FirstOrDefault(x => x.Value == Model.BirthStateId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthStateId.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Birth City</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.BirthCityName as string))
+				{
+					@ViewBag.BirthCityName @* <small class="text-muted">(ID: @(Model.BirthCityId != Guid.Empty ? Model.BirthCityId.ToString() : "N/A"))</small> *@
+				}
+				else if (Model.BirthCityId != Guid.Empty)
+				{
+					@((Model.BirthCities?.FirstOrDefault(x => x.Value == Model.BirthCityId.ToString())?.Text) ?? "N/A") @* <small class="text-muted">(ID: @Model.BirthCityId.ToString())</small> *@
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+		</dl>
+	</div>
 
-    <!-- Previous School Tab -->
-    <div class="tab-pane fade" id="previous-school" role="tabpanel" aria-labelledby="previous-school-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Previous School</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.PreviousSchoolAttended))
-                {
-                    @Model.PreviousSchoolAttended
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Class</dt>
-            <dd class="col-sm-9">
-                @if (Model.PreviousSchoolClassId.HasValue)
-                {
-                    @(Model.PreviousSchoolClasses?.FirstOrDefault(x => x.Value == Model.PreviousSchoolClassId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Board</dt>
-            <dd class="col-sm-9">
-                @if (Model.PreviousSchoolBoardId != Guid.Empty)
-                {
-                    @(Model.PreviousSchoolBoards?.FirstOrDefault(x => x.Value == Model.PreviousSchoolBoardId.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Percentage</dt>
-            <dd class="col-sm-9">
-                @if (Model.PreviousSchoolPercentage.HasValue)
-                {
-                    @Model.PreviousSchoolPercentage.Value.ToString("F2")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Rank</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.PreviousSchoolRank))
-                {
-                    @Model.PreviousSchoolRank
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">From Date</dt>
-            <dd class="col-sm-9">
-                @if (Model.PreviousSchoolFromDate.HasValue)
-                {
-                    @Model.PreviousSchoolFromDate.Value.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">To Date</dt>
-            <dd class="col-sm-9">
-                @if (Model.PreviousSchoolToDate.HasValue)
-                {
-                    @Model.PreviousSchoolToDate.Value.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Withdrawn Date</dt>
-            <dd class="col-sm-9">
-                @if (Model.WithdrawnDate.HasValue)
-                {
-                    @Model.WithdrawnDate.Value.ToString("yyyy-MM-dd")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Withdrawn Reason</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.WithdrawnReason))
-                {
-                    @Model.WithdrawnReason
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Previous School Tab -->
+	<div class="tab-pane fade" id="previous-school" role="tabpanel" aria-labelledby="previous-school-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Previous School</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.PreviousSchoolAttended))
+				{
+					@Model.PreviousSchoolAttended
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Class</dt>
+			<dd class="col-sm-9">
+				@if (Model.PreviousSchoolClassId.HasValue)
+				{
+					@(Model.PreviousSchoolClasses?.FirstOrDefault(x => x.Value == Model.PreviousSchoolClassId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Board</dt>
+			<dd class="col-sm-9">
+				@if (Model.PreviousSchoolBoardId != Guid.Empty)
+				{
+					@(Model.PreviousSchoolBoards?.FirstOrDefault(x => x.Value == Model.PreviousSchoolBoardId.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Percentage</dt>
+			<dd class="col-sm-9">
+				@if (Model.PreviousSchoolPercentage.HasValue)
+				{
+					@Model.PreviousSchoolPercentage.Value.ToString("F2")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Rank</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.PreviousSchoolRank))
+				{
+					@Model.PreviousSchoolRank
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">From Date</dt>
+			<dd class="col-sm-9">
+				@if (Model.PreviousSchoolFromDate.HasValue)
+				{
+					@Model.PreviousSchoolFromDate.Value.ToString("yyyy-MM-dd")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">To Date</dt>
+			<dd class="col-sm-9">
+				@if (Model.PreviousSchoolToDate.HasValue)
+				{
+					@Model.PreviousSchoolToDate.Value.ToString("yyyy-MM-dd")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Withdrawn Date</dt>
+			<dd class="col-sm-9">
+				@if (Model.WithdrawnDate.HasValue)
+				{
+					@Model.WithdrawnDate.Value.ToString("yyyy-MM-dd")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Withdrawn Reason</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.WithdrawnReason))
+				{
+					@Model.WithdrawnReason
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+		</dl>
+	</div>
 
-    <!-- Additional Info Tab -->
-    <div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
-        <dl class="row">
-            <dt class="col-sm-3">Hobbies</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(Model.Hobbies))
-                {
-                    @Model.Hobbies
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Siblings If Any</dt>
-            <dd class="col-sm-9">
-                @if (Model.SiblingsIfAny.HasValue)
-                {
-                    @Model.SiblingsIfAny.Value
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Sibling Class</dt>
-            <dd class="col-sm-9">
-                @if (Model.SiblingClassId.HasValue)
-                {
-                    @(Model.SiblingClasses?.FirstOrDefault(x => x.Value == Model.SiblingClassId.Value.ToString())?.Text ?? "N/A")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Avail Transport</dt>
-            <dd class="col-sm-9">
-                @if (Model.AvailTransport.HasValue)
-                {
-                    @Model.AvailTransport.Value
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Category</dt>
-            <dd class="col-sm-9">
-                @if (!string.IsNullOrEmpty(ViewBag.CategoryName as string))
-                {
-                    @ViewBag.CategoryName
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-                @* <small class="text-muted">(ID: @(ViewBag.CategoryId != null ? ViewBag.CategoryId.ToString() : (Model.CategoryId != Guid.Empty ? Model.CategoryId.ToString() : "N/A")))</small> *@
-            </dd>
-            <dt class="col-sm-3">Route</dt>
-            <dd class="col-sm-9">
-                @if (Model.RouteId.HasValue && Model.RouteId.Value != Guid.Empty)
-                {
-                    @Model.RouteId.Value.ToString()
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Route Stop</dt>
-            <dd class="col-sm-9">
-                @if (Model.RouteStopDetailsId.HasValue && Model.RouteStopDetailsId.Value != Guid.Empty)
-                {
-                    @Model.RouteStopDetailsId.Value.ToString()
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Route Pick And Drop</dt>
-            <dd class="col-sm-9">
-                @if (Model.RoutePickAndDrop.HasValue)
-                {
-                    @Model.RoutePickAndDrop.Value
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Fees Discount Category</dt>
-            <dd class="col-sm-9">
-                @if (Model.FeesDiscountCategoryMasterId.HasValue && Model.FeesDiscountCategoryMasterId.Value != Guid.Empty)
-                {
-                    @Model.FeesDiscountCategoryMasterId.Value.ToString()
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Tuition Fees</dt>
-            <dd class="col-sm-9">
-                @if (Model.TutionFees.HasValue)
-                {
-                    @Model.TutionFees.Value.ToString("C")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Annual Fees</dt>
-            <dd class="col-sm-9">
-                @if (Model.AnnualFees.HasValue)
-                {
-                    @Model.AnnualFees.Value.ToString("C")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Transport Fees</dt>
-            <dd class="col-sm-9">
-                @if (Model.TransportFees.HasValue)
-                {
-                    @Model.TransportFees.Value.ToString("C")
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Use Transport Fees</dt>
-            <dd class="col-sm-9">
-                @if (Model.UseTransportFees.HasValue)
-                {
-                    @Model.UseTransportFees.Value
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            <dt class="col-sm-3">Session</dt>
-            <dd class="col-sm-9">
-                @if (Model.SessionId.HasValue && Model.SessionId.Value != Guid.Empty)
-                {
-                    @Model.SessionId.Value.ToString()
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-            
-            <dt class="col-sm-3">Is Active</dt>
-            <dd class="col-sm-9">@Model.IsActive</dd>
-            <dt class="col-sm-3">Is Deleted</dt>
-            <dd class="col-sm-9">@Model.IsDeleted</dd>
-            <dt class="col-sm-3">House Allotted</dt>
-            <dd class="col-sm-9">
-                @if (Model.HouseAllotted.HasValue && Model.HouseAllotted.Value != Guid.Empty)
-                {
-                    @Model.HouseAllotted.Value.ToString()
-                }
-                else
-                {
-                    <span class="text-muted">N/A</span>
-                }
-            </dd>
-        </dl>
-    </div>
+	<!-- Additional Info Tab -->
+	<div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
+		<dl class="row">
+			<dt class="col-sm-3">Hobbies</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(Model.Hobbies))
+				{
+					@Model.Hobbies
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Siblings If Any</dt>
+			<dd class="col-sm-9">
+				@if (Model.SiblingsIfAny.HasValue)
+				{
+					@Model.SiblingsIfAny.Value
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Sibling Class</dt>
+			<dd class="col-sm-9">
+				@if (Model.SiblingClassId.HasValue)
+				{
+					@(Model.SiblingClasses?.FirstOrDefault(x => x.Value == Model.SiblingClassId.Value.ToString())?.Text ?? "N/A")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Avail Transport</dt>
+			<dd class="col-sm-9">
+				@if (Model.AvailTransport.HasValue)
+				{
+					@Model.AvailTransport.Value
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Category</dt>
+			<dd class="col-sm-9">
+				@if (!string.IsNullOrEmpty(ViewBag.CategoryName as string))
+				{
+					@ViewBag.CategoryName
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+				@* <small class="text-muted">(ID: @(ViewBag.CategoryId != null ? ViewBag.CategoryId.ToString() : (Model.CategoryId != Guid.Empty ? Model.CategoryId.ToString() : "N/A")))</small> *@
+			</dd>
+			<dt class="col-sm-3">Route</dt>
+			<dd class="col-sm-9">
+				@if (Model.RouteId.HasValue && Model.RouteId.Value != Guid.Empty)
+				{
+					@Model.RouteId.Value.ToString()
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Route Stop</dt>
+			<dd class="col-sm-9">
+				@if (Model.RouteStopDetailsId.HasValue && Model.RouteStopDetailsId.Value != Guid.Empty)
+				{
+					@Model.RouteStopDetailsId.Value.ToString()
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Route Pick And Drop</dt>
+			<dd class="col-sm-9">
+				@if (Model.RoutePickAndDrop.HasValue)
+				{
+					@Model.RoutePickAndDrop.Value
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Fees Discount Category</dt>
+			<dd class="col-sm-9">
+				@if (Model.FeesDiscountCategoryMasterId.HasValue && Model.FeesDiscountCategoryMasterId.Value != Guid.Empty)
+				{
+					@Model.FeesDiscountCategoryMasterId.Value.ToString()
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Tuition Fees</dt>
+			<dd class="col-sm-9">
+				@if (Model.TutionFees.HasValue)
+				{
+					@Model.TutionFees.Value.ToString("C")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Annual Fees</dt>
+			<dd class="col-sm-9">
+				@if (Model.AnnualFees.HasValue)
+				{
+					@Model.AnnualFees.Value.ToString("C")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Transport Fees</dt>
+			<dd class="col-sm-9">
+				@if (Model.TransportFees.HasValue)
+				{
+					@Model.TransportFees.Value.ToString("C")
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Use Transport Fees</dt>
+			<dd class="col-sm-9">
+				@if (Model.UseTransportFees.HasValue)
+				{
+					@Model.UseTransportFees.Value
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			<dt class="col-sm-3">Session</dt>
+			<dd class="col-sm-9">
+				@if (Model.SessionId.HasValue && Model.SessionId.Value != Guid.Empty)
+				{
+					@Model.SessionId.Value.ToString()
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+			
+			<dt class="col-sm-3">Is Active</dt>
+			<dd class="col-sm-9">@Model.IsActive</dd>
+			<dt class="col-sm-3">Is Deleted</dt>
+			<dd class="col-sm-9">@Model.IsDeleted</dd>
+			<dt class="col-sm-3">House Allotted</dt>
+			<dd class="col-sm-9">
+				@if (Model.HouseAllotted.HasValue && Model.HouseAllotted.Value != Guid.Empty)
+				{
+					@Model.HouseAllotted.Value.ToString()
+				}
+				else
+				{
+					<span class="text-muted">N/A</span>
+				}
+			</dd>
+		</dl>
+	</div>
 </div>
 
 <div class="mt-4">
-    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    
+	<a class="btn btn-secondary" asp-action="Index">Back to List</a>
+	<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+	
 </div>
 
 @section Scripts{
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var firstEl = document.getElementById('basic-tab');
-            if (firstEl && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
-                new bootstrap.Tab(firstEl).show();
-            }
-        });
-    </script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var firstEl = document.getElementById('basic-tab');
+			if (firstEl && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+				new bootstrap.Tab(firstEl).show();
+			}
+		});
+	</script>
 }

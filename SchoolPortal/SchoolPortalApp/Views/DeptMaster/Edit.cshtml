@@ -1,52 +1,52 @@
 @model SchoolPortalApp.Models.DeptMasterViewModel
 
 @{
-    ViewData["Title"] = "Edit Department";
+	ViewData["Title"] = "Edit Department";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h4>Edit Department</h4>
-    </div>
-    <div class="card-body">
-        <form asp-action="Edit" asp-route-id="@Model.Id">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="DeptCode" class="form-label"></label>
-                        <input asp-for="DeptCode" class="form-control" />
-                        <span asp-validation-for="DeptCode" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="DeptName" class="form-label"></label>
-                        <input asp-for="DeptName" class="form-control" />
-                        <span asp-validation-for="DeptName" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+	<div class="card-header">
+		<h4>Edit Department</h4>
+	</div>
+	<div class="card-body">
+		<form asp-action="Edit" asp-route-id="@Model.Id">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="DeptCode" class="form-label"></label>
+						<input asp-for="DeptCode" class="form-control" />
+						<span asp-validation-for="DeptCode" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="DeptName" class="form-label"></label>
+						<input asp-for="DeptName" class="form-control" />
+						<span asp-validation-for="DeptName" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group form-check mt-4 pt-2">
-                        <input class="form-check-input" asp-for="IsActive" />
-                        <label class="form-check-label" asp-for="IsActive"></label>
-                    </div>
-                </div>
-            </div>
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-group form-check mt-4 pt-2">
+						<input class="form-check-input" asp-for="IsActive" />
+						<label class="form-check-label" asp-for="IsActive"></label>
+					</div>
+				</div>
+			</div>
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-warning">Save Changes</button>
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
-    </div>
+			<div class="form-group mt-4">
+				<button type="submit" class="btn btn-warning">Save Changes</button>
+				<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,15 +1,15 @@
 @model SchoolPortal.Entities.Models.CompanyMaster
 @{
-    ViewData["Title"] = "Delete Company";
+	ViewData["Title"] = "Delete Company";
 }
 <h2>Delete Company</h2>
 <h5>Are you sure you want to delete this company?</h5>
 <div class="mb-3">
-    <strong>@Model.CompanyName</strong>
+	<strong>@Model.CompanyName</strong>
 </div>
 <form asp-action="Delete" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="id" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	@Html.AntiForgeryToken()
+	<input type="hidden" name="id" value="@Model.Id" />
+	<button type="submit" class="btn btn-danger">Delete</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>

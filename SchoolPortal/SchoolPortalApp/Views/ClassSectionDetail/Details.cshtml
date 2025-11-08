@@ -1,36 +1,36 @@
 @model ClassSectionDetailListItemViewModel
 
 @{
-    ViewData["Title"] = "Class Section Details";
+	ViewData["Title"] = "Class Section Details";
 }
 
 <div>
-    <h4>@ViewData["Title"]</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Class</dt>
-        <dd class="col-sm-10">@Model.ClassName</dd>
+	<h4>@ViewData["Title"]</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">Class</dt>
+		<dd class="col-sm-10">@Model.ClassName</dd>
 
-        <dt class="col-sm-2">Section</dt>
-        <dd class="col-sm-10">@Model.SectionName</dd>
+		<dt class="col-sm-2">Section</dt>
+		<dd class="col-sm-10">@Model.SectionName</dd>
 
-        <dt class="col-sm-2">Location</dt>
-        <dd class="col-sm-10">@Model.LocationName</dd>
+		<dt class="col-sm-2">Location</dt>
+		<dd class="col-sm-10">@Model.LocationName</dd>
 
-        <dt class="col-sm-2">Status</dt>
-        <dd class="col-sm-10">
-            @if (Model.IsActive)
-            {
-                <span class="badge bg-success">Active</span>
-            }
-            else
-            {
-                <span class="badge bg-danger">Inactive</span>
-            }
-        </dd>
-    </dl>
+		<dt class="col-sm-2">Status</dt>
+		<dd class="col-sm-10">
+			@if (Model.IsActive)
+			{
+				<span class="badge bg-success">Active</span>
+			}
+			else
+			{
+				<span class="badge bg-danger">Inactive</span>
+			}
+		</dd>
+	</dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

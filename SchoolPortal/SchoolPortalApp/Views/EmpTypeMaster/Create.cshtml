@@ -1,45 +1,45 @@
 @model SchoolPortalApp.Models.EmpTypeViewModel
 @{
-    ViewData["Title"] = "Create Employee Type";
+	ViewData["Title"] = "Create Employee Type";
 }
 <h2>Create Employee Type</h2>
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="TypeName" class="form-label"></label>
-        <input asp-for="TypeName" class="form-control" />
-        <span asp-validation-for="TypeName" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="CompanyId" class="form-label"></label>
-            <select asp-for="CompanyId" class="form-select" asp-items="Model.Companies">
-                <option value="">-- Select Company --</option>
-            </select>
-            <span asp-validation-for="CompanyId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="SchoolId" class="form-label"></label>
-            <select asp-for="SchoolId" class="form-select" asp-items="Model.Schools">
-                <option value="">-- Select School --</option>
-            </select>
-            <span asp-validation-for="SchoolId" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-check mb-3">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label asp-for="IsActive" class="form-check-label"></label>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="TypeName" class="form-label"></label>
+		<input asp-for="TypeName" class="form-control" />
+		<span asp-validation-for="TypeName" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Description" class="form-label"></label>
+		<textarea asp-for="Description" class="form-control" rows="3"></textarea>
+		<span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="CompanyId" class="form-label"></label>
+			<select asp-for="CompanyId" class="form-select" asp-items="Model.Companies">
+				<option value="">-- Select Company --</option>
+			</select>
+			<span asp-validation-for="CompanyId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="SchoolId" class="form-label"></label>
+			<select asp-for="SchoolId" class="form-select" asp-items="Model.Schools">
+				<option value="">-- Select School --</option>
+			</select>
+			<span asp-validation-for="SchoolId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }
 

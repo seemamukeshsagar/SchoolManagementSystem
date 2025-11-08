@@ -1,19 +1,19 @@
 @model SchoolPortal.Entities.Models.HolidayTypeMaster
 @{
-    ViewData["Title"] = "Holiday Type Details";
+	ViewData["Title"] = "Holiday Type Details";
 }
 <h2>Holiday Type Details</h2>
 <div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Name</dt>
-            <dd class="col-sm-9">@Model.HolidayTypeName</dd>
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.HolidayTypeDescription</dd>
-            <dt class="col-sm-3">Is Active</dt>
-            <dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
-        </dl>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class="col-sm-3">Name</dt>
+			<dd class="col-sm-9">@Model.HolidayTypeName</dd>
+			<dt class="col-sm-3">Description</dt>
+			<dd class="col-sm-9">@Model.HolidayTypeDescription</dd>
+			<dt class="col-sm-3">Is Active</dt>
+			<dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
+		</dl>
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+		<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+	</div>
 </div>

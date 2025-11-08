@@ -1,88 +1,88 @@
 @model SchoolPortalApp.Models.DeptImportViewModel
 
 @{
-    ViewData["Title"] = "Import Departments";
+	ViewData["Title"] = "Import Departments";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h4>Import Departments from Excel</h4>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="alert alert-info">
-                    <h5><i class="fas fa-info-circle"></i> Instructions</h5>
-                    <ol class="mb-0">
-                        <li>Download the <a asp-action="ExportToExcel" class="alert-link">Excel template</a> for reference.</li>
-                        <li>Ensure your Excel file has these columns in order:
-                            <ul>
-                                <li>Department Code (required)</li>
-                                <li>Department Name (required)</li>
-                                <li>School Name (must match existing school)</li>
-                                <li>Is Active (Yes/No)</li>
-                            </ul>
-                        </li>
-                        <li>Do not modify the header row in the template.</li>
-                        <li>Save your file in .xlsx format before uploading.</li>
-                    </ol>
-                </div>
+	<div class="card-header">
+		<h4>Import Departments from Excel</h4>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="alert alert-info">
+					<h5><i class="fas fa-info-circle"></i> Instructions</h5>
+					<ol class="mb-0">
+						<li>Download the <a asp-action="ExportToExcel" class="alert-link">Excel template</a> for reference.</li>
+						<li>Ensure your Excel file has these columns in order:
+							<ul>
+								<li>Department Code (required)</li>
+								<li>Department Name (required)</li>
+								<li>School Name (must match existing school)</li>
+								<li>Is Active (Yes/No)</li>
+							</ul>
+						</li>
+						<li>Do not modify the header row in the template.</li>
+						<li>Save your file in .xlsx format before uploading.</li>
+					</ol>
+				</div>
 
-                <form asp-action="Import" method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="ExcelFile" class="control-label"></label>
-                        <div class="custom-file">
-                            <input asp-for="ExcelFile" class="form-control" accept=".xlsx,.xls" />
-                            <span asp-validation-for="ExcelFile" class="text-danger"></span>
-                        </div>
-                    </div>
+				<form asp-action="Import" method="post" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					
+					<div class="form-group mb-3">
+						<label asp-for="ExcelFile" class="control-label"></label>
+						<div class="custom-file">
+							<input asp-for="ExcelFile" class="form-control" accept=".xlsx,.xls" />
+							<span asp-validation-for="ExcelFile" class="text-danger"></span>
+						</div>
+					</div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-upload"></i> Upload and Import
-                        </button>
-                        <a asp-action="Index" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to List
-                        </a>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Import Summary</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>This import will:</p>
-                        <ul>
-                            <li>Create new department records</li>
-                            <li>Skip any departments that already exist</li>
-                            <li>Validate all data before importing</li>
-                            <li>Show a summary of imported records</li>
-                        </ul>
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            <strong>Note:</strong> Large files may take several minutes to process.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-upload"></i> Upload and Import
+						</button>
+						<a asp-action="Index" class="btn btn-secondary">
+							<i class="fas fa-arrow-left"></i> Back to List
+						</a>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="mb-0">Import Summary</h5>
+					</div>
+					<div class="card-body">
+						<p>This import will:</p>
+						<ul>
+							<li>Create new department records</li>
+							<li>Skip any departments that already exist</li>
+							<li>Validate all data before importing</li>
+							<li>Show a summary of imported records</li>
+						</ul>
+						<div class="alert alert-warning">
+							<i class="fas fa-exclamation-triangle"></i> 
+							<strong>Note:</strong> Large files may take several minutes to process.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <script>
-        // Show file name when selected
-        $(document).ready(function() {
-            $("input[type='file']").change(function() {
-                var fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').html(fileName || 'Choose file');
-            });
-        });
-    </script>
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	
+	<script>
+		// Show file name when selected
+		$(document).ready(function() {
+			$("input[type='file']").change(function() {
+				var fileName = $(this).val().split('\\').pop();
+				$(this).next('.custom-file-label').html(fileName || 'Choose file');
+			});
+		});
+	</script>
 }

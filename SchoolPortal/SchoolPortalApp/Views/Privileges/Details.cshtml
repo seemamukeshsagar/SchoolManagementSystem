@@ -1,42 +1,42 @@
 @model SchoolPortalApp.Models.PrivilegeDetailsViewModel
 
 @{
-    ViewData["Title"] = "Privilege Details";
+	ViewData["Title"] = "Privilege Details";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">@ViewData["Title"]</h3>
-        <div class="card-tools">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-            <a asp-action="Index" class="btn btn-default">Back to List</a>
-        </div>
-    </div>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+	<div class="card-header">
+		<h3 class="card-title">@ViewData["Title"]</h3>
+		<div class="card-tools">
+			<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+			<a asp-action="Index" class="btn btn-default">Back to List</a>
+		</div>
+	</div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+			<dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsActive)</dt>
-            <dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
+			<dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsActive)</dt>
+			<dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedBy)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedBy)</dd>
+			<dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedBy)</dt>
+			<dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedBy)</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
-            <dd class="col-sm-9">@Model.CreatedDate.ToString("g")</dd>
+			<dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+			<dd class="col-sm-9">@Model.CreatedDate.ToString("g")</dd>
 
-            @if (Model.ModifiedBy != null)
-            {
-                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedBy)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.ModifiedBy)</dd>
+			@if (Model.ModifiedBy != null)
+			{
+				<dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedBy)</dt>
+				<dd class="col-sm-9">@Html.DisplayFor(model => model.ModifiedBy)</dd>
 
-                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedDate)</dt>
-                <dd class="col-sm-9">@Model.ModifiedDate?.ToString("g")</dd>
-            }
-        </dl>
-    </div>
+				<dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedDate)</dt>
+				<dd class="col-sm-9">@Model.ModifiedDate?.ToString("g")</dd>
+			}
+		</dl>
+	</div>
 </div>

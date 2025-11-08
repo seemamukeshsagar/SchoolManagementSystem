@@ -1,19 +1,19 @@
 @model SchoolPortal.Entities.Models.SystemParameters
 @{
-    ViewData["Title"] = "System Parameter Details";
+	ViewData["Title"] = "System Parameter Details";
 }
 <h2>System Parameter Details</h2>
 <dl class="row">
-    <dt class="col-sm-3">Parameter Name</dt>
-    <dd class="col-sm-9">@Model.ParameterName</dd>
-    <dt class="col-sm-3">Parameter Value</dt>
-    <dd class="col-sm-9">@Model.ParameterValue</dd>
-    <dt class="col-sm-3">Description</dt>
-    <dd class="col-sm-9">@Model.Description</dd>    
-    <dt class="col-sm-3">Active</dt>
-    <dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
+	<dt class="col-sm-3">Parameter Name</dt>
+	<dd class="col-sm-9">@Model.ParameterName</dd>
+	<dt class="col-sm-3">Parameter Value</dt>
+	<dd class="col-sm-9">@Model.ParameterValue</dd>
+	<dt class="col-sm-3">Description</dt>
+	<dd class="col-sm-9">@Model.Description</dd>    
+	<dt class="col-sm-3">Active</dt>
+	<dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
 </dl>
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-secondary">Back</a>
 </p>

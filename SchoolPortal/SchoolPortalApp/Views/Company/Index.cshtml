@@ -1,48 +1,48 @@
 @model IEnumerable<SchoolPortalApp.Models.CompanyListItemViewModel>
 @{
-    ViewData["Title"] = "Companies";
+	ViewData["Title"] = "Companies";
 }
 <h2>Companies</h2>
 @if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create Company"))
 {
-    <p>
-        <a class="btn btn-primary" asp-controller="Company" asp-action="Create">Create New</a>
-    </p>
+	<p>
+		<a class="btn btn-primary" asp-controller="Company" asp-action="Create">Create New</a>
+	</p>
 }
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Company Name</th>
-            <th>Email</th>
-            <th>Is Active</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Country</th>
-            <th>Zip Code</th>
-            <th>Jurisdiction Area</th>
-            <th>Establishment Year</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.CompanyName</td>
-            <td>@item.Email</td>
-            <td>@item.IsActive</td>
-            <td>@item.CityName</td>
-            <td>@item.StateName</td>
-            <td>@item.CountryName</td>
-            <td>@item.ZipCode</td>
-            <td>@item.JurisdictionAreaName</td>
-            <td>@item.EstablishmentYear</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
+	<thead>
+		<tr>
+			<th>Company Name</th>
+			<th>Email</th>
+			<th>Is Active</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Country</th>
+			<th>Zip Code</th>
+			<th>Jurisdiction Area</th>
+			<th>Establishment Year</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@item.CompanyName</td>
+			<td>@item.Email</td>
+			<td>@item.IsActive</td>
+			<td>@item.CityName</td>
+			<td>@item.StateName</td>
+			<td>@item.CountryName</td>
+			<td>@item.ZipCode</td>
+			<td>@item.JurisdictionAreaName</td>
+			<td>@item.EstablishmentYear</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+				<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+				<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+			</td>
+		</tr>
+	}
+	</tbody>
 </table>

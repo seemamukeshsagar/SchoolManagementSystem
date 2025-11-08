@@ -1,4 +1,7 @@
-  <style>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor Accessor;
+
+<style>
 	.nav-sidebar .nav-link {
 	  color: white;
 	  padding: 10px 20px;
@@ -10,10 +13,14 @@
 	}
   </style>
 
+@{
+	var lstPrivileges = Accessor.HttpContext.Session.GetString("Privileges").Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+}
+
   <!-- Sidebar -->
   <div class="d-flex flex-column">
-    <div class="accordion" id="sidebarAccordion">
-      <ul class="nav nav-pills flex-column mb-auto">
+	<div class="accordion" id="sidebarAccordion">
+	  <ul class="nav nav-pills flex-column mb-auto">
 	  <li class="nav-item">
 		<a href="#" class="nav-link active" data-tooltip="Home">
 		  <i class="bi bi-house-door"></i> <span>Home</span>
@@ -209,7 +216,7 @@
 		</ul>
 	  </li>
 	  </ul>
-    </div>
+	</div>
   </div>
 
   <!-- Bootstrap Icons -->

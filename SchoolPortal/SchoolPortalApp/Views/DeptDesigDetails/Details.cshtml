@@ -1,54 +1,54 @@
 @model SchoolPortalApp.Models.DeptDesigDetailsViewModel
 
 @{
-    ViewData["Title"] = "Department Designation Details";
+	ViewData["Title"] = "Department Designation Details";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h4>Department Designation Details</h4>
-    </div>
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Department</dt>
-            <dd class="col-sm-9">@ViewData["DepartmentName"]</dd>
+	<div class="card-header">
+		<h4>Department Designation Details</h4>
+	</div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class="col-sm-3">Department</dt>
+			<dd class="col-sm-9">@ViewData["DepartmentName"]</dd>
 
-            <dt class="col-sm-3">Designation</dt>
-            <dd class="col-sm-9">@ViewData["DesignationName"]</dd>
+			<dt class="col-sm-3">Designation</dt>
+			<dd class="col-sm-9">@ViewData["DesignationName"]</dd>
 
-            <dt class="col-sm-3">Company</dt>
-            <dd class="col-sm-9">@ViewData["CompanyName"]</dd>
+			<dt class="col-sm-3">Company</dt>
+			<dd class="col-sm-9">@ViewData["CompanyName"]</dd>
 
-            <dt class="col-sm-3">School</dt>
-            <dd class="col-sm-9">@ViewData["SchoolName"]</dd>
+			<dt class="col-sm-3">School</dt>
+			<dd class="col-sm-9">@ViewData["SchoolName"]</dd>
 
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9">
-                @if (Model.IsActive)
-                {
-                    <span class="badge bg-success">Active</span>
-                }
-                else
-                {
-                    <span class="badge bg-danger">Inactive</span>
-                }
-            </dd>
+			<dt class="col-sm-3">Status</dt>
+			<dd class="col-sm-9">
+				@if (Model.IsActive)
+				{
+					<span class="badge bg-success">Active</span>
+				}
+				else
+				{
+					<span class="badge bg-danger">Inactive</span>
+				}
+			</dd>
 
-            @if (!string.IsNullOrEmpty(Model.Status))
-            {
-                <dt class="col-sm-3">Status</dt>
-                <dd class="col-sm-9">@Model.Status</dd>
-            }
+			@if (!string.IsNullOrEmpty(Model.Status))
+			{
+				<dt class="col-sm-3">Status</dt>
+				<dd class="col-sm-9">@Model.Status</dd>
+			}
 
-            @if (!string.IsNullOrEmpty(Model.StatusMessage))
-            {
-                <dt class="col-sm-3">Status Message</dt>
-                <dd class="col-sm-9">@Model.StatusMessage</dd>
-            }
-        </dl>
-    </div>
-    <div class="card-footer">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
+			@if (!string.IsNullOrEmpty(Model.StatusMessage))
+			{
+				<dt class="col-sm-3">Status Message</dt>
+				<dd class="col-sm-9">@Model.StatusMessage</dd>
+			}
+		</dl>
+	</div>
+	<div class="card-footer">
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+		<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+	</div>
 </div>

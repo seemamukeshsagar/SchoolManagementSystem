@@ -1,74 +1,73 @@
 @model IEnumerable<SchoolPortalApp.Models.PrivilegeListItemViewModel>
 
 @{
-    ViewData["Title"] = "Privileges";
+	ViewData["Title"] = "Privileges";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Privileges</h3>
-        <div class="card-tools">
-            <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
-        </div>
-    </div>
-    <div class="card-body table-responsive p-0">
-        <table class="table table-hover text-nowrap">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    @* <th>Description</th> *@
-                    <th>Is Active</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                        @* <td>@Html.DisplayFor(modelItem => item.Description)</td> *@
-                        <td>@(item.IsActive ? "Yes" : "No")</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-xs">Details</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-xs">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-xs">Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+	<div class="card-header">
+		<h3 class="card-title">Privileges</h3>
+		<div class="card-tools">
+			<a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+		</div>
+	</div>
+	<div class="card-body table-responsive p-0">
+		<table class="table table-hover text-nowrap">
+			<thead>
+				<tr>
+					<th>Name</th>
+					@* <th>Description</th> *@
+					<th>Is Active</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@Html.DisplayFor(modelItem => item.Name)</td>
+						<td>@(item.IsActive ? "Yes" : "No")</td>
+						<td>
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-xs">Details</a>
+							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-xs">Edit</a>
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-xs">Delete</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 @section Styles {
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
 }
 
 @section Scripts {
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(function () {
-            $('table.table').attr('id', 'privilegesTable');
-            $('#privilegesTable').DataTable({
-                paging: true,
-                pageLength: 10,
-                lengthChange: true,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
-                searching: true,
-                ordering: true,
-                info: true,
-                autoWidth: false,
-                responsive: true,
-                order: [],
-                language: {
-                    search: 'Search:',
-                    lengthMenu: 'Show _MENU_ entries',
-                    info: 'Showing _START_ to _END_ of _TOTAL_ entries',
-                    infoEmpty: 'No entries found',
-                    infoFiltered: '(filtered from _MAX_ total entries)'
-                }
-            });
-        });
-    </script>
+	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+	<script>
+		$(function () {
+			$('table.table').attr('id', 'privilegesTable');
+			$('#privilegesTable').DataTable({
+				paging: true,
+				pageLength: 10,
+				lengthChange: true,
+				lengthMenu: [[10, 25, 50, -1], [10, 25, 50, 'All']],
+				searching: true,
+				ordering: true,
+				info: true,
+				autoWidth: false,
+				responsive: true,
+				order: [],
+				language: {
+					search: 'Search:',
+					lengthMenu: 'Show _MENU_ entries',
+					info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+					infoEmpty: 'No entries found',
+					infoFiltered: '(filtered from _MAX_ total entries)'
+				}
+			});
+		});
+	</script>
 }

@@ -1,55 +1,55 @@
 @model DesigMasterViewModel
 
 @{
-    ViewData["Title"] = "Create Designation";
+	ViewData["Title"] = "Create Designation";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h4>@ViewData["Title"]</h4>
-    </div>
-    <div class="card-body">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Code" class="form-label"></label>
-                        <input asp-for="Code" class="form-control" />
-                        <span asp-validation-for="Code" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group form-check mt-4 pt-2">
-                        <input class="form-check-input" asp-for="IsActive" />
-                        <label class="form-check-label" asp-for="IsActive"></label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Create
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to List
-                </a>
-            </div>
-        </form>
-    </div>
+	<div class="card-header">
+		<h4>@ViewData["Title"]</h4>
+	</div>
+	<div class="card-body">
+		<form asp-action="Create">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="Code" class="form-label"></label>
+						<input asp-for="Code" class="form-control" />
+						<span asp-validation-for="Code" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="Name" class="form-label"></label>
+						<input asp-for="Name" class="form-control" />
+						<span asp-validation-for="Name" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-md-6">
+					<div class="form-group form-check mt-4 pt-2">
+						<input class="form-check-input" asp-for="IsActive" />
+						<label class="form-check-label" asp-for="IsActive"></label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group mt-4">
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-save"></i> Create
+				</button>
+				<a asp-action="Index" class="btn btn-secondary">
+					<i class="fas fa-arrow-left"></i> Back to List
+				</a>
+			</div>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

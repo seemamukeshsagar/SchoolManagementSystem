@@ -1,153 +1,153 @@
 @model SchoolPortalApp.Models.SchoolViewModel
 @{
-    ViewData["Title"] = "Create School";
+	ViewData["Title"] = "Create School";
 }
 <h2>Create School</h2>
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="Phone" class="form-label"></label>
-            <input asp-for="Phone" class="form-control" />
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="Mobile" class="form-label"></label>
-            <input asp-for="Mobile" class="form-control" />
-            <span asp-validation-for="Mobile" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Address1" class="form-label"></label>
-        <input asp-for="Address1" class="form-control" />
-        <span asp-validation-for="Address1" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Address2" class="form-label"></label>
-        <input asp-for="Address2" class="form-control" />
-        <span asp-validation-for="Address2" class="text-danger"></span>
-    </div>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label asp-for="CountryId" class="form-label"></label>
-            <select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
-                <option value="">-- Select Country --</option>
-            </select>
-            <span asp-validation-for="CountryId" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="StateId" class="form-label"></label>
-            <select asp-for="StateId" class="form-select" asp-items="Model.States">
-                <option value="">-- Select State --</option>
-            </select>
-            <span asp-validation-for="StateId" class="text-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="CityId" class="form-label"></label>
-            <select asp-for="CityId" class="form-select" asp-items="Model.Cities">
-                <option value="">-- Select City --</option>
-            </select>
-            <span asp-validation-for="CityId" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="ZipCode" class="form-label"></label>
-            <input asp-for="ZipCode" class="form-control" />
-            <span asp-validation-for="ZipCode" class="text-danger"></span>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="EstablishmentYear" class="form-label"></label>
-            <input asp-for="EstablishmentYear" class="form-control" />
-            <span asp-validation-for="EstablishmentYear" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="JudistrictionCityId" class="form-label"></label>
-            <select asp-for="JudistrictionCityId" class="form-select" asp-items="Model.Cities">
-                <option value="">-- Select Jurisdiction (City) --</option>
-            </select>
-            <span asp-validation-for="JudistrictionCityId" class="text-danger"></span>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="form-check" style="margin-top:32px;">
-                <input asp-for="IsActive" class="form-check-input" />
-                <label asp-for="IsActive" class="form-check-label"></label>
-            </div>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="Name" class="form-label"></label>
+		<input asp-for="Name" class="form-control" />
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Description" class="form-label"></label>
+		<input asp-for="Description" class="form-control" />
+		<span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Email" class="form-label"></label>
+		<input asp-for="Email" class="form-control" />
+		<span asp-validation-for="Email" class="text-danger"></span>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="Phone" class="form-label"></label>
+			<input asp-for="Phone" class="form-control" />
+			<span asp-validation-for="Phone" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="Mobile" class="form-label"></label>
+			<input asp-for="Mobile" class="form-control" />
+			<span asp-validation-for="Mobile" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address1" class="form-label"></label>
+		<input asp-for="Address1" class="form-control" />
+		<span asp-validation-for="Address1" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address2" class="form-label"></label>
+		<input asp-for="Address2" class="form-control" />
+		<span asp-validation-for="Address2" class="text-danger"></span>
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<label asp-for="CountryId" class="form-label"></label>
+			<select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
+				<option value="">-- Select Country --</option>
+			</select>
+			<span asp-validation-for="CountryId" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="StateId" class="form-label"></label>
+			<select asp-for="StateId" class="form-select" asp-items="Model.States">
+				<option value="">-- Select State --</option>
+			</select>
+			<span asp-validation-for="StateId" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="CityId" class="form-label"></label>
+			<select asp-for="CityId" class="form-select" asp-items="Model.Cities">
+				<option value="">-- Select City --</option>
+			</select>
+			<span asp-validation-for="CityId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="ZipCode" class="form-label"></label>
+			<input asp-for="ZipCode" class="form-control" />
+			<span asp-validation-for="ZipCode" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="EstablishmentYear" class="form-label"></label>
+			<input asp-for="EstablishmentYear" class="form-control" />
+			<span asp-validation-for="EstablishmentYear" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="JudistrictionCityId" class="form-label"></label>
+			<select asp-for="JudistrictionCityId" class="form-select" asp-items="Model.Cities">
+				<option value="">-- Select Jurisdiction (City) --</option>
+			</select>
+			<span asp-validation-for="JudistrictionCityId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<div class="form-check" style="margin-top:32px;">
+				<input asp-for="IsActive" class="form-check-input" />
+				<label asp-for="IsActive" class="form-check-label"></label>
+			</div>
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        (function() {
-            const country = document.getElementById('CountryId');
-            const state = document.getElementById('StateId');
-            const city = document.getElementById('CityId');
-            const juris = document.getElementById('JudistrictionCityId');
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		(function() {
+			const country = document.getElementById('CountryId');
+			const state = document.getElementById('StateId');
+			const city = document.getElementById('CityId');
+			const juris = document.getElementById('JudistrictionCityId');
 
-            function clearOptions(sel, placeholder) {
-                sel.innerHTML = '';
-                const opt = document.createElement('option');
-                opt.value = '';
-                opt.textContent = placeholder;
-                sel.appendChild(opt);
-            }
+			function clearOptions(sel, placeholder) {
+				sel.innerHTML = '';
+				const opt = document.createElement('option');
+				opt.value = '';
+				opt.textContent = placeholder;
+				sel.appendChild(opt);
+			}
 
-            country?.addEventListener('change', async () => {
-                clearOptions(state, '-- Select State --');
-                clearOptions(city, '-- Select City --');
-                clearOptions(juris, '-- Select Jurisdiction (City) --');
-                const val = country.value;
-                if (!val) return;
-                const res = await fetch(`/School/GetStates?countryId=${val}`);
-                const data = await res.json();
-                data.forEach(x => {
-                    const o = document.createElement('option');
-                    o.value = x.id;
-                    o.textContent = x.name;
-                    state.appendChild(o);
-                });
-            });
+			country?.addEventListener('change', async () => {
+				clearOptions(state, '-- Select State --');
+				clearOptions(city, '-- Select City --');
+				clearOptions(juris, '-- Select Jurisdiction (City) --');
+				const val = country.value;
+				if (!val) return;
+				const res = await fetch(`/School/GetStates?countryId=${val}`);
+				const data = await res.json();
+				data.forEach(x => {
+					const o = document.createElement('option');
+					o.value = x.id;
+					o.textContent = x.name;
+					state.appendChild(o);
+				});
+			});
 
-            state?.addEventListener('change', async () => {
-                clearOptions(city, '-- Select City --');
-                clearOptions(juris, '-- Select Jurisdiction (City) --');
-                const val = state.value;
-                if (!val) return;
-                const res = await fetch(`/School/GetCities?stateId=${val}`);
-                const data = await res.json();
-                data.forEach(x => {
-                    const o1 = document.createElement('option');
-                    o1.value = x.id;
-                    o1.textContent = x.name; 
-                    city.appendChild(o1);
-                    
-                    const o2 = document.createElement('option');
-                    o2.value = x.id; 
-                    o2.textContent = x.name; 
-                    juris.appendChild(o2);
-                });
-            });
-        })();
-    </script>
+			state?.addEventListener('change', async () => {
+				clearOptions(city, '-- Select City --');
+				clearOptions(juris, '-- Select Jurisdiction (City) --');
+				const val = state.value;
+				if (!val) return;
+				const res = await fetch(`/School/GetCities?stateId=${val}`);
+				const data = await res.json();
+				data.forEach(x => {
+					const o1 = document.createElement('option');
+					o1.value = x.id;
+					o1.textContent = x.name; 
+					city.appendChild(o1);
+					
+					const o2 = document.createElement('option');
+					o2.value = x.id; 
+					o2.textContent = x.name; 
+					juris.appendChild(o2);
+				});
+			});
+		})();
+	</script>
 }

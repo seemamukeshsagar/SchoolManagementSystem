@@ -4,14 +4,14 @@ using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.IServices
 {
-    public interface ISectionService
-    {
-        List<SectionMaster> GetAll();
-        SectionMaster? GetById(Guid id);
-        List<SectionMaster> GetSectionsByClassId(Guid classId);
-        Guid Create(SectionMaster section);
-        bool Update(SectionMaster section);
-        bool Delete(Guid id);
-        string SectionNameById(Guid id);
-    }
+	public interface ISectionService
+	{
+		List<SectionMaster> GetAll();
+		SectionMaster? GetById(Guid id);
+		List<SectionMaster> GetSectionsByClassId(Guid classId);
+		Guid Create(SectionMaster section);
+		bool Update(SectionMaster section);
+		bool Delete(Guid id);
+		string SectionNameById(Guid id);
+	}
 }

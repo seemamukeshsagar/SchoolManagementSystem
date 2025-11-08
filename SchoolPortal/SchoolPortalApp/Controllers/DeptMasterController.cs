@@ -100,15 +100,15 @@ namespace SchoolPortalApp.Controllers
 			var companyIdStr = HttpContext.Session.GetString("CompanyId");
 
 			if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
-            {
-                ModelState.AddModelError(string.Empty, "Missing required session data.");
-                PopulateDropdowns(model);
-                return View(model);
-            }
+			{
+				ModelState.AddModelError(string.Empty, "Missing required session data.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
 
 			if (Guid.TryParse(companyIdStr, out var companyId) && 
-                Guid.TryParse(schoolIdStr, out var schoolId) && 
-                Guid.TryParse(userIdStr, out var userId))
+				Guid.TryParse(schoolIdStr, out var schoolId) && 
+				Guid.TryParse(userIdStr, out var userId))
 			{
 				var entity = new DeptMaster
 				{
@@ -131,11 +131,11 @@ namespace SchoolPortalApp.Controllers
 				}
 				return RedirectToAction("Details", new { id = newId });
 			}
-            
-            // If we get here, there was an error parsing the GUIDs
-            ModelState.AddModelError(string.Empty, "Invalid session data format.");
-            PopulateDropdowns(model);
-            return View(model);
+			
+			// If we get here, there was an error parsing the GUIDs
+			ModelState.AddModelError(string.Empty, "Invalid session data format.");
+			PopulateDropdowns(model);
+			return View(model);
 		}
 
 		[HttpGet]
@@ -376,16 +376,16 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		private string GetInnerExceptionMessages(Exception ex)
-        {
-            var messages = new List<string>();
-            Exception? current = ex;
-            while (current != null)
-            {
-                messages.Add(current.Message);
-                current = current.InnerException;
-            }
-            return string.Join(" ", messages);
-        }
+		{
+			var messages = new List<string>();
+			Exception? current = ex;
+			while (current != null)
+			{
+				messages.Add(current.Message);
+				current = current.InnerException;
+			}
+			return string.Join(" ", messages);
+		}
 
 		[HttpPost]
 		[Route("Import")]
@@ -430,7 +430,7 @@ namespace SchoolPortalApp.Controllers
 				{
 					// Copy the file to a memory stream
 					await model.ExcelFile.CopyToAsync(memoryStream);
-            
+			
 					// Check if the file is empty
 					if (memoryStream.Length == 0)
 					{

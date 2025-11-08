@@ -1,35 +1,35 @@
 @model IEnumerable<SchoolPortal.Entities.Models.SchoolContactMaster>
 @{
-    ViewData["Title"] = "School Contacts";
+	ViewData["Title"] = "School Contacts";
 }
 <h2>School Contacts</h2>
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+	<a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>School</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Active</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+	<thead>
+		<tr>
+			<th>School</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Active</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
 @foreach (var item in Model)
 {
-    <tr>
-        <td>@item.School.Name</td>
-        <td>@(item.FirstName + (string.IsNullOrWhiteSpace(item.LastName) ? "" : (" " + item.LastName)))</td>
-        <td>@item.Email</td>
-        <td>@item.IsActive</td>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>
-    </tr>
+	<tr>
+		<td>@item.School.Name</td>
+		<td>@(item.FirstName + (string.IsNullOrWhiteSpace(item.LastName) ? "" : (" " + item.LastName)))</td>
+		<td>@item.Email</td>
+		<td>@item.IsActive</td>
+		<td>
+			<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+			<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+			<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+		</td>
+	</tr>
 }
-    </tbody>
+	</tbody>
 </table>

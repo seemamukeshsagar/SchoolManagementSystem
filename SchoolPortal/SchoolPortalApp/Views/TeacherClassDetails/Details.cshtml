@@ -1,24 +1,24 @@
 @model SchoolPortal.Entities.Models.TeacherClassDetails
 @{
-    ViewData["Title"] = "Teacher Class Details - Details";
+	ViewData["Title"] = "Teacher Class Details - Details";
 }
 <h2>Details</h2>
 <div class="mb-2">
-    <strong>Teacher Id:</strong> @Model.TeacherId
+	<strong>Teacher Id:</strong> @Model.TeacherId
 </div>
 <div class="mb-2">
-    <strong>Class Id:</strong> @Model.ClassId
+	<strong>Class Id:</strong> @Model.ClassId
 </div>
 <div class="mb-2">
-    <strong>Section Id:</strong> @Model.SectionId
+	<strong>Section Id:</strong> @Model.SectionId
 </div>
 <div class="mb-2">
-    <strong>Subject Id:</strong> @Model.SubjectId
+	<strong>Subject Id:</strong> @Model.SubjectId
 </div>
 <div class="mb-2">
-    <strong>Active:</strong> @Model.IsActive
+	<strong>Active:</strong> @Model.IsActive
 </div>
 <p>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-secondary" asp-action="Index">Back</a>
+	<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+	<a class="btn btn-secondary" asp-action="Index">Back</a>
 </p>

@@ -8,25 +8,22 @@ using SchoolPortal.DBAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var envName = builder.Environment.EnvironmentName;
-//var serverNameRaw = Environment.GetEnvironmentVariable("APP_SERVER_NAME") ?? Environment.MachineName;
 var serverNameRaw = Environment.MachineName;
 var serverName = Regex.Replace(serverNameRaw, "[^A-Za-z0-9_.-]", "_");
 
 if (serverName == "DESKTOP-L9I46P8")
 {
-    serverName = "Office";
+	serverName = "Office";
 }
 else
 {
-    serverName = "Home";
+	serverName = "Home";
 }
 
 builder.Configuration
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        //.AddJsonFile($"appsettings.{envName}.json", optional: true, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
-        .AddEnvironmentVariables();
+		.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+		.AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
+		.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -34,32 +31,32 @@ builder.Services.AddControllersWithViews();
 
 // Authentication & Authorization
 builder.Services
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/Login";
-        options.SlidingExpiration = true;
-    });
+	.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+	.AddCookie(options =>
+	{
+		options.LoginPath = "/Account/Login";
+		options.LogoutPath = "/Account/Logout";
+		options.AccessDeniedPath = "/Account/Login";
+		options.SlidingExpiration = true;
+	});
 builder.Services.AddAuthorization();
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+	options.IdleTimeout = TimeSpan.FromMinutes(30);
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddAntiforgery(o =>
 {
-    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-        ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
-        : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-    o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
-    o.Cookie.HttpOnly = true;
+	o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+		? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
+		: Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+	o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+	o.Cookie.HttpOnly = true;
 });
 
 // Register IHttpContextAccessor (singleton)
@@ -67,7 +64,7 @@ builder.Services.AddHttpContextAccessor();
 
 // DI registrations
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
-    SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
+	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
@@ -99,9 +96,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -118,19 +115,19 @@ app.MapStaticAssets();
 
 // Map MVC controller routes
 app.MapControllerRoute(
-    name: "account",
-    pattern: "Account/{action=Login}/{id?}",
-    defaults: new { controller = "Account" });
+	name: "account",
+	pattern: "Account/{action=Login}/{id?}",
+	defaults: new { controller = "Account" });
 
 app.MapControllerRoute(
-    name: "home",
-    pattern: "Home/{action=Index}/{id?}",
-    defaults: new { controller = "Home" });
+	name: "home",
+	pattern: "Home/{action=Index}/{id?}",
+	defaults: new { controller = "Home" });
 
 // Default MVC route
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+	name: "default",
+	pattern: "{controller=Account}/{action=Login}/{id?}");
 
 // Map Razor Pages (must be after controller routes to avoid conflicts)
 app.MapRazorPages()
@@ -139,9 +136,9 @@ app.MapRazorPages()
 // Add this before app.Run()
 app.Use(async (context, next) =>
 {
-    // This ensures the AuthorizedManager is configured per-request
-    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
-    await next();
+	// This ensures the AuthorizedManager is configured per-request
+	AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
+	await next();
 });
 
 app.Run();

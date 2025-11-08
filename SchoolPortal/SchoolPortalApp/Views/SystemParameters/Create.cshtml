@@ -1,33 +1,33 @@
 @model SchoolPortalApp.Models.SystemParameterViewModel
 @{
-    ViewData["Title"] = "Create System Parameter";
+	ViewData["Title"] = "Create System Parameter";
 }
 <h2>Create System Parameter</h2>
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="ParameterName" class="form-label"></label>
-        <input asp-for="ParameterName" class="form-control" />
-        <span asp-validation-for="ParameterName" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="ParameterValue" class="form-label"></label>
-        <input asp-for="ParameterValue" class="form-control" />
-        <span asp-validation-for="ParameterValue" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-check mb-3">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label asp-for="IsActive" class="form-check-label"></label>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="ParameterName" class="form-label"></label>
+		<input asp-for="ParameterName" class="form-control" />
+		<span asp-validation-for="ParameterName" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="ParameterValue" class="form-label"></label>
+		<input asp-for="ParameterValue" class="form-control" />
+		<span asp-validation-for="ParameterValue" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Description" class="form-label"></label>
+		<input asp-for="Description" class="form-control" />
+		<span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }

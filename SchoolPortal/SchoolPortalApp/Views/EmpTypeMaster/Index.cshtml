@@ -1,38 +1,38 @@
 @model IEnumerable<SchoolPortalApp.Models.EmpTypeListItemViewModel>
 @{
-    ViewData["Title"] = "Employee Types";
+	ViewData["Title"] = "Employee Types";
 }
 <h2>Employee Types</h2>
 <p>
-    <a class="btn btn-primary" asp-controller="EmpTypeMaster" asp-action="Create">Create New</a>
+	<a class="btn btn-primary" asp-controller="EmpTypeMaster" asp-action="Create">Create New</a>
 </p>
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Type Name</th>
-            <th>Description</th>
-            <th>Company</th>
-            <th>School</th>
-            <th>Is Active</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.TypeName</td>
-            <td>@item.Description</td>
-            <td>@item.CompanyName</td>
-            <td>@item.SchoolName</td>
-            <td>@item.IsActive</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
+	<thead>
+		<tr>
+			<th>Type Name</th>
+			<th>Description</th>
+			<th>Company</th>
+			<th>School</th>
+			<th>Is Active</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@item.TypeName</td>
+			<td>@item.Description</td>
+			<td>@item.CompanyName</td>
+			<td>@item.SchoolName</td>
+			<td>@item.IsActive</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+				<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+				<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+			</td>
+		</tr>
+	}
+	</tbody>
 </table>
 

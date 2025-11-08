@@ -1,18 +1,18 @@
 @model SchoolPortal.Entities.Models.ClassRoomMaster
 @{
-    ViewData["Title"] = "Delete Class Room";
+	ViewData["Title"] = "Delete Class Room";
 }
 <h2>Delete Class Room</h2>
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>@Model.Name</h4>
-    <dl class="row">
-        <dt class="col-sm-2">Is Active</dt>
-        <dd class="col-sm-10">@Model.IsActive</dd>
-    </dl>
+	<h4>@Model.Name</h4>
+	<dl class="row">
+		<dt class="col-sm-2">Is Active</dt>
+		<dd class="col-sm-10">@Model.IsActive</dd>
+	</dl>
 </div>
 <form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	<input type="hidden" asp-for="Id" />
+	<button type="submit" class="btn btn-danger">Delete</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
