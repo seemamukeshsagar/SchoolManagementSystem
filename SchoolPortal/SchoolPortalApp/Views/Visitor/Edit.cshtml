@@ -1,0 +1,13 @@
+@model SchoolPortalApp.Models.VisitorViewModel
+@{
+    ViewData["Title"] = "Edit Visitor";
+}
+<h2>Edit Visitor</h2>
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @* Reuse the same fields layout as Create *@
+    <partial name="Create" />
+</form>
