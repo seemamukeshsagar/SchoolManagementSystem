@@ -1,39 +1,198 @@
-@model SchoolPortal.Entities.Models.CleanerMaster
-@{
+@model SchoolPortalApp.Models.CleanerAggregateViewModel
+@{ 
     ViewData["Title"] = "Edit Cleaner";
 }
 <h2>Edit Cleaner</h2>
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="SchoolId" />
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Master.Id" />
+    <input type="hidden" asp-for="Master.SchoolId" />
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-master" role="tab">Cleaner Master</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-docs" role="tab">Documents</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-quals" role="tab">Qualifications</a></li>
+    </ul>
+
+    <div class="tab-content border p-3 border-top-0">
+        <div class="tab-pane fade show active" id="tab-master" role="tabpanel">
+            <div class="form-group">
+                <label asp-for="Master.Name"></label>
+                <input asp-for="Master.Name" class="form-control" />
+                <span asp-validation-for="Master.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Master.FatherName"></label>
+                <input asp-for="Master.FatherName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Master.Description"></label>
+                <input asp-for="Master.Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Master.Image"></label>
+                <input asp-for="Master.Image" class="form-control" />
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="Master.IsActive" />
+                <label class="form-check-label" asp-for="Master.IsActive"></label>
+            </div>
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="Master.IsDeleted" />
+                <label class="form-check-label" asp-for="Master.IsDeleted"></label>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-docs" role="tabpanel">
+            <input type="hidden" id="existingDocCount" value="@Model.Documents.Count" />
+            <div class="mb-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddDoc">Add Document</button>
+            </div>
+            <table class="table table-bordered" id="tblDocs">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>File</th>
+                        <th>Active</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < Model.Documents.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" name="Documents[@i].Id" value="@Model.Documents[i].Id" />
+                            <input type="hidden" name="Documents[@i].IsDeleted" value="false" />
+                            <input name="Documents[@i].Name" class="form-control" value="@Model.Documents[i].Name" />
+                        </td>
+                        <td><input name="Documents[@i].Description" class="form-control" value="@Model.Documents[i].Description" /></td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(Model.Documents[i].FileName))
+                            {
+                                <div class="mb-1"><a href="@Model.Documents[i].FileName" target="_blank">Current</a></div>
+                            }
+                            <input type="file" name="DocumentFiles[@i]" class="form-control" />
+                            <input type="hidden" name="Documents[@i].FileName" value="@Model.Documents[i].FileName" />
+                        </td>
+                        <td class="text-center"><input type="checkbox" name="Documents[@i].IsActive" @(Model.Documents[i].IsActive ? "checked" : null) /></td>
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="tab-quals" role="tabpanel">
+            <input type="hidden" id="existingQualCount" value="@Model.Qualifications.Count" />
+            <div class="mb-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddQual">Add Qualification</button>
+            </div>
+            <table class="table table-bordered" id="tblQuals">
+                <thead>
+                    <tr>
+                        <th>Qualification</th>
+                        <th>Active</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < Model.Qualifications.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" name="Qualifications[@i].Id" value="@Model.Qualifications[i].Id" />
+                            <input type="hidden" name="Qualifications[@i].IsDeleted" value="false" />
+                            <select name="Qualifications[@i].QualificationId" class="form-select">
+                                <option value="">-- Select Qualification --</option>
+                                @foreach (var opt in Model.QualificationItems)
+                                {
+                                    if (opt.Value == Model.Qualifications[i].QualificationId.ToString())
+                                    {
+                                        <option value="@opt.Value" selected="selected">@opt.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@opt.Value">@opt.Text</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td class="text-center"><input type="checkbox" name="Qualifications[@i].IsActive" @(Model.Qualifications[i].IsActive ? "checked" : null) /></td>
+                        <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="FatherName"></label>
-        <input asp-for="FatherName" class="form-control" />
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
     </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Image"></label>
-        <input asp-for="Image" class="form-control" />
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="IsActive" />
-        <label class="form-check-label" asp-for="IsActive"></label>
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="IsDeleted" />
-        <label class="form-check-label" asp-for="IsDeleted"></label>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function(){
+            // Documents dynamic rows
+            const tblDocsBody = document.querySelector('#tblDocs tbody');
+            const btnAddDoc = document.getElementById('btnAddDoc');
+            const existingDocCountEl = document.getElementById('existingDocCount');
+            let docIndex = parseInt((existingDocCountEl && existingDocCountEl.value) ? existingDocCountEl.value : '0');
+            btnAddDoc && btnAddDoc.addEventListener('click', function(){
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input name="Documents[${docIndex}].Name" class="form-control" /></td>
+                    <td><input name="Documents[${docIndex}].Description" class="form-control" /></td>
+                    <td><input type="file" name="DocumentFiles[${docIndex}]" class="form-control" /></td>
+                    <td class="text-center"><input type="checkbox" name="Documents[${docIndex}].IsActive" /></td>
+                    <input type="hidden" name="Documents[${docIndex}].IsDeleted" value="false" />
+                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>`;
+                tblDocsBody.appendChild(tr);
+                docIndex++;
+            });
+            tblDocsBody && tblDocsBody.addEventListener('click', function(e){
+                if(e.target && e.target.classList.contains('btn-remove')){
+                    const tr = e.target.closest('tr');
+                    if(!tr) return;
+                    const del = tr.querySelector('input[type="hidden"][name$=".IsDeleted"]');
+                    if(del){ del.value = 'true'; tr.classList.add('d-none'); }
+                    else { tr.remove(); }
+                }
+            });
+
+            // Qualifications dynamic rows
+            const tblQualsBody = document.querySelector('#tblQuals tbody');
+            const btnAddQual = document.getElementById('btnAddQual');
+            const qualTemplate = (function(){
+                const sel = document.createElement('select');
+                sel.innerHTML = `@Html.Raw(string.Join("", (Model.QualificationItems ?? Enumerable.Empty<SelectListItem>()).Select(q => $"<option value='{q.Value}'>{q.Text}</option>")))`;
+                return sel.innerHTML;
+            })();
+            const existingQualCountEl = document.getElementById('existingQualCount');
+            let qualIndex = parseInt((existingQualCountEl && existingQualCountEl.value) ? existingQualCountEl.value : '0');
+            btnAddQual && btnAddQual.addEventListener('click', function(){
+                const tr = document.createElement('tr');
+                const selectHtml = `<select name="Qualifications[${qualIndex}].QualificationId" class="form-select"><option value="">-- Select Qualification --</option>${qualTemplate}</select>`;
+                tr.innerHTML = `
+                    <td>${selectHtml}</td>
+                    <td class="text-center"><input type="checkbox" name="Qualifications[${qualIndex}].IsActive" /></td>
+                    <input type="hidden" name="Qualifications[${qualIndex}].IsDeleted" value="false" />
+                    <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>`;
+                tblQualsBody.appendChild(tr);
+                qualIndex++;
+            });
+            tblQualsBody && tblQualsBody.addEventListener('click', function(e){
+                if(e.target && e.target.classList.contains('btn-remove')){
+                    const tr = e.target.closest('tr');
+                    if(!tr) return;
+                    const del = tr.querySelector('input[type="hidden"][name$=".IsDeleted"]');
+                    if(del){ del.value = 'true'; tr.classList.add('d-none'); }
+                    else { tr.remove(); }
+                }
+            });
+        })();
+    </script>
 }

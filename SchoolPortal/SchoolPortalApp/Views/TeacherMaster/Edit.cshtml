@@ -1,108 +1,335 @@
-@model SchoolPortal.Entities.Models.TeacherMaster
-@{
-    ViewData["Title"] = "Edit Teacher";
+@model SchoolPortalApp.Models.TeacherAggregateViewModel
+@{ 
+	ViewData["Title"] = "Edit Teacher";
 }
 <h2>Edit Teacher</h2>
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="SchoolId" />
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Salutation"></label>
-        <input asp-for="Salutation" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="DOB"></label>
-        <input asp-for="DOB" class="form-control" />
-        <span asp-validation-for="DOB" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DOJ"></label>
-        <input asp-for="DOJ" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="DateOfLeaving"></label>
-        <input asp-for="DateOfLeaving" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="ZipCode"></label>
-        <input asp-for="ZipCode" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="CityId"></label>
-        <input asp-for="CityId" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="StateId"></label>
-        <input asp-for="StateId" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="CountryId"></label>
-        <input asp-for="CountryId" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Gender"></label>
-        <input asp-for="Gender" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MaritalStatusId"></label>
-        <input asp-for="MaritalStatusId" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Phone"></label>
-        <input asp-for="Phone" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="MobilePhone"></label>
-        <input asp-for="MobilePhone" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Image"></label>
-        <input asp-for="Image" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="YearsOfExperience"></label>
-        <input asp-for="YearsOfExperience" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="PreviousSchool"></label>
-        <input asp-for="PreviousSchool" class="form-control" />
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="IsActive" />
-        <label class="form-check-label" asp-for="IsActive"></label>
-    </div>
-    <div class="form-group form-check">
-        <input class="form-check-input" asp-for="IsDeleted" />
-        <label class="form-check-label" asp-for="IsDeleted"></label>
-    </div>
-    <div class="form-group">
-        <label asp-for="Status"></label>
-        <input asp-for="Status" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="StatusMessage"></label>
-        <input asp-for="StatusMessage" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+	<input type="hidden" asp-for="Master.Id" />
+	<input type="hidden" asp-for="Master.SchoolId" />
+
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-master" role="tab">Teacher Master</a></li>
+		<li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-docs" role="tab">Documents</a></li>
+		<li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-quals" role="tab">Qualifications</a></li>
+	</ul>
+	<div class="tab-content border p-3 border-top-0">
+		<div class="tab-pane fade show active" id="tab-master" role="tabpanel">
+			<div class="form-group">
+				<label asp-for="Master.FirstName"></label>
+				<input asp-for="Master.FirstName" class="form-control" />
+				<span asp-validation-for="Master.FirstName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.LastName"></label>
+				<input asp-for="Master.LastName" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.Salutation"></label>
+				<input asp-for="Master.Salutation" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.DOB"></label>
+				<input asp-for="Master.DOB" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+				<span asp-validation-for="Master.DOB" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.DOJ"></label>
+				<input asp-for="Master.DOJ" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.DateOfLeaving"></label>
+				<input asp-for="Master.DateOfLeaving" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.Address"></label>
+				<input asp-for="Master.Address" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.ZipCode"></label>
+				<input asp-for="Master.ZipCode" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.CountryId"></label>
+				<select asp-for="Master.CountryId" class="form-control" asp-items="Model.Countries">
+					<option value="">-- Select Country --</option>
+				</select>
+				<span asp-validation-for="Master.CountryId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.StateId"></label>
+				<select asp-for="Master.StateId" class="form-control" asp-items="Model.States" disabled>
+					<option value="">-- Select State --</option>
+				</select>
+				<span asp-validation-for="Master.StateId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.CityId"></label>
+				<select asp-for="Master.CityId" class="form-control" asp-items="Model.Cities" disabled>
+					<option value="">-- Select City --</option>
+				</select>
+				<span asp-validation-for="Master.CityId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+                <label asp-for="Master.Gender"></label>
+                <select asp-for="Master.Gender" class="form-control" asp-items="Model.Genders">
+                    <option value="">-- Select Gender --</option>
+                </select>
+                <span asp-validation-for="Master.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Master.MaritalStatusId"></label>
+                <select asp-for="Master.MaritalStatusId" class="form-control" asp-items="Model.MaritalStatuses">
+                    <option value="">-- Select Marital Status --</option>
+                </select>
+                <span asp-validation-for="Master.MaritalStatusId" class="text-danger"></span>
+            </div>
+			<div class="form-group">
+				<label asp-for="Master.Email"></label>
+				<input asp-for="Master.Email" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.Phone"></label>
+				<input asp-for="Master.Phone" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.MobilePhone"></label>
+				<input asp-for="Master.MobilePhone" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.Image"></label>
+				<input asp-for="Master.Image" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.YearsOfExperience"></label>
+				<input asp-for="Master.YearsOfExperience" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Master.PreviousSchool"></label>
+				<input asp-for="Master.PreviousSchool" class="form-control" />
+			</div>
+			<div class="form-group form-check">
+				<input class="form-check-input" asp-for="Master.IsActive" />
+				<label class="form-check-label" asp-for="Master.IsActive"></label>
+			</div>
+			<div class="form-group form-check">
+				<input class="form-check-input" asp-for="Master.IsDeleted" />
+				<label class="form-check-label" asp-for="Master.IsDeleted"></label>
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="tab-docs" role="tabpanel">
+			<input type="hidden" id="existingDocCount" value="@Model.Documents.Count" />
+			<div class="mb-2">
+				<button type="button" class="btn btn-sm btn-outline-primary" id="btnAddDoc">Add Document</button>
+			</div>
+			<table class="table table-bordered" id="tblDocs">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>File</th>
+						<th>Active</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				@for (int i = 0; i < Model.Documents.Count; i++)
+				{
+					<tr>
+						<td>
+							<input type="hidden" name="Documents[@i].Id" value="@Model.Documents[i].Id" />
+							<input name="Documents[@i].Name" class="form-control" value="@Model.Documents[i].Name" />
+						</td>
+						<td><input name="Documents[@i].Description" class="form-control" value="@Model.Documents[i].Description" /></td>
+						<td>
+							@if (!string.IsNullOrWhiteSpace(Model.Documents[i].FileName))
+							{
+								<div class="mb-1">
+									<a href="@Model.Documents[i].FileName" target="_blank">Current</a>
+								</div>
+							}
+							<input type="file" name="DocumentFiles[@i]" class="form-control" />
+							<input type="hidden" name="Documents[@i].FileName" value="@Model.Documents[i].FileName" />
+						</td>
+						<td class="text-center"><input type="checkbox" name="Documents[@i].IsActive" @(Model.Documents[i].IsActive ? "checked" : null) /></td>
+						<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="tab-pane fade" id="tab-quals" role="tabpanel">
+			<input type="hidden" id="existingQualCount" value="@Model.Qualifications.Count" />
+			<div class="mb-2">
+				<button type="button" class="btn btn-sm btn-outline-primary" id="btnAddQual">Add Qualification</button>
+			</div>
+			<table class="table table-bordered" id="tblQuals">
+				<thead>
+					<tr>
+						<th>Qualification</th>
+						<th>Active</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				@for (int i = 0; i < Model.Qualifications.Count; i++)
+				{
+					<tr>
+						<td>
+							<input type="hidden" name="Qualifications[@i].Id" value="@Model.Qualifications[i].Id" />
+							<select name="Qualifications[@i].QualificationId" class="form-select">
+								<option value="">-- Select Qualification --</option>
+								@foreach (var opt in Model.QualificationItems)
+								{
+									if (opt.Value == Model.Qualifications[i].QualificationId.ToString())
+									{
+										<option value="@opt.Value" selected="selected">@opt.Text</option>
+									}
+									else
+									{
+										<option value="@opt.Value">@opt.Text</option>
+									}
+								}
+							</select>
+						</td>
+						<td class="text-center"><input type="checkbox" name="Qualifications[@i].IsActive" @(Model.Qualifications[i].IsActive ? "checked" : null) /></td>
+						<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="mt-3">
+		<button type="submit" class="btn btn-primary">Save</button>
+		<a class="btn btn-secondary" asp-action="Index">Cancel</a>
+	</div>
 </form>
 @section Scripts{
-    <partial name="_ValidationScriptsPartial" />
+	<script>
+		(function () {
+			const countrySel = document.getElementById('Master_CountryId');
+			const stateSel = document.getElementById('Master_StateId');
+			const citySel = document.getElementById('Master_CityId');
+
+			function clearSelect(sel, placeholder) {
+				sel.innerHTML = '';
+				const opt = document.createElement('option');
+				opt.value = '';
+				opt.textContent = placeholder;
+				sel.appendChild(opt);
+			}
+
+			function setDisabled(sel, disabled) {
+				if (!sel) return;
+				sel.disabled = !!disabled;
+			}
+
+			// Initialize on load (handles Edit prefilled scenario)
+			(function init() {
+				const hasCountry = !!(countrySel && countrySel.value);
+				const hasState = !!(stateSel && stateSel.value);
+				setDisabled(stateSel, !hasCountry);
+				setDisabled(citySel, !hasState);
+			})();
+
+			countrySel && countrySel.addEventListener('change', function () {
+				const cid = this.value;
+				clearSelect(stateSel, '-- Select State --');
+				clearSelect(citySel, '-- Select City --');
+				setDisabled(stateSel, !cid);
+				setDisabled(citySel, true);
+				if (!cid) return;
+				fetch(`/TeacherMaster/GetStatesByCountry/${cid}`)
+					.then(r => r.ok ? r.json() : Promise.reject(r))
+					.then(items => {
+						items.forEach(x => {
+							const opt = document.createElement('option');
+							opt.value = x.value; opt.textContent = x.text;
+							stateSel.appendChild(opt);
+						});
+						setDisabled(stateSel, false);
+					})
+					.catch(() => { setDisabled(stateSel, true); });
+			});
+
+			stateSel && stateSel.addEventListener('change', function () {
+				const sid = this.value;
+				clearSelect(citySel, '-- Select City --');
+				setDisabled(citySel, !sid);
+				if (!sid) return;
+				fetch(`/TeacherMaster/GetCitiesByState/${sid}`)
+					.then(r => r.ok ? r.json() : Promise.reject(r))
+					.then(items => {
+						items.forEach(x => {
+							const opt = document.createElement('option');
+							opt.value = x.value; opt.textContent = x.text;
+							citySel.appendChild(opt);
+						});
+						setDisabled(citySel, false);
+					})
+					.catch(() => { setDisabled(citySel, true); });
+			});
+			// Dynamic rows for documents (append new)
+			const tblDocsBody = document.querySelector('#tblDocs tbody');
+			const btnAddDoc = document.getElementById('btnAddDoc');
+			const existingDocCountEl = document.getElementById('existingDocCount');
+			let docIndex = parseInt((existingDocCountEl && existingDocCountEl.value) ? existingDocCountEl.value : '0');
+			btnAddDoc && btnAddDoc.addEventListener('click', function(){
+				const tr = document.createElement('tr');
+				tr.innerHTML = `
+					<td><input name="Documents[${docIndex}].Name" class="form-control" /></td>
+					<td><input name="Documents[${docIndex}].Description" class="form-control" /></td>
+					<td><input type="file" name="DocumentFiles[${docIndex}]" class="form-control" /></td>
+					<td class="text-center"><input type="checkbox" name="Documents[${docIndex}].IsActive" /></td>
+					<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>`;
+				tblDocsBody.appendChild(tr);
+				docIndex++;
+			});
+			tblDocsBody && tblDocsBody.addEventListener('click', function(e){
+				if(e.target && e.target.classList.contains('btn-remove')){
+					e.target.closest('tr').remove();
+				}
+			});
+
+			// Dynamic rows for qualifications (append new)
+			const tblQualsBody = document.querySelector('#tblQuals tbody');
+			const btnAddQual = document.getElementById('btnAddQual');
+			const existingQualCountEl = document.getElementById('existingQualCount');
+			let qualIndex = parseInt((existingQualCountEl && existingQualCountEl.value) ? existingQualCountEl.value : '0');
+			function buildQualSelect(name){
+				const sel = document.createElement('select');
+				sel.name = name;
+				sel.className = 'form-select';
+				const emptyOpt = document.createElement('option');
+				emptyOpt.value = '';
+				emptyOpt.textContent = '-- Select Qualification --';
+				sel.appendChild(emptyOpt);
+				const items = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.QualificationItems.Select(x => new { value = x.Value, text = x.Text })));
+				items.forEach(x=>{
+					const opt = document.createElement('option');
+					opt.value = x.value; opt.textContent = x.text;
+					sel.appendChild(opt);
+				});
+				return sel.outerHTML;
+			}
+			btnAddQual && btnAddQual.addEventListener('click', function(){
+				const tr = document.createElement('tr');
+				tr.innerHTML = `
+					<td>${buildQualSelect('Qualifications[' + qualIndex + '].QualificationId')}</td>
+					<td class="text-center"><input type="checkbox" name="Qualifications[${qualIndex}].IsActive" /></td>
+					<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">Remove</button></td>`;
+				tblQualsBody.appendChild(tr);
+				qualIndex++;
+			});
+			tblQualsBody && tblQualsBody.addEventListener('click', function(e){
+				if(e.target && e.target.classList.contains('btn-remove')){
+					e.target.closest('tr').remove();
+				}
+			});
+		})();
+	</script>
+	<partial name="_ValidationScriptsPartial" />
 }

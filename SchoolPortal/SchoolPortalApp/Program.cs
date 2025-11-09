@@ -78,6 +78,8 @@ builder.Services.AddScoped<IClassRoomService, SchoolPortal.Services.ClassRoomSer
 builder.Services.AddScoped<ITeacherService, SchoolPortal.Services.TeacherService>();
 builder.Services.AddScoped<IStudentService, SchoolPortal.Services.StudentService>();
 builder.Services.AddScoped<ITeacherClassDetailsService, SchoolPortal.Services.TeacherClassDetailsService>();
+builder.Services.AddScoped<ITeacherDocumentDetailsService, SchoolPortal.Services.TeacherDocumentDetailsService>();
+builder.Services.AddScoped<ITeacherQualificationDetailsService, SchoolPortal.Services.TeacherQualificationDetailsService>();
 builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
 builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMasterService>();
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
@@ -93,7 +95,11 @@ builder.Services.AddScoped<IHolidayMasterService, SchoolPortal.Services.HolidayM
 builder.Services.AddScoped<IEmpTypeService, SchoolPortal.Services.EmpTypeService>();
 builder.Services.AddScoped<IVisitorService, SchoolPortal.Services.VisitorService>();
 builder.Services.AddScoped<ICleanerMasterService, SchoolPortal.Services.CleanerMasterService>();
+builder.Services.AddScoped<ICleanerDocumentDetailsService, SchoolPortal.Services.CleanerDocumentDetailsService>();
+builder.Services.AddScoped<ICleanerQualificationDetailsService, SchoolPortal.Services.CleanerQualificationDetailsService>();
 builder.Services.AddScoped<IDriverMasterService, SchoolPortal.Services.DriverMasterService>();
+builder.Services.AddScoped<IDriverDocumentDetailsService, SchoolPortal.Services.DriverDocumentDetailsService>();
+builder.Services.AddScoped<IDriverQualificationDetailsService, SchoolPortal.Services.DriverQualificationDetailsService>();
 
 var app = builder.Build();
 
