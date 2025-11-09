@@ -44,7 +44,7 @@ namespace SchoolPortalApp.Controllers
 				{
 					Id = item.Id,
 					SubjectName = item.SubjectName,
-					IsScholastic = item.IsScholastic,
+					IsScholastic = item.IsScholastic ?? false,
 					IsActive = item.IsActive,
 					SchoolName = school?.Name ?? string.Empty
 				};
@@ -107,7 +107,7 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = Guid.Empty,
 				SubjectName = model.SubjectName,
-				IsScholastic = model.IsScholastic ?? false,
+				IsScholastic = model.IsScholastic,
 				IsActive = model.IsActive,
 				CompanyId = companyId,
 				SchoolId = schoolId,
@@ -135,7 +135,7 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = item.Id,
 				SubjectName = item.SubjectName,
-				IsScholastic = item.IsScholastic,
+				IsScholastic = item.IsScholastic ?? false,
 				IsActive = item.IsActive,
 				SchoolId = item.SchoolId
 			};
@@ -172,7 +172,7 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = id,
 				SubjectName = model.SubjectName,
-				IsScholastic = model.IsScholastic ?? false,
+				IsScholastic = model.IsScholastic,
 				IsActive = model.IsActive,
 				SchoolId = model.SchoolId,
 				ModifiedBy = userId,

@@ -1,5 +1,6 @@
 @using System.Security.Claims
 @inject SchoolPortal.Services.IServices.ILookupService Lookup
+@inject SchoolPortal.Services.IServices.ISchoolService SchoolService
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -279,72 +280,100 @@
 	</style>
 </head>
 <body>
-    @{
-        var isAuthenticated = User?.Identity?.IsAuthenticated == true;
-        var displayName = User?.Identity?.Name;
-    }
-    <!-- HEADER -->
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <div class="container-fluid">
-                <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                    <i class="bi bi-list"></i>
-                </button>
-                <a class="navbar-brand ms-2" asp-area="" asp-page="/Index">School Management System</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+	@{
+		var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+		var displayName = User?.Identity?.Name;
+	}
+	<!-- HEADER -->
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container-fluid">
+				<button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+					<i class="bi bi-list"></i>
+				</button>
+				<a class="navbar-brand ms-2" asp-area="" asp-page="/Index">School Management System</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        @if (isAuthenticated)
-                        {
-                            <li class="nav-item d-flex align-items-center">
-								@{
-									var userName = Context.Session.GetString("UserName") ?? "Guest";
-									var role = Context.Session.GetString("UserRole") ?? "Guest";
-									var designation = Context.Session.GetString("Designation") ?? "Not Specified";
-									var fullName = Context.Session.GetString("FullName") ?? userName;
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						@if (isAuthenticated)
+						{
+							<li class="nav-item d-flex align-items-center">
+							@{
+								var userName = Context.Session.GetString("UserName") ?? "Guest";
+								var role = Context.Session.GetString("UserRole") ?? "Guest";
+								var designation = Context.Session.GetString("Designation") ?? "Not Specified";
+								var fullName = Context.Session.GetString("FullName") ?? userName;
+								var companyIdStr = Context.Session.GetString("CompanyId");
+								var schoolIdStr = Context.Session.GetString("SchoolId");
+								var preSchools = Enumerable.Empty<SchoolPortal.Entities.Models.SchoolMaster>();
+								if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var preCompanyId))
+								{
+									preSchools = SchoolService.GetByCompany(preCompanyId) ?? new List<SchoolPortal.Entities.Models.SchoolMaster>();
 								}
-                                <span class="navbar-text me-3"
+							}
+								<div id="companySchoolSelectors" class="me-3 d-flex align-items-center" style="gap:8px;">
+									<select id="companySelect" class="form-select form-select-sm" style="min-width: 200px;" data-current-company-id="@companyIdStr">
+										<option value="">Select Company</option>
+									</select>
+									<select id="schoolSelect"
+											class="form-select form-select-sm"
+											style="min-width: 200px;"
+											data-current-school-id="@schoolIdStr"
+											@(preSchools.Any() ? "" : "disabled")>
+
+										<option value="">Select School</option>
+
+										@foreach (var school in preSchools)
+										{
+											var isSelected = schoolIdStr == school.Id.ToString() ? "selected" : null;
+											<option value="@school.Id" selected="@isSelected">
+												@(school.Name ?? string.Empty)
+											</option>
+										}
+									</select>
+								</div>
+								<span class="navbar-text me-3"
 									  data-bs-toggle="tooltip"
 									  data-bs-placement="bottom"
 									  title="Name: @fullName&#10;Role: @role&#10;Designation: @designation">
-                                    @{ 
-                                        var companyIdStr = Context.Session.GetString("CompanyId");
-                                        var schoolIdStr = Context.Session.GetString("SchoolId");
-                                        var companyName = string.Empty;
-                                        var schoolName = string.Empty;
-                                        if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
-                                        {
-                                            var companies = Lookup.GetCompanies();
-                                            var comp = companies.FirstOrDefault(c => c.Id == companyId);
-                                            companyName = comp?.Name ?? string.Empty;
-                                        }
-                                        if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
-                                        {
-                                            var schools = Lookup.GetSchools();
-                                            var sch = schools.FirstOrDefault(s => s.Id == schoolId);
-                                            schoolName = sch?.Name ?? string.Empty;
-                                        }
-                                        if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
-                                        {
-                                            <text>@companyName@(string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(schoolName) ? "" : " | ")@schoolName&nbsp;&nbsp;</text>
-                                        }
-                                    }
-                                    Welcome, @displayName
+									@{ 
+										var companyIdStr1 = Context.Session.GetString("CompanyId");
+										var schoolIdStr1 = Context.Session.GetString("SchoolId");
+										var companyName = string.Empty;
+										var schoolName = string.Empty;
+										if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var companyId))
+										{
+											var companies = Lookup.GetCompanies();
+											var comp = companies.FirstOrDefault(c => c.Id == companyId);
+											companyName = comp?.Name ?? string.Empty;
+										}
+										if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
+										{
+											var schools = Lookup.GetSchools();
+											var sch = schools.FirstOrDefault(s => s.Id == schoolId);
+											schoolName = sch?.Name ?? string.Empty;
+										}
+										if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
+										{
+											<text>@companyName@(string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(schoolName) ? "" : " | ")@schoolName&nbsp;&nbsp;</text>
+										}
+									}
+									Welcome, @displayName
 								</span>
-                                <script>
-                                    // Initialize tooltips
-                                    document.addEventListener('DOMContentLoaded', function() {
-                                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                                        tooltipTriggerList.map(function (tooltipTriggerEl) {
-                                            return new bootstrap.Tooltip(tooltipTriggerEl);
-                                        });
-                                    });
-                                </script>
+								<script>
+									// Initialize tooltips
+									document.addEventListener('DOMContentLoaded', function() {
+										var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+										tooltipTriggerList.map(function (tooltipTriggerEl) {
+											return new bootstrap.Tooltip(tooltipTriggerEl);
+										});
+									});
+								</script>
 								<span class="user-info me-3">
 									<span id="userFullName"></span>
 									<span id="userRole"></span>
@@ -355,123 +384,192 @@
 									@Html.AntiForgeryToken()
 									<button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
 								</form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="/Account/Login">Login</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="/Account/Login">Login</a>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
 
-    <!-- MAIN LAYOUT -->
-    <div class="main-container">
-        @if (isAuthenticated)
-        {
-            <!-- SIDEBAR -->
-            <nav class="nav-sidebar" id="sidebar">
-                <partial name="_NavigationBar" />
-            </nav>
-        }
+	<!-- MAIN LAYOUT -->
+	<div class="main-container">
+		@if (isAuthenticated)
+		{
+			<!-- SIDEBAR -->
+			<nav class="nav-sidebar" id="sidebar">
+				<partial name="_NavigationBar" />
+			</nav>
+		}
 
-        <!-- MAIN CONTENT -->
-        <main role="main" class="content-area @(isAuthenticated ? "" : "full-width")" id="content">
-            <div class="body-scroll">
-                @RenderBody()
-            </div>
-        </main>
-    </div>
+		<!-- MAIN CONTENT -->
+		<main role="main" class="content-area @(isAuthenticated ? "" : "full-width")" id="content">
+			<div class="body-scroll">
+				@RenderBody()
+			</div>
+		</main>
+	</div>
 
-    <!-- FOOTER -->
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+	<!-- FOOTER -->
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+		</div>
+	</footer>
 
-    <!-- SCRIPTS -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.js"></script>
+	<!-- SCRIPTS -->
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            (async () => {
-                try {
-                    const response = await fetch('/Account/GetUserProfile');
-                    if (!response.ok) throw new Error('Failed to load profile');
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			(async () => {
+				try {
+					const response = await fetch('/Account/GetUserProfile');
+					if (!response.ok) throw new Error('Failed to load profile');
 
-                    const data = await response.json();
-                    if (data.success) {
-                        const userData = data.data || {};
-                        const setText = (id, val) => {
-                            const el = document.getElementById(id);
-                            if (el) el.textContent = val;
-                        };
-                        setText('userFullName', userData.fullName || 'Not available');
-                        setText('userRole', userData.role || 'Not specified');
-                        setText('userDepartment', userData.department || 'Not specified');
-                        setText('userEmail', userData.email || 'Not available');
+					const data = await response.json();
+					if (data.success) {
+						const userData = data.data || {};
+						const setText = (id, val) => {
+							const el = document.getElementById(id);
+							if (el) el.textContent = val;
+						};
+						setText('userFullName', userData.fullName || 'Not available');
+						setText('userRole', userData.role || 'Not specified');
+						setText('userDepartment', userData.department || 'Not specified');
+						setText('userEmail', userData.email || 'Not available');
 
-                        const avatar = document.querySelector('.user-avatar');
-                        if (avatar && userData.fullName) {
-                            avatar.textContent = userData.fullName.charAt(0).toUpperCase();
-                        }
-                        const ids = ['userFullName', 'userRole', 'userDepartment', 'userEmail'];
-                        const els = ids.map(id => document.getElementById(id)).filter(Boolean);
-                        if (els.length > 0) {
-                            const sameParent = els.every(e => e.parentElement === els[0].parentElement);
-                            const parent = sameParent ? els[0].parentElement : null;
-                            if (parent) parent.classList.add('user-info');
-                        }
-                    } else {
-                        const roleEl = document.getElementById('userRole');
-                        if (roleEl) roleEl.textContent = data.message || 'Error loading profile';
-                    }
-                } catch (err) {
-                    const roleEl = document.getElementById('userRole');
-                    if (roleEl) roleEl.textContent = 'Error loading profile';
-                }
-            })();
+						const avatar = document.querySelector('.user-avatar');
+						if (avatar && userData.fullName) {
+							avatar.textContent = userData.fullName.charAt(0).toUpperCase();
+						}
+						const ids = ['userFullName', 'userRole', 'userDepartment', 'userEmail'];
+						const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+						if (els.length > 0) {
+							const sameParent = els.every(e => e.parentElement === els[0].parentElement);
+							const parent = sameParent ? els[0].parentElement : null;
+							if (parent) parent.classList.add('user-info');
+						}
+					} else {
+						const roleEl = document.getElementById('userRole');
+						if (roleEl) roleEl.textContent = data.message || 'Error loading profile';
+					}
+				} catch (err) {
+					const roleEl = document.getElementById('userRole');
+					if (roleEl) roleEl.textContent = 'Error loading profile';
+				}
+			})();
 
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const toggleButton = document.getElementById('sidebarToggle');
+			const companySelect = document.getElementById('companySelect');
+			const schoolSelect = document.getElementById('schoolSelect');
+			const selectorsContainer = document.getElementById('companySchoolSelectors');
 
-            toggleButton?.addEventListener('click', () => {
-                if (!sidebar || !content) return;
+			async function loadCompanies(preselectId) {
+				try {
+					const res = await fetch('/Lookup/GetCompanies');
+					if (!res.ok) return;
+					const items = await res.json();
+					companySelect.innerHTML = '<option value="">Select Company</option>';
+					(items || []).forEach(i => {
+						const opt = document.createElement('option');
+						opt.value = i.id;
+						opt.textContent = i.name;
+						if (preselectId && i.id.toLowerCase() === preselectId.toLowerCase()) opt.selected = true;
+						companySelect.appendChild(opt);
+					});
+					const selectedCompanyId = companySelect.value || preselectId || '';
+					await loadSchools(selectedCompanyId, schoolSelect?.getAttribute('data-current-school-id'));
+				} catch {}
+			}
 
-                if (window.innerWidth > 768) {
-                    sidebar.classList.toggle('collapsed');
-                    content.classList.toggle('collapsed');
+			async function loadSchools(companyId, preselectSchoolId) {
+				schoolSelect.innerHTML = '<option value="">Select School</option>';
+				if (!companyId) { schoolSelect.disabled = true; return; }
+				try {
+					const res = await fetch(`/Lookup/GetSchoolsByCompany?companyId=${encodeURIComponent(companyId)}`);
+					if (!res.ok) { schoolSelect.disabled = true; return; }
+					const items = await res.json();
+					(items || []).forEach(i => {
+						const opt = document.createElement('option');
+						opt.value = i.id;
+						opt.textContent = i.name;
+						if (preselectSchoolId && i.id.toLowerCase() === preselectSchoolId.toLowerCase()) opt.selected = true;
+						schoolSelect.appendChild(opt);
+					});
+					schoolSelect.disabled = false;
+				} catch {
+					schoolSelect.disabled = true;
+				}
+			}
 
-                    if (sidebar.classList.contains('collapsed')) {
-                        const openSubmenus = sidebar.querySelectorAll('.collapse.show');
-                        openSubmenus.forEach(el => {
-                            if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
-                                const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
-                                instance.hide();
-                            } else {
-                                el.classList.remove('show');
-                            }
-                        });
+			if (companySelect && schoolSelect) {
+				const currentCompanyId = companySelect.getAttribute('data-current-company-id') || '';
+				const currentSchoolId = schoolSelect.getAttribute('data-current-school-id') || '';
+				if (currentCompanyId) {
+					loadCompanies(currentCompanyId).then(async () => {
+						if (currentCompanyId) {
+							try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(currentCompanyId)}`); } catch {}
+						}
+						if (currentSchoolId) {
+							try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(currentSchoolId)}`); } catch {}
+						}
+					});
+				} else {
+					loadCompanies('');
+				}
 
-                        const triggers = sidebar.querySelectorAll('[data-bs-toggle="collapse"]');
-                        triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
-                    }
-                } else {
-                    sidebar.classList.toggle('show');
-                }
-            });
-        });
-    </script>
+				companySelect.addEventListener('change', async () => {
+					const val = companySelect.value;
+					try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
+					await loadSchools(val, '');
+				});
+				schoolSelect.addEventListener('change', async () => {
+					const val = schoolSelect.value;
+					try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(val)}`); } catch {}
+				});
+			}
 
-    @await RenderSectionAsync("Scripts", required: false)
+			const sidebar = document.getElementById('sidebar');
+			const content = document.getElementById('content');
+			const toggleButton = document.getElementById('sidebarToggle');
+
+			toggleButton?.addEventListener('click', () => {
+				if (!sidebar || !content) return;
+
+				if (window.innerWidth > 768) {
+					sidebar.classList.toggle('collapsed');
+					content.classList.toggle('collapsed');
+
+					if (sidebar.classList.contains('collapsed')) {
+						const openSubmenus = sidebar.querySelectorAll('.collapse.show');
+						openSubmenus.forEach(el => {
+							if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+								const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+								instance.hide();
+							} else {
+								el.classList.remove('show');
+							}
+						});
+
+						const triggers = sidebar.querySelectorAll('[data-bs-toggle="collapse"]');
+						triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+					}
+				} else {
+					sidebar.classList.toggle('show');
+				}
+			});
+		});
+	</script>
+
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

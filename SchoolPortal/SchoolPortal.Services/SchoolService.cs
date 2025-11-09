@@ -13,7 +13,9 @@ namespace SchoolPortal.Services
         {
             var s = new SchoolMaster();
             if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) s.Id = id;
-            s.Name = r.Table.Columns.Contains("Name") ? r["Name"].ToString() ?? string.Empty : string.Empty;
+            s.Name = r.Table.Columns.Contains("Name")
+                ? (r["Name"].ToString() ?? string.Empty)
+                : (r.Table.Columns.Contains("SchoolName") ? (r["SchoolName"].ToString() ?? string.Empty) : string.Empty);
             s.Description = r.Table.Columns.Contains("Description") ? r["Description"].ToString() ?? string.Empty : string.Empty;
             s.Email = r.Table.Columns.Contains("Email") ? r["Email"].ToString() ?? string.Empty : string.Empty;
             s.Address1 = r.Table.Columns.Contains("Address1") ? r["Address1"].ToString() ?? string.Empty : string.Empty;
@@ -30,6 +32,7 @@ namespace SchoolPortal.Services
             if (r.Table.Columns.Contains("JudistrictionCityId") && Guid.TryParse(r["JudistrictionCityId"].ToString(), out var jurisCity)) s.JudistrictionCityId = jurisCity;
             if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
             if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
+            if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"].ToString(), out var compId)) s.CompanyId = compId;
             if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"].ToString(), out var createdBy)) s.CreatedBy = createdBy;
             if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"].ToString(), out var createdDate)) s.CreatedDate = createdDate;
             if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"].ToString(), out var modifiedBy)) s.ModifiedBy = modifiedBy;
@@ -45,6 +48,20 @@ namespace SchoolPortal.Services
         {
             var list = new List<SchoolMaster>();
             Proc p = new Proc("School_GetAll");
+            var dt = new DataTable();
+            p.Exec(dt);
+            foreach (DataRow r in dt.Rows)
+            {
+                list.Add(Map(r));
+            }
+            return list;
+        }
+
+        public List<SchoolMaster> GetByCompany(Guid companyId)
+        {
+            var list = new List<SchoolMaster>();
+            Proc p = new Proc("School_GetByCompany");
+            p["@CompanyId"] = companyId;
             var dt = new DataTable();
             p.Exec(dt);
             foreach (DataRow r in dt.Rows)

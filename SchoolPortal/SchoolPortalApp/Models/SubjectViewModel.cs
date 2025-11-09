@@ -4,24 +4,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SchoolPortalApp.Models
 {
-    public class SubjectViewModel
-    {
-        public Guid Id { get; set; }
+	public class SubjectViewModel
+	{
+		public Guid Id { get; set; }
 
-        [Required]
-        [Display(Name = "Subject Name")]
-        public string SubjectName { get; set; } = string.Empty;
+		[Required]
+		[Display(Name = "Subject Name")]
+		public string SubjectName { get; set; } = string.Empty;
 
-        [Display(Name = "Is Scholastic")]
-        public bool? IsScholastic { get; set; } = false;
+		[Display(Name = "Is Scholastic")]
+		public bool IsScholastic { get; set; } = false;
 
-        [Display(Name = "Is Active")]
-        public bool IsActive { get; set; } = true;
+		[Display(Name = "Is Active")]
+		public bool IsActive { get; set; } = true;
 
-        [Required]
-        [Display(Name = "School")]
-        public Guid SchoolId { get; set; }
+		[Required]
+		[Display(Name = "School")]
+		public Guid SchoolId { get; set; }
 
-        public IEnumerable<SelectListItem> Schools { get; set; } = Array.Empty<SelectListItem>();
-    }
+		public IEnumerable<SelectListItem> Schools { get; set; } = Array.Empty<SelectListItem>();
+	}
 }

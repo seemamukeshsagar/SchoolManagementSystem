@@ -1,8 +1,3183 @@
+USE [SchoolManagementSystem]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_select_SMSTaskSchedule]    Script Date: 10-11-2025 00:15:25 ******/
+DROP PROCEDURE [dbo].[usp_select_SMSTaskSchedule]
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateUserDetails]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[UpdateUserDetails]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherSubjectDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherSubjectDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherSubjectDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherSubjectDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherSubjectDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherClassDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherClassDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherClassDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherClassDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[TeacherClassDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Teacher_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Teacher_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Teacher_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Teacher_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Teacher_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Teacher_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Teacher_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Teacher_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Teacher_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Teacher_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SystemParameters_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[SystemParameters_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SystemParameters_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[SystemParameters_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SystemParameters_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SystemParameters_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SystemParameters_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SubjectCategory_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SubjectCategory_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SubjectCategory_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SubjectCategory_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SubjectCategory_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Subject_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Subject_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Subject_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Subject_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Subject_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Subject_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Subject_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Subject_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Subject_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Subject_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Student_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Student_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Student_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Student_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Student_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[State_GetByCountry]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[State_GetByCountry]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_RolePrivilege_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_GetByRoleId]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_RolePrivilege_GetByRoleId]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_IsInUse]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_IsInUse]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetByRoleId]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_GetByRoleId]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[sp_Privilege_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_GetByClassId]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_GetByClassId]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Section_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Section_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SchoolContact_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[SchoolContact_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SchoolContact_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[SchoolContact_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SchoolContact_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SchoolContact_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[SchoolContact_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[School_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[School_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[School_GetByCompany]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_GetByCompany]
+GO
+/****** Object:  StoredProcedure [dbo].[School_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[School_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[School_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[School_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RoleMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[RoleMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RoleMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[RoleMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RoleMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RoleMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RoleMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Religion_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Religion_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[RelationType_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[RelationType_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Qualification_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Qualification_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[PaymentMode_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[PaymentMode_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Parent_GetByStudentId]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Parent_GetByStudentId]
+GO
+/****** Object:  StoredProcedure [dbo].[Parent_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Parent_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[MaritalStatus_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[MaritalStatus_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[IsUserExist]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[IsUserExist]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayTypeMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayTypeMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayTypeMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayTypeMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayTypeMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[HolidayMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Grade_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Grade_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUserRoleName]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetUserRoleName]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUserPrivileges]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetUserPrivileges]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUserNameById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetUserNameById]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUserFullName]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetUserFullName]
+GO
+/****** Object:  StoredProcedure [dbo].[GetSundaysbyyearandmonth]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetSundaysbyyearandmonth]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAllUserDetails]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[GetAllUserDetails]
+GO
+/****** Object:  StoredProcedure [dbo].[Gender_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Gender_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmpTypeMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmpTypeMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmpTypeMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmpTypeMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmpTypeMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[EmployeeType_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[EmployeeType_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Emp_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Emp_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Emp_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Emp_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Emp_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverQualificationDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverQualificationDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverQualificationDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverQualificationDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverQualificationDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetByKey]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_GetByKey]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverDocumentDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverDocumentDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverDocumentDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverDocumentDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DriverDocumentDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Designation_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Designation_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DesigMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DesigMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DesigMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DesigMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DesigMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DesigMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DesigMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetBySchool]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_GetBySchool]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptMaster_BulkInsert]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptMaster_BulkInsert]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptDesigDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptDesigDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptDesigDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptDesigDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeptDesigDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Department_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Department_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteUserDetails]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[DeleteUserDetails]
+GO
+/****** Object:  StoredProcedure [dbo].[Country_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Country_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Company_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Company_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Company_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Company_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Company_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Company_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Company_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Company_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Company_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Company_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerQualificationDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerQualificationDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerQualificationDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerQualificationDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerQualificationDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetByKey]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_GetByKey]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerMaster_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerDocumentDetails_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerDocumentDetails_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerDocumentDetails_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerDocumentDetails_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[CleanerDocumentDetails_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ClassRoom_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[ClassRoom_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ClassRoom_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[ClassRoom_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ClassRoom_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ClassRoom_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ClassRoom_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[Class_Update]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Class_Update]
+GO
+/****** Object:  StoredProcedure [dbo].[Class_GetById]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Class_GetById]
+GO
+/****** Object:  StoredProcedure [dbo].[Class_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Class_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[Class_Delete]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Class_Delete]
+GO
+/****** Object:  StoredProcedure [dbo].[Class_Create]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Class_Create]
+GO
+/****** Object:  StoredProcedure [dbo].[City_GetByState]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[City_GetByState]
+GO
+/****** Object:  StoredProcedure [dbo].[ChangePassword]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[ChangePassword]
+GO
+/****** Object:  StoredProcedure [dbo].[Category_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[Category_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[BloodGroup_GetAll]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[BloodGroup_GetAll]
+GO
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[AuthenticateUser]
+GO
+/****** Object:  StoredProcedure [dbo].[AddUserDetails]    Script Date: 10-11-2025 00:15:26 ******/
+DROP PROCEDURE [dbo].[AddUserDetails]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [CK_StudentFeeDetails_Amount]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [CK_CompanyMaster_JudistrictionArea_CityId]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [CK_BookMaster_StockInHand]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [CK_BookMaster_Price]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [CK_BookMaster_NoOfCopies]
+GO
+ALTER TABLE [dbo].[VoucherMaster] DROP CONSTRAINT [FK_VoucherMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[VoucherMaster] DROP CONSTRAINT [FK_VoucherMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VoucherMaster] DROP CONSTRAINT [FK_VoucherMaster_ExpenseCategoryId]
+GO
+ALTER TABLE [dbo].[VoucherMaster] DROP CONSTRAINT [FK_VoucherMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[VoucherMaster] DROP CONSTRAINT [FK_VoucherMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_StateId]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_CountryId]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[VisitorMaster] DROP CONSTRAINT [FK_VisitorMaster_CityId]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_StateMaster]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_CountryMaster]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[VendorMaster] DROP CONSTRAINT [FK_VendorMaster_CityMaster]
+GO
+ALTER TABLE [dbo].[VehicleTypeMaster] DROP CONSTRAINT [FK_VehicleTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[VehicleTypeMaster] DROP CONSTRAINT [FK_VehicleTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VehicleTypeMaster] DROP CONSTRAINT [FK_VehicleTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[VehicleTypeMaster] DROP CONSTRAINT [FK_VehicleTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[VehicleMaster] DROP CONSTRAINT [FK_VehicleMaster_VehicleTypeId]
+GO
+ALTER TABLE [dbo].[VehicleMaster] DROP CONSTRAINT [FK_VehicleMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[VehicleMaster] DROP CONSTRAINT [FK_VehicleMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VehicleMaster] DROP CONSTRAINT [FK_VehicleMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[VehicleMaster] DROP CONSTRAINT [FK_VehicleMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_VehicleTypeId]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_VehicleId]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[VehicleExpenseDetails] DROP CONSTRAINT [FK_VehicleExpenseDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FL_UserDetails_UserRoleId]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FL_UserDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FK_UserDetails_SchoolID]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FK_UserDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FK_UserDetails_DesignationID]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [FK_UserDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_TeacherNewId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_TeacherId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_PeriodId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetailsHistory] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetailss_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_TeacherNewId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_TeacherId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_SectionId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_PeriodId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableSubstitutionDetails] DROP CONSTRAINT [FK_TimeTableSubstitutionDetails_ClassId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetailsHistory] DROP CONSTRAINT [FK_TimeTableSetupDetailsHistorys_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetailsHistory] DROP CONSTRAINT [FK_TimeTableSetupDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetailsHistory] DROP CONSTRAINT [FK_TimeTableSetupDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetailsHistory] DROP CONSTRAINT [FK_TimeTableSetupDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetailsHistory] DROP CONSTRAINT [FK_TimeTableSetupDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [FK_TimeTableSetupDetailss_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [FK_TimeTableSetupDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [FK_TimeTableSetupDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [FK_TimeTableSetupDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [FK_TimeTableSetupDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [FK_TimeTableSessions_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [FK_TimeTableSessions_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [FK_TimeTableSessions_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [FK_TimeTableSessions_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTablePeriodMaster] DROP CONSTRAINT [FK_TimeTablePeriodMasters_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTablePeriodMaster] DROP CONSTRAINT [FK_TimeTablePeriodMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTablePeriodMaster] DROP CONSTRAINT [FK_TimeTablePeriodMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTablePeriodMaster] DROP CONSTRAINT [FK_TimeTablePeriodMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTablePeriodMaster] DROP CONSTRAINT [FK_TimeTablePeriodMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistorys_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_TeacherId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_PeriodId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableDetailsHistory] DROP CONSTRAINT [FK_TimeTableDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistorys_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_PeriodId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetailsHistory] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetailss_SessionId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_SectionId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_PeriodId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TimeTableClassPeriodDetails] DROP CONSTRAINT [FK_TimeTableClassPeriodDetails_ClassId]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_TeacherId]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherSubjectDetails] DROP CONSTRAINT [FK_TeacherSubjectDetails_ClassId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_TeacherId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_SectionId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherSectionDetails] DROP CONSTRAINT [FK_TeacherSectionDetails_ClassId]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_TeacherId]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_QualificationId]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherQualificationDetails] DROP CONSTRAINT [FK_TeacherQualificationDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_StateId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_Gender]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_CountryId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK_TeacherMaster_CityId]
+GO
+ALTER TABLE [dbo].[TeacherMaster] DROP CONSTRAINT [FK__TeacherMa__Marit__1CFC3D38]
+GO
+ALTER TABLE [dbo].[TeacherDocumentDetails] DROP CONSTRAINT [FK_TeacherDocumentDetails_TeacherId]
+GO
+ALTER TABLE [dbo].[TeacherDocumentDetails] DROP CONSTRAINT [FK_TeacherDocumentDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherDocumentDetails] DROP CONSTRAINT [FK_TeacherDocumentDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherDocumentDetails] DROP CONSTRAINT [FK_TeacherDocumentDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherDocumentDetails] DROP CONSTRAINT [FK_TeacherDocumentDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_SectionId]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[TeacherClassDetails] DROP CONSTRAINT [FK_TeacherClassDetails_ClassId]
+GO
+ALTER TABLE [dbo].[SystemParameters] DROP CONSTRAINT [FK_SystemParameters_SchoolId]
+GO
+ALTER TABLE [dbo].[SystemParameters] DROP CONSTRAINT [FK_SystemParameters_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SystemParameters] DROP CONSTRAINT [FK_SystemParameters_CreatedBy]
+GO
+ALTER TABLE [dbo].[SystemParameters] DROP CONSTRAINT [FK_SystemParameters_CompanyId]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_StateId]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_CountryId]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SupplierMaster] DROP CONSTRAINT [FK_SupplierMaster_CityId]
+GO
+ALTER TABLE [dbo].[SubjectMaster] DROP CONSTRAINT [FK_SubjectMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SubjectMaster] DROP CONSTRAINT [FK_SubjectMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SubjectMaster] DROP CONSTRAINT [FK_SubjectMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SubjectMaster] DROP CONSTRAINT [FK_SubjectMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistorys_SessionId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_SubjectCategoryId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetailsHistory] DROP CONSTRAINT [FK_SubjectCategoryDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetailss_SessionId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[SubjectCategoryDetails] DROP CONSTRAINT [FK_SubjectCategoryDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK_StudentReportCardMasterHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK_StudentReportCardMasterHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK_StudentReportCardMasterHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK_StudentReportCardMasterHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK__StudentRe__Sessi__7211DF33]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK__StudentRe__Secti__711DBAFA]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK__StudentRe__Repor__702996C1]
+GO
+ALTER TABLE [dbo].[StudentReportCardMasterHistory] DROP CONSTRAINT [FK__StudentRe__Class__6F357288]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK_StudentReportCardMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK_StudentReportCardMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK_StudentReportCardMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK_StudentReportCardMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK__StudentRe__Sessi__6A70BD6B]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK__StudentRe__Secti__697C9932]
+GO
+ALTER TABLE [dbo].[StudentReportCardMaster] DROP CONSTRAINT [FK__StudentRe__Class__688874F9]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetailsHistory] DROP CONSTRAINT [FK_StudentReportCardDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetailsHistory] DROP CONSTRAINT [FK_StudentReportCardDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetailsHistory] DROP CONSTRAINT [FK_StudentReportCardDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetailsHistory] DROP CONSTRAINT [FK_StudentReportCardDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetailsHistory] DROP CONSTRAINT [FK__StudentRe__Subje__63C3BFDC]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetails] DROP CONSTRAINT [FK_StudentReportCardDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetails] DROP CONSTRAINT [FK_StudentReportCardDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetails] DROP CONSTRAINT [FK_StudentReportCardDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetails] DROP CONSTRAINT [FK_StudentReportCardDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentReportCardDetails] DROP CONSTRAINT [FK__StudentRe__Subje__5EFF0ABF]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_StateId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_SectionId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_PreviousSchoolClassId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_PreviousSchoolBoardId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_HouseAllotted]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_CountryId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_ClassId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_CategoryId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_BloodGroupId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_BithStateId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_BithCityId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory_BirthCountryId]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK_StudentMasterHistory]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Sibli__4DD47EBD]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Sessi__4CE05A84]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Route__4BEC364B]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Route__4AF81212]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Relig__4A03EDD9]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Natio__490FC9A0]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Gende__481BA567]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__FeesD__4727812E]
+GO
+ALTER TABLE [dbo].[StudentMasterHistory] DROP CONSTRAINT [FK__StudentMa__Class__46335CF5]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_StateId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_SectionId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_PreviousSchoolClassId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_PreviousSchoolBoardId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_HouseAllotted]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_CountryId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_ClassId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_CategoryId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_BloodGroupId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_BithStateId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_BithCityId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster_BirthCountryId]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK_StudentMaster]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Sibli__3508D0F3]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Sessi__3414ACBA]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Route__33208881]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Route__322C6448]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Relig__3138400F]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Natio__30441BD6]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Gende__2F4FF79D]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__FeesD__2E5BD364]
+GO
+ALTER TABLE [dbo].[StudentMaster] DROP CONSTRAINT [FK__StudentMa__Class__2D67AF2B]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_StudentMarksDetailsId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetailsHistory] DROP CONSTRAINT [FK_StudentMarksDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_SubjectId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_SectionId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentMarksDetails] DROP CONSTRAINT [FK_StudentMarksDetails_ClassId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_StudentGradeId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_ScholisticCategoryId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetailsHistory_CategoryId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetailsHistory] DROP CONSTRAINT [FK_StudentGradeDetails_SessionId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_SessionIds]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_SectionId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_ClassId]
+GO
+ALTER TABLE [dbo].[StudentGradeDetails] DROP CONSTRAINT [FK_StudentGradeDetails_CategoryId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_FeesCategoryId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetailsHistory] DROP CONSTRAINT [FK_StudentFeeDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_SectionId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentFeeDetails] DROP CONSTRAINT [FK_StudentFeeDetails_ClassId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_StudentCommentId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_SectionId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetailsHistory] DROP CONSTRAINT [FK_StudentCommentDetailsHistory_ClassId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_SessionId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_SectionId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentCommentDetails] DROP CONSTRAINT [FK_StudentCommentDetails_ClassId]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_StudentGUID]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_SectionId]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_ClassId]
+GO
+ALTER TABLE [dbo].[StudentAttendanceDetails] DROP CONSTRAINT [FK_StudentAttendanceDetails_AttendanceReasonId]
+GO
+ALTER TABLE [dbo].[StudentAchievements] DROP CONSTRAINT [FK_StudentAchievements_SessionId]
+GO
+ALTER TABLE [dbo].[StudentAchievements] DROP CONSTRAINT [FK_StudentAchievements_SchoolId]
+GO
+ALTER TABLE [dbo].[StudentAchievements] DROP CONSTRAINT [FK_StudentAchievements_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StudentAchievements] DROP CONSTRAINT [FK_StudentAchievements_CreatedBy]
+GO
+ALTER TABLE [dbo].[StudentAchievements] DROP CONSTRAINT [FK_StudentAchievements_CompanyId]
+GO
+ALTER TABLE [dbo].[StateMaster] DROP CONSTRAINT [FK_StateMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[StateMaster] DROP CONSTRAINT [FK_StateMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[StateMaster] DROP CONSTRAINT [FK_StateMaster_CountryID]
+GO
+ALTER TABLE [dbo].[SmtpDetails] DROP CONSTRAINT [FK_SmtpDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[SmtpDetails] DROP CONSTRAINT [FK_SmtpDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SmtpDetails] DROP CONSTRAINT [FK_SmtpDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[SmtpDetails] DROP CONSTRAINT [FK_SmtpDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[SMSTaskStatusMaster] DROP CONSTRAINT [FK_SMSTaskStatusMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SMSTaskStatusMaster] DROP CONSTRAINT [FK_SMSTaskStatusMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskStatusMaster] DROP CONSTRAINT [FK_SMSTaskStatusMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskStatusMaster] DROP CONSTRAINT [FK_SMSTaskStatusMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SMSTaskSmtpDetails] DROP CONSTRAINT [FK_SMSTaskSmtpDetails_TaskId]
+GO
+ALTER TABLE [dbo].[SMSTaskSmtpDetails] DROP CONSTRAINT [FK_SMSTaskSmtpDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[SMSTaskSmtpDetails] DROP CONSTRAINT [FK_SMSTaskSmtpDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskSmtpDetails] DROP CONSTRAINT [FK_SMSTaskSmtpDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskSmtpDetails] DROP CONSTRAINT [FK_SMSTaskSmtpDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[SMSTaskSchedule] DROP CONSTRAINT [FK_SMSTaskSchedule_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskSchedule] DROP CONSTRAINT [FK_SMSTaskSchedule_CreatedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskSchedule] DROP CONSTRAINT [FK_SMSTaskSchedule_CompanyId]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_TaskId]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_ReceiverId]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_ParentId]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[SMSTaskHistory] DROP CONSTRAINT [FK_SMSTaskHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[SMSTask] DROP CONSTRAINT [FK_SMSTask_SchoolId]
+GO
+ALTER TABLE [dbo].[SMSTask] DROP CONSTRAINT [FK_SMSTask_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SMSTask] DROP CONSTRAINT [FK_SMSTask_CreatedBy]
+GO
+ALTER TABLE [dbo].[SMSTask] DROP CONSTRAINT [FK_SMSTask_CompanyId]
+GO
+ALTER TABLE [dbo].[SessionMaster] DROP CONSTRAINT [FK_SessionMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SessionMaster] DROP CONSTRAINT [FK_SessionMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SessionMaster] DROP CONSTRAINT [FK_SessionMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SessionMaster] DROP CONSTRAINT [FK_SessionMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SectionMaster] DROP CONSTRAINT [FK_SectionMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SectionMaster] DROP CONSTRAINT [FK_SectionMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SectionMaster] DROP CONSTRAINT [FK_SectionMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SectionMaster] DROP CONSTRAINT [FK_SectionMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_StateId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_JudistrictionStateId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_JudistrictionCountryId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_JudistrictionCityId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_CountryId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_CityId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_BankStateId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_BankCountryId]
+GO
+ALTER TABLE [dbo].[SchoolMaster] DROP CONSTRAINT [FK_SchoolMaster_BankCityId]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_StateId]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_CountryId]
+GO
+ALTER TABLE [dbo].[SchoolContactMaster] DROP CONSTRAINT [FK_SchoolContactMaster_CityId]
+GO
+ALTER TABLE [dbo].[ScholasticUnitDetail] DROP CONSTRAINT [FK_ScholasticUnitDetail_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ScholasticUnitDetail] DROP CONSTRAINT [FK_ScholasticUnitDetail_CreatedBy]
+GO
+ALTER TABLE [dbo].[ScholasticUnitDetail] DROP CONSTRAINT [FK__Scholasti__Schoo__28D80438]
+GO
+ALTER TABLE [dbo].[ScholasticUnitDetail] DROP CONSTRAINT [FK__Scholasti__Compa__27E3DFFF]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_SubjectId]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [fk_ScholasticMaster_SessionId]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_ParentId]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ScholasticMaster] DROP CONSTRAINT [FK_ScholasticMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SalaryTypeMaster] DROP CONSTRAINT [FK_SalaryTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[SalaryTypeMaster] DROP CONSTRAINT [FK_SalaryTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SalaryTypeMaster] DROP CONSTRAINT [FK_SalaryTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SalaryTypeMaster] DROP CONSTRAINT [FK_SalaryTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[SalaryType] DROP CONSTRAINT [FK__SalaryTyp__Schoo__1C722D53]
+GO
+ALTER TABLE [dbo].[SalaryType] DROP CONSTRAINT [FK__SalaryTyp__Modif__1B7E091A]
+GO
+ALTER TABLE [dbo].[SalaryType] DROP CONSTRAINT [FK__SalaryTyp__Creat__1A89E4E1]
+GO
+ALTER TABLE [dbo].[SalaryType] DROP CONSTRAINT [FK__SalaryTyp__Compa__1995C0A8]
+GO
+ALTER TABLE [dbo].[SalaryHeadMaster] DROP CONSTRAINT [FK_SalaryHeadMaster_SalaryTypeId]
+GO
+ALTER TABLE [dbo].[SalaryHeadMaster] DROP CONSTRAINT [FK_SalaryHeadMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SalaryHeadMaster] DROP CONSTRAINT [FK_SalaryHeadMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[SalaryHeadMaster] DROP CONSTRAINT [FK__SalaryHea__Schoo__15C52FC4]
+GO
+ALTER TABLE [dbo].[SalaryHeadMaster] DROP CONSTRAINT [FK__SalaryHea__Compa__14D10B8B]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK_SalaryDesigGradeDetailsHistory_SessionId]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK_SalaryDesigGradeDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK_SalaryDesigGradeDetailsHistory_DesignationGradeId]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK_SalaryDesigGradeDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK__SalaryDes__Schoo__100C566E]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetailsHistory] DROP CONSTRAINT [FK__SalaryDes__Compa__0F183235]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK_SalaryDesigGradeDetails_SessionId]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK_SalaryDesigGradeDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK_SalaryDesigGradeDetails_DesignationGradeId]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK_SalaryDesigGradeDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK__SalaryDes__Schoo__0A537D18]
+GO
+ALTER TABLE [dbo].[SalaryDesigGradeDetails] DROP CONSTRAINT [FK__SalaryDes__Compa__095F58DF]
+GO
+ALTER TABLE [dbo].[SalaryCode] DROP CONSTRAINT [FK__SalaryCod__Schoo__086B34A6]
+GO
+ALTER TABLE [dbo].[SalaryCode] DROP CONSTRAINT [FK__SalaryCod__Modif__0777106D]
+GO
+ALTER TABLE [dbo].[SalaryCode] DROP CONSTRAINT [FK__SalaryCod__Creat__0682EC34]
+GO
+ALTER TABLE [dbo].[SalaryCode] DROP CONSTRAINT [FK__SalaryCod__Compa__058EC7FB]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_RouteId]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_RouteDetailId]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_LocationId]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [FK_RouteStopDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [fk_RouteMaster_StartLocationId]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [FK_RouteMaster_SessionId]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [FK_RouteMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [FK_RouteMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [fk_RouteMaster_EndLocationId]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [FK_RouteMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [FK_RouteMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[RouteLocationMaster] DROP CONSTRAINT [FK_RouteLocationMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[RouteLocationMaster] DROP CONSTRAINT [FK_RouteLocationMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RouteLocationMaster] DROP CONSTRAINT [FK_RouteLocationMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RouteLocationMaster] DROP CONSTRAINT [FK_RouteLocationMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[RouteLocationMaster] DROP CONSTRAINT [FK_RouteLocationMaster_CityId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_VehicleId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_RouteId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_DriverId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [FK_RouteDetails_CleanerId]
+GO
+ALTER TABLE [dbo].[RolePrivileges] DROP CONSTRAINT [FK_RolePrivileges_RoleId]
+GO
+ALTER TABLE [dbo].[RolePrivileges] DROP CONSTRAINT [FK_RolePrivileges_PrivilegeId]
+GO
+ALTER TABLE [dbo].[RolePrivileges] DROP CONSTRAINT [FK_RolePrivileges_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RolePrivileges] DROP CONSTRAINT [FK_RolePrivileges_CreatedBy]
+GO
+ALTER TABLE [dbo].[RolePrivileges] DROP CONSTRAINT [FK__RolePrivi__Privi__670A40DB]
+GO
+ALTER TABLE [dbo].[RoleMaster] DROP CONSTRAINT [FK_RoleMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[RoleMaster] DROP CONSTRAINT [FK_RoleMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RoleMaster] DROP CONSTRAINT [FK_RoleMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RoleMaster] DROP CONSTRAINT [FK_RoleMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ReligionMaster] DROP CONSTRAINT [FK_ReligionMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ReligionMaster] DROP CONSTRAINT [FK_ReligionMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RelationTypeMaster] DROP CONSTRAINT [FK_RelationTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RelationTypeMaster] DROP CONSTRAINT [FK_RelationTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_StateId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_SiblingClassMasterId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_SessionId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_ReligionId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_MothersQualificationId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_MothersDesignationId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_Gender]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_FathersQualificationId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_FathersDesignationId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_CountryId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_ClassMasterId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_CityId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_CategoryId]
+GO
+ALTER TABLE [dbo].[RegistrationMaster] DROP CONSTRAINT [FK_RegistrationMaster_BloodGroupId]
+GO
+ALTER TABLE [dbo].[QualificationMaster] DROP CONSTRAINT [FK_QualificationMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[QualificationMaster] DROP CONSTRAINT [FK_QualificationMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_StateId]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_CountryId]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[PublisherMaster] DROP CONSTRAINT [FK_PublisherMaster_CityId]
+GO
+ALTER TABLE [dbo].[ProfessionMaster] DROP CONSTRAINT [FK_ProfessionMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ProfessionMaster] DROP CONSTRAINT [FK_ProfessionMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ProfessionMaster] DROP CONSTRAINT [FK_ProfessionMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ProfessionMaster] DROP CONSTRAINT [FK_ProfessionMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[Privileges] DROP CONSTRAINT [FK_Privileges_ModifiedBy]
+GO
+ALTER TABLE [dbo].[Privileges] DROP CONSTRAINT [FK_Privileges_CreatedBy]
+GO
+ALTER TABLE [dbo].[PaymentTypeMode] DROP CONSTRAINT [FK__PaymentTy__Modif__3EFC4F81]
+GO
+ALTER TABLE [dbo].[PaymentTypeMode] DROP CONSTRAINT [FK__PaymentTy__Creat__3E082B48]
+GO
+ALTER TABLE [dbo].[PaymentModeMaster] DROP CONSTRAINT [FK_PaymentModeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[PaymentModeMaster] DROP CONSTRAINT [FK_PaymentModeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[PaymentModeMaster] DROP CONSTRAINT [FK_PaymentModeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[PaymentModeMaster] DROP CONSTRAINT [FK_PaymentModeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_StateId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_RelationTypeId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_QualificationId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_OfficeStateId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_OfficeCountryId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_OfficeCityId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_DesignationId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_CountryId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ParentMaster] DROP CONSTRAINT [FK_ParentMaster_CityId]
+GO
+ALTER TABLE [dbo].[NotificationReceiverMaster] DROP CONSTRAINT [FK_NotificationReceiverMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[NotificationReceiverMaster] DROP CONSTRAINT [FK_NotificationReceiverMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[NotificationReceiverMaster] DROP CONSTRAINT [FK_NotificationReceiverMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[NotificationReceiverMaster] DROP CONSTRAINT [FK_NotificationReceiverMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[MarksGradeMaster] DROP CONSTRAINT [FK_MarksGradeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[MarksGradeMaster] DROP CONSTRAINT [FK_MarksGradeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[MarksGradeMaster] DROP CONSTRAINT [FK_MarksGradeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[MarksGradeMaster] DROP CONSTRAINT [FK_MarksGradeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[MarksGradeMaster] DROP CONSTRAINT [FK_MarksGradeMaster_ClassMasterId]
+GO
+ALTER TABLE [dbo].[MaritalStatus] DROP CONSTRAINT [FK__MaritalSt__Schoo__24485945]
+GO
+ALTER TABLE [dbo].[MaritalStatus] DROP CONSTRAINT [FK__MaritalSt__Modif__2354350C]
+GO
+ALTER TABLE [dbo].[MaritalStatus] DROP CONSTRAINT [FK__MaritalSt__Creat__226010D3]
+GO
+ALTER TABLE [dbo].[MaritalStatus] DROP CONSTRAINT [FK__MaritalSt__Compa__216BEC9A]
+GO
+ALTER TABLE [dbo].[LocationMaster] DROP CONSTRAINT [FK_LocationMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[LocationMaster] DROP CONSTRAINT [FK_LocationMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[LocationMaster] DROP CONSTRAINT [FK_LocationMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[LocationMaster] DROP CONSTRAINT [FK_LocationMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[LocationMaster] DROP CONSTRAINT [FK_LocationMaster_CityId]
+GO
+ALTER TABLE [dbo].[LeaveTypeMaster] DROP CONSTRAINT [FK_LeaveTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[LeaveTypeMaster] DROP CONSTRAINT [FK_LeaveTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[LeaveTypeMaster] DROP CONSTRAINT [FK_LeaveTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[LeaveTypeMaster] DROP CONSTRAINT [FK_LeaveTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[LeaveStatusMaster] DROP CONSTRAINT [FK_LeaveStatusMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[LeaveStatusMaster] DROP CONSTRAINT [FK_LeaveStatusMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[LeaveStatusMaster] DROP CONSTRAINT [FK_LeaveStatusMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[LeaveStatusMaster] DROP CONSTRAINT [FK_LeaveStatusMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ItemTypeMaster] DROP CONSTRAINT [FK_ItemTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ItemTypeMaster] DROP CONSTRAINT [FK_ItemTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ItemTypeMaster] DROP CONSTRAINT [FK_ItemTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ItemTypeMaster] DROP CONSTRAINT [FK_ItemTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ItemMaster] DROP CONSTRAINT [FK_ItemMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ItemMaster] DROP CONSTRAINT [FK_ItemMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ItemMaster] DROP CONSTRAINT [FK_ItemMaster_ItemTypeMasterId]
+GO
+ALTER TABLE [dbo].[ItemMaster] DROP CONSTRAINT [FK_ItemMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ItemMaster] DROP CONSTRAINT [FK_ItemMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ItemLocationMaster] DROP CONSTRAINT [FK_ItemLocationMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ItemLocationMaster] DROP CONSTRAINT [FK_ItemLocationMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ItemLocationMaster] DROP CONSTRAINT [FK_ItemLocationMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ItemLocationMaster] DROP CONSTRAINT [FK_ItemLocationMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_LocationId]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_ItemId]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[InventoryMaster] DROP CONSTRAINT [FK_InventoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[HouseMaster] DROP CONSTRAINT [FK__HouseMast__Schoo__01F34141]
+GO
+ALTER TABLE [dbo].[HouseMaster] DROP CONSTRAINT [FK__HouseMast__Compa__00FF1D08]
+GO
+ALTER TABLE [dbo].[HolidayTypeMaster] DROP CONSTRAINT [FK_HolidayTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[HolidayTypeMaster] DROP CONSTRAINT [FK_HolidayTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[HolidayTypeMaster] DROP CONSTRAINT [FK_HolidayTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[HolidayTypeMaster] DROP CONSTRAINT [FK_HolidayTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_TypeId]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_SessionId]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[HolidayMaster] DROP CONSTRAINT [FK_HolidayMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[HolidayDeptDetails] DROP CONSTRAINT [FK_HolidayDeptDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[HolidayDeptDetails] DROP CONSTRAINT [FK_HolidayDeptDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[HolidayDeptDetails] DROP CONSTRAINT [FK_HolidayDeptDetails_DepartmentId]
+GO
+ALTER TABLE [dbo].[HolidayDeptDetails] DROP CONSTRAINT [FK_HolidayDeptDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[HolidayDeptDetails] DROP CONSTRAINT [FK_HolidayDeptDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_SectionMasterId]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[HolidayClassDetails] DROP CONSTRAINT [FK_HolidayClassDetails_ClassMasterId]
+GO
+ALTER TABLE [dbo].[GradeMaster] DROP CONSTRAINT [FK_GradeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[GradeMaster] DROP CONSTRAINT [FK_GradeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[GradeMaster] DROP CONSTRAINT [FK_GradeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[GradeMaster] DROP CONSTRAINT [FK_GradeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[GenderMaster] DROP CONSTRAINT [FK_GenderMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[GenderMaster] DROP CONSTRAINT [FK_GenderMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [FK_FeesDiscountCategoryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [FK_FeesDiscountCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [FK_FeesDiscountCategoryMaster_FeeCategoryId]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [FK_FeesDiscountCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [FK_FeesDiscountCategoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[FeesCategoryMaster] DROP CONSTRAINT [FK_FeesCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[FeesCategoryMaster] DROP CONSTRAINT [FK_FeesCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[FeeClassDetailsHistory] DROP CONSTRAINT [FK_FeeClassDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[FeeClassDetailsHistory] DROP CONSTRAINT [FK_FeeClassDetailsHistory_FeesCategoryId]
+GO
+ALTER TABLE [dbo].[FeeClassDetailsHistory] DROP CONSTRAINT [FK_FeeClassDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[FeeClassDetailsHistory] DROP CONSTRAINT [FK_FeeClassDetailsHistory_ClassMasterId]
+GO
+ALTER TABLE [dbo].[FeeClassDetails] DROP CONSTRAINT [FK_FeeClassDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[FeeClassDetails] DROP CONSTRAINT [FK_FeeClassDetails_FeesCategoryId]
+GO
+ALTER TABLE [dbo].[FeeClassDetails] DROP CONSTRAINT [FK_FeeClassDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[FeeClassDetails] DROP CONSTRAINT [FK_FeeClassDetails_ClassMasterId]
+GO
+ALTER TABLE [dbo].[ExpenseCategoryMaster] DROP CONSTRAINT [FK_ExpenseCategoryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ExpenseCategoryMaster] DROP CONSTRAINT [FK_ExpenseCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ExpenseCategoryMaster] DROP CONSTRAINT [FK_ExpenseCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ExpenseCategoryMaster] DROP CONSTRAINT [FK_ExpenseCategoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ExamUnitMaster] DROP CONSTRAINT [FK_ExamUnitMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ExamUnitMaster] DROP CONSTRAINT [FK_ExamUnitMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ExamUnitMaster] DROP CONSTRAINT [FK_ExamUnitMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ExamUnitMaster] DROP CONSTRAINT [FK_ExamUnitMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ExamCategoryMaster] DROP CONSTRAINT [FK_ExamCategoryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ExamCategoryMaster] DROP CONSTRAINT [FK_ExamCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ExamCategoryMaster] DROP CONSTRAINT [FK_ExamCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ExamCategoryMaster] DROP CONSTRAINT [FK_ExamCategoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ErrorType] DROP CONSTRAINT [FK__ErrorType__Schoo__4C8B54C9]
+GO
+ALTER TABLE [dbo].[ErrorDetail] DROP CONSTRAINT [FK__ErrorDeta__Schoo__4B973090]
+GO
+ALTER TABLE [dbo].[ErrorDetail] DROP CONSTRAINT [FK__ErrorDeta__Error__4AA30C57]
+GO
+ALTER TABLE [dbo].[ErrorDetail] DROP CONSTRAINT [FK__ErrorDeta__Compa__49AEE81E]
+GO
+ALTER TABLE [dbo].[Error] DROP CONSTRAINT [FK__Error__UserID__48BAC3E5]
+GO
+ALTER TABLE [dbo].[Error] DROP CONSTRAINT [FK__Error__SchoolId__47C69FAC]
+GO
+ALTER TABLE [dbo].[Error] DROP CONSTRAINT [FK__Error__ErrorType__46D27B73]
+GO
+ALTER TABLE [dbo].[Error] DROP CONSTRAINT [FK__Error__CompanyId__45DE573A]
+GO
+ALTER TABLE [dbo].[EmpTypeMaster] DROP CONSTRAINT [FK_EmpTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpTypeMaster] DROP CONSTRAINT [FK_EmpTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpTypeMaster] DROP CONSTRAINT [FK_EmpTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpTypeMaster] DROP CONSTRAINT [FK_EmpTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_SessionId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_SalaryTypeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_SalaryCodeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_EmpMaster]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_DesigGradeDetails]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryStructureDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_SessionId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_SalaryTypeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_SalaryCodeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_EmpMaster]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_DesigGradeDetails]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryStructureDetails] DROP CONSTRAINT [FK_EmpSalaryStructureDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_SessionId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_GradeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_DesignationId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_DepartmentId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryMasterHistory] DROP CONSTRAINT [FK_EmpSalaryMasterHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_SessionId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_GradeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_DesignationId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_DepartmentId]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryMaster] DROP CONSTRAINT [FK_EmpSalaryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [fk_EmpSalaryDetailsHistory_SalaryTypeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_SalaryHeadMasterId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [fk_EmpSalaryDetailsHistory_SalaryCodeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [fk_EmpSalaryDetailsHistory_DesignationGradeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetailsHistory] DROP CONSTRAINT [FK_EmpSalaryDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [fk_EmpSalaryDetails_SalaryTypeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_SalaryHeadMasterId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [fk_EmpSalaryDetails_SalaryCodeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [fk_EmpSalaryDetails_DesignationGradeId]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpSalaryDetails] DROP CONSTRAINT [FK_EmpSalaryDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpProfQualiDetails] DROP CONSTRAINT [FK_EmpProfQualiDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpProfQualiDetails] DROP CONSTRAINT [FK_EmpProfQualiDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpProfQualiDetails] DROP CONSTRAINT [FK_EmpProfQualiDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpProfQualiDetails] DROP CONSTRAINT [FK_EmpProfQualiDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_PermanentStateId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_PermanentCountryId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_PermanentCityId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [fk_EmpMaster_PaymentModeId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_GradeId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_GenderId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_EmployeeTypeId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_EmployeeCategoryId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_DesigMaster]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_DeptMaster]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CurrentStateId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CurrentCountryId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CurrentCityId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_CategoryId]
+GO
+ALTER TABLE [dbo].[EmpMaster] DROP CONSTRAINT [FK_EmpMaster_BloodGroupId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_SessionId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_LeaveTypeId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpLeaveDetailsHistory_CategoryId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_SessionId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [fk_EmpLeaveDetails_LeaveTypeId]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_EmpMaster]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_EmpCategoryMaster]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveDetails] DROP CONSTRAINT [FK_EmpLeaveDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_StateMaster]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_SessionId]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_LeaveTypeMaster]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [fk_EmpLeaveAvailDetails_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_CountryMaster]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpLeaveAvailDetails] DROP CONSTRAINT [FK_EmpLeaveAvailDetails_CityMaster]
+GO
+ALTER TABLE [dbo].[EmpDocumentDetails] DROP CONSTRAINT [FK_EmpDocumentDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpDocumentDetails] DROP CONSTRAINT [FK_EmpDocumentDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpDocumentDetails] DROP CONSTRAINT [FK_EmpDocumentDetails_EmpMaster]
+GO
+ALTER TABLE [dbo].[EmpDocumentDetails] DROP CONSTRAINT [FK_EmpDocumentDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpDocumentDetails] DROP CONSTRAINT [FK_EmpDocumentDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [fk_EmpCatLeaveDetailsHistory_SessionId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_LeaveTypeId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_EmpCatLeaveCategoryId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetailsHistory] DROP CONSTRAINT [FK_EmpCatLeaveDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [fk_EmpCatLeaveDetails_SessionId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_LeaveTypeId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_EmpCatLeaveCategoryId]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpCatLeaveDetails] DROP CONSTRAINT [FK_EmpCatLeaveDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpCategoryMaster] DROP CONSTRAINT [FK_EmpCategoryMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpCategoryMaster] DROP CONSTRAINT [FK_EmpCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpCategoryMaster] DROP CONSTRAINT [FK_EmpCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpCategoryMaster] DROP CONSTRAINT [FK_EmpCategoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetailsHistory] DROP CONSTRAINT [FK_EmpAttendanceDetailsHistory_AttendenceLeaveTypeId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_EmployeeId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[EmpAttendanceDetails] DROP CONSTRAINT [FK_EmpAttendanceDetails_AttendenceLeaveTypeId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_QualificationId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_DriverId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] DROP CONSTRAINT [FK_DriverQualificationDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_StateMaster]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_QualificationId]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_CountryMaster]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[DriverMaster] DROP CONSTRAINT [FK_DriverMaster_CityMaster]
+GO
+ALTER TABLE [dbo].[DesignationGrade] DROP CONSTRAINT [FK__Designati__Modif__35DCF99B]
+GO
+ALTER TABLE [dbo].[DesignationGrade] DROP CONSTRAINT [FK__Designati__Creat__34E8D562]
+GO
+ALTER TABLE [dbo].[DesigMaster] DROP CONSTRAINT [FK_DesigMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[DesigMaster] DROP CONSTRAINT [FK_DesigMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DesigMaster] DROP CONSTRAINT [FK_DesigMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[DesigMaster] DROP CONSTRAINT [fk_DesigMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_GradeMaster]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_DesignationId]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_DesigMaster]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[DesigGradeDetails] DROP CONSTRAINT [FK_DesigGradeDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[DeptMaster] DROP CONSTRAINT [FK_DeptMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[DeptMaster] DROP CONSTRAINT [FK_DeptMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DeptMaster] DROP CONSTRAINT [FK_DeptMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[DeptMaster] DROP CONSTRAINT [FK_DeptMaster_CompanyID]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_SchoolID]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_DesignationId]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_DesigMaster]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_DeptMaster]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_DepartmentId]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_CreatedID]
+GO
+ALTER TABLE [dbo].[DeptDesigDetails] DROP CONSTRAINT [FK_DeptDesigDetails_CompanyID]
+GO
+ALTER TABLE [dbo].[CountryMaster] DROP CONSTRAINT [FK_CountryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[CountryMaster] DROP CONSTRAINT [FK_CountryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_StateMaster]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_StateID]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_JudistrictionArea]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_CountryMaster]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_CountryID]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_CityMaster]
+GO
+ALTER TABLE [dbo].[CompanyMaster] DROP CONSTRAINT [FK_CompanyMaster_CityID]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_SubjectId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_SessionId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetailHistory] DROP CONSTRAINT [FK_ClassSubjectDetailHistory_ClassMasterId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_SubjectMaster]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassSubjectDetail] DROP CONSTRAINT [FK_ClassSubjectDetail_ClassMaster]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_TaskId]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_SectionMasterId]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassSMSTasksDetails] DROP CONSTRAINT [FK_ClassSMSTasksDetails_ClassMasterId]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_SectionMaster]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_LocationId]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassSectionDetail] DROP CONSTRAINT [FK_ClassSectionDetail_ClassMaster]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_SessionId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_ScholasticsId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetailHistory] DROP CONSTRAINT [FK_ClassScholasticDetailHistory_ClassMasterId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_ScholasticId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassScholasticDetail] DROP CONSTRAINT [FK_ClassScholasticDetail_ClassMaster]
+GO
+ALTER TABLE [dbo].[ClassRoomMaster] DROP CONSTRAINT [FK_ClassRoomMasters_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassRoomMaster] DROP CONSTRAINT [FK_ClassRoomMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassRoomMaster] DROP CONSTRAINT [FK_ClassRoomMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassRoomMaster] DROP CONSTRAINT [FK_ClassRoomMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassRoomMaster] DROP CONSTRAINT [FK_ClassRoomMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[ClassMaster] DROP CONSTRAINT [FK_ClassMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[ClassMaster] DROP CONSTRAINT [FK_ClassMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[ClassMaster] DROP CONSTRAINT [FK_ClassMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[ClassMaster] DROP CONSTRAINT [fk_ClassMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[CityMaster] DROP CONSTRAINT [FK_CityMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[CityMaster] DROP CONSTRAINT [FK_CityMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[CityMaster] DROP CONSTRAINT [FK_CityMaster_CityStateID]
+GO
+ALTER TABLE [dbo].[CategoryMaster] DROP CONSTRAINT [FK_CategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[CategoryMaster] DROP CONSTRAINT [FK_CategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookTypeMaster] DROP CONSTRAINT [FK_BookTypeMaster_SchoolId]
+GO
+ALTER TABLE [dbo].[BookTypeMaster] DROP CONSTRAINT [FK_BookTypeMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BookTypeMaster] DROP CONSTRAINT [FK_BookTypeMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookTypeMaster] DROP CONSTRAINT [FK_BookTypeMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[BookTransactionType] DROP CONSTRAINT [FK_BookTransactionType_SchoolId]
+GO
+ALTER TABLE [dbo].[BookTransactionType] DROP CONSTRAINT [FK_BookTransactionType_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BookTransactionType] DROP CONSTRAINT [FK_BookTransactionType_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookTransactionType] DROP CONSTRAINT [fk_BookTransactionType_CompanyId]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDetails_BookTransactionType]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDetails_BookMaster]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_SectionMasterID]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_SchoolId]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_CompanyId]
+GO
+ALTER TABLE [dbo].[BookTransactionDetails] DROP CONSTRAINT [FK_BookTransactionDeatils_ClassMasterID]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_SupplierId]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_PublisherId]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_CompanyID]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_BookTypeMaster]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_BookCategoryMaster]
+GO
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [FK_BookMaster_AuthorMaster]
+GO
+ALTER TABLE [dbo].[BookCategoryMaster] DROP CONSTRAINT [FK_BookCategoryMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[BookCategoryMaster] DROP CONSTRAINT [FK_BookCategoryMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BookCategoryMaster] DROP CONSTRAINT [FK_BookCategoryMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BookCategoryMaster] DROP CONSTRAINT [fk_BookCategoryMaster_CompanyId]
+GO
+ALTER TABLE [dbo].[BloodGroupMaster] DROP CONSTRAINT [FK_BloodGroupMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BloodGroupMaster] DROP CONSTRAINT [FK_BloodGroupMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_VendorMaster]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_VendorId]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_VehicleId]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[BillMaster] DROP CONSTRAINT [FK_BillMaster_CompanyID]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_SchoolID]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_ExpenseCategoryMaster]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_ExpenseCategoryId]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_CompanyID]
+GO
+ALTER TABLE [dbo].[BillDetails] DROP CONSTRAINT [FK_BillDetails_BillMaster]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_StateMaster]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_StateId]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CountryMaster]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CountryId]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CompanyID]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CityMaster]
+GO
+ALTER TABLE [dbo].[AuthorMaster] DROP CONSTRAINT [FK_AuthorMaster_CityId]
+GO
+ALTER TABLE [dbo].[AuditType] DROP CONSTRAINT [FK__AuditType__Schoo__27C3E46E]
+GO
+ALTER TABLE [dbo].[AuditType] DROP CONSTRAINT [FK__AuditType__Compa__26CFC035]
+GO
+ALTER TABLE [dbo].[Audit] DROP CONSTRAINT [FK__Audit__SchoolId__25DB9BFC]
+GO
+ALTER TABLE [dbo].[Audit] DROP CONSTRAINT [FK__Audit__CompanyId__24E777C3]
+GO
+ALTER TABLE [dbo].[Audit] DROP CONSTRAINT [FK__Audit__ChangeUse__23F3538A]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_SchoolMaster]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_SchoolID]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_ModifiedBy]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_CreatedBy]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_CompanyMaster]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [FK_AttendanceReasonMaster_CompanyID]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [FK__Assesment__Schoo__1D4655FB]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [FK__Assesment__Modif__1C5231C2]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [FK__Assesment__Creat__1B5E0D89]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [FK__Assesment__Compa__1A69E950]
+GO
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [DF__UserDetai__Statu__1975C517]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [DF__TimeTable__Statu__1881A0DE]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [DF__TimeTable__Creat__178D7CA5]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [DF__TimeTable__IsDel__1699586C]
+GO
+ALTER TABLE [dbo].[TimeTableSetupDetails] DROP CONSTRAINT [DF__TimeTable__IsAct__15A53433]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [DF__TimeTable__Statu__14B10FFA]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [DF__TimeTable__Creat__13BCEBC1]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [DF__TimeTable__IsDel__12C8C788]
+GO
+ALTER TABLE [dbo].[TimeTableSessions] DROP CONSTRAINT [DF__TimeTable__IsAct__11D4A34F]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [DF__RouteStop__Statu__10E07F16]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [DF__RouteStop__Creat__0FEC5ADD]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [DF__RouteStop__IsDel__0EF836A4]
+GO
+ALTER TABLE [dbo].[RouteStopDetails] DROP CONSTRAINT [DF__RouteStop__IsAct__0E04126B]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [DF__RouteMast__Statu__0D0FEE32]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [DF__RouteMast__Creat__0C1BC9F9]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [DF__RouteMast__IsDel__0B27A5C0]
+GO
+ALTER TABLE [dbo].[RouteMaster] DROP CONSTRAINT [DF__RouteMast__IsAct__0A338187]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [DF__RouteDeta__Statu__093F5D4E]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [DF__RouteDeta__Creat__084B3915]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [DF__RouteDeta__IsDel__075714DC]
+GO
+ALTER TABLE [dbo].[RouteDetails] DROP CONSTRAINT [DF__RouteDeta__IsAct__0662F0A3]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [DF__FeesDisco__Statu__056ECC6A]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [DF__FeesDisco__Creat__047AA831]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [DF__FeesDisco__IsDel__038683F8]
+GO
+ALTER TABLE [dbo].[FeesDiscountCategoryMaster] DROP CONSTRAINT [DF__FeesDisco__IsAct__02925FBF]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [DF__Attendanc__Statu__019E3B86]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [DF__Attendanc__Creat__00AA174D]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [DF__Attendanc__IsDel__7FB5F314]
+GO
+ALTER TABLE [dbo].[AttendanceReasonMaster] DROP CONSTRAINT [DF__Attendanc__IsAct__7EC1CEDB]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [DF__Assesment__Statu__7DCDAAA2]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [DF__Assesment__Creat__7CD98669]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [DF__Assesment__IsDel__7BE56230]
+GO
+ALTER TABLE [dbo].[AssesmentMaster] DROP CONSTRAINT [DF__Assesment__IsAct__7AF13DF7]
+GO
+/****** Object:  Index [UQ_UserDetails_UserName]    Script Date: 10-11-2025 00:15:27 ******/
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [UQ_UserDetails_UserName]
+GO
+/****** Object:  Index [UQ_UserDetails_EmailAddress]    Script Date: 10-11-2025 00:15:27 ******/
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [UQ_UserDetails_EmailAddress]
+GO
+/****** Object:  Index [UK_UserDetails_UserName]    Script Date: 10-11-2025 00:15:27 ******/
+ALTER TABLE [dbo].[UserDetails] DROP CONSTRAINT [UK_UserDetails_UserName]
+GO
+/****** Object:  Index [UQ_BookMaster_ISBNNumber]    Script Date: 10-11-2025 00:15:27 ******/
+ALTER TABLE [dbo].[BookMaster] DROP CONSTRAINT [UQ_BookMaster_ISBNNumber]
+GO
+/****** Object:  Index [UQ_AuditType_Name]    Script Date: 10-11-2025 00:15:27 ******/
+ALTER TABLE [dbo].[AuditType] DROP CONSTRAINT [UQ_AuditType_Name]
+GO
+/****** Object:  Table [dbo].[VoucherMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VoucherMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[VoucherMaster]
+GO
+/****** Object:  Table [dbo].[VisitorMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VisitorMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[VisitorMaster]
+GO
+/****** Object:  Table [dbo].[VendorMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VendorMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[VendorMaster]
+GO
+/****** Object:  Table [dbo].[VehicleTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VehicleTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[VehicleTypeMaster]
+GO
+/****** Object:  Table [dbo].[VehicleMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VehicleMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[VehicleMaster]
+GO
+/****** Object:  Table [dbo].[VehicleExpenseDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[VehicleExpenseDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[VehicleExpenseDetails]
+GO
+/****** Object:  Table [dbo].[UserDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UserDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[UserDetails]
+GO
+/****** Object:  Table [dbo].[TimeTableSubstitutionDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableSubstitutionDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableSubstitutionDetailsHistory]
+GO
+/****** Object:  Table [dbo].[TimeTableSubstitutionDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableSubstitutionDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableSubstitutionDetails]
+GO
+/****** Object:  Table [dbo].[TimeTableSetupDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableSetupDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableSetupDetailsHistory]
+GO
+/****** Object:  Table [dbo].[TimeTableSetupDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableSetupDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableSetupDetails]
+GO
+/****** Object:  Table [dbo].[TimeTableSessions]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableSessions]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableSessions]
+GO
+/****** Object:  Table [dbo].[TimeTablePeriodMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTablePeriodMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTablePeriodMaster]
+GO
+/****** Object:  Table [dbo].[TimeTableDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableDetailsHistory]
+GO
+/****** Object:  Table [dbo].[TimeTableClassPeriodDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableClassPeriodDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableClassPeriodDetailsHistory]
+GO
+/****** Object:  Table [dbo].[TimeTableClassPeriodDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TimeTableClassPeriodDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TimeTableClassPeriodDetails]
+GO
+/****** Object:  Table [dbo].[TeacherSubjectDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherSubjectDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherSubjectDetails]
+GO
+/****** Object:  Table [dbo].[TeacherSectionDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherSectionDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherSectionDetails]
+GO
+/****** Object:  Table [dbo].[TeacherQualificationDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherQualificationDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherQualificationDetails]
+GO
+/****** Object:  Table [dbo].[TeacherMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherMaster]
+GO
+/****** Object:  Table [dbo].[TeacherDocumentDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherDocumentDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherDocumentDetails]
+GO
+/****** Object:  Table [dbo].[TeacherClassDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TeacherClassDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[TeacherClassDetails]
+GO
+/****** Object:  Table [dbo].[SystemParameters]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SystemParameters]') AND type in (N'U'))
+DROP TABLE [dbo].[SystemParameters]
+GO
+/****** Object:  Table [dbo].[SupplierMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SupplierMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SupplierMaster]
+GO
+/****** Object:  Table [dbo].[SubjectMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SubjectMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SubjectMaster]
+GO
+/****** Object:  Table [dbo].[SubjectCategoryDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SubjectCategoryDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[SubjectCategoryDetailsHistory]
+GO
+/****** Object:  Table [dbo].[SubjectCategoryDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SubjectCategoryDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[SubjectCategoryDetails]
+GO
+/****** Object:  Table [dbo].[StudentReportCardMasterHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentReportCardMasterHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentReportCardMasterHistory]
+GO
+/****** Object:  Table [dbo].[StudentReportCardMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentReportCardMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentReportCardMaster]
+GO
+/****** Object:  Table [dbo].[StudentReportCardDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentReportCardDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentReportCardDetailsHistory]
+GO
+/****** Object:  Table [dbo].[StudentReportCardDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentReportCardDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentReportCardDetails]
+GO
+/****** Object:  Table [dbo].[StudentMasterHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentMasterHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentMasterHistory]
+GO
+/****** Object:  Table [dbo].[StudentMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentMaster]
+GO
+/****** Object:  Table [dbo].[StudentMarksDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentMarksDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentMarksDetailsHistory]
+GO
+/****** Object:  Table [dbo].[StudentMarksDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentMarksDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentMarksDetails]
+GO
+/****** Object:  Table [dbo].[StudentGradeDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentGradeDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentGradeDetailsHistory]
+GO
+/****** Object:  Table [dbo].[StudentGradeDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentGradeDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentGradeDetails]
+GO
+/****** Object:  Table [dbo].[StudentFeeDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentFeeDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentFeeDetailsHistory]
+GO
+/****** Object:  Table [dbo].[StudentFeeDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentFeeDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentFeeDetails]
+GO
+/****** Object:  Table [dbo].[StudentCommentDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentCommentDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentCommentDetailsHistory]
+GO
+/****** Object:  Table [dbo].[StudentCommentDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentCommentDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentCommentDetails]
+GO
+/****** Object:  Table [dbo].[StudentAttendanceDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentAttendanceDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentAttendanceDetails]
+GO
+/****** Object:  Table [dbo].[StudentAchievements]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StudentAchievements]') AND type in (N'U'))
+DROP TABLE [dbo].[StudentAchievements]
+GO
+/****** Object:  Table [dbo].[StateMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[StateMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[StateMaster]
+GO
+/****** Object:  Table [dbo].[SmtpDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SmtpDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[SmtpDetails]
+GO
+/****** Object:  Table [dbo].[SMSTaskStatusMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SMSTaskStatusMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SMSTaskStatusMaster]
+GO
+/****** Object:  Table [dbo].[SMSTaskSmtpDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SMSTaskSmtpDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[SMSTaskSmtpDetails]
+GO
+/****** Object:  Table [dbo].[SMSTaskSchedule]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SMSTaskSchedule]') AND type in (N'U'))
+DROP TABLE [dbo].[SMSTaskSchedule]
+GO
+/****** Object:  Table [dbo].[SMSTaskHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SMSTaskHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[SMSTaskHistory]
+GO
+/****** Object:  Table [dbo].[SMSTask]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SMSTask]') AND type in (N'U'))
+DROP TABLE [dbo].[SMSTask]
+GO
+/****** Object:  Table [dbo].[SessionMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SessionMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SessionMaster]
+GO
+/****** Object:  Table [dbo].[SectionMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SectionMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SectionMaster]
+GO
+/****** Object:  Table [dbo].[SchoolMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SchoolMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SchoolMaster]
+GO
+/****** Object:  Table [dbo].[SchoolContactMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SchoolContactMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SchoolContactMaster]
+GO
+/****** Object:  Table [dbo].[SchoolBoard]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SchoolBoard]') AND type in (N'U'))
+DROP TABLE [dbo].[SchoolBoard]
+GO
+/****** Object:  Table [dbo].[ScholasticUnitDetail]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ScholasticUnitDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[ScholasticUnitDetail]
+GO
+/****** Object:  Table [dbo].[ScholasticMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ScholasticMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ScholasticMaster]
+GO
+/****** Object:  Table [dbo].[SalaryTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryTypeMaster]
+GO
+/****** Object:  Table [dbo].[SalaryType]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryType]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryType]
+GO
+/****** Object:  Table [dbo].[SalaryHeadMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryHeadMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryHeadMaster]
+GO
+/****** Object:  Table [dbo].[SalaryDesigGradeDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryDesigGradeDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryDesigGradeDetailsHistory]
+GO
+/****** Object:  Table [dbo].[SalaryDesigGradeDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryDesigGradeDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryDesigGradeDetails]
+GO
+/****** Object:  Table [dbo].[SalaryCode]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SalaryCode]') AND type in (N'U'))
+DROP TABLE [dbo].[SalaryCode]
+GO
+/****** Object:  Table [dbo].[RouteStopDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RouteStopDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[RouteStopDetails]
+GO
+/****** Object:  Table [dbo].[RouteMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RouteMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[RouteMaster]
+GO
+/****** Object:  Table [dbo].[RouteLocationMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RouteLocationMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[RouteLocationMaster]
+GO
+/****** Object:  Table [dbo].[RouteDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RouteDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[RouteDetails]
+GO
+/****** Object:  Table [dbo].[RoleMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RoleMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[RoleMaster]
+GO
+/****** Object:  Table [dbo].[ReligionMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ReligionMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ReligionMaster]
+GO
+/****** Object:  Table [dbo].[RelationTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RelationTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[RelationTypeMaster]
+GO
+/****** Object:  Table [dbo].[RegistrationMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RegistrationMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[RegistrationMaster]
+GO
+/****** Object:  Table [dbo].[QualificationMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[QualificationMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[QualificationMaster]
+GO
+/****** Object:  Table [dbo].[PublisherMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PublisherMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[PublisherMaster]
+GO
+/****** Object:  Table [dbo].[ProfessionMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ProfessionMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ProfessionMaster]
+GO
+/****** Object:  Table [dbo].[Privileges]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Privileges]') AND type in (N'U'))
+DROP TABLE [dbo].[Privileges]
+GO
+/****** Object:  Table [dbo].[PaymentTypeMode]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaymentTypeMode]') AND type in (N'U'))
+DROP TABLE [dbo].[PaymentTypeMode]
+GO
+/****** Object:  Table [dbo].[PaymentModeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaymentModeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[PaymentModeMaster]
+GO
+/****** Object:  Table [dbo].[ParentMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ParentMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ParentMaster]
+GO
+/****** Object:  Table [dbo].[NotificationReceiverMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NotificationReceiverMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[NotificationReceiverMaster]
+GO
+/****** Object:  Table [dbo].[MarksGradeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MarksGradeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[MarksGradeMaster]
+GO
+/****** Object:  Table [dbo].[MaritalStatus]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MaritalStatus]') AND type in (N'U'))
+DROP TABLE [dbo].[MaritalStatus]
+GO
+/****** Object:  Table [dbo].[LocationMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LocationMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[LocationMaster]
+GO
+/****** Object:  Table [dbo].[LeaveTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LeaveTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[LeaveTypeMaster]
+GO
+/****** Object:  Table [dbo].[LeaveStatusMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LeaveStatusMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[LeaveStatusMaster]
+GO
+/****** Object:  Table [dbo].[ItemTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ItemTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ItemTypeMaster]
+GO
+/****** Object:  Table [dbo].[ItemMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ItemMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ItemMaster]
+GO
+/****** Object:  Table [dbo].[ItemLocationMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ItemLocationMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ItemLocationMaster]
+GO
+/****** Object:  Table [dbo].[InventoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[InventoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[InventoryMaster]
+GO
+/****** Object:  Table [dbo].[HouseMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HouseMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[HouseMaster]
+GO
+/****** Object:  Table [dbo].[HolidayTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HolidayTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[HolidayTypeMaster]
+GO
+/****** Object:  Table [dbo].[HolidayMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HolidayMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[HolidayMaster]
+GO
+/****** Object:  Table [dbo].[HolidayDeptDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HolidayDeptDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[HolidayDeptDetails]
+GO
+/****** Object:  Table [dbo].[HolidayClassDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HolidayClassDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[HolidayClassDetails]
+GO
+/****** Object:  Table [dbo].[GradeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GradeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[GradeMaster]
+GO
+/****** Object:  Table [dbo].[GenderMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GenderMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[GenderMaster]
+GO
+/****** Object:  Table [dbo].[FeesDiscountCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FeesDiscountCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[FeesDiscountCategoryMaster]
+GO
+/****** Object:  Table [dbo].[FeesCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FeesCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[FeesCategoryMaster]
+GO
+/****** Object:  Table [dbo].[FeeClassDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FeeClassDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[FeeClassDetailsHistory]
+GO
+/****** Object:  Table [dbo].[FeeClassDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FeeClassDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[FeeClassDetails]
+GO
+/****** Object:  Table [dbo].[ExpenseCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExpenseCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ExpenseCategoryMaster]
+GO
+/****** Object:  Table [dbo].[ExamUnitMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExamUnitMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ExamUnitMaster]
+GO
+/****** Object:  Table [dbo].[ExamCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ExamCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ExamCategoryMaster]
+GO
+/****** Object:  Table [dbo].[ErrorType]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ErrorType]') AND type in (N'U'))
+DROP TABLE [dbo].[ErrorType]
+GO
+/****** Object:  Table [dbo].[ErrorDetail]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ErrorDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[ErrorDetail]
+GO
+/****** Object:  Table [dbo].[Error]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Error]') AND type in (N'U'))
+DROP TABLE [dbo].[Error]
+GO
+/****** Object:  Table [dbo].[EmpTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpTypeMaster]
+GO
+/****** Object:  Table [dbo].[EmpSalaryStructureDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryStructureDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryStructureDetailsHistory]
+GO
+/****** Object:  Table [dbo].[EmpSalaryStructureDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryStructureDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryStructureDetails]
+GO
+/****** Object:  Table [dbo].[EmpSalaryMasterHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryMasterHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryMasterHistory]
+GO
+/****** Object:  Table [dbo].[EmpSalaryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryMaster]
+GO
+/****** Object:  Table [dbo].[EmpSalaryDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryDetailsHistory]
+GO
+/****** Object:  Table [dbo].[EmpSalaryDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpSalaryDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpSalaryDetails]
+GO
+/****** Object:  Table [dbo].[EmpProfQualiDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpProfQualiDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpProfQualiDetails]
+GO
+/****** Object:  Table [dbo].[EmpMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpMaster]
+GO
+/****** Object:  Table [dbo].[EmpLeaveDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpLeaveDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpLeaveDetailsHistory]
+GO
+/****** Object:  Table [dbo].[EmpLeaveDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpLeaveDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpLeaveDetails]
+GO
+/****** Object:  Table [dbo].[EmpLeaveAvailDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpLeaveAvailDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpLeaveAvailDetails]
+GO
+/****** Object:  Table [dbo].[EmpDocumentDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpDocumentDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpDocumentDetails]
+GO
+/****** Object:  Table [dbo].[EmpCatLeaveDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpCatLeaveDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpCatLeaveDetailsHistory]
+GO
+/****** Object:  Table [dbo].[EmpCatLeaveDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpCatLeaveDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpCatLeaveDetails]
+GO
+/****** Object:  Table [dbo].[EmpCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpCategoryMaster]
+GO
+/****** Object:  Table [dbo].[EmpAttendanceDetailsHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpAttendanceDetailsHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpAttendanceDetailsHistory]
+GO
+/****** Object:  Table [dbo].[EmpAttendanceDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EmpAttendanceDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[EmpAttendanceDetails]
+GO
+/****** Object:  Table [dbo].[DriverQualificationDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DriverQualificationDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[DriverQualificationDetails]
+GO
+/****** Object:  Table [dbo].[DriverMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DriverMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[DriverMaster]
+GO
+/****** Object:  Table [dbo].[DesignationGrade]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DesignationGrade]') AND type in (N'U'))
+DROP TABLE [dbo].[DesignationGrade]
+GO
+/****** Object:  Table [dbo].[DesigMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DesigMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[DesigMaster]
+GO
+/****** Object:  Table [dbo].[DesigGradeDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DesigGradeDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[DesigGradeDetails]
+GO
+/****** Object:  Table [dbo].[DeptMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DeptMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[DeptMaster]
+GO
+/****** Object:  Table [dbo].[DeptDesigDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DeptDesigDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[DeptDesigDetails]
+GO
+/****** Object:  Table [dbo].[CountryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CountryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[CountryMaster]
+GO
+/****** Object:  Table [dbo].[CompanyMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CompanyMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[CompanyMaster]
+GO
+/****** Object:  Table [dbo].[CleanerMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CleanerMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[CleanerMaster]
+GO
+/****** Object:  Table [dbo].[ClassSubjectDetailHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassSubjectDetailHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassSubjectDetailHistory]
+GO
+/****** Object:  Table [dbo].[ClassSubjectDetail]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassSubjectDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassSubjectDetail]
+GO
+/****** Object:  Table [dbo].[ClassSMSTasksDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassSMSTasksDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassSMSTasksDetails]
+GO
+/****** Object:  Table [dbo].[ClassSectionDetail]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassSectionDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassSectionDetail]
+GO
+/****** Object:  Table [dbo].[ClassScholasticDetailHistory]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassScholasticDetailHistory]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassScholasticDetailHistory]
+GO
+/****** Object:  Table [dbo].[ClassScholasticDetail]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassScholasticDetail]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassScholasticDetail]
+GO
+/****** Object:  Table [dbo].[ClassRoomMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassRoomMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassRoomMaster]
+GO
+/****** Object:  Table [dbo].[ClassMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ClassMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[ClassMaster]
+GO
+/****** Object:  Table [dbo].[CityMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CityMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[CityMaster]
+GO
+/****** Object:  Table [dbo].[CategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[CategoryMaster]
+GO
+/****** Object:  Table [dbo].[BookTypeMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BookTypeMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[BookTypeMaster]
+GO
+/****** Object:  Table [dbo].[BookTransactionType]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BookTransactionType]') AND type in (N'U'))
+DROP TABLE [dbo].[BookTransactionType]
+GO
+/****** Object:  Table [dbo].[BookTransactionDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BookTransactionDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[BookTransactionDetails]
+GO
+/****** Object:  Table [dbo].[BookMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BookMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[BookMaster]
+GO
+/****** Object:  Table [dbo].[BookCategoryMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BookCategoryMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[BookCategoryMaster]
+GO
+/****** Object:  Table [dbo].[BloodGroupMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BloodGroupMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[BloodGroupMaster]
+GO
+/****** Object:  Table [dbo].[BillMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BillMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[BillMaster]
+GO
+/****** Object:  Table [dbo].[BillDetails]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BillDetails]') AND type in (N'U'))
+DROP TABLE [dbo].[BillDetails]
+GO
+/****** Object:  Table [dbo].[AuthorMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AuthorMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[AuthorMaster]
+GO
+/****** Object:  Table [dbo].[AuditType]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AuditType]') AND type in (N'U'))
+DROP TABLE [dbo].[AuditType]
+GO
+/****** Object:  Table [dbo].[Audit]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Audit]') AND type in (N'U'))
+DROP TABLE [dbo].[Audit]
+GO
+/****** Object:  Table [dbo].[AttendanceReasonMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AttendanceReasonMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[AttendanceReasonMaster]
+GO
+/****** Object:  Table [dbo].[AssesmentMaster]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AssesmentMaster]') AND type in (N'U'))
+DROP TABLE [dbo].[AssesmentMaster]
+GO
+/****** Object:  View [dbo].[UserPrivileges]    Script Date: 10-11-2025 00:15:28 ******/
+DROP VIEW [dbo].[UserPrivileges]
+GO
+/****** Object:  Table [dbo].[RolePrivileges]    Script Date: 10-11-2025 00:15:28 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RolePrivileges]') AND type in (N'U'))
+DROP TABLE [dbo].[RolePrivileges]
+GO
+/****** Object:  UserDefinedFunction [dbo].[fnCONVTO_ROMAN]    Script Date: 10-11-2025 00:15:28 ******/
+DROP FUNCTION [dbo].[fnCONVTO_ROMAN]
+GO
+/****** Object:  UserDefinedTableType [dbo].[UniqueIdentifierList]    Script Date: 10-11-2025 00:15:28 ******/
+DROP TYPE [dbo].[UniqueIdentifierList]
+GO
+/****** Object:  UserDefinedTableType [dbo].[DeptMasterType]    Script Date: 10-11-2025 00:15:28 ******/
+DROP TYPE [dbo].[DeptMasterType]
+GO
 USE [master]
 GO
-/****** Object:  Database [SchoolManagementSystem]    Script Date: 09-11-2025 15:40:40 ******/
+/****** Object:  Database [SchoolManagementSystem]    Script Date: 10-11-2025 00:15:28 ******/
+DROP DATABASE [SchoolManagementSystem]
+GO
+/****** Object:  Database [SchoolManagementSystem]    Script Date: 10-11-2025 00:15:28 ******/
 CREATE DATABASE [SchoolManagementSystem]
- WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
 ALTER DATABASE [SchoolManagementSystem] SET COMPATIBILITY_LEVEL = 160
 GO
@@ -77,7 +3252,7 @@ ALTER DATABASE [SchoolManagementSystem] SET QUERY_STORE (OPERATION_MODE = READ_W
 GO
 USE [SchoolManagementSystem]
 GO
-/****** Object:  UserDefinedTableType [dbo].[DeptMasterType]    Script Date: 09-11-2025 15:40:41 ******/
+/****** Object:  UserDefinedTableType [dbo].[DeptMasterType]    Script Date: 10-11-2025 00:15:29 ******/
 CREATE TYPE [dbo].[DeptMasterType] AS TABLE(
 	[Id] [uniqueidentifier] NOT NULL,
 	[DeptCode] [nvarchar](50) NOT NULL,
@@ -89,12 +3264,12 @@ CREATE TYPE [dbo].[DeptMasterType] AS TABLE(
 	[CompanyId] [uniqueidentifier] NOT NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[UniqueIdentifierList]    Script Date: 09-11-2025 15:40:41 ******/
+/****** Object:  UserDefinedTableType [dbo].[UniqueIdentifierList]    Script Date: 10-11-2025 00:15:29 ******/
 CREATE TYPE [dbo].[UniqueIdentifierList] AS TABLE(
 	[Id] [uniqueidentifier] NULL
 )
 GO
-/****** Object:  UserDefinedFunction [dbo].[fnCONVTO_ROMAN]    Script Date: 09-11-2025 15:40:41 ******/
+/****** Object:  UserDefinedFunction [dbo].[fnCONVTO_ROMAN]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +3309,7 @@ END
 
 
 GO
-/****** Object:  Table [dbo].[RolePrivileges]    Script Date: 09-11-2025 15:40:41 ******/
+/****** Object:  Table [dbo].[RolePrivileges]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -157,7 +3332,7 @@ CREATE TABLE [dbo].[RolePrivileges](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[UserPrivileges]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  View [dbo].[UserPrivileges]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -177,7 +3352,7 @@ SELECT
   rp.StatusMessage
 FROM dbo.RolePrivileges rp;
 GO
-/****** Object:  Table [dbo].[AssesmentMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[AssesmentMaster]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -205,7 +3380,7 @@ CREATE TABLE [dbo].[AssesmentMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AttendanceReasonMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[AttendanceReasonMaster]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -231,7 +3406,7 @@ CREATE TABLE [dbo].[AttendanceReasonMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Audit]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[Audit]    Script Date: 10-11-2025 00:15:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -254,7 +3429,7 @@ CREATE TABLE [dbo].[Audit](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AuditType]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[AuditType]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -272,7 +3447,7 @@ CREATE TABLE [dbo].[AuditType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AuthorMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[AuthorMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -306,7 +3481,7 @@ CREATE TABLE [dbo].[AuthorMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BillDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BillDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -334,7 +3509,7 @@ CREATE TABLE [dbo].[BillDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BillMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BillMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -366,7 +3541,7 @@ CREATE TABLE [dbo].[BillMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BloodGroupMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BloodGroupMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -388,7 +3563,7 @@ CREATE TABLE [dbo].[BloodGroupMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BookCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BookCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -413,7 +3588,7 @@ CREATE TABLE [dbo].[BookCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BookMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BookMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -455,7 +3630,7 @@ CREATE TABLE [dbo].[BookMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BookTransactionDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BookTransactionDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -491,7 +3666,7 @@ CREATE TABLE [dbo].[BookTransactionDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BookTransactionType]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BookTransactionType]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -515,7 +3690,7 @@ CREATE TABLE [dbo].[BookTransactionType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BookTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[BookTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -540,7 +3715,7 @@ CREATE TABLE [dbo].[BookTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[CategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -562,7 +3737,7 @@ CREATE TABLE [dbo].[CategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CityMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[CityMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -585,7 +3760,7 @@ CREATE TABLE [dbo].[CityMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -612,7 +3787,7 @@ CREATE TABLE [dbo].[ClassMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassRoomMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassRoomMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -636,7 +3811,7 @@ CREATE TABLE [dbo].[ClassRoomMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassScholasticDetail]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassScholasticDetail]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -661,7 +3836,7 @@ CREATE TABLE [dbo].[ClassScholasticDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassScholasticDetailHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassScholasticDetailHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -687,7 +3862,7 @@ CREATE TABLE [dbo].[ClassScholasticDetailHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassSectionDetail]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassSectionDetail]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -713,7 +3888,7 @@ CREATE TABLE [dbo].[ClassSectionDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassSMSTasksDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassSMSTasksDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -739,7 +3914,7 @@ CREATE TABLE [dbo].[ClassSMSTasksDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassSubjectDetail]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassSubjectDetail]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -764,7 +3939,7 @@ CREATE TABLE [dbo].[ClassSubjectDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ClassSubjectDetailHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ClassSubjectDetailHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -790,7 +3965,7 @@ CREATE TABLE [dbo].[ClassSubjectDetailHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CleanerMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[CleanerMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -817,7 +3992,7 @@ CREATE TABLE [dbo].[CleanerMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CompanyMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[CompanyMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -848,7 +4023,7 @@ CREATE TABLE [dbo].[CompanyMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CountryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[CountryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -870,7 +4045,7 @@ CREATE TABLE [dbo].[CountryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DeptDesigDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DeptDesigDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -895,7 +4070,7 @@ CREATE TABLE [dbo].[DeptDesigDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DeptMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DeptMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -920,7 +4095,7 @@ CREATE TABLE [dbo].[DeptMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DesigGradeDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DesigGradeDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -945,7 +4120,7 @@ CREATE TABLE [dbo].[DesigGradeDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DesigMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DesigMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -970,7 +4145,7 @@ CREATE TABLE [dbo].[DesigMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DesignationGrade]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DesignationGrade]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -991,7 +4166,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DriverMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DriverMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1035,7 +4210,32 @@ CREATE TABLE [dbo].[DriverMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpAttendanceDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[DriverQualificationDetails]    Script Date: 10-11-2025 00:15:30 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DriverQualificationDetails](
+	[Id] [uniqueidentifier] NOT NULL,
+	[DriverId] [uniqueidentifier] NOT NULL,
+	[QualificationId] [uniqueidentifier] NOT NULL,
+	[SchoolId] [uniqueidentifier] NOT NULL,
+	[CompanyId] [uniqueidentifier] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[ModifiedBy] [uniqueidentifier] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[Status] [varchar](10) NULL,
+	[StatusMessage] [nvarchar](255) NULL,
+ CONSTRAINT [PK_DriverQualificationDetails] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[EmpAttendanceDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1066,7 +4266,7 @@ CREATE TABLE [dbo].[EmpAttendanceDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpAttendanceDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpAttendanceDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1097,7 +4297,7 @@ CREATE TABLE [dbo].[EmpAttendanceDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1122,7 +4322,7 @@ CREATE TABLE [dbo].[EmpCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpCatLeaveDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpCatLeaveDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1149,7 +4349,7 @@ CREATE TABLE [dbo].[EmpCatLeaveDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpCatLeaveDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpCatLeaveDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1176,7 +4376,7 @@ CREATE TABLE [dbo].[EmpCatLeaveDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpDocumentDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpDocumentDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1203,7 +4403,7 @@ CREATE TABLE [dbo].[EmpDocumentDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpLeaveAvailDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpLeaveAvailDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1243,7 +4443,7 @@ CREATE TABLE [dbo].[EmpLeaveAvailDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpLeaveDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpLeaveDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1273,7 +4473,7 @@ CREATE TABLE [dbo].[EmpLeaveDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpLeaveDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpLeaveDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1303,7 +4503,7 @@ CREATE TABLE [dbo].[EmpLeaveDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1382,7 +4582,7 @@ CREATE TABLE [dbo].[EmpMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpProfQualiDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpProfQualiDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1408,7 +4608,7 @@ CREATE TABLE [dbo].[EmpProfQualiDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1441,7 +4641,7 @@ CREATE TABLE [dbo].[EmpSalaryDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1474,7 +4674,7 @@ CREATE TABLE [dbo].[EmpSalaryDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1516,7 +4716,7 @@ CREATE TABLE [dbo].[EmpSalaryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryMasterHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryMasterHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1558,7 +4758,7 @@ CREATE TABLE [dbo].[EmpSalaryMasterHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryStructureDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryStructureDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1589,7 +4789,7 @@ CREATE TABLE [dbo].[EmpSalaryStructureDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpSalaryStructureDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpSalaryStructureDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1620,7 +4820,7 @@ CREATE TABLE [dbo].[EmpSalaryStructureDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EmpTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[EmpTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1645,7 +4845,7 @@ CREATE TABLE [dbo].[EmpTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Error]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[Error]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1666,7 +4866,7 @@ CREATE TABLE [dbo].[Error](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ErrorDetail]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ErrorDetail]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1683,7 +4883,7 @@ CREATE TABLE [dbo].[ErrorDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 100, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ErrorType]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ErrorType]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1700,7 +4900,7 @@ CREATE TABLE [dbo].[ErrorType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExamCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ExamCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1725,7 +4925,7 @@ CREATE TABLE [dbo].[ExamCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExamUnitMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ExamUnitMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1749,7 +4949,7 @@ CREATE TABLE [dbo].[ExamUnitMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExpenseCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ExpenseCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1774,7 +4974,7 @@ CREATE TABLE [dbo].[ExpenseCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FeeClassDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[FeeClassDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1800,7 +5000,7 @@ CREATE TABLE [dbo].[FeeClassDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FeeClassDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[FeeClassDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1826,7 +5026,7 @@ CREATE TABLE [dbo].[FeeClassDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FeesCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[FeesCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1849,7 +5049,7 @@ CREATE TABLE [dbo].[FeesCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FeesDiscountCategoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[FeesDiscountCategoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1877,7 +5077,7 @@ CREATE TABLE [dbo].[FeesDiscountCategoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[GenderMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[GenderMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1899,7 +5099,7 @@ CREATE TABLE [dbo].[GenderMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[GradeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[GradeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1924,7 +5124,7 @@ CREATE TABLE [dbo].[GradeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HolidayClassDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[HolidayClassDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1949,7 +5149,7 @@ CREATE TABLE [dbo].[HolidayClassDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HolidayDeptDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[HolidayDeptDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1973,7 +5173,7 @@ CREATE TABLE [dbo].[HolidayDeptDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HolidayMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[HolidayMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2004,7 +5204,7 @@ CREATE TABLE [dbo].[HolidayMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HolidayTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[HolidayTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2029,7 +5229,7 @@ CREATE TABLE [dbo].[HolidayTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HouseMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[HouseMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2053,7 +5253,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[InventoryMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[InventoryMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2081,7 +5281,7 @@ CREATE TABLE [dbo].[InventoryMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ItemLocationMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ItemLocationMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2110,7 +5310,7 @@ CREATE TABLE [dbo].[ItemLocationMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ItemMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ItemMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2136,7 +5336,7 @@ CREATE TABLE [dbo].[ItemMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ItemTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ItemTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2161,7 +5361,7 @@ CREATE TABLE [dbo].[ItemTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LeaveStatusMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[LeaveStatusMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2186,7 +5386,7 @@ CREATE TABLE [dbo].[LeaveStatusMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LeaveTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[LeaveTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2215,7 +5415,7 @@ CREATE TABLE [dbo].[LeaveTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LocationMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[LocationMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2241,7 +5441,7 @@ CREATE TABLE [dbo].[LocationMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MaritalStatus]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[MaritalStatus]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2265,7 +5465,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MarksGradeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[MarksGradeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2293,7 +5493,7 @@ CREATE TABLE [dbo].[MarksGradeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NotificationReceiverMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[NotificationReceiverMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2318,7 +5518,7 @@ CREATE TABLE [dbo].[NotificationReceiverMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ParentMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ParentMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2367,7 +5567,7 @@ CREATE TABLE [dbo].[ParentMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentModeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[PaymentModeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2392,7 +5592,7 @@ CREATE TABLE [dbo].[PaymentModeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentTypeMode]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[PaymentTypeMode]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2414,7 +5614,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Privileges]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[Privileges]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2437,7 +5637,7 @@ CREATE TABLE [dbo].[Privileges](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProfessionMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ProfessionMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2461,7 +5661,7 @@ CREATE TABLE [dbo].[ProfessionMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PublisherMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[PublisherMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2495,7 +5695,7 @@ CREATE TABLE [dbo].[PublisherMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[QualificationMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[QualificationMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2518,7 +5718,7 @@ CREATE TABLE [dbo].[QualificationMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RegistrationMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RegistrationMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2591,7 +5791,7 @@ CREATE TABLE [dbo].[RegistrationMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RelationTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RelationTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2613,7 +5813,7 @@ CREATE TABLE [dbo].[RelationTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ReligionMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ReligionMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2635,7 +5835,7 @@ CREATE TABLE [dbo].[ReligionMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RoleMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RoleMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2660,7 +5860,7 @@ CREATE TABLE [dbo].[RoleMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RouteDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RouteDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2687,7 +5887,7 @@ CREATE TABLE [dbo].[RouteDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RouteLocationMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RouteLocationMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2714,7 +5914,7 @@ CREATE TABLE [dbo].[RouteLocationMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RouteMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RouteMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2743,7 +5943,7 @@ CREATE TABLE [dbo].[RouteMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RouteStopDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[RouteStopDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2774,7 +5974,7 @@ CREATE TABLE [dbo].[RouteStopDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryCode]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryCode]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2798,7 +5998,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryDesigGradeDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryDesigGradeDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2824,7 +6024,7 @@ CREATE TABLE [dbo].[SalaryDesigGradeDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryDesigGradeDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryDesigGradeDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2850,7 +6050,7 @@ CREATE TABLE [dbo].[SalaryDesigGradeDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryHeadMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryHeadMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2878,7 +6078,7 @@ CREATE TABLE [dbo].[SalaryHeadMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryType]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryType]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2902,7 +6102,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SalaryTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SalaryTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2926,7 +6126,7 @@ CREATE TABLE [dbo].[SalaryTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ScholasticMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ScholasticMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2954,7 +6154,7 @@ CREATE TABLE [dbo].[ScholasticMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ScholasticUnitDetail]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[ScholasticUnitDetail]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2979,7 +6179,7 @@ CREATE TABLE [dbo].[ScholasticUnitDetail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SchoolBoard]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SchoolBoard]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3006,7 +6206,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SchoolContactMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SchoolContactMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3038,7 +6238,7 @@ CREATE TABLE [dbo].[SchoolContactMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SchoolMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SchoolMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3083,7 +6283,7 @@ CREATE TABLE [dbo].[SchoolMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SectionMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SectionMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3107,7 +6307,7 @@ CREATE TABLE [dbo].[SectionMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SessionMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SessionMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3132,7 +6332,7 @@ CREATE TABLE [dbo].[SessionMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SMSTask]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SMSTask]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3164,7 +6364,7 @@ CREATE TABLE [dbo].[SMSTask](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SMSTaskHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SMSTaskHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3196,7 +6396,7 @@ CREATE TABLE [dbo].[SMSTaskHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SMSTaskSchedule]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SMSTaskSchedule]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3226,7 +6426,7 @@ CREATE TABLE [dbo].[SMSTaskSchedule](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SMSTaskSmtpDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SMSTaskSmtpDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3258,7 +6458,7 @@ CREATE TABLE [dbo].[SMSTaskSmtpDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SMSTaskStatusMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SMSTaskStatusMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3282,7 +6482,7 @@ CREATE TABLE [dbo].[SMSTaskStatusMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SmtpDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SmtpDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3313,7 +6513,7 @@ CREATE TABLE [dbo].[SmtpDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StateMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StateMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3336,7 +6536,7 @@ CREATE TABLE [dbo].[StateMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentAchievements]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentAchievements]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3363,7 +6563,7 @@ CREATE TABLE [dbo].[StudentAchievements](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentAttendanceDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentAttendanceDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3395,7 +6595,7 @@ CREATE TABLE [dbo].[StudentAttendanceDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentCommentDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentCommentDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3428,7 +6628,7 @@ CREATE TABLE [dbo].[StudentCommentDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentCommentDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentCommentDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3462,7 +6662,7 @@ CREATE TABLE [dbo].[StudentCommentDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentFeeDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentFeeDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3497,7 +6697,7 @@ CREATE TABLE [dbo].[StudentFeeDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentFeeDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentFeeDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3533,7 +6733,7 @@ CREATE TABLE [dbo].[StudentFeeDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentGradeDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentGradeDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3570,7 +6770,7 @@ CREATE TABLE [dbo].[StudentGradeDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentGradeDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentGradeDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3609,7 +6809,7 @@ CREATE TABLE [dbo].[StudentGradeDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentMarksDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentMarksDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3645,7 +6845,7 @@ CREATE TABLE [dbo].[StudentMarksDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentMarksDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentMarksDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3682,7 +6882,7 @@ CREATE TABLE [dbo].[StudentMarksDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3757,7 +6957,7 @@ CREATE TABLE [dbo].[StudentMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentMasterHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentMasterHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3832,7 +7032,7 @@ CREATE TABLE [dbo].[StudentMasterHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentReportCardDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentReportCardDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3872,7 +7072,7 @@ CREATE TABLE [dbo].[StudentReportCardDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentReportCardDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentReportCardDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3912,7 +7112,7 @@ CREATE TABLE [dbo].[StudentReportCardDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentReportCardMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentReportCardMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3942,7 +7142,7 @@ CREATE TABLE [dbo].[StudentReportCardMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentReportCardMasterHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[StudentReportCardMasterHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3973,7 +7173,7 @@ CREATE TABLE [dbo].[StudentReportCardMasterHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SubjectCategoryDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SubjectCategoryDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4001,7 +7201,7 @@ CREATE TABLE [dbo].[SubjectCategoryDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SubjectCategoryDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SubjectCategoryDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4030,7 +7230,7 @@ CREATE TABLE [dbo].[SubjectCategoryDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SubjectMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SubjectMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4055,7 +7255,7 @@ CREATE TABLE [dbo].[SubjectMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SupplierMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SupplierMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4089,7 +7289,7 @@ CREATE TABLE [dbo].[SupplierMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SystemParameters]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[SystemParameters]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4115,7 +7315,7 @@ CREATE TABLE [dbo].[SystemParameters](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherClassDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherClassDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4142,7 +7342,7 @@ CREATE TABLE [dbo].[TeacherClassDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherDocumentDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherDocumentDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4169,7 +7369,7 @@ CREATE TABLE [dbo].[TeacherDocumentDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4211,7 +7411,7 @@ CREATE TABLE [dbo].[TeacherMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherQualificationDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherQualificationDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4236,7 +7436,7 @@ CREATE TABLE [dbo].[TeacherQualificationDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherSectionDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherSectionDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4264,7 +7464,7 @@ CREATE TABLE [dbo].[TeacherSectionDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeacherSubjectDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TeacherSubjectDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4290,7 +7490,7 @@ CREATE TABLE [dbo].[TeacherSubjectDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableClassPeriodDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableClassPeriodDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4319,7 +7519,7 @@ CREATE TABLE [dbo].[TimeTableClassPeriodDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableClassPeriodDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableClassPeriodDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4348,7 +7548,7 @@ CREATE TABLE [dbo].[TimeTableClassPeriodDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4378,7 +7578,7 @@ CREATE TABLE [dbo].[TimeTableDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTablePeriodMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTablePeriodMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4406,7 +7606,7 @@ CREATE TABLE [dbo].[TimeTablePeriodMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableSessions]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableSessions]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4431,7 +7631,7 @@ CREATE TABLE [dbo].[TimeTableSessions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableSetupDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableSetupDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4464,7 +7664,7 @@ CREATE TABLE [dbo].[TimeTableSetupDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableSetupDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableSetupDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4497,7 +7697,7 @@ CREATE TABLE [dbo].[TimeTableSetupDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableSubstitutionDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableSubstitutionDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4529,7 +7729,7 @@ CREATE TABLE [dbo].[TimeTableSubstitutionDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TimeTableSubstitutionDetailsHistory]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[TimeTableSubstitutionDetailsHistory]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4561,7 +7761,7 @@ CREATE TABLE [dbo].[TimeTableSubstitutionDetailsHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[UserDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4592,7 +7792,7 @@ CREATE TABLE [dbo].[UserDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VehicleExpenseDetails]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VehicleExpenseDetails]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4621,7 +7821,7 @@ CREATE TABLE [dbo].[VehicleExpenseDetails](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VehicleMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VehicleMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4652,7 +7852,7 @@ CREATE TABLE [dbo].[VehicleMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VehicleTypeMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VehicleTypeMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4676,7 +7876,7 @@ CREATE TABLE [dbo].[VehicleTypeMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VendorMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VendorMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4710,7 +7910,7 @@ CREATE TABLE [dbo].[VendorMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VisitorMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VisitorMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4746,7 +7946,7 @@ CREATE TABLE [dbo].[VisitorMaster](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[VoucherMaster]    Script Date: 09-11-2025 15:40:42 ******/
+/****** Object:  Table [dbo].[VoucherMaster]    Script Date: 10-11-2025 00:15:30 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -21568,7 +24768,7 @@ INSERT [dbo].[UserDetails] ([Id], [UserName], [UserPassword], [FirstName], [Last
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_AuditType_Name]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  Index [UQ_AuditType_Name]    Script Date: 10-11-2025 00:15:33 ******/
 ALTER TABLE [dbo].[AuditType] ADD  CONSTRAINT [UQ_AuditType_Name] UNIQUE NONCLUSTERED 
 (
 	[Name] ASC
@@ -21576,7 +24776,7 @@ ALTER TABLE [dbo].[AuditType] ADD  CONSTRAINT [UQ_AuditType_Name] UNIQUE NONCLUS
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_BookMaster_ISBNNumber]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  Index [UQ_BookMaster_ISBNNumber]    Script Date: 10-11-2025 00:15:33 ******/
 ALTER TABLE [dbo].[BookMaster] ADD  CONSTRAINT [UQ_BookMaster_ISBNNumber] UNIQUE NONCLUSTERED 
 (
 	[ISBNNumber] ASC
@@ -21584,7 +24784,7 @@ ALTER TABLE [dbo].[BookMaster] ADD  CONSTRAINT [UQ_BookMaster_ISBNNumber] UNIQUE
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UK_UserDetails_UserName]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  Index [UK_UserDetails_UserName]    Script Date: 10-11-2025 00:15:33 ******/
 ALTER TABLE [dbo].[UserDetails] ADD  CONSTRAINT [UK_UserDetails_UserName] UNIQUE NONCLUSTERED 
 (
 	[UserName] ASC
@@ -21592,7 +24792,7 @@ ALTER TABLE [dbo].[UserDetails] ADD  CONSTRAINT [UK_UserDetails_UserName] UNIQUE
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_UserDetails_EmailAddress]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  Index [UQ_UserDetails_EmailAddress]    Script Date: 10-11-2025 00:15:33 ******/
 ALTER TABLE [dbo].[UserDetails] ADD  CONSTRAINT [UQ_UserDetails_EmailAddress] UNIQUE NONCLUSTERED 
 (
 	[EmailAddress] ASC
@@ -21600,7 +24800,7 @@ ALTER TABLE [dbo].[UserDetails] ADD  CONSTRAINT [UQ_UserDetails_EmailAddress] UN
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ_UserDetails_UserName]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  Index [UQ_UserDetails_UserName]    Script Date: 10-11-2025 00:15:33 ******/
 ALTER TABLE [dbo].[UserDetails] ADD  CONSTRAINT [UQ_UserDetails_UserName] UNIQUE NONCLUSTERED 
 (
 	[UserName] ASC
@@ -22489,6 +25689,36 @@ ALTER TABLE [dbo].[DriverMaster]  WITH CHECK ADD  CONSTRAINT [FK_DriverMaster_St
 REFERENCES [dbo].[StateMaster] ([Id])
 GO
 ALTER TABLE [dbo].[DriverMaster] CHECK CONSTRAINT [FK_DriverMaster_StateMaster]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_CompanyId] FOREIGN KEY([CompanyId])
+REFERENCES [dbo].[CompanyMaster] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_CompanyId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[UserDetails] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_CreatedBy]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_DriverId] FOREIGN KEY([DriverId])
+REFERENCES [dbo].[DriverMaster] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_DriverId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[UserDetails] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_ModifiedBy]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_QualificationId] FOREIGN KEY([QualificationId])
+REFERENCES [dbo].[QualificationMaster] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_QualificationId]
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails]  WITH CHECK ADD  CONSTRAINT [FK_DriverQualificationDetails_SchoolId] FOREIGN KEY([SchoolId])
+REFERENCES [dbo].[SchoolMaster] ([Id])
+GO
+ALTER TABLE [dbo].[DriverQualificationDetails] CHECK CONSTRAINT [FK_DriverQualificationDetails_SchoolId]
 GO
 ALTER TABLE [dbo].[EmpAttendanceDetails]  WITH CHECK ADD  CONSTRAINT [FK_EmpAttendanceDetails_AttendenceLeaveTypeId] FOREIGN KEY([AttendenceLeaveTypeId])
 REFERENCES [dbo].[LeaveTypeMaster] ([Id])
@@ -26268,7 +29498,7 @@ ALTER TABLE [dbo].[StudentFeeDetails]  WITH CHECK ADD  CONSTRAINT [CK_StudentFee
 GO
 ALTER TABLE [dbo].[StudentFeeDetails] CHECK CONSTRAINT [CK_StudentFeeDetails_Amount]
 GO
-/****** Object:  StoredProcedure [dbo].[AddUserDetails]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[AddUserDetails]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26301,7 +29531,7 @@ BEGIN
     
 END
 GO
-/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26370,7 +29600,7 @@ BEGIN
     END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[BloodGroup_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[BloodGroup_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26384,7 +29614,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Category_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Category_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26400,7 +29630,7 @@ BEGIN
     ORDER BY c.[Name];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ChangePassword]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ChangePassword]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26431,7 +29661,7 @@ BEGIN
     RETURN 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[City_GetByState]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[City_GetByState]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26449,7 +29679,7 @@ BEGIN
     ORDER BY c.[CityName];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Class_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Class_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26502,7 +29732,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Class_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Class_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26520,7 +29750,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Class_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Class_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26550,7 +29780,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Class_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Class_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26581,7 +29811,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Class_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Class_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26612,7 +29842,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ClassRoom_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26659,7 +29889,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ClassRoom_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26677,7 +29907,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ClassRoom_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ClassRoom_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26704,7 +29934,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ClassRoom_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ClassRoom_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26732,7 +29962,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ClassRoom_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[ClassRoom_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26759,7 +29989,156 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerDocumentDetails_Create]
+    @CleanerId UNIQUEIDENTIFIER,
+    @Name NVARCHAR(200),
+    @Description NVARCHAR(500),
+    @FileName NVARCHAR(500),
+    @IsActive BIT,
+    @CompanyId UNIQUEIDENTIFIER,
+    @SchoolId UNIQUEIDENTIFIER,
+    @CreatedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(200)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO dbo.CleanerDocumentDetails
+    (
+        Id, CleanerId, Name, Description, FileName,
+        CompanyId, SchoolId, IsActive, IsDeleted,
+        CreatedBy, CreatedDate, Status, StatusMessage
+    )
+    VALUES
+    (
+        @NewId, @CleanerId, ISNULL(@Name, ''), ISNULL(@Description, ''), ISNULL(@FileName, ''),
+        @CompanyId, @SchoolId, ISNULL(@IsActive, 0), 0,
+        @CreatedBy, SYSUTCDATETIME(), ISNULL(@Status, ''), ISNULL(@StatusMessage, '')
+    );
+    SELECT Id = @NewId;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerDocumentDetails_Delete]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.CleanerDocumentDetails
+    SET IsDeleted = 1,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerDocumentDetails_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           CleanerId,
+           Name,
+           Description,
+           FileName,
+           CompanyId,
+           SchoolId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.CleanerDocumentDetails WITH (NOLOCK)
+    WHERE ISNULL(IsDeleted, 0) = 0
+    ORDER BY CreatedDate DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerDocumentDetails_GetById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           CleanerId,
+           Name,
+           Description,
+           FileName,
+           CompanyId,
+           SchoolId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.CleanerDocumentDetails WITH (NOLOCK)
+    WHERE Id = @Id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerDocumentDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerDocumentDetails_Update]
+    @Id UNIQUEIDENTIFIER,
+    @CleanerId UNIQUEIDENTIFIER,
+    @Name NVARCHAR(200),
+    @Description NVARCHAR(500),
+    @FileName NVARCHAR(500),
+    @IsActive BIT,
+    @SchoolId UNIQUEIDENTIFIER,
+    @ModifiedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.CleanerDocumentDetails
+    SET CleanerId = @CleanerId,
+        Name = ISNULL(@Name, ''),
+        Description = ISNULL(@Description, ''),
+        FileName = ISNULL(@FileName, ''),
+        IsActive = ISNULL(@IsActive, 0),
+        SchoolId = @SchoolId,
+        ModifiedBy = @ModifiedBy,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26823,7 +30202,7 @@ BEGIN
     SELECT @Id AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26842,7 +30221,7 @@ BEGIN
     RETURN CASE WHEN @@ROWCOUNT = 1 THEN 1 ELSE 0 END;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26872,7 +30251,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26903,7 +30282,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetByKey]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_GetByKey]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26939,7 +30318,7 @@ BEGIN
       AND (IsDeleted = 0 OR IsDeleted IS NULL);
 END
 GO
-/****** Object:  StoredProcedure [dbo].[CleanerMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -26976,7 +30355,146 @@ BEGIN
     RETURN CASE WHEN @@ROWCOUNT = 1 THEN 1 ELSE 0 END;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Company_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerQualificationDetails_Create]
+    @CleanerId UNIQUEIDENTIFIER,
+    @QualificationId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @CompanyId UNIQUEIDENTIFIER,
+    @SchoolId UNIQUEIDENTIFIER,
+    @CreatedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(200)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO dbo.CleanerQualificationDetails
+    (
+        Id, CleanerId, QualificationId,
+        CompanyId, SchoolId, IsActive, IsDeleted,
+        CreatedBy, CreatedDate, Status, StatusMessage
+    )
+    VALUES
+    (
+        @NewId, @CleanerId, @QualificationId,
+        @CompanyId, @SchoolId, ISNULL(@IsActive, 0), 0,
+        @CreatedBy, SYSUTCDATETIME(), ISNULL(@Status, ''), ISNULL(@StatusMessage, '')
+    );
+    SELECT Id = @NewId;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerQualificationDetails_Delete]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.CleanerQualificationDetails
+    SET IsDeleted = 1,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerQualificationDetails_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           CleanerId,
+           QualificationId,
+           SchoolId,
+           CompanyId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.CleanerQualificationDetails WITH (NOLOCK)
+    WHERE ISNULL(IsDeleted, 0) = 0
+    ORDER BY CreatedDate DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerQualificationDetails_GetById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           CleanerId,
+           QualificationId,
+           SchoolId,
+           CompanyId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.CleanerQualificationDetails WITH (NOLOCK)
+    WHERE Id = @Id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CleanerQualificationDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[CleanerQualificationDetails_Update]
+    @Id UNIQUEIDENTIFIER,
+    @CleanerId UNIQUEIDENTIFIER,
+    @QualificationId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @SchoolId UNIQUEIDENTIFIER,
+    @ModifiedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.CleanerQualificationDetails
+    SET CleanerId = @CleanerId,
+        QualificationId = @QualificationId,
+        IsActive = ISNULL(@IsActive, 0),
+        SchoolId = @SchoolId,
+        ModifiedBy = @ModifiedBy,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Company_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27045,7 +30563,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Company_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Company_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27070,7 +30588,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Company_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Company_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27105,7 +30623,7 @@ BEGIN
     ORDER BY CompanyName;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Company_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Company_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27140,7 +30658,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Company_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Company_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27188,7 +30706,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Country_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Country_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27204,7 +30722,7 @@ BEGIN
     ORDER BY c.[CountryName];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteUserDetails]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeleteUserDetails]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27229,7 +30747,7 @@ BEGIN
     
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Department_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Department_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27249,7 +30767,7 @@ BEGIN
     ORDER BY DeptName;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27283,7 +30801,7 @@ BEGIN
     RETURN 1
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27302,7 +30820,7 @@ BEGIN
     RETURN 1
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27314,7 +30832,7 @@ BEGIN
     SELECT * FROM DeptDesigDetails WHERE IsDeleted = 0
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27328,7 +30846,7 @@ BEGIN
     SELECT * FROM DeptDesigDetails WHERE Id = @Id AND IsDeleted = 0
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptDesigDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27362,7 +30880,7 @@ BEGIN
     RETURN 1
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_BulkInsert]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_BulkInsert]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27396,7 +30914,7 @@ BEGIN
 END
 
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27429,7 +30947,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27453,7 +30971,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27471,7 +30989,7 @@ BEGIN
     ORDER BY d.DeptName
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27490,7 +31008,7 @@ BEGIN
     WHERE d.Id = @Id AND d.IsDeleted = 0
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_GetBySchool]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_GetBySchool]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27519,7 +31037,7 @@ BEGIN
     ORDER BY DeptName;
 END;
 GO
-/****** Object:  StoredProcedure [dbo].[DeptMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DeptMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27551,7 +31069,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DesigMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27609,7 +31127,7 @@ BEGIN
     SELECT @Id AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DesigMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27630,7 +31148,7 @@ BEGIN
         Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DesigMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DesigMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27663,7 +31181,7 @@ BEGIN
         Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DesigMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DesigMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27697,7 +31215,7 @@ BEGIN
         AND IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DesigMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DesigMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27738,7 +31256,7 @@ BEGIN
         Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Designation_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Designation_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27754,7 +31272,156 @@ BEGIN
     ORDER BY d.[Name];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverDocumentDetails_Create]
+    @DriverId UNIQUEIDENTIFIER,
+    @Name NVARCHAR(200),
+    @Description NVARCHAR(500),
+    @FileName NVARCHAR(500),
+    @IsActive BIT,
+    @CompanyId UNIQUEIDENTIFIER,
+    @SchoolId UNIQUEIDENTIFIER,
+    @CreatedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(200)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO dbo.DriverDocumentDetails
+    (
+        Id, DriverId, Name, Description, FileName,
+        CompanyId, SchoolId, IsActive, IsDeleted,
+        CreatedBy, CreatedDate, Status, StatusMessage
+    )
+    VALUES
+    (
+        @NewId, @DriverId, ISNULL(@Name, ''), ISNULL(@Description, ''), ISNULL(@FileName, ''),
+        @CompanyId, @SchoolId, ISNULL(@IsActive, 0), 0,
+        @CreatedBy, SYSUTCDATETIME(), ISNULL(@Status, ''), ISNULL(@StatusMessage, '')
+    );
+    SELECT Id = @NewId;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverDocumentDetails_Delete]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.DriverDocumentDetails
+    SET IsDeleted = 1,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverDocumentDetails_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           DriverId,
+           Name,
+           Description,
+           FileName,
+           CompanyId,
+           SchoolId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.DriverDocumentDetails WITH (NOLOCK)
+    WHERE ISNULL(IsDeleted, 0) = 0
+    ORDER BY CreatedDate DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverDocumentDetails_GetById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           DriverId,
+           Name,
+           Description,
+           FileName,
+           CompanyId,
+           SchoolId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.DriverDocumentDetails WITH (NOLOCK)
+    WHERE Id = @Id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverDocumentDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverDocumentDetails_Update]
+    @Id UNIQUEIDENTIFIER,
+    @DriverId UNIQUEIDENTIFIER,
+    @Name NVARCHAR(200),
+    @Description NVARCHAR(500),
+    @FileName NVARCHAR(500),
+    @IsActive BIT,
+    @SchoolId UNIQUEIDENTIFIER,
+    @ModifiedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.DriverDocumentDetails
+    SET DriverId = @DriverId,
+        Name = ISNULL(@Name, ''),
+        Description = ISNULL(@Description, ''),
+        FileName = ISNULL(@FileName, ''),
+        IsActive = ISNULL(@IsActive, 0),
+        SchoolId = @SchoolId,
+        ModifiedBy = @ModifiedBy,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27819,7 +31486,7 @@ BEGIN
     SELECT @Id AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27838,7 +31505,7 @@ BEGIN
     RETURN CASE WHEN @@ROWCOUNT = 1 THEN 1 ELSE 0 END;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27885,7 +31552,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27933,7 +31600,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_GetByKey]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverMaster_GetByKey]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27956,7 +31623,7 @@ BEGIN
       AND (IsDeleted = 0 OR IsDeleted IS NULL);
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DriverMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28027,7 +31694,146 @@ BEGIN
     RETURN CASE WHEN @@ROWCOUNT = 1 THEN 1 ELSE 0 END;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Emp_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverQualificationDetails_Create]
+    @DriverId UNIQUEIDENTIFIER,
+    @QualificationId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @CompanyId UNIQUEIDENTIFIER,
+    @SchoolId UNIQUEIDENTIFIER,
+    @CreatedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(200)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO dbo.DriverQualificationDetails
+    (
+        Id, DriverId, QualificationId,
+        CompanyId, SchoolId, IsActive, IsDeleted,
+        CreatedBy, CreatedDate, Status, StatusMessage
+    )
+    VALUES
+    (
+        @NewId, @DriverId, @QualificationId,
+        @CompanyId, @SchoolId, ISNULL(@IsActive, 0), 0,
+        @CreatedBy, SYSUTCDATETIME(), ISNULL(@Status, ''), ISNULL(@StatusMessage, '')
+    );
+    SELECT Id = @NewId;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverQualificationDetails_Delete]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.DriverQualificationDetails
+    SET IsDeleted = 1,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverQualificationDetails_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           DriverId,
+           QualificationId,
+           SchoolId,
+           CompanyId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.DriverQualificationDetails WITH (NOLOCK)
+    WHERE ISNULL(IsDeleted, 0) = 0
+    ORDER BY CreatedDate DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverQualificationDetails_GetById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT Id,
+           DriverId,
+           QualificationId,
+           SchoolId,
+           CompanyId,
+           IsActive,
+           IsDeleted,
+           CreatedBy,
+           CreatedDate,
+           ModifiedBy,
+           ModifiedDate,
+           Status,
+           StatusMessage
+    FROM dbo.DriverQualificationDetails WITH (NOLOCK)
+    WHERE Id = @Id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[DriverQualificationDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROCEDURE [dbo].[DriverQualificationDetails_Update]
+    @Id UNIQUEIDENTIFIER,
+    @DriverId UNIQUEIDENTIFIER,
+    @QualificationId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @SchoolId UNIQUEIDENTIFIER,
+    @ModifiedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.DriverQualificationDetails
+    SET DriverId = @DriverId,
+        QualificationId = @QualificationId,
+        IsActive = ISNULL(@IsActive, 0),
+        SchoolId = @SchoolId,
+        ModifiedBy = @ModifiedBy,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    IF @@ROWCOUNT = 1 RETURN 1;
+    RETURN 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Emp_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28238,7 +32044,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Emp_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Emp_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28256,7 +32062,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Emp_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Emp_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28337,7 +32143,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Emp_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Emp_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28419,7 +32225,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Emp_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Emp_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28556,7 +32362,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmployeeType_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmployeeType_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28577,7 +32383,7 @@ BEGIN
     ORDER BY Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28627,7 +32433,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28646,7 +32452,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28674,7 +32480,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28703,7 +32509,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[EmpTypeMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28730,7 +32536,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Gender_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Gender_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28749,7 +32555,7 @@ BEGIN
         IsActive = 1
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetAllUserDetails]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetAllUserDetails]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28777,7 +32583,7 @@ FROM            UserDetails  LEFT JOIN
                          SchoolMaster ON UserDetails.SchoolId = SchoolMaster.Id 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetSundaysbyyearandmonth]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetSundaysbyyearandmonth]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28841,7 +32647,7 @@ end
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetUserFullName]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetUserFullName]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28862,7 +32668,7 @@ BEGIN
     
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetUserNameById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetUserNameById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28891,7 +32697,7 @@ FROM            UserDetails  LEFT JOIN
     
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetUserPrivileges]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetUserPrivileges]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28910,7 +32716,7 @@ BEGIN
    where UserDetails.UserName = @userName
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetUserRoleName]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[GetUserRoleName]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28928,7 +32734,7 @@ BEGIN
    where UserName = @userName
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Grade_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Grade_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28949,7 +32755,7 @@ BEGIN
     ORDER BY Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29017,7 +32823,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29035,7 +32841,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29069,7 +32875,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29104,7 +32910,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29145,7 +32951,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29195,7 +33001,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29214,7 +33020,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29242,7 +33048,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29271,7 +33077,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[HolidayTypeMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29298,7 +33104,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[IsUserExist]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[IsUserExist]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29316,7 +33122,7 @@ BEGIN
    where UserName = @userName
 END
 GO
-/****** Object:  StoredProcedure [dbo].[MaritalStatus_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[MaritalStatus_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29335,7 +33141,7 @@ BEGIN
     ORDER BY Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Parent_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Parent_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29403,7 +33209,7 @@ BEGIN
     SELECT @NewId AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Parent_GetByStudentId]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Parent_GetByStudentId]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29445,7 +33251,7 @@ BEGIN
         AND IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[PaymentMode_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[PaymentMode_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29466,7 +33272,7 @@ BEGIN
     ORDER BY Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Qualification_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Qualification_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29480,7 +33286,7 @@ BEGIN
     ORDER BY q.[QualificationName];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RelationType_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RelationType_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29496,7 +33302,7 @@ BEGIN
     ORDER BY r.[Name];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Religion_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Religion_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29510,7 +33316,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RoleMaster_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29579,7 +33385,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RoleMaster_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29613,7 +33419,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RoleMaster_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RoleMaster_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29641,7 +33447,7 @@ BEGIN
         Name;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RoleMaster_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RoleMaster_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29669,7 +33475,7 @@ BEGIN
         AND IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RoleMaster_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[RoleMaster_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29715,7 +33521,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[School_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[School_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29790,7 +33596,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[School_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[School_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29813,7 +33619,7 @@ BEGIN
     RETURN 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[School_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[School_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29849,7 +33655,48 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[School_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[School_GetByCompany]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[School_GetByCompany]
+    @CompanyId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        Id,
+        CompanyId,
+        Name,           -- or SchoolName as Name
+        Description,
+        Email,
+        Address1,
+        Address2,
+        CityId,
+        StateId,
+        CountryId,
+        ZipCode,
+        Phone,
+        EstablishmentYear,
+        Mobile,
+        JudistrictionCountryId,
+        JudistrictionStateId,
+        JudistrictionCityId,
+        IsActive,
+        IsDeleted,
+        CreatedBy,
+        CreatedDate,
+        ModifiedBy,
+        ModifiedDate,
+        Status,
+        StatusMessage
+    FROM SchoolMaster
+    WHERE CompanyId = @CompanyId AND IsDeleted = 0;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[School_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29889,7 +33736,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[School_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[School_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29937,7 +33784,7 @@ BEGIN
     RETURN 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SchoolContact_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30008,7 +33855,7 @@ BEGIN
     SELECT @NewId AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SchoolContact_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30031,7 +33878,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SchoolContact_GetAll]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[SchoolContact_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30075,7 +33922,7 @@ BEGIN
     WHERE sc.IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SchoolContact_GetById]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[SchoolContact_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30111,7 +33958,7 @@ BEGIN
     WHERE Id = @Id AND IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SchoolContact_Update]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[SchoolContact_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30160,7 +34007,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_Create]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Section_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30207,7 +34054,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_Delete]    Script Date: 09-11-2025 15:40:45 ******/
+/****** Object:  StoredProcedure [dbo].[Section_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30225,7 +34072,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Section_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30252,7 +34099,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_GetByClassId]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Section_GetByClassId]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30283,7 +34130,7 @@ BEGIN
         AND S.IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Section_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30311,7 +34158,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Section_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Section_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30338,7 +34185,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30395,7 +34242,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30440,7 +34287,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30470,7 +34317,7 @@ BEGIN
         PrivilegeName;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30500,7 +34347,7 @@ BEGIN
         AND IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetByRoleId]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_GetByRoleId]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30528,7 +34375,7 @@ BEGIN
         p.PrivilegeName;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_IsInUse]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_IsInUse]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30549,7 +34396,7 @@ BEGIN
     SELECT @IsInUse AS IsInUse;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Privilege_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Privilege_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30599,7 +34446,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_GetByRoleId]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_GetByRoleId]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30626,7 +34473,7 @@ BEGIN
         AND p.IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_RolePrivilege_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30690,7 +34537,7 @@ BEGIN
     END CATCH;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[State_GetByCountry]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[State_GetByCountry]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30708,7 +34555,7 @@ BEGIN
     ORDER BY s.[StateName];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Student_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Student_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30833,7 +34680,7 @@ BEGIN
     SELECT @NewId AS Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Student_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Student_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30863,7 +34710,7 @@ BEGIN
     RETURN @Result;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Student_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Student_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30897,7 +34744,7 @@ BEGIN
         IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Student_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Student_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30933,7 +34780,7 @@ FROM            StudentMaster LEFT JOIN
         AND StudentMaster.IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Student_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Student_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31100,7 +34947,7 @@ BEGIN
     RETURN @Result;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Subject_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Subject_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31150,7 +34997,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Subject_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Subject_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31168,7 +35015,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Subject_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Subject_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31196,7 +35043,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Subject_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Subject_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31225,7 +35072,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Subject_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Subject_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31254,7 +35101,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SubjectCategory_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31329,7 +35176,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SubjectCategory_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31347,7 +35194,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31378,7 +35225,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31410,7 +35257,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SubjectCategory_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SubjectCategory_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31451,7 +35298,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SystemParameters_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31499,7 +35346,7 @@ BEGIN
     SELECT @NewId AS [Id];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SystemParameters_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31519,7 +35366,7 @@ BEGIN
     RETURN 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SystemParameters_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SystemParameters_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31548,7 +35395,7 @@ BEGIN
     ORDER BY [ParameterName];
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SystemParameters_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SystemParameters_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31577,7 +35424,7 @@ BEGIN
     WHERE [Id] = @Id AND ISNULL([IsDeleted], 0) = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SystemParameters_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[SystemParameters_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31611,7 +35458,7 @@ BEGIN
     RETURN 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Teacher_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Teacher_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31766,7 +35613,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Teacher_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Teacher_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31793,7 +35640,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Teacher_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Teacher_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31838,7 +35685,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Teacher_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Teacher_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -31884,7 +35731,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[Teacher_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[Teacher_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32004,7 +35851,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Create]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32060,7 +35907,7 @@ BEGIN
     SELECT Id = @NewId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Delete]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32078,7 +35925,7 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetAll]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32108,7 +35955,7 @@ BEGIN
     WHERE IsDeleted = 0;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetById]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32139,7 +35986,7 @@ BEGIN
     WHERE Id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Update]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherClassDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32172,7 +36019,168 @@ BEGIN
     RETURN 1;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateUserDetails]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Create]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[TeacherSubjectDetails_Create]
+    @TeacherId UNIQUEIDENTIFIER,
+    @SubjectId UNIQUEIDENTIFIER,
+    @ClassId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @CompanyId UNIQUEIDENTIFIER,
+    @SchoolId UNIQUEIDENTIFIER,
+    @CreatedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
+
+    INSERT INTO [dbo].[TeacherSubjectDetails]
+    (
+        Id,
+        TeacherId,
+        SubjectId,
+        ClassId,
+        CompanyId,
+        SchoolId,
+        IsActive,
+        IsDeleted,
+        CreatedBy,
+        CreatedDate,
+        [Status],
+        StatusMessage
+    )
+    VALUES
+    (
+        @NewId,
+        @TeacherId,
+        @SubjectId,
+        @ClassId,
+        @CompanyId,
+        @SchoolId,
+        @IsActive,
+        0,
+        @CreatedBy,
+        SYSUTCDATETIME(),
+        N'',
+        N''
+    );
+
+    SELECT Id = @NewId;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Delete]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[TeacherSubjectDetails_Delete]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE [dbo].[TeacherSubjectDetails]
+    SET IsDeleted = 1
+    WHERE Id = @Id;
+
+    RETURN 1;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_GetAll]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[TeacherSubjectDetails_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        Id,
+        TeacherId,
+        SubjectId,
+        ClassId,
+        CompanyId,
+        SchoolId,
+        IsActive,
+        IsDeleted,
+        CreatedBy,
+        CreatedDate,
+        ModifiedBy,
+        ModifiedDate,
+        [Status],
+        StatusMessage
+    FROM [dbo].[TeacherSubjectDetails]
+    WHERE IsDeleted = 0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_GetById]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[TeacherSubjectDetails_GetById]
+    @Id UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        Id,
+        TeacherId,
+        SubjectId,
+        ClassId,
+        CompanyId,
+        SchoolId,
+        IsActive,
+        IsDeleted,
+        CreatedBy,
+        CreatedDate,
+        ModifiedBy,
+        ModifiedDate,
+        [Status],
+        StatusMessage
+    FROM [dbo].[TeacherSubjectDetails]
+    WHERE Id = @Id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TeacherSubjectDetails_Update]    Script Date: 10-11-2025 00:15:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[TeacherSubjectDetails_Update]
+    @Id UNIQUEIDENTIFIER,
+    @TeacherId UNIQUEIDENTIFIER,
+    @SubjectId UNIQUEIDENTIFIER,
+    @ClassId UNIQUEIDENTIFIER,
+    @IsActive BIT,
+    @SchoolId UNIQUEIDENTIFIER,
+    @ModifiedBy UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE [dbo].[TeacherSubjectDetails]
+    SET 
+        TeacherId = @TeacherId,
+        SubjectId = @SubjectId,
+        ClassId = @ClassId,
+        IsActive = @IsActive,
+        SchoolId = @SchoolId,
+        ModifiedBy = @ModifiedBy,
+        ModifiedDate = SYSUTCDATETIME()
+    WHERE Id = @Id;
+
+    RETURN 1;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateUserDetails]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32222,7 +36230,7 @@ BEGIN
     
 END
 GO
-/****** Object:  StoredProcedure [dbo].[usp_select_SMSTaskSchedule]    Script Date: 09-11-2025 15:40:46 ******/
+/****** Object:  StoredProcedure [dbo].[usp_select_SMSTaskSchedule]    Script Date: 10-11-2025 00:15:33 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
