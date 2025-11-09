@@ -4,6 +4,12 @@
 }
 <h2>Create Teacher</h2>
 
+<style>
+	body { overflow: hidden; }
+	#tab-master .form-group { width: 50%; display: inline-block; vertical-align: top; box-sizing: border-box; padding-right: 12px; }
+	#tab-master .form-group.form-check { padding-top: 8px; }
+</style>
+
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 	<ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-master" role="tab">Teacher Master</a></li>
