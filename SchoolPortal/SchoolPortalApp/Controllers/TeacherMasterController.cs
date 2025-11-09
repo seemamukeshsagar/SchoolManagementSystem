@@ -3,9 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolPortal.Entities.Models;
-using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
@@ -24,12 +22,6 @@ namespace SchoolPortalApp.Controllers
 			_logger = logger;
 		}
 
-		private void PopulateDropdowns(TeacherViewModel vm)
-		{
-			var schools = _schoolService.GetAll();
-			vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
-		}
-
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
@@ -40,7 +32,7 @@ namespace SchoolPortalApp.Controllers
 			var result = list.Select(item =>
 			{
 				var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-				return new TeacherListItemViewModel
+				return new SchoolPortalApp.Models.TeacherListItemViewModel
 				{
 					Id = item.Id,
 					Name = string.Join(" ", new[] { item.FirstName, item.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))),
@@ -66,26 +58,30 @@ namespace SchoolPortalApp.Controllers
 		[Route("Create")]
 		public IActionResult Create()
 		{
-			var vm = new TeacherViewModel();
-			PopulateDropdowns(vm);
-			return View(vm);
+			var entity = new TeacherMaster
+			{
+				DOB = DateTime.UtcNow.Date,
+				IsActive = true,
+				IsDeleted = false,
+				Status = "INC",
+				StatusMessage = "In Process...."
+			};
+			return View(entity);
 		}
 
 		[HttpPost]
 		[Route("Create")]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(TeacherViewModel model)
+		public IActionResult Create(TeacherMaster model)
 		{
 			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
 			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
 			{
-				ModelState.Remove(nameof(TeacherViewModel.SchoolId));
 				model.SchoolId = schoolId;
 			}
 
 			if (!ModelState.IsValid)
 			{
-				PopulateDropdowns(model);
 				return View(model);
 			}
 
@@ -94,30 +90,33 @@ namespace SchoolPortalApp.Controllers
 			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create teacher.");
-				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			var entity = new TeacherMaster
-			{
-				Id = Guid.Empty,
-				FirstName = model.FirstName,
-				LastName = model.LastName ?? string.Empty,
-				DOB = model.DOB,
-				Email = model.Email ?? string.Empty,
-				Phone = model.Phone ?? string.Empty,
-				IsActive = model.IsActive,
-				CompanyId = companyId,
-				SchoolId = model.SchoolId,
-				CreatedBy = userId,
-				CreatedDate = DateTime.UtcNow
-			};
+			// Normalize optional strings to avoid nulls
+			model.Id = Guid.Empty;
+			model.FirstName = model.FirstName ?? string.Empty;
+			model.LastName = model.LastName ?? string.Empty;
+			model.Address = model.Address ?? string.Empty;
+			model.ZipCode = model.ZipCode ?? string.Empty;
+			model.Image = model.Image ?? string.Empty;
+			model.Phone = model.Phone ?? string.Empty;
+			model.MobilePhone = model.MobilePhone ?? string.Empty;
+			model.YearsOfExperience = model.YearsOfExperience ?? string.Empty;
+			model.PreviousSchool = model.PreviousSchool ?? string.Empty;
+			model.Salutation = model.Salutation ?? string.Empty;
+			model.Email = model.Email ?? string.Empty;
+			model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;
+			model.StatusMessage = string.IsNullOrWhiteSpace(model.StatusMessage) ? "In Process...." : model.StatusMessage;
+			model.CompanyId = companyId;
+			model.CreatedBy = userId;
+			model.CreatedDate = DateTime.UtcNow;
+			model.IsDeleted = model.IsDeleted;
 
-			var newId = _service.Create(entity);
+			var newId = _service.Create(model);
 			if (newId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Failed to create teacher.");
-				PopulateDropdowns(model);
 				return View(model);
 			}
 			return RedirectToAction("Details", new { id = newId });
@@ -129,38 +128,24 @@ namespace SchoolPortalApp.Controllers
 		{
 			var item = _service.GetById(id);
 			if (item == null) return NotFound();
-			var vm = new TeacherViewModel
-			{
-				Id = item.Id,
-				FirstName = item.FirstName,
-				LastName = item.LastName,
-				DOB = item.DOB,
-				Email = item.Email,
-				Phone = item.Phone,
-				IsActive = item.IsActive,
-				SchoolId = item.SchoolId
-			};
-			PopulateDropdowns(vm);
-			return View(vm);
+			return View(item);
 		}
 
 		[HttpPost]
 		[Route("Edit/{id}")]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit(Guid id, TeacherViewModel model)
+		public IActionResult Edit(Guid id, TeacherMaster model)
 		{
 			if (id != model.Id) return BadRequest();
 
 			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
 			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
 			{
-				ModelState.Remove(nameof(TeacherViewModel.SchoolId));
 				model.SchoolId = schoolIdFromSession;
 			}
 
 			if (!ModelState.IsValid)
 			{
-				PopulateDropdowns(model);
 				return View(model);
 			}
 
@@ -168,28 +153,29 @@ namespace SchoolPortalApp.Controllers
 			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update teacher.");
-				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			var entity = new TeacherMaster
-			{
-				Id = id,
-				FirstName = model.FirstName,
-				LastName = model.LastName ?? string.Empty,
-				DOB = model.DOB,
-				Email = model.Email ?? string.Empty,
-				Phone = model.Phone ?? string.Empty,
-				IsActive = model.IsActive,
-				SchoolId = model.SchoolId,
-				ModifiedBy = userId,
-				ModifiedDate = DateTime.UtcNow
-			};
+			// Normalize optional strings to avoid nulls
+			model.FirstName = model.FirstName ?? string.Empty;
+			model.LastName = model.LastName ?? string.Empty;
+			model.Address = model.Address ?? string.Empty;
+			model.ZipCode = model.ZipCode ?? string.Empty;
+			model.Image = model.Image ?? string.Empty;
+			model.Phone = model.Phone ?? string.Empty;
+			model.MobilePhone = model.MobilePhone ?? string.Empty;
+			model.YearsOfExperience = model.YearsOfExperience ?? string.Empty;
+			model.PreviousSchool = model.PreviousSchool ?? string.Empty;
+			model.Salutation = model.Salutation ?? string.Empty;
+			model.Email = model.Email ?? string.Empty;
+			model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;
+			model.StatusMessage = string.IsNullOrWhiteSpace(model.StatusMessage) ? "In Process...." : model.StatusMessage;
+			model.ModifiedBy = userId;
+			model.ModifiedDate = DateTime.UtcNow;
 
-			if (!_service.Update(entity))
+			if (!_service.Update(model))
 			{
 				ModelState.AddModelError(string.Empty, "Failed to update teacher.");
-				PopulateDropdowns(model);
 				return View(model);
 			}
 			return RedirectToAction("Details", new { id });

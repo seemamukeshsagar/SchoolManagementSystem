@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SchoolPortalApp.Models
@@ -84,6 +85,7 @@ namespace SchoolPortalApp.Models
         public List<SelectListItem> EmployeeCategories { get; set; } = new();
         public List<SelectListItem> Grades { get; set; } = new();
         public List<SelectListItem> BloodGroups { get; set; } = new();
+        public List<SelectListItem> MaritalStatuses { get; set; } = new();
 
         public List<SelectListItem> CurrentCountries { get; set; } = new();
         public List<SelectListItem> CurrentStates { get; set; } = new();
@@ -94,6 +96,10 @@ namespace SchoolPortalApp.Models
         public List<SelectListItem> PermanentCities { get; set; } = new();
 
         public List<SelectListItem> LicenceTypes { get; set; } = new();
+
+        // Uploads
+        public IFormFile? ImageFile { get; set; }
+        public IFormFile? LicenceImageFile { get; set; }
     }
 
     public class EmpListItemViewModel

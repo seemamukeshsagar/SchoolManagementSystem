@@ -388,6 +388,21 @@
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
 	<script>
+		var getDesignationsUrl = '@Url.Action("GetDesignationsByDepartment", "Emp")';
+		function loadDesignations(deptId, $desigSelect, selectedId) {
+			if (!deptId) {
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Select Designation --' })).prop('disabled', true); return;
+			}
+			$.get(getDesignationsUrl + '/' + deptId, function (items) {
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Select Designation --' }));
+				if (items && items.length) {
+					$.each(items, function (i, it) { $desigSelect.append($('<option>', { value: it.value, text: it.text })); }); if (selectedId) { $desigSelect.val(selectedId); } $desigSelect.prop('disabled', false);
+				} else { $desigSelect.prop('disabled', true); }
+			}).fail(function (xhr) {
+				console.error('Failed to load designations', xhr);
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Error loading designations --' })).prop('disabled', true);
+			});
+		}
 		function loadStates(countryId, $stateSelect, selectedId) {
 			if (!countryId) { $stateSelect.empty().append($('<option>', { value: '', text: '-- Select State --' })).prop('disabled', true); return; }
 			$.get('/StudentMaster/GetStatesByCountry/' + countryId, function (states) {
@@ -403,6 +418,17 @@
 			}).fail(function () { $citySelect.empty().append($('<option>', { value: '', text: '-- Error loading cities --' })); });
 		}
 		$(document).ready(function () {
+			var $dept = $('#DepartmentId');
+			var $desig = $('#DesignationId');
+			if (!$dept.val()) { $desig.prop('disabled', true); }
+			$dept.on('change', function () {
+				var deptId = $(this).val();
+				$desig.empty().append($('<option>', { value: '', text: '-- Select Designation --' }));
+				if (deptId) { loadDesignations(deptId, $desig); } else { $desig.prop('disabled', true); }
+			});
+			var initDept = $dept.val();
+			var initDesig = $desig.val();
+			if (initDept) { loadDesignations(initDept, $desig, initDesig); }
 			var $curCountry = $('#CurrentCountryId');
 			var $curState = $('#CurrentStateId');
 			var $curCity = $('#CurrentCityId');

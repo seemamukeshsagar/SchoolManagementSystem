@@ -1,0 +1,43 @@
+@model SchoolPortal.Entities.Models.DriverMaster
+@{
+    ViewData["Title"] = "Driver Details";
+}
+<h2>Driver Details</h2>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">First Name</dt>
+        <dd class="col-sm-9">@Model.FirstName</dd>
+        <dt class="col-sm-3">Last Name</dt>
+        <dd class="col-sm-9">@Model.LastName</dd>
+        <dt class="col-sm-3">Date Of Birth</dt>
+        <dd class="col-sm-9">@(Model.DateOfBirth?.ToString("yyyy-MM-dd"))</dd>
+        <dt class="col-sm-3">Father's Name</dt>
+        <dd class="col-sm-9">@Model.FathersName</dd>
+        <dt class="col-sm-3">Mother's Name</dt>
+        <dd class="col-sm-9">@Model.MothersName</dd>
+        <dt class="col-sm-3">Address 1</dt>
+        <dd class="col-sm-9">@Model.Address1</dd>
+        <dt class="col-sm-3">Address 2</dt>
+        <dd class="col-sm-9">@Model.Address2</dd>
+        <dt class="col-sm-3">Zip Code</dt>
+        <dd class="col-sm-9">@Model.ZipCode</dd>
+        <dt class="col-sm-3">Mobile</dt>
+        <dd class="col-sm-9">@Model.MobileNumber</dd>
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+        <dt class="col-sm-3">Licence Number</dt>
+        <dd class="col-sm-9">@Model.LicenceNumber</dd>
+        <dt class="col-sm-3">Licence Issue Date</dt>
+        <dd class="col-sm-9">@(Model.LicenceIssueDate?.ToString("yyyy-MM-dd"))</dd>
+        <dt class="col-sm-3">Licence Valid Upto</dt>
+        <dd class="col-sm-9">@(Model.LicenceValidUptoDate?.ToString("yyyy-MM-dd"))</dd>
+        <dt class="col-sm-3">Licence Type</dt>
+        <dd class="col-sm-9">@Model.LicenceType</dd>
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">@Model.IsActive</dd>
+    </dl>
+</div>
+<p>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+</p>

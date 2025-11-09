@@ -54,12 +54,18 @@ namespace SchoolPortal.Services
         public List<DeptDesigDetails> GetAll()
         {
             var list = new List<DeptDesigDetails>();
-            Proc p = new Proc("DeptDesigDetails_GetAll");
-            var dt = new DataTable();
-            p.Exec(dt);
-            foreach (DataRow r in dt.Rows)
+            try
             {
-                list.Add(MapDeptDesigDetails(r));
+                Proc p = new Proc("DeptDesigDetails_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                foreach (DataRow r in dt.Rows)
+                {
+                    list.Add(MapDeptDesigDetails(r));
+                }
+            }
+            catch
+            {
             }
             return list;
         }

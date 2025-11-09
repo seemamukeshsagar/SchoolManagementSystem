@@ -7,7 +7,7 @@
 		<h4>Create Employee</h4>
 	</div>
 	<div class="card-body">
-		<form asp-action="Create">
+		<form asp-action="Create" enctype="multipart/form-data">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="CompanyId" />
 			<input type="hidden" asp-for="SchoolId" />
@@ -15,9 +15,6 @@
 			<ul class="nav nav-tabs" id="empCreateTabs" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="tab-basic-tab" data-bs-toggle="tab" data-bs-target="#tab-basic" type="button" role="tab" aria-controls="tab-basic" aria-selected="true">Basic Info</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="tab-classification-tab" data-bs-toggle="tab" data-bs-target="#tab-classification" type="button" role="tab" aria-controls="tab-classification" aria-selected="false">Classification</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="tab-contact-bank-tab" data-bs-toggle="tab" data-bs-target="#tab-contact-bank" type="button" role="tab" aria-controls="tab-contact-bank" aria-selected="false">Contact & Bank</button>
@@ -141,30 +138,16 @@
 							</select>
 						</div>
 					</div>
-				</div>
-
-				<div class="tab-pane fade" id="tab-classification" role="tabpanel" aria-labelledby="tab-classification-tab">
 					<div class="row mb-3">
-						<div class="col-md-4">
-							<label asp-for="CategoryId" class="control-label">Category</label>
-							<select asp-for="CategoryId" class="form-control" asp-items="Model.EmployeeCategories">
-								<option value="">-- Select Category --</option>
-							</select>
-						</div>
 						<div class="col-md-4">
 							<label asp-for="GradeId" class="control-label">Grade</label>
 							<select asp-for="GradeId" class="form-control" asp-items="Model.Grades">
 								<option value="">-- Select Grade --</option>
 							</select>
 						</div>
-						<div class="col-md-4">
-							<label asp-for="BloodGroupId" class="control-label">Blood Group</label>
-							<select asp-for="BloodGroupId" class="form-control" asp-items="Model.BloodGroups">
-								<option value="">-- Select Blood Group --</option>
-							</select>
-						</div>
 					</div>
 				</div>
+
 
 				<div class="tab-pane fade" id="tab-contact-bank" role="tabpanel" aria-labelledby="tab-contact-bank-tab">
 					<div class="row mb-3">
@@ -278,7 +261,9 @@
 						</div>
 						<div class="col-md-4">
 							<label asp-for="MaritalStatus" class="control-label">Marital Status</label>
-							<input asp-for="MaritalStatus" class="form-control" />
+							<select asp-for="MaritalStatus" class="form-control" asp-items="Model.MaritalStatuses">
+								<option value="">-- Select Marital Status --</option>
+							</select>
 						</div>
 						<div class="col-md-4">
 							<label asp-for="YearsOfExperience" class="control-label">Experience</label>
@@ -330,8 +315,8 @@
 				<div class="tab-pane fade" id="tab-docs" role="tabpanel" aria-labelledby="tab-docs-tab">
 					<div class="row mb-3">
 						<div class="col-md-6">
-							<label asp-for="Image" class="control-label">Image</label>
-							<input asp-for="Image" class="form-control" />
+							<label asp-for="ImageFile" class="control-label">Image</label>
+							<input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
 						</div>
 						<div class="col-md-6">
 							<label asp-for="EmployeeOldId" class="control-label">Old Employee Id</label>
@@ -359,8 +344,8 @@
 							<input asp-for="LicenceValidUpto" class="form-control" type="date" />
 						</div>
 						<div class="col-md-4">
-							<label asp-for="LicenceImage" class="control-label">Licence Image</label>
-							<input asp-for="LicenceImage" class="form-control" />
+							<label asp-for="LicenceImageFile" class="control-label">Licence Image</label>
+							<input asp-for="LicenceImageFile" class="form-control" type="file" accept="image/*" />
 						</div>
 					</div>
 				</div>
@@ -408,6 +393,29 @@
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
 	<script>
+		var getDesignationsUrl = '@Url.Action("GetDesignationsByDepartment", "Emp")';
+		if (getDesignationsUrl && !getDesignationsUrl.startsWith('/')) {
+			getDesignationsUrl = '/' + getDesignationsUrl.replace(/^~?\/?/, '');
+		}
+		function loadDesignations(deptId, $desigSelect, selectedId) {
+			if (!deptId) {
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Select Designation --' })).prop('disabled', true);
+				return;
+			}
+			$.get(getDesignationsUrl + '/' + deptId, function (items) {
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Select Designation --' }));
+				if (items && items.length) {
+					$.each(items, function (i, it) { $desigSelect.append($('<option>', { value: it.value, text: it.text })); });
+					if (selectedId) { $desigSelect.val(selectedId); }
+					$desigSelect.prop('disabled', false);
+				} else {
+					$desigSelect.prop('disabled', true);
+				}
+			}).fail(function (xhr) {
+				console.error('Failed to load designations', xhr);
+				$desigSelect.empty().append($('<option>', { value: '', text: '-- Error loading designations --' })).prop('disabled', true);
+			});
+		}
 		function loadStates(countryId, $stateSelect, selectedId) {
 			if (!countryId) {
 				$stateSelect.empty().append($('<option>', { value: '', text: '-- Select State --' })).prop('disabled', true);
@@ -437,6 +445,17 @@
 			}).fail(function () { $citySelect.empty().append($('<option>', { value: '', text: '-- Error loading cities --' })); });
 		}
 		$(document).ready(function () {
+			var $dept = $('#DepartmentId');
+			var $desig = $('#DesignationId');
+			if (!$dept.val()) { $desig.prop('disabled', true); }
+			$dept.on('change', function () {
+				var deptId = $(this).val();
+				$desig.empty().append($('<option>', { value: '', text: '-- Select Designation --' }));
+				if (deptId) { loadDesignations(deptId, $desig); } else { $desig.prop('disabled', true); }
+			});
+			var initDept = $dept.val();
+			var initDesig = $desig.val();
+			if (initDept) { loadDesignations(initDept, $desig, initDesig); }
 			var $curCountry = $('#CurrentCountryId');
 			var $curState = $('#CurrentStateId');
 			var $curCity = $('#CurrentCityId');

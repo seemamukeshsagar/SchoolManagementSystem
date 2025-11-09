@@ -72,6 +72,23 @@ namespace SchoolPortal.Services
             }
         }
 
+        public List<LookupItem> GetDepartments(Guid schoolId)
+        {
+            try
+            {
+                Proc p = new Proc("Department_GetBySchool");
+                p["@SchoolId"] = schoolId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                return Map(dt, "Id", "DepartmentName");
+            }
+            catch (Exception)
+            {
+                // Log the exception if needed
+                return new List<LookupItem>();
+            }
+        }
+
         public List<LookupItem> GetDesignations()
         {
             try
@@ -79,7 +96,8 @@ namespace SchoolPortal.Services
                 Proc p = new Proc("Designation_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
-                return Map(dt, "Id", "Name");
+                var nameCol = dt.Columns.Contains("Name") ? "Name" : (dt.Columns.Contains("DesignationName") ? "DesignationName" : "Name");
+                return Map(dt, "Id", nameCol);
             }
             catch (Exception)
             {
@@ -173,7 +191,35 @@ namespace SchoolPortal.Services
                 Proc p = new Proc("PaymentMode_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
-                return Map(dt); // assume columns Id, Name
+                var nameCol = dt.Columns.Contains("Name")
+                    ? "Name"
+                    : (dt.Columns.Contains("PaymentModeName") ? "PaymentModeName" : (dt.Columns.Contains("ModeName") ? "ModeName" : "Name"));
+                var idCol = dt.Columns.Contains("Id")
+                    ? "Id"
+                    : (dt.Columns.Contains("PaymentModeId") ? "PaymentModeId" : (dt.Columns.Contains("ModeId") ? "ModeId" : "Id"));
+                return Map(dt, idCol, nameCol);
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetPaymentModes(Guid schoolId)
+        {
+            try
+            {
+                Proc p = new Proc("PaymentMode_GetAll");
+                p["@SchoolId"] = schoolId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                var nameCol = dt.Columns.Contains("Name")
+                    ? "Name"
+                    : (dt.Columns.Contains("PaymentModeName") ? "PaymentModeName" : (dt.Columns.Contains("ModeName") ? "ModeName" : "Name"));
+                var idCol = dt.Columns.Contains("Id")
+                    ? "Id"
+                    : (dt.Columns.Contains("PaymentModeId") ? "PaymentModeId" : (dt.Columns.Contains("ModeId") ? "ModeId" : "Id"));
+                return Map(dt, idCol, nameCol);
             }
             catch (Exception)
             {
@@ -188,7 +234,35 @@ namespace SchoolPortal.Services
                 Proc p = new Proc("EmployeeType_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
-                return Map(dt); // assume columns Id, Name
+                var nameCol = dt.Columns.Contains("Name")
+                    ? "Name"
+                    : (dt.Columns.Contains("EmployeeTypeName") ? "EmployeeTypeName" : (dt.Columns.Contains("TypeName") ? "TypeName" : "Name"));
+                var idCol = dt.Columns.Contains("Id")
+                    ? "Id"
+                    : (dt.Columns.Contains("EmployeeTypeId") ? "EmployeeTypeId" : (dt.Columns.Contains("TypeId") ? "TypeId" : "Id"));
+                return Map(dt, idCol, nameCol);
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetEmployeeTypes(Guid schoolId)
+        {
+            try
+            {
+                Proc p = new Proc("EmployeeType_GetAll");
+                p["@SchoolId"] = schoolId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                var nameCol = dt.Columns.Contains("Name")
+                    ? "Name"
+                    : (dt.Columns.Contains("EmployeeTypeName") ? "EmployeeTypeName" : (dt.Columns.Contains("TypeName") ? "TypeName" : "Name"));
+                var idCol = dt.Columns.Contains("Id")
+                    ? "Id"
+                    : (dt.Columns.Contains("EmployeeTypeId") ? "EmployeeTypeId" : (dt.Columns.Contains("TypeId") ? "TypeId" : "Id"));
+                return Map(dt, idCol, nameCol);
             }
             catch (Exception)
             {
@@ -218,7 +292,27 @@ namespace SchoolPortal.Services
                 Proc p = new Proc("Grade_GetAll");
                 var dt = new DataTable();
                 p.Exec(dt);
-                return Map(dt); // assume columns Id, Name
+                var nameCol = dt.Columns.Contains("Name") ? "Name" : (dt.Columns.Contains("GradeName") ? "GradeName" : "Name");
+                var idCol = dt.Columns.Contains("Id") ? "Id" : (dt.Columns.Contains("GradeId") ? "GradeId" : "Id");
+                return Map(dt, idCol, nameCol);
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetGrades(Guid schoolId)
+        {
+            try
+            {
+                Proc p = new Proc("Grade_GetAll");
+                p["@SchoolId"] = schoolId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                var nameCol = dt.Columns.Contains("Name") ? "Name" : (dt.Columns.Contains("GradeName") ? "GradeName" : "Name");
+                var idCol = dt.Columns.Contains("Id") ? "Id" : (dt.Columns.Contains("GradeId") ? "GradeId" : "Id");
+                return Map(dt, idCol, nameCol);
             }
             catch (Exception)
             {
@@ -265,6 +359,23 @@ namespace SchoolPortal.Services
                 var dt = new DataTable();
                 p.Exec(dt);
                 return Map(dt); // assume columns Id, Name
+            }
+            catch (Exception)
+            {
+                return new List<LookupItem>();
+            }
+        }
+
+        public List<LookupItem> GetMaritalStatuses()
+        {
+            try
+            {
+                Proc p = new Proc("MaritalStatus_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
+                var nameCol = dt.Columns.Contains("Name") ? "Name" : (dt.Columns.Contains("MaritalStatusName") ? "MaritalStatusName" : (dt.Columns.Contains("StatusName") ? "StatusName" : "Name"));
+                var idCol = dt.Columns.Contains("Id") ? "Id" : (dt.Columns.Contains("MaritalStatusId") ? "MaritalStatusId" : "Id");
+                return Map(dt, idCol, nameCol);
             }
             catch (Exception)
             {

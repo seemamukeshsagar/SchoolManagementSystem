@@ -97,12 +97,29 @@ CREATE PROCEDURE [dbo].[Teacher_Create]
     @FirstName NVARCHAR(50),
     @LastName NVARCHAR(50),
     @DOB DATETIME,
+    @DOJ DATETIME NULL,
+    @DateOfLeaving DATETIME NULL,
+    @Address NVARCHAR(250),
+    @CityId UNIQUEIDENTIFIER NULL,
+    @StateId UNIQUEIDENTIFIER NULL,
+    @CountryId UNIQUEIDENTIFIER NULL,
+    @ZipCode NVARCHAR(20),
+    @Gender UNIQUEIDENTIFIER NULL,
+    @MaritalStatusId UNIQUEIDENTIFIER NULL,
+    @Image NVARCHAR(500),
     @Email NVARCHAR(150),
     @Phone NVARCHAR(50),
+    @MobilePhone NVARCHAR(50),
+    @YearsOfExperience NVARCHAR(50),
+    @PreviousSchool NVARCHAR(150),
+    @Salutation NVARCHAR(50),
     @IsActive BIT,
+    @IsDeleted BIT,
     @CompanyId UNIQUEIDENTIFIER,
     @SchoolId UNIQUEIDENTIFIER,
-    @CreatedBy UNIQUEIDENTIFIER
+    @CreatedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(250)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -115,8 +132,22 @@ BEGIN
         FirstName,
         LastName,
         DOB,
+        DOJ,
+        DateOfLeaving,
+        Address,
+        CityId,
+        StateId,
+        CountryId,
+        ZipCode,
+        Gender,
+        MaritalStatusId,
+        Image,
         Email,
         Phone,
+        MobilePhone,
+        YearsOfExperience,
+        PreviousSchool,
+        Salutation,
         IsActive,
         IsDeleted,
         CompanyId,
@@ -132,17 +163,82 @@ BEGIN
         @FirstName,
         @LastName,
         @DOB,
+        @DOJ,
+        @DateOfLeaving,
+        @Address,
+        @CityId,
+        @StateId,
+        @CountryId,
+        @ZipCode,
+        @Gender,
+        @MaritalStatusId,
+        @Image,
         @Email,
         @Phone,
+        @MobilePhone,
+        @YearsOfExperience,
+        @PreviousSchool,
+        @Salutation,
         @IsActive,
-        0,
+        @IsDeleted,
         @CompanyId,
         @SchoolId,
         @CreatedBy,
         SYSUTCDATETIME(),
-        N'',
-        N''
+        @Status,
+        @StatusMessage
     );
+
+    -- Sync EmpMaster on create
+    IF NOT EXISTS (SELECT 1 FROM [dbo].[EmpMaster] WHERE Id = @NewId)
+    BEGIN
+        INSERT INTO [dbo].[EmpMaster]
+        (
+            Id,
+            FirstName,
+            LastName,
+            Email,
+            Phone,
+            DOB,
+            CompanyId,
+            SchoolId,
+            IsActive,
+            IsDeleted,
+            CreatedBy,
+            CreatedDate
+        )
+        VALUES
+        (
+            @NewId,
+            @FirstName,
+            @LastName,
+            @Email,
+            @Phone,
+            @DOB,
+            @CompanyId,
+            @SchoolId,
+            @IsActive,
+            @IsDeleted,
+            @CreatedBy,
+            SYSUTCDATETIME()
+        );
+    END
+    ELSE
+    BEGIN
+        UPDATE [dbo].[EmpMaster]
+        SET FirstName = @FirstName,
+            LastName = @LastName,
+            Email = @Email,
+            Phone = @Phone,
+            DOB = @DOB,
+            CompanyId = @CompanyId,
+            SchoolId = @SchoolId,
+            IsActive = @IsActive,
+            IsDeleted = @IsDeleted,
+            ModifiedBy = @CreatedBy,
+            ModifiedDate = SYSUTCDATETIME()
+        WHERE Id = @NewId;
+    END
 
     SELECT Id = @NewId;
 END
@@ -157,11 +253,28 @@ CREATE PROCEDURE [dbo].[Teacher_Update]
     @FirstName NVARCHAR(50),
     @LastName NVARCHAR(50),
     @DOB DATETIME,
+    @DOJ DATETIME NULL,
+    @DateOfLeaving DATETIME NULL,
+    @Address NVARCHAR(250),
+    @CityId UNIQUEIDENTIFIER NULL,
+    @StateId UNIQUEIDENTIFIER NULL,
+    @CountryId UNIQUEIDENTIFIER NULL,
+    @ZipCode NVARCHAR(20),
+    @Gender UNIQUEIDENTIFIER NULL,
+    @MaritalStatusId UNIQUEIDENTIFIER NULL,
+    @Image NVARCHAR(500),
     @Email NVARCHAR(150),
     @Phone NVARCHAR(50),
+    @MobilePhone NVARCHAR(50),
+    @YearsOfExperience NVARCHAR(50),
+    @PreviousSchool NVARCHAR(150),
+    @Salutation NVARCHAR(50),
     @IsActive BIT,
+    @IsDeleted BIT,
     @SchoolId UNIQUEIDENTIFIER,
-    @ModifiedBy UNIQUEIDENTIFIER
+    @ModifiedBy UNIQUEIDENTIFIER,
+    @Status NVARCHAR(50),
+    @StatusMessage NVARCHAR(250)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -171,13 +284,81 @@ BEGIN
         FirstName = @FirstName,
         LastName = @LastName,
         DOB = @DOB,
+        DOJ = @DOJ,
+        DateOfLeaving = @DateOfLeaving,
+        Address = @Address,
+        CityId = @CityId,
+        StateId = @StateId,
+        CountryId = @CountryId,
+        ZipCode = @ZipCode,
+        Gender = @Gender,
+        MaritalStatusId = @MaritalStatusId,
+        Image = @Image,
         Email = @Email,
         Phone = @Phone,
+        MobilePhone = @MobilePhone,
+        YearsOfExperience = @YearsOfExperience,
+        PreviousSchool = @PreviousSchool,
+        Salutation = @Salutation,
         IsActive = @IsActive,
+        IsDeleted = @IsDeleted,
         SchoolId = @SchoolId,
+        [Status] = @Status,
+        StatusMessage = @StatusMessage,
         ModifiedBy = @ModifiedBy,
         ModifiedDate = SYSUTCDATETIME()
     WHERE Id = @Id;
+
+    -- Sync EmpMaster on update (upsert)
+    IF EXISTS (SELECT 1 FROM [dbo].[EmpMaster] WHERE Id = @Id)
+    BEGIN
+        UPDATE [dbo].[EmpMaster]
+        SET FirstName = @FirstName,
+            LastName = @LastName,
+            Email = @Email,
+            Phone = @Phone,
+            DOB = @DOB,
+            CompanyId = CompanyId, -- keep existing unless you want to change via teacher
+            SchoolId = @SchoolId,
+            IsActive = @IsActive,
+            IsDeleted = @IsDeleted,
+            ModifiedBy = @ModifiedBy,
+            ModifiedDate = SYSUTCDATETIME()
+        WHERE Id = @Id;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO [dbo].[EmpMaster]
+        (
+            Id,
+            FirstName,
+            LastName,
+            Email,
+            Phone,
+            DOB,
+            CompanyId,
+            SchoolId,
+            IsActive,
+            IsDeleted,
+            CreatedBy,
+            CreatedDate
+        )
+        VALUES
+        (
+            @Id,
+            @FirstName,
+            @LastName,
+            @Email,
+            @Phone,
+            @DOB,
+            (SELECT CompanyId FROM [dbo].[TeacherMaster] WHERE Id = @Id),
+            @SchoolId,
+            @IsActive,
+            @IsDeleted,
+            @ModifiedBy,
+            SYSUTCDATETIME()
+        );
+    END
 
     RETURN 1;
 END
@@ -196,6 +377,15 @@ BEGIN
     UPDATE [dbo].[TeacherMaster]
     SET IsDeleted = 1
     WHERE Id = @Id;
+
+    -- Soft delete in EmpMaster as well
+    IF EXISTS (SELECT 1 FROM [dbo].[EmpMaster] WHERE Id = @Id)
+    BEGIN
+        UPDATE [dbo].[EmpMaster]
+        SET IsDeleted = 1,
+            ModifiedDate = SYSUTCDATETIME()
+        WHERE Id = @Id;
+    END
 
     RETURN 1;
 END

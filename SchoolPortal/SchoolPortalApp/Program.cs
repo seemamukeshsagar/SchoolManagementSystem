@@ -81,6 +81,7 @@ builder.Services.AddScoped<ITeacherClassDetailsService, SchoolPortal.Services.Te
 builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
 builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMasterService>();
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
+builder.Services.AddScoped<IDeptDesigDetailsService, SchoolPortal.Services.DeptDesigDetailsService>();
 builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
 builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
 builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
@@ -91,6 +92,8 @@ builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePriv
 builder.Services.AddScoped<IHolidayMasterService, SchoolPortal.Services.HolidayMasterService>();
 builder.Services.AddScoped<IEmpTypeService, SchoolPortal.Services.EmpTypeService>();
 builder.Services.AddScoped<IVisitorService, SchoolPortal.Services.VisitorService>();
+builder.Services.AddScoped<ICleanerMasterService, SchoolPortal.Services.CleanerMasterService>();
+builder.Services.AddScoped<IDriverMasterService, SchoolPortal.Services.DriverMasterService>();
 
 var app = builder.Build();
 

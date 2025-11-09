@@ -1,0 +1,38 @@
+@model SchoolPortal.Entities.Models.CleanerMaster
+@{
+    ViewData["Title"] = "Create Cleaner";
+}
+<h2>Create Cleaner</h2>
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="SchoolId" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FatherName"></label>
+        <input asp-for="FatherName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Image"></label>
+        <input asp-for="Image" class="form-control" />
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="IsActive" />
+        <label class="form-check-label" asp-for="IsActive"></label>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="IsDeleted" />
+        <label class="form-check-label" asp-for="IsDeleted"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

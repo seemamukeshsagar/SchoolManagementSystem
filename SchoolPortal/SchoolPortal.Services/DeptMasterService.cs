@@ -41,6 +41,20 @@ namespace SchoolPortal.Services
 			return list;
 		}
 
+		public List<DeptMaster> GetBySchool(Guid schoolId)
+		{
+			var list = new List<DeptMaster>();
+			Proc p = new Proc("DeptMaster_GetBySchool");
+			p["@SchoolId"] = schoolId;
+			var dt = new DataTable();
+			p.Exec(dt);
+			foreach (DataRow r in dt.Rows)
+			{
+				list.Add(Map(r));
+			}
+			return list;
+		}
+
 		public DeptMaster? GetById(Guid id)
 		{
 			Proc p = new Proc("DeptMaster_GetById");

@@ -1,0 +1,154 @@
+@model SchoolPortal.Entities.Models.DriverMaster
+@{
+    ViewData["Title"] = "Create Driver";
+}
+<h2>Create Driver</h2>
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="SchoolId" />
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="FathersName"></label>
+        <input asp-for="FathersName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MothersName"></label>
+        <input asp-for="MothersName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="QualificationId"></label>
+        <select asp-for="QualificationId" asp-items="ViewBag.Qualifications" class="form-control"></select>
+        <span asp-validation-for="QualificationId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address1"></label>
+        <input asp-for="Address1" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address2"></label>
+        <input asp-for="Address2" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CountryId"></label>
+        <select asp-for="CountryId" asp-items="ViewBag.Countries" class="form-control" id="CountryId"></select>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StateId"></label>
+        <select asp-for="StateId" asp-items="ViewBag.States" class="form-control" id="StateId"></select>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CityId"></label>
+        <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-control" id="CityId"></select>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ZipCode"></label>
+        <input asp-for="ZipCode" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="MobileNumber"></label>
+        <input asp-for="MobileNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DriverImage"></label>
+        <input asp-for="DriverImage" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceNumber"></label>
+        <input asp-for="LicenceNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceIssueDate"></label>
+        <input asp-for="LicenceIssueDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceValidUptoDate"></label>
+        <input asp-for="LicenceValidUptoDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceDescription"></label>
+        <input asp-for="LicenceDescription" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceImage"></label>
+        <input asp-for="LicenceImage" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="LicenceType"></label>
+        <input asp-for="LicenceType" class="form-control" />
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="IsActive" />
+        <label class="form-check-label" asp-for="IsActive"></label>
+    </div>
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="IsDeleted" />
+        <label class="form-check-label" asp-for="IsDeleted"></label>
+    </div>    
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const countryEl = document.getElementById('CountryId');
+            const stateEl = document.getElementById('StateId');
+            const cityEl = document.getElementById('CityId');
+
+            const statesUrl = '@Url.Action("GetStates", "DriverMaster")';
+            const citiesUrl = '@Url.Action("GetCities", "DriverMaster")';
+
+            function clearAndSet(el, items, selected) {
+                while (el.options.length > 0) el.remove(0);
+                const d = document.createElement('option');
+                d.value = '';
+                d.text = '-- Select --';
+                el.add(d);
+                (items || []).forEach(i => {
+                    const o = document.createElement('option');
+                    o.value = i.id;
+                    o.text = i.name;
+                    if (selected && String(selected).toLowerCase() === String(i.id).toLowerCase()) o.selected = true;
+                    el.add(o);
+                });
+            }
+
+            countryEl.addEventListener('change', async function () {
+                const cid = this.value;
+                clearAndSet(stateEl, []);
+                clearAndSet(cityEl, []);
+                if (!cid) return;
+                const res = await fetch(`${statesUrl}?countryId=${cid}`);
+                const data = await res.json();
+                clearAndSet(stateEl, data);
+            });
+
+            stateEl.addEventListener('change', async function () {
+                const sid = this.value;
+                clearAndSet(cityEl, []);
+                if (!sid) return;
+                const res = await fetch(`${citiesUrl}?stateId=${sid}`);
+                const data = await res.json();
+                clearAndSet(cityEl, data);
+            });
+        })();
+    </script>
+}

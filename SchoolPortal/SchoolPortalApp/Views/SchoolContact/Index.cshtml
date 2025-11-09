@@ -9,27 +9,29 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>School</th>
 			<th>Name</th>
 			<th>Email</th>
+			<th>Phone</th>
+			<th>Mobile</th>
 			<th>Active</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-@foreach (var item in Model)
-{
-	<tr>
-		<td>@item.School.Name</td>
-		<td>@(item.FirstName + (string.IsNullOrWhiteSpace(item.LastName) ? "" : (" " + item.LastName)))</td>
-		<td>@item.Email</td>
-		<td>@item.IsActive</td>
-		<td>
-			<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-			<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-			<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-		</td>
-	</tr>
-}
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@(item.FirstName + (string.IsNullOrWhiteSpace(item.LastName) ? "" : (" " + item.LastName)))</td>
+			<td>@item.Email</td>
+			<td>@item.Phone</td>
+				<td>@item.MobilePhone</td>
+			<td>@item.IsActive</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+				<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+				<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+			</td>
+		</tr>
+	}
 	</tbody>
 </table>

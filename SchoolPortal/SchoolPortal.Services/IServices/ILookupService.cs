@@ -24,12 +24,16 @@ namespace SchoolPortal.Services.IServices
 		List<LookupItem> GetSchools();
 		List<LookupItem> GetGenders();
 		List<LookupItem> GetPaymentModes();
+		List<LookupItem> GetPaymentModes(Guid schoolId);
 		List<LookupItem> GetEmployeeTypes();
+		List<LookupItem> GetEmployeeTypes(Guid schoolId);
 		List<LookupItem> GetEmployeeCategories();
 		List<LookupItem> GetCategories();
 		List<LookupItem> GetGrades();
+		List<LookupItem> GetGrades(Guid schoolId);
 		List<LookupItem> GetBloodGroups();
 		List<LookupItem> GetReligions();
+		List<LookupItem> GetMaritalStatuses();
 		List<LookupItem> GetSchoolBoards();
 		IEnumerable<ClassMaster> GetClasses();
 		IEnumerable<SectionMaster> GetSections();
