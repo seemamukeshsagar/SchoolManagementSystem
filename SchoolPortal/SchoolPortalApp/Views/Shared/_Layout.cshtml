@@ -9,275 +9,10 @@
 	<title>@ViewData["Title"] - SchoolPortal.Web</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/layout-styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 	@RenderSection("Styles", required: false)
-	<style>
-		.user-profile-container {
-			position: relative;
-			display: inline-block;
-		}
-		
-		.user-profile-popup {
-			display: none;
-			position: absolute;
-			right: 0;
-			top: 100%;
-			background: white;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-			padding: 15px;
-			min-width: 250px;
-			z-index: 1000;
-			margin-top: 5px;
-		}
-		
-		.user-profile-container:hover .user-profile-popup {
-			display: block;
-		}
-		
-		.user-profile-header {
-			display: flex;
-			align-items: center;
-			padding-bottom: 10px;
-			border-bottom: 1px solid #eee;
-			margin-bottom: 10px;
-		}
-		
-		.user-avatar {
-			width: 40px;
-			height: 40px;
-			border-radius: 50%;
-			background-color: #007bff;
-			color: white;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-right: 10px;
-			font-weight: bold;
-		}
-		
-		.user-detail {
-			margin-bottom: 8px;
-			font-size: 0.9em;
-		}
-		
-		.user-detail i {
-			width: 20px;
-			color: #6c757d;
-			margin-right: 8px;
-		}
-		
-		/* Inline user info row */
-		.user-info {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			flex-wrap: wrap;
-		}
-	</style>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			overflow-x: hidden;
-			background-color: #f8f9fa;
-		}
-
-		/* HEADER */
-		header.navbar {
-			width: 100%;
-		}
-
-		.navbar-dark .navbar-brand,
-		.navbar-dark .nav-link {
-			color: white !important;
-		}
-
-		/* MAIN CONTAINER */
-		.main-container {
-			display: flex;
-			min-height: calc(100vh - 56px); /* Full viewport height minus header */
-			margin-top: 56px;
-			transition: all 0.3s ease;
-			overflow-x: hidden; /* Prevent horizontal overflow */
-			overflow-y: auto; /* Allow vertical scrolling when content exceeds viewport */
-		}
-
-		/* Full width content when sidebar is hidden */
-		.content-area.full-width {
-			width: 100%;
-			margin-left: 0;
-		}
-
-		/* SIDEBAR */
-		.nav-sidebar {
-			width: 240px;
-			height: calc(100vh - 112px); /* Viewport height minus header and footer */
-			background-color: #343a40;
-			color: white;
-			position: fixed;
-			top: 56px;
-			left: 0;
-			overflow-y: auto;
-			transition: width 0.3s ease, left 0.3s ease;
-			z-index: 1030;
-			/* display: flex; */
-			flex-direction: column;
-		}
-
-		.nav-sidebar.collapsed {
-			width: 60px;
-			padding: 0;
-		}
-
-		.nav-sidebar.collapsed .nav-link span {
-			display: none;
-		}
-
-		.nav-sidebar.collapsed .nav-link i {
-			margin-right: 0;
-			text-align: center;
-		}
-
-		.nav-sidebar.collapsed .nav-link {
-			text-align: center;
-			padding: 10px 5px;
-		}
-
-		.nav-sidebar.collapsed .accordion-body {
-			display: none; /* hide submenu content when collapsed */
-			pointer-events: none; /* disable interaction when collapsed */
-		}
-
-		/* Also prevent accordion headers from toggling when collapsed */
-		.nav-sidebar.collapsed .accordion-button,
-		.nav-sidebar.collapsed [data-bs-toggle="collapse"] {
-			pointer-events: none; /* no click/keyboard interaction */
-			cursor: default;
-		}
-
-		/* Tooltip styles for collapsed sidebar */
-		.nav-sidebar.collapsed .nav-link {
-			position: relative;
-		}
-
-		.nav-sidebar.collapsed .nav-link::after {
-			content: attr(data-tooltip);
-			position: absolute;
-			left: 100%;
-			top: 50%;
-			transform: translateY(-50%);
-			background-color: #343a40;
-			color: white;
-			padding: 8px 12px;
-			border-radius: 4px;
-			white-space: nowrap;
-			opacity: 0;
-			visibility: hidden;
-			transition: opacity 0.3s ease, visibility 0.3s ease;
-			z-index: 1000;
-			margin-left: 10px;
-			font-size: 14px;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-		}
-
-		.nav-sidebar.collapsed .nav-link::before {
-			content: '';
-			position: absolute;
-			left: 100%;
-			top: 50%;
-			transform: translateY(-50%);
-			border: 5px solid transparent;
-			border-right-color: #343a40;
-			opacity: 0;
-			visibility: hidden;
-			transition: opacity 0.3s ease, visibility 0.3s ease;
-			z-index: 1000;
-			margin-left: 5px;
-		}
-
-		.nav-sidebar.collapsed .nav-link:hover::after,
-		.nav-sidebar.collapsed .nav-link:hover::before {
-			opacity: 1;
-			visibility: visible;
-		}
-
-		/* Hide tooltips when sidebar is expanded */
-		.nav-sidebar:not(.collapsed) .nav-link::after,
-		.nav-sidebar:not(.collapsed) .nav-link::before {
-			display: none;
-		}
-
-		.nav-sidebar .accordion-button {
-			background-color: #343a40;
-			color: #fff;
-			padding: 10px 15px;
-			border: none;
-			border-radius: 0;
-		}
-
-		.nav-sidebar .accordion-button:not(.collapsed) {
-			background-color: #495057;
-		}
-
-		.nav-sidebar .accordion-body a {
-			display: block;
-			color: #dee2e6;
-			padding: 6px 20px;
-			text-decoration: none;
-		}
-
-		.nav-sidebar .accordion-body a:hover {
-			background-color: #495057;
-			color: #fff;
-		}
-
-		/* CONTENT AREA */
-		.content-area {
-			flex: 1;
-			padding: 20px 0 20px 20px; /* remove right padding to allow full-width content */
-			margin-left: 240px;
-			transition: margin-left 0.3s ease;
-			width: calc(100% - 240px);
-			overflow-y: auto; /* enable internal vertical scrolling within content area */
-			height: calc(100vh - 112px); /* Viewport height minus header and footer */
-			position: relative;
-			box-sizing: border-box; /* ensure padding doesn't reduce usable width */
-		}
-
-		.content-area.collapsed {
-			margin-left: 60px;
-			width: calc(100% - 60px); /* adjust width when sidebar is collapsed to icon-only */
-		}
-
-		/* FOOTER */
-		footer {
-			background-color: #212529;
-			color: #f8f9fa;
-			text-align: center;
-			padding: 15px 0;
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			width: 100%;
-			z-index: 1000;
-			border-top: 1px solid #495057;
-			margin: 0;
-		}
-
-		/* Toggle Button */
-		.sidebar-toggle {
-			background: none;
-			border: none;
-			color: white;
-			font-size: 1.5rem;
-			cursor: pointer;
-			margin-right: 10px;
-		}
-	</style>
 </head>
 <body>
 	@{
@@ -506,6 +241,18 @@
 						schoolSelect.appendChild(opt);
 					});
 					schoolSelect.disabled = false;
+					
+					// If there's a preselected school ID and it's not already selected, select it
+					if (preselectSchoolId && !schoolSelect.value) {
+						schoolSelect.value = preselectSchoolId;
+					}
+					
+					// If there's only one school, automatically select it
+					if (items && items.length === 1) {
+						schoolSelect.value = items[0].id;
+						// Trigger change event to set session
+						schoolSelect.dispatchEvent(new Event('change'));
+					}
 				} catch {
 					schoolSelect.disabled = true;
 				}
@@ -530,7 +277,7 @@
 				companySelect.addEventListener('change', async () => {
 					const val = companySelect.value;
 					try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
-					await loadSchools(val, '');
+					await loadSchools(val, currentSchoolId); // Pass the session school ID
 				});
 				schoolSelect.addEventListener('change', async () => {
 					const val = schoolSelect.value;
