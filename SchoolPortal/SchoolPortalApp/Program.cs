@@ -101,6 +101,10 @@ builder.Services.AddScoped<ICleanerQualificationDetailsService, SchoolPortal.Ser
 builder.Services.AddScoped<IDriverMasterService, SchoolPortal.Services.DriverMasterService>();
 builder.Services.AddScoped<IDriverDocumentDetailsService, SchoolPortal.Services.DriverDocumentDetailsService>();
 builder.Services.AddScoped<IDriverQualificationDetailsService, SchoolPortal.Services.DriverQualificationDetailsService>();
+builder.Services.AddScoped<ISupplierService, SchoolPortal.Services.SupplierService>();
+builder.Services.AddScoped<IVendorService, SchoolPortal.Services.VendorService>();
+builder.Services.AddScoped<IVehicleMasterService, SchoolPortal.Services.VehicleMasterService>();
+builder.Services.AddScoped<IVehicleTypeMasterService, SchoolPortal.Services.VehicleTypeMasterService>();
 
 var app = builder.Build();
 

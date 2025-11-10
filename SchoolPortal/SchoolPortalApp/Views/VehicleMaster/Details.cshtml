@@ -1,0 +1,46 @@
+@model SchoolPortalApp.Models.VehicleMasterDetailsViewModel
+@{
+	ViewData["Title"] = "Vehicle Details";
+}
+<h2>Vehicle Details</h2>
+<div>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-3">Vehicle Number</dt>
+		<dd class="col-sm-9">@Model.VehicleNumber</dd>
+
+		<dt class="col-sm-3">Vehicle Model</dt>
+		<dd class="col-sm-9">@Model.VehicleModel</dd>
+
+		<dt class="col-sm-3">Vehicle Make</dt>
+		<dd class="col-sm-9">@Model.VehicleMake</dd>
+
+		<dt class="col-sm-3">Vehicle Type</dt>
+		<dd class="col-sm-9">@Model.VehicleTypeName</dd>
+
+		<dt class="col-sm-3">Registration Number</dt>
+		<dd class="col-sm-9">@Model.RegistrationNumber</dd>
+
+		<dt class="col-sm-3">Insurance Company</dt>
+		<dd class="col-sm-9">@Model.InsuranceCompany</dd>
+
+		<dt class="col-sm-3">Insurance Premium</dt>
+		<dd class="col-sm-9">@Model.InsurancePremium</dd>
+
+		<dt class="col-sm-3">Seating Capacity</dt>
+		<dd class="col-sm-9">@Model.SeatingCapacity</dd>
+
+		<dt class="col-sm-3">Company</dt>
+		<dd class="col-sm-9">@Model.CompanyName</dd>
+
+		<dt class="col-sm-3">School</dt>
+		<dd class="col-sm-9">@Model.SchoolName</dd>
+
+		<dt class="col-sm-3">Is Active</dt>
+		<dd class="col-sm-9">@Model.IsActive</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

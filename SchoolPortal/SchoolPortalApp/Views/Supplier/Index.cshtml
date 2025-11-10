@@ -1,0 +1,51 @@
+@model IEnumerable<SchoolPortalApp.Models.SupplierListItemViewModel>
+@{
+	ViewData["Title"] = "Suppliers";
+}
+<h2>Suppliers</h2>
+@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create Supplier"))
+{
+	<p>
+		<a class="btn btn-primary" asp-controller="Supplier" asp-action="Create">Create New</a>
+	</p>
+}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Supplier Name</th>
+			<th>Email</th>
+			<th>Is Active</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Country</th>
+			<th>Zip Code</th>
+			<th>Company</th>
+			<th>School</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@item.Name</td>
+			<td>@item.EmailId</td>
+			<td>@item.IsActive</td>
+			<td>@item.CityName</td>
+			<td>@item.StateName</td>
+			<td>@item.CountryName</td>
+			<td>@item.ZipCode</td>
+			<td>@item.CompanyName</td>
+			<td>@item.SchoolName</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id"class="btn btn-info" title="View Details">
+				<i class="bi bi-eye"></i></a> |
+				<a asp-action="Edit" asp-route-id="@item.Id"class="btn btn-warning" title="Edit">
+				<i class="bi bi-pencil"></i></a> |
+				<a asp-action="Delete" asp-route-id="@item.Id"class="btn btn-danger" title="Delete">
+				<i class="bi bi-trash"></i></a>
+			</td>			
+		</tr>
+	}
+	</tbody>
+</table>

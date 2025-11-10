@@ -1,0 +1,35 @@
+@model SchoolPortal.Entities.Models.VehicleMaster
+@{
+	ViewData["Title"] = "Delete Vehicle";
+}
+<h2>Delete Vehicle</h2>
+<h3>Are you sure you want to delete this?</h3>
+<div>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-3">Vehicle Number</dt>
+		<dd class="col-sm-9">@Model.VehicleNumber</dd>
+
+		<dt class="col-sm-3">Vehicle Model</dt>
+		<dd class="col-sm-9">@Model.VehicleModel</dd>
+
+		<dt class="col-sm-3">Vehicle Make</dt>
+		<dd class="col-sm-9">@Model.VehicleMake</dd>
+
+		<dt class="col-sm-3">Registration Number</dt>
+		<dd class="col-sm-9">@Model.RegistrationNumber</dd>
+
+		<dt class="col-sm-3">Insurance Company</dt>
+		<dd class="col-sm-9">@Model.InsuranceCompany</dd>
+
+		<dt class="col-sm-3">Is Active</dt>
+		<dd class="col-sm-9">@Model.IsActive</dd>
+	</dl>
+
+	<form asp-action="Delete" method="post">
+		@Html.AntiForgeryToken()
+		<input type="hidden" asp-for="Id" />
+		<button type="submit" class="btn btn-danger">Delete</button>
+		<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+	</form>
+</div>

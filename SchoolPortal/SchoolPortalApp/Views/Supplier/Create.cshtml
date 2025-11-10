@@ -1,0 +1,145 @@
+@model SchoolPortalApp.Models.SupplierViewModel
+@{
+	ViewData["Title"] = "Create Supplier";
+}
+<h2>Create Supplier</h2>
+<form asp-action="Create" method="post">
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="Name" class="form-label"></label>
+		<input asp-for="Name" class="form-control" />
+		<span asp-validation-for="Name" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Description" class="form-label"></label>
+		<input asp-for="Description" class="form-control" />
+		<span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="CompanyId" class="form-label"></label>
+			<select asp-for="CompanyId" class="form-select" asp-items="Model.Companies">
+				<option value="">-- Select Company --</option>
+			</select>
+			<span asp-validation-for="CompanyId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="SchoolId" class="form-label"></label>
+			<select asp-for="SchoolId" class="form-select" asp-items="Model.Schools">
+				<option value="">-- Select School --</option>
+			</select>
+			<span asp-validation-for="SchoolId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address1" class="form-label"></label>
+		<input asp-for="Address1" class="form-control" />
+		<span asp-validation-for="Address1" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Address2" class="form-label"></label>
+		<input asp-for="Address2" class="form-control" />
+		<span asp-validation-for="Address2" class="text-danger"></span>
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<label asp-for="CountryId" class="form-label"></label>
+			<select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
+				<option value="">-- Select Country --</option>
+			</select>
+			<span asp-validation-for="CountryId" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="StateId" class="form-label"></label>
+			<select asp-for="StateId" class="form-select" asp-items="Model.States">
+				<option value="">-- Select State --</option>
+			</select>
+			<span asp-validation-for="StateId" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="CityId" class="form-label"></label>
+			<select asp-for="CityId" class="form-select" asp-items="Model.Cities">
+				<option value="">-- Select City --</option>
+			</select>
+			<span asp-validation-for="CityId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="ZipCode" class="form-label"></label>
+			<input asp-for="ZipCode" class="form-control" />
+			<span asp-validation-for="ZipCode" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="EmailId" class="form-label"></label>
+			<input asp-for="EmailId" class="form-control" />
+			<span asp-validation-for="EmailId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="PhonbeNumber" class="form-label"></label>
+			<input asp-for="PhonbeNumber" class="form-control" />
+			<span asp-validation-for="PhonbeNumber" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="MobileNumber" class="form-label"></label>
+			<input asp-for="MobileNumber" class="form-control" />
+			<span asp-validation-for="MobileNumber" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		(function() {
+			const country = document.getElementById('CountryId');
+			const state = document.getElementById('StateId');
+			const city = document.getElementById('CityId');
+
+			function clearOptions(sel, placeholder) {
+				sel.innerHTML = '';
+				const opt = document.createElement('option');
+				opt.value = '';
+				opt.textContent = placeholder;
+				sel.appendChild(opt);
+			}
+
+			country?.addEventListener('change', async () => {
+				clearOptions(state, '-- Select State --');
+				clearOptions(city, '-- Select City --');
+				const val = country.value;
+				if (!val) return;
+				const res = await fetch(`/Supplier/GetStates?countryId=${val}`);
+				const data = await res.json();
+				data.forEach(x => {
+					const o = document.createElement('option');
+					o.value = x.id;
+					o.textContent = x.name;
+					state.appendChild(o);
+				});
+			});
+
+			state?.addEventListener('change', async () => {
+				clearOptions(city, '-- Select City --');
+				const val = state.value;
+				if (!val) return;
+				const res = await fetch(`/Supplier/GetCities?stateId=${val}`);
+				const data = await res.json();
+				data.forEach(x => {
+					const o = document.createElement('option');
+					o.value = x.id;
+					o.textContent = x.name;
+					city.appendChild(o);
+				});
+			});
+		})();
+	</script>
+}

@@ -1,0 +1,83 @@
+@model SchoolPortalApp.Models.VehicleMasterViewModel
+@{
+	ViewData["Title"] = "Edit Vehicle";
+}
+<h2>Edit Vehicle</h2>
+<form asp-action="Edit" method="post">
+	@Html.AntiForgeryToken()
+	<input type="hidden" asp-for="Id" />
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<label asp-for="VehicleNumber" class="form-label"></label>
+			<input asp-for="VehicleNumber" class="form-control" />
+			<span asp-validation-for="VehicleNumber" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="VehicleModel" class="form-label"></label>
+			<input asp-for="VehicleModel" class="form-control" />
+			<span asp-validation-for="VehicleModel" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="VehicleMake" class="form-label"></label>
+			<input asp-for="VehicleMake" class="form-control" />
+			<span asp-validation-for="VehicleMake" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="VehicleTypeId" class="form-label"></label>
+			<select asp-for="VehicleTypeId" class="form-select" asp-items="Model.VehicleTypes">
+				<option value="">-- Select Vehicle Type --</option>
+			</select>
+			<span asp-validation-for="VehicleTypeId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="RegistrationNumber" class="form-label"></label>
+			<input asp-for="RegistrationNumber" class="form-control" />
+			<span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="CompanyId" class="form-label"></label>
+			<select asp-for="CompanyId" class="form-select" asp-items="Model.Companies">
+				<option value="">-- Select Company --</option>
+			</select>
+			<span asp-validation-for="CompanyId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="SchoolId" class="form-label"></label>
+			<select asp-for="SchoolId" class="form-select" asp-items="Model.Schools">
+				<option value="">-- Select School --</option>
+			</select>
+			<span asp-validation-for="SchoolId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<label asp-for="InsuranceCompany" class="form-label"></label>
+			<input asp-for="InsuranceCompany" class="form-control" />
+			<span asp-validation-for="InsuranceCompany" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="InsurancePremium" class="form-label"></label>
+			<input asp-for="InsurancePremium" class="form-control" />
+			<span asp-validation-for="InsurancePremium" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="SeatingCapacity" class="form-label"></label>
+			<input asp-for="SeatingCapacity" class="form-control" />
+			<span asp-validation-for="SeatingCapacity" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

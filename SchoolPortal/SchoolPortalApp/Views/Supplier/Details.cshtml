@@ -1,0 +1,55 @@
+@model SchoolPortalApp.Models.SupplierDetailsViewModel
+@{
+	ViewData["Title"] = "Supplier Details";
+}
+<h2>Supplier Details</h2>
+<div>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-3">Supplier Name</dt>
+		<dd class="col-sm-9">@Model.Name</dd>
+
+		<dt class="col-sm-3">Description</dt>
+		<dd class="col-sm-9">@Model.Description</dd>
+
+		<dt class="col-sm-3">Email</dt>
+		<dd class="col-sm-9">@Model.EmailId</dd>
+
+		<dt class="col-sm-3">Phone Number</dt>
+		<dd class="col-sm-9">@Model.PhonbeNumber</dd>
+
+		<dt class="col-sm-3">Mobile Number</dt>
+		<dd class="col-sm-9">@Model.MobileNumber</dd>
+
+		<dt class="col-sm-3">Address Line 1</dt>
+		<dd class="col-sm-9">@Model.Address1</dd>
+
+		<dt class="col-sm-3">Address Line 2</dt>
+		<dd class="col-sm-9">@Model.Address2</dd>
+
+		<dt class="col-sm-3">City</dt>
+		<dd class="col-sm-9">@Model.CityName</dd>
+
+		<dt class="col-sm-3">State</dt>
+		<dd class="col-sm-9">@Model.StateName</dd>
+
+		<dt class="col-sm-3">Country</dt>
+		<dd class="col-sm-9">@Model.CountryName</dd>
+
+		<dt class="col-sm-3">Zip Code</dt>
+		<dd class="col-sm-9">@Model.ZipCode</dd>
+
+		<dt class="col-sm-3">Company</dt>
+		<dd class="col-sm-9">@Model.CompanyName</dd>
+
+		<dt class="col-sm-3">School</dt>
+		<dd class="col-sm-9">@Model.SchoolName</dd>
+
+		<dt class="col-sm-3">Is Active</dt>
+		<dd class="col-sm-9">@Model.IsActive</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
