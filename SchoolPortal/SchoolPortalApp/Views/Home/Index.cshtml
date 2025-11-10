@@ -1,6 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Home";
-    //Layout = null;
+	ViewData["Title"] = "Home";
+	//Layout = null;
 }
 
 @model SchoolPortalApp.Models.StudentGenderByClassChartViewModel
@@ -8,229 +8,229 @@
 <h1>Dashboard</h1>
 
 <div class="row">
-    <!-- Chart 1: Bar Chart -->
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3>Student Distribution by Class</h3>
-            </div>
-            <div class="card-body">
-                <div style="position: relative; height: 300px;">
-                    <div id="barChart" style="width:100%;height:300px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Chart 2: Line Chart -->
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3>Student Performance Trend</h3>
-            </div>
-            <div class="card-body">
-                <div style="position: relative; height: 300px;">
-                    <div id="lineChart" style="width:100%;height:300px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Chart 3: Pie Chart -->
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3>Student Gender Distribution</h3>
-            </div>
-            <div class="card-body">
-                <div style="position: relative; height: 300px;">
-                    <div id="pieChart" style="width:100%;height:300px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Chart 4: Area Chart -->
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h3>Attendance Rate Over Time</h3>
-            </div>
-            <div class="card-body">
-                <div style="position: relative; height: 300px;">
-                    <div id="areaChart" style="width:100%;height:300px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Chart 1: Bar Chart -->
+	<div class="col-md-6 mb-4">
+		<div class="card">
+			<div class="card-header">
+				<h3>Student Distribution by Class</h3>
+			</div>
+			<div class="card-body">
+				<div style="position: relative; height: 300px;">
+					<div id="barChart" style="width:100%;height:300px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Chart 2: Line Chart -->
+	<div class="col-md-6 mb-4">
+		<div class="card">
+			<div class="card-header">
+				<h3>Student Performance Trend</h3>
+			</div>
+			<div class="card-body">
+				<div style="position: relative; height: 300px;">
+					<div id="lineChart" style="width:100%;height:300px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Chart 3: Pie Chart -->
+	<div class="col-md-6 mb-4">
+		<div class="card">
+			<div class="card-header">
+				<h3>Student Gender Distribution</h3>
+			</div>
+			<div class="card-body">
+				<div style="position: relative; height: 300px;">
+					<div id="pieChart" style="width:100%;height:300px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Chart 4: Area Chart -->
+	<div class="col-md-6 mb-4">
+		<div class="card">
+			<div class="card-header">
+				<h3>Attendance Rate Over Time</h3>
+			</div>
+			<div class="card-body">
+				<div style="position: relative; height: 300px;">
+					<div id="areaChart" style="width:100%;height:300px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.time.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // 1. Bar Chart - Student Distribution by Class
-            var barData = [
-                { label: "Class 1", data: [[0, 25]] },
-                { label: "Class 2", data: [[1, 30]] },
-                { label: "Class 3", data: [[2, 28]] },
-                { label: "Class 4", data: [[3, 32]] },
-                { label: "Class 5", data: [[4, 27]] }
-            ];
-            
-            var barOptions = {
-                series: {
-                    bars: {
-                        show: true,
-                        barWidth: 0.6,
-                        align: "center"
-                    }
-                },
-                xaxis: {
-                    mode: "categories",
-                    tickLength: 0
-                },
-                yaxis: {
-                    min: 0,
-                    tickDecimals: 0
-                },
-                grid: {
-                    hoverable: true,
-                    borderWidth: 1
-                },
-                legend: {
-                    show: true,
-                    position: "ne"
-                }
-            };
-            
-            $.plot("#barChart", barData, barOptions);
-            
-            // 2. Line Chart - Student Performance Trend
-            var lineData = [
-                { label: "Math", data: [[1, 75], [2, 80], [3, 70], [4, 85], [5, 90], [6, 88], [7, 92]] },
-                { label: "Science", data: [[1, 70], [2, 75], [3, 65], [4, 80], [5, 85], [6, 82], [7, 88]] }
-            ];
-            
-            var lineOptions = {
-                series: {
-                    lines: {
-                        show: true,
-                        fill: false
-                    },
-                    points: {
-                        show: true
-                    }
-                },
-                xaxis: {
-                    tickDecimals: 0
-                },
-                yaxis: {
-                    min: 0,
-                    max: 100
-                },
-                grid: {
-                    hoverable: true,
-                    borderWidth: 1
-                },
-                legend: {
-                    show: true,
-                    position: "ne"
-                }
-            };
-            
-            $.plot("#lineChart", lineData, lineOptions);
-            
-            // 3. Pie Chart - Student Gender Distribution
-            var pieData = [
-                { label: "Boys", data: 55 },
-                { label: "Girls", data: 45 }
-            ];
-            
-            var pieOptions = {
-                series: {
-                    pie: {
-                        show: true,
-                        radius: 1,
-                        label: {
-                            show: true,
-                            radius: 0.6,
-                            formatter: function(label, series) {
-                                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + 
-                                       label + '<br/>' + Math.round(series.percent) + '%</div>';
-                            },
-                            background: {
-                                opacity: 0.8
-                            }
-                        }
-                    }
-                },
-                legend: {
-                    show: true,
-                    position: "ne"
-                }
-            };
-            
-            $.plot("#pieChart", pieData, pieOptions);
-            
-            // 4. Area Chart - Attendance Rate Over Time
-            var areaData = [
-                { label: "Attendance Rate", data: [[1, 85], [2, 88], [3, 90], [4, 87], [5, 92], [6, 89], [7, 93]] }
-            ];
-            
-            var areaOptions = {
-                series: {
-                    lines: {
-                        show: true,
-                        fill: true
-                    },
-                    points: {
-                        show: true
-                    }
-                },
-                xaxis: {
-                    tickDecimals: 0
-                },
-                yaxis: {
-                    min: 0,
-                    max: 100
-                },
-                grid: {
-                    hoverable: true,
-                    borderWidth: 1
-                },
-                legend: {
-                    show: true,
-                    position: "ne"
-                }
-            };
-            
-            $.plot("#areaChart", areaData, areaOptions);
-            
-            // Add tooltip functionality for all charts
-            $(".card-body > div > div").on("plothover", function (event, pos, item) {
-                if (item) {
-                    var x = item.datapoint[0].toFixed(2),
-                        y = item.datapoint[1].toFixed(2);
-                    
-                    $("#tooltip").remove();
-                    $('<div id="tooltip">' + item.series.label + ': ' + y + '</div>').css({
-                        position: 'absolute',
-                        display: 'none',
-                        top: item.pageY - 20,
-                        left: item.pageX + 10,
-                        border: '1px solid #ccc',
-                        padding: '2px',
-                        'background-color': '#fff',
-                        opacity: 0.80
-                    }).appendTo("body").fadeIn(200);
-                } else {
-                    $("#tooltip").remove();
-                }
-            });
-        });
-    </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.time.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			// 1. Bar Chart - Student Distribution by Class
+			var barData = [
+				{ label: "Class 1", data: [[0, 25]] },
+				{ label: "Class 2", data: [[1, 30]] },
+				{ label: "Class 3", data: [[2, 28]] },
+				{ label: "Class 4", data: [[3, 32]] },
+				{ label: "Class 5", data: [[4, 27]] }
+			];
+			
+			var barOptions = {
+				series: {
+					bars: {
+						show: true,
+						barWidth: 0.6,
+						align: "center"
+					}
+				},
+				xaxis: {
+					mode: "categories",
+					tickLength: 0
+				},
+				yaxis: {
+					min: 0,
+					tickDecimals: 0
+				},
+				grid: {
+					hoverable: true,
+					borderWidth: 1
+				},
+				legend: {
+					show: true,
+					position: "ne"
+				}
+			};
+			
+			$.plot("#barChart", barData, barOptions);
+			
+			// 2. Line Chart - Student Performance Trend
+			var lineData = [
+				{ label: "Math", data: [[1, 75], [2, 80], [3, 70], [4, 85], [5, 90], [6, 88], [7, 92]] },
+				{ label: "Science", data: [[1, 70], [2, 75], [3, 65], [4, 80], [5, 85], [6, 82], [7, 88]] }
+			];
+			
+			var lineOptions = {
+				series: {
+					lines: {
+						show: true,
+						fill: false
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					tickDecimals: 0
+				},
+				yaxis: {
+					min: 0,
+					max: 100
+				},
+				grid: {
+					hoverable: true,
+					borderWidth: 1
+				},
+				legend: {
+					show: true,
+					position: "ne"
+				}
+			};
+			
+			$.plot("#lineChart", lineData, lineOptions);
+			
+			// 3. Pie Chart - Student Gender Distribution
+			var pieData = [
+				{ label: "Boys", data: 55 },
+				{ label: "Girls", data: 45 }
+			];
+			
+			var pieOptions = {
+				series: {
+					pie: {
+						show: true,
+						radius: 1,
+						label: {
+							show: true,
+							radius: 0.6,
+							formatter: function(label, series) {
+								return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + 
+									   label + '<br/>' + Math.round(series.percent) + '%</div>';
+							},
+							background: {
+								opacity: 0.8
+							}
+						}
+					}
+				},
+				legend: {
+					show: true,
+					position: "ne"
+				}
+			};
+			
+			$.plot("#pieChart", pieData, pieOptions);
+			
+			// 4. Area Chart - Attendance Rate Over Time
+			var areaData = [
+				{ label: "Attendance Rate", data: [[1, 85], [2, 88], [3, 90], [4, 87], [5, 92], [6, 89], [7, 93]] }
+			];
+			
+			var areaOptions = {
+				series: {
+					lines: {
+						show: true,
+						fill: true
+					},
+					points: {
+						show: true
+					}
+				},
+				xaxis: {
+					tickDecimals: 0
+				},
+				yaxis: {
+					min: 0,
+					max: 100
+				},
+				grid: {
+					hoverable: true,
+					borderWidth: 1
+				},
+				legend: {
+					show: true,
+					position: "ne"
+				}
+			};
+			
+			$.plot("#areaChart", areaData, areaOptions);
+			
+			// Add tooltip functionality for all charts
+			$(".card-body > div > div").on("plothover", function (event, pos, item) {
+				if (item) {
+					var x = item.datapoint[0].toFixed(2),
+						y = item.datapoint[1].toFixed(2);
+					
+					$("#tooltip").remove();
+					$('<div id="tooltip">' + item.series.label + ': ' + y + '</div>').css({
+						position: 'absolute',
+						display: 'none',
+						top: item.pageY - 20,
+						left: item.pageX + 10,
+						border: '1px solid #ccc',
+						padding: '2px',
+						'background-color': '#fff',
+						opacity: 0.80
+					}).appendTo("body").fadeIn(200);
+				} else {
+					$("#tooltip").remove();
+				}
+			});
+		});
+	</script>
 }

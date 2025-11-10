@@ -1,0 +1,80 @@
+@model dynamic
+
+@{
+	// Extract property names from ViewData or use defaults
+	string countryProperty = ViewData["CountryProperty"]?.ToString() ?? "CountryId";
+	string stateProperty = ViewData["StateProperty"]?.ToString() ?? "StateId";
+	string cityProperty = ViewData["CityProperty"]?.ToString() ?? "CityId";
+	
+	// Extract label texts from ViewData or use defaults
+	string countryLabel = ViewData["CountryLabel"]?.ToString() ?? "Country";
+	string stateLabel = ViewData["StateLabel"]?.ToString() ?? "State";
+	string cityLabel = ViewData["CityLabel"]?.ToString() ?? "City";
+	
+	// Extract collections from the model
+	var countries = ViewData["Countries"] as IEnumerable<SelectListItem> ?? Model.Countries as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+	var states = ViewData["States"] as IEnumerable<SelectListItem> ?? Model.States as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+	var cities = ViewData["Cities"] as IEnumerable<SelectListItem> ?? Model.Cities as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+	
+	// Extract selected values
+	string countryValue = ViewData["CountryValue"]?.ToString() ?? "";
+	string stateValue = ViewData["StateValue"]?.ToString() ?? "";
+	string cityValue = ViewData["CityValue"]?.ToString() ?? "";
+	
+	// Extract controller name for AJAX calls
+	string controllerName = ViewData["ControllerName"]?.ToString() ?? "";
+}
+
+<div class="row">
+	<div class="col-md-4 mb-3">
+		<label for="@countryProperty" class="form-label">@countryLabel</label>
+		<select id="@countryProperty" name="@countryProperty" class="form-select" 
+				data-states-target="@stateProperty" 
+				data-cities-target="@cityProperty"
+				data-controller="@controllerName">
+			<option value="">-- Select @countryLabel --</option>
+			@foreach (var country in countries)
+			{
+				<option value="@country.Value" selected="@(country.Value == countryValue ? "selected" : null)">
+					@country.Text
+				</option>
+			}
+		</select>
+		@if (ViewData.ContainsKey($"{countryProperty}_Validation"))
+		{
+			<span class="text-danger">@ViewData[$"{countryProperty}_Validation"]</span>
+		}
+	</div>
+	<div class="col-md-4 mb-3">
+		<label for="@stateProperty" class="form-label">@stateLabel</label>
+		<select id="@stateProperty" name="@stateProperty" class="form-select">
+			<option value="">-- Select @stateLabel --</option>
+			@foreach (var state in states)
+			{
+				<option value="@state.Value" selected="@(state.Value == stateValue ? "selected" : null)">
+					@state.Text
+				</option>
+			}
+		</select>
+		@if (ViewData.ContainsKey($"{stateProperty}_Validation"))
+		{
+			<span class="text-danger">@ViewData[$"{stateProperty}_Validation"]</span>
+		}
+	</div>
+	<div class="col-md-4 mb-3">
+		<label for="@cityProperty" class="form-label">@cityLabel</label>
+		<select id="@cityProperty" name="@cityProperty" class="form-select">
+			<option value="">-- Select @cityLabel --</option>
+			@foreach (var city in cities)
+			{
+				<option value="@city.Value" selected="@(city.Value == cityValue ? "selected" : null)">
+					@city.Text
+				</option>
+			}
+		</select>
+		@if (ViewData.ContainsKey($"{cityProperty}_Validation"))
+		{
+			<span class="text-danger">@ViewData[$"{cityProperty}_Validation"]</span>
+		}
+	</div>
+</div>

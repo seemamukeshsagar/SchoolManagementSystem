@@ -43,29 +43,19 @@
 		<input asp-for="Address2" class="form-control" />
 		<span asp-validation-for="Address2" class="text-danger"></span>
 	</div>
-	<div class="row">
-		<div class="col-md-4 mb-3">
-			<label asp-for="CountryId" class="form-label"></label>
-			<select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
-				<option value="">-- Select Country --</option>
-			</select>
-			<span asp-validation-for="CountryId" class="text-danger"></span>
-		</div>
-		<div class="col-md-4 mb-3">
-			<label asp-for="StateId" class="form-label"></label>
-			<select asp-for="StateId" class="form-select" asp-items="Model.States">
-				<option value="">-- Select State --</option>
-			</select>
-			<span asp-validation-for="StateId" class="text-danger"></span>
-		</div>
-		<div class="col-md-4 mb-3">
-			<label asp-for="CityId" class="form-label"></label>
-			<select asp-for="CityId" class="form-select" asp-items="Model.Cities">
-				<option value="">-- Select City --</option>
-			</select>
-			<span asp-validation-for="CityId" class="text-danger"></span>
-		</div>
-	</div>
+	
+	@* Using the new partial view for Country/State/City dropdowns *@
+	@{
+		ViewData["CountryProperty"] = "CountryId";
+		ViewData["StateProperty"] = "StateId";
+		ViewData["CityProperty"] = "CityId";
+		ViewData["CountryLabel"] = "Country";
+		ViewData["StateLabel"] = "State";
+		ViewData["CityLabel"] = "City";
+		ViewData["ControllerName"] = "Vendor";
+	}
+	<partial name="_CountryStateCityDropdowns" model="@Model" view-data="ViewData" />
+	
 	<div class="row">
 		<div class="col-md-6 mb-3">
 			<label asp-for="ZipCode" class="form-label"></label>
@@ -99,56 +89,8 @@
 </form>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
-	<script>
-		(function() {
-			const country = document.getElementById('CountryId');
-			const state = document.getElementById('StateId');
-			const city = document.getElementById('CityId');
-
-			function clearOptions(sel, placeholder) {
-				sel.innerHTML = '';
-				const opt = document.createElement('option');
-				opt.value = '';
-				opt.textContent = placeholder;
-				sel.appendChild(opt);
-			}
-
-			// Initialize states and cities based on current selection
-			if (country && country.value) {
-				state.disabled = false;
-			}
-			if (state && state.value) {
-				city.disabled = false;
-			}
-
-			country?.addEventListener('change', async () => {
-				clearOptions(state, '-- Select State --');
-				clearOptions(city, '-- Select City --');
-				const val = country.value;
-				if (!val) return;
-				const res = await fetch(`/Vendor/GetStates?countryId=${val}`);
-				const data = await res.json();
-				data.forEach(x => {
-					const o = document.createElement('option');
-					o.value = x.id;
-					o.textContent = x.name;
-					state.appendChild(o);
-				});
-			});
-
-			state?.addEventListener('change', async () => {
-				clearOptions(city, '-- Select City --');
-				const val = state.value;
-				if (!val) return;
-				const res = await fetch(`/Vendor/GetCities?stateId=${val}`);
-				const data = await res.json();
-				data.forEach(x => {
-					const o = document.createElement('option');
-					o.value = x.id;
-					o.textContent = x.name;
-					city.appendChild(o);
-				});
-			});
-		})();
-	</script>
+	@* 
+		Removed the inline JavaScript since it's now handled by the cascading-dropdowns.js file
+		that's included in the _Layout.cshtml
+	*@
 }

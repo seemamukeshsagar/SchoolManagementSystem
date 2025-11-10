@@ -1,0 +1,56 @@
+@*
+	This is a demonstration of how to use the _CountryStateCityDropdowns partial view.
+	
+	To use the partial view, you need to:
+	1. Make sure your model has CountryId, StateId, and CityId properties
+	2. Make sure your model has Countries, States, and Cities collections of SelectListItem
+	3. Include the necessary data attributes in ViewData
+*@
+
+@model dynamic
+
+<h3>Country/State/City Dropdowns Demo</h3>
+
+<form method="post">
+	<div class="mb-3">
+		<label class="form-label">Vendor Address</label>
+		@{
+			// Set up ViewData for the partial view
+			ViewData["CountryProperty"] = "CountryId";
+			ViewData["StateProperty"] = "StateId";
+			ViewData["CityProperty"] = "CityId";
+			ViewData["CountryLabel"] = "Country";
+			ViewData["StateLabel"] = "State";
+			ViewData["CityLabel"] = "City";
+			ViewData["ControllerName"] = "Vendor"; // This should match your controller name
+		}
+		
+		<partial name="_CountryStateCityDropdowns" model="@Model" view-data="ViewData" />
+	</div>
+	
+	<div class="mb-3">
+		<label class="form-label">Emergency Contact Address</label>
+		@{
+			// Set up ViewData for a second set of dropdowns with different property names
+			ViewData["CountryProperty"] = "EmergencyCountryId";
+			ViewData["StateProperty"] = "EmergencyStateId";
+			ViewData["CityProperty"] = "EmergencyCityId";
+			ViewData["CountryLabel"] = "Emergency Country";
+			ViewData["StateLabel"] = "Emergency State";
+			ViewData["CityLabel"] = "Emergency City";
+			ViewData["ControllerName"] = "Vendor"; // This should match your controller name
+		}
+		
+		<partial name="_CountryStateCityDropdowns" model="@Model" view-data="ViewData" />
+	</div>
+	
+	<button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	@* 
+		The cascading dropdowns JavaScript is now included in the _Layout.cshtml file,
+		so you don't need to include it here unless you have special requirements.
+	*@
+}
