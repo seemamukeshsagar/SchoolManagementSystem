@@ -1,0 +1,74 @@
+@model SchoolPortalApp.Models.VehicleExpenseDetailsViewModel
+@{
+	ViewData["Title"] = "Create Vehicle Expense";
+}
+<h2>Create Vehicle Expense</h2>
+<form asp-action="Create" method="post">
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="Name" class="form-label"></label>
+			<input asp-for="Name" class="form-control" />
+			<span asp-validation-for="Name" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="VehicleId" class="form-label"></label>
+			<select asp-for="VehicleId" class="form-select" asp-items="Model.Vehicles">
+				<option value="">-- Select Vehicle --</option>
+			</select>
+			<span asp-validation-for="VehicleId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="VehicleTypeId" class="form-label"></label>
+			<select asp-for="VehicleTypeId" class="form-select" asp-items="Model.VehicleTypes">
+				<option value="">-- Select Vehicle Type --</option>
+			</select>
+			<span asp-validation-for="VehicleTypeId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="ExpenseDate" class="form-label"></label>
+			<input asp-for="ExpenseDate" class="form-control" />
+			<span asp-validation-for="ExpenseDate" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="ExpenseAmount" class="form-label"></label>
+			<input asp-for="ExpenseAmount" class="form-control" />
+			<span asp-validation-for="ExpenseAmount" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="CompanyId" class="form-label"></label>
+			<select asp-for="CompanyId" class="form-select" asp-items="Model.Companies">
+				<option value="">-- Select Company --</option>
+			</select>
+			<span asp-validation-for="CompanyId" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 mb-3">
+			<label asp-for="SchoolId" class="form-label"></label>
+			<select asp-for="SchoolId" class="form-select" asp-items="Model.Schools">
+				<option value="">-- Select School --</option>
+			</select>
+			<span asp-validation-for="SchoolId" class="text-danger"></span>
+		</div>
+		<div class="col-md-6 mb-3">
+			<label asp-for="Description" class="form-label"></label>
+			<input asp-for="Description" class="form-control" />
+			<span asp-validation-for="Description" class="text-danger"></span>
+		</div>
+	</div>
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

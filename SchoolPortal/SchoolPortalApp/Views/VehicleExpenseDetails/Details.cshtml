@@ -1,0 +1,36 @@
+@{
+	ViewData["Title"] = "Vehicle Expense Details";
+}
+<h2>Vehicle Expense Details</h2>
+<div class="mb-3">
+	<strong>Name:</strong> @Model.Name
+</div>
+<div class="mb-3">
+	<strong>Description:</strong> @Model.Description
+</div>
+<div class="mb-3">
+	<strong>Vehicle:</strong> @Model.VehicleNumber
+</div>
+<div class="mb-3">
+	<strong>Vehicle Type:</strong> @Model.VehicleType
+</div>
+<div class="mb-3">
+	<strong>Expense Date:</strong> @Model.ExpenseDate
+</div>
+<div class="mb-3">
+	<strong>Expense Amount:</strong> @Model.ExpenseAmount
+</div>
+<div class="mb-3">
+	<strong>Company:</strong> @Model.CompanyName
+</div>
+<div class="mb-3">
+	<strong>School:</strong> @Model.SchoolName
+</div>
+<div class="mb-3">
+	<strong>Active:</strong> @Model.IsActive
+</div>
+
+<p>
+	<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+	<a class="btn btn-secondary" asp-action="Index">Back</a>
+</p>

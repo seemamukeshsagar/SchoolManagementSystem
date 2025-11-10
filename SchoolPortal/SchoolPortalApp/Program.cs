@@ -105,6 +105,7 @@ builder.Services.AddScoped<ISupplierService, SchoolPortal.Services.SupplierServi
 builder.Services.AddScoped<IVendorService, SchoolPortal.Services.VendorService>();
 builder.Services.AddScoped<IVehicleMasterService, SchoolPortal.Services.VehicleMasterService>();
 builder.Services.AddScoped<IVehicleTypeMasterService, SchoolPortal.Services.VehicleTypeMasterService>();
+builder.Services.AddScoped<IVehicleExpenseDetailsService, SchoolPortal.Services.VehicleExpenseDetailsService>();
 
 var app = builder.Build();
 

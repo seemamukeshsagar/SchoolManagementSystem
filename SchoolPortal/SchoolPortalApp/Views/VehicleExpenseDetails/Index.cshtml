@@ -1,0 +1,48 @@
+@{
+	ViewData["Title"] = "Vehicle Expense Details";
+}
+<h2>Vehicle Expense Details</h2>
+@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create VehicleExpense"))
+{
+	<p>
+		<a class="btn btn-primary" asp-controller="VehicleExpenseDetails" asp-action="Create">Create New</a>
+	</p>
+}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Vehicle</th>
+			<th>Vehicle Type</th>
+			<th>Expense Date</th>
+			<th>Expense Amount</th>
+			<th>Company</th>
+			<th>School</th>
+			<th>Is Active</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@item.Name</td>
+			<td>@item.VehicleNumber</td>
+			<td>@item.VehicleType</td>
+			<td>@item.ExpenseDate</td>
+			<td>@item.ExpenseAmount</td>
+			<td>@item.CompanyName</td>
+			<td>@item.SchoolName</td>
+			<td>@item.IsActive</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id"class="btn btn-info" title="View Details">
+				<i class="bi bi-eye"></i></a> |
+				<a asp-action="Edit" asp-route-id="@item.Id"class="btn btn-warning" title="Edit">
+				<i class="bi bi-pencil"></i></a> |
+				<a asp-action="Delete" asp-route-id="@item.Id"class="btn btn-danger" title="Delete">
+				<i class="bi bi-trash"></i></a>
+			</td>			
+		</tr>
+	}
+	</tbody>
+</table>
