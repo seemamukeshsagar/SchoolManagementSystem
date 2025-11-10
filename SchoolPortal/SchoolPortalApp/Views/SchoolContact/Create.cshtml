@@ -19,20 +19,22 @@
 		<input asp-for="LastName" class="form-control" />
 		<span asp-validation-for="LastName" class="text-danger"></span>
 	</div>
-	<div class="form-group">
-		<label asp-for="Email"></label>
-		<input asp-for="Email" class="form-control" />
-		<span asp-validation-for="Email" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="Phone"></label>
-		<input asp-for="Phone" class="form-control" />
-		<span asp-validation-for="Phone" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="MobilePhone"></label>
-		<input asp-for="MobilePhone" class="form-control" />
-		<span asp-validation-for="MobilePhone" class="text-danger"></span>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<label asp-for="Email" class="form-label"></label>
+			<input asp-for="Email" class="form-control" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="Phone" class="form-label"></label>
+			<input asp-for="Phone" class="form-control" />
+			<span asp-validation-for="Phone" class="text-danger"></span>
+		</div>
+		<div class="col-md-4 mb-3">
+			<label asp-for="MobilePhone" class="form-label"></label>
+			<input asp-for="MobilePhone" class="form-control" />
+			<span asp-validation-for="MobilePhone" class="text-danger"></span>
+		</div>
 	</div>
 	<div class="form-group">
 		<label asp-for="AddressLine1"></label>
@@ -44,11 +46,6 @@
 		<input asp-for="AddressLine2" class="form-control" />
 		<span asp-validation-for="AddressLine2" class="text-danger"></span>
 	</div>
-	@* <div class="form-group">
-		<label asp-for="CountryId"></label>
-		<select asp-for="CountryId" asp-items="Model.Countries" class="form-control" id="country"></select>
-		<span asp-validation-for="CountryId" class="text-danger"></span>
-	</div> *@
 	<div class="col-md-4 mb-3">
 		<label asp-for="CountryId" class="form-label"></label>
 		<select asp-for="CountryId" class="form-select" asp-items="Model.Countries">
@@ -56,11 +53,6 @@
 		</select>
 		<span asp-validation-for="CountryId" class="text-danger"></span>
 	</div>
-	@* <div class="form-group">
-		<label asp-for="StateId"></label>
-		<select asp-for="StateId" asp-items="Model.States" class="form-control" id="state"></select>
-		<span asp-validation-for="StateId" class="text-danger"></span>
-	</div> *@
 	<div class="col-md-4 mb-3">
 		<label asp-for="StateId" class="form-label"></label>
 		<select asp-for="StateId" class="form-select" asp-items="Model.States">
@@ -68,11 +60,6 @@
 		</select>
 		<span asp-validation-for="StateId" class="text-danger"></span>
 	</div>
-	@* <div class="form-group">
-		<label asp-for="CityId"></label>
-		<select asp-for="CityId" asp-items="Model.Cities" class="form-control" id="city"></select>
-		<span asp-validation-for="CityId" class="text-danger"></span>
-	</div> *@
 	<div class="col-md-4 mb-3">
 			<label asp-for="CityId" class="form-label"></label>
 			<select asp-for="CityId" class="form-select" asp-items="Model.Cities">

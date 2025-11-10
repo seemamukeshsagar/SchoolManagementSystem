@@ -63,7 +63,7 @@ namespace SchoolPortalApp.Controllers
             vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
             {
                 Value = s.Id.ToString(),
-                Text = s.SchoolName
+                Text = s.Name
             }).ToList();
         }
 
@@ -78,7 +78,7 @@ namespace SchoolPortalApp.Controllers
             var vehicles = _vehicleService.GetAll().ToDictionary(v => v.Id, v => v.VehicleNumber);
             var vehicleTypes = _vehicleTypeService.GetAll().ToDictionary(vt => vt.Id, vt => vt.VehicleType);
             var companies = _companyService.GetAll().ToDictionary(c => c.Id, c => c.CompanyName);
-            var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.SchoolName);
+            var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.Name);
 
             var result = list.Select(item =>
             {
@@ -121,7 +121,7 @@ namespace SchoolPortalApp.Controllers
                 VehicleNumber = vehicle?.VehicleNumber ?? string.Empty,
                 VehicleType = vehicleType?.VehicleType ?? string.Empty,
                 CompanyName = company?.CompanyName ?? string.Empty,
-                SchoolName = school?.SchoolName ?? string.Empty,
+                SchoolName = school?.Name ?? string.Empty,
                 IsActive = item.IsActive
             };
 
@@ -286,7 +286,7 @@ namespace SchoolPortalApp.Controllers
                 VehicleNumber = vehicle?.VehicleNumber ?? string.Empty,
                 VehicleType = vehicleType?.VehicleType ?? string.Empty,
                 CompanyName = company?.CompanyName ?? string.Empty,
-                SchoolName = school?.SchoolName ?? string.Empty,
+                SchoolName = school?.Name ?? string.Empty,
                 ExpenseAmount = item.ExpenseAmount?.ToString("C") ?? "0.00"
             };
 

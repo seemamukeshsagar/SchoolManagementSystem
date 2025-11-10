@@ -38,7 +38,7 @@ namespace SchoolPortalApp.Controllers
 			ViewBag.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem 
 			{ 
 				Value = s.Id.ToString(), 
-				Text = s.SchoolName 
+				Text = s.Name 
 			}).ToList();
 		}
 
@@ -51,7 +51,7 @@ namespace SchoolPortalApp.Controllers
 			
 			// Enrich with company and school names
 			var companies = _companyService.GetAll().ToDictionary(c => c.Id, c => c.CompanyName);
-			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.SchoolName);
+			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.Name);
 			
 			var result = list.Select(item =>
 			{
@@ -76,7 +76,7 @@ namespace SchoolPortalApp.Controllers
 			if (item == null) return NotFound();
 
 			var companies = _companyService.GetAll().ToDictionary(c => c.Id, c => c.CompanyName);
-			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.SchoolName);
+			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.Name);
 
 			var vm = new
 			{
@@ -212,7 +212,7 @@ namespace SchoolPortalApp.Controllers
 			if (item == null) return NotFound();
 			
 			var companies = _companyService.GetAll().ToDictionary(c => c.Id, c => c.CompanyName);
-			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.SchoolName);
+			var schools = _schoolService.GetAll().ToDictionary(s => s.Id, s => s.Name);
 
 			var vm = new
 			{
