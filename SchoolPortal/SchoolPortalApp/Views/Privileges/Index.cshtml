@@ -4,48 +4,41 @@
 	ViewData["Title"] = "Privileges";
 }
 
-<div class="card">
-	<div class="card-header">
-		<h3 class="card-title">Privileges</h3>
-		<div class="card-tools">
-			<a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
-		</div>
-	</div>
-	<div class="card-body table-responsive p-0">
-		<table class="table table-hover text-nowrap">
-			<thead>
-				<tr>
-					<th>Name</th>
-					@* <th>Description</th> *@
-					<th>Is Active</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model)
-				{
-					<tr>
-						<td>@Html.DisplayFor(modelItem => item.Name)</td>
-						<td>@(item.IsActive ? "Yes" : "No")</td>
-						<td>
-							<div class="btn-group btn-group-sm">
-								<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details">
-									<i class="bi bi-eye"></i>
-								</a>
-								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
-									<i class="bi bi-pencil"></i>
-								</a>
-								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
-									<i class="bi bi-trash"></i>
-								</a>
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
-</div>
+<h2>Privileges</h2>
+@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create Privilege"))
+{
+	<p>
+		<a class="btn btn-primary" asp-controller="Privileges" asp-action="Create">Create New</a>
+	</p>
+}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Privilege Name</th>
+			<th>Is Active</th>
+			<th>Parent Privilege</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@item.PrivilegeName</td>
+			<td>@item.IsActive</td>
+			<td>@item.ParentPrivilegeName</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id"class="btn btn-info" title="View Details">
+				<i class="bi bi-eye"></i></a> |
+				<a asp-action="Edit" asp-route-id="@item.Id"class="btn btn-warning" title="Edit">
+				<i class="bi bi-pencil"></i></a> |
+				<a asp-action="Delete" asp-route-id="@item.Id"class="btn btn-danger" title="Delete">
+				<i class="bi bi-trash"></i></a>
+			</td>			
+		</tr>
+	}
+	</tbody>
+</table>
 
 @section Styles {
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">

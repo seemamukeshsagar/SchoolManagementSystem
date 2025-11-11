@@ -17,8 +17,21 @@ namespace SchoolPortalApp.Controllers
 
 		public PrivilegesController(IPrivilegeService service, ILogger<PrivilegesController> logger)
 		{
-			_service = service ?? throw new ArgumentNullException(nameof(service));
-			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			_service = service;
+			_logger = logger;
+		}
+
+		private void PopulateDropdowns(PrivilegeViewModel vm)
+		{
+			var allPrivileges = _service.GetAll();
+			// Exclude the current privilege from parent options to prevent circular references
+			var parentPrivileges = allPrivileges.Where(p => p.Id != vm.Id).ToList();
+			vm.ParentPrivileges = parentPrivileges.Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem 
+			{ 
+				Value = p.Id.ToString(), 
+				Text = p.PrivilegeName,
+				Selected = p.Id == vm.PrivilegeParentId 
+			}).ToList();
 		}
 
 		[HttpGet]
@@ -26,57 +39,40 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			try
+			var list = _service.GetAll();
+			var allPrivileges = list.ToList();
+			var result = list.Select(item =>
 			{
-				var privileges = _service.GetAll()
-					.Select(p => new PrivilegeListItemViewModel
-					{
-						Id = p.Id,
-						Name = p.PrivilegeName,
-						IsActive = p.IsActive
-					})
-					.OrderBy(x => x.Name)
-					.ToList();
-
-				return View(privileges);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Error occurred while getting privileges list");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+				var parent = allPrivileges.FirstOrDefault(p => p.Id == item.PrivilegeParentId);
+				return new PrivilegeListItemViewModel
+				{
+					Id = item.Id,
+					PrivilegeName = item.PrivilegeName,
+					IsActive = item.IsActive,
+					ParentPrivilegeName = parent?.PrivilegeName ?? string.Empty,
+				};
+			}).ToList();
+			return View(result);
 		}
 
 		[HttpGet]
 		[Route("Details/{id}")]
 		public IActionResult Details(Guid id)
 		{
-			try
-			{
-				var privilege = _service.GetById(id);
-				if (privilege == null)
-				{
-					return NotFound();
-				}
+			var item = _service.GetById(id);
+			if (item == null) return NotFound();
 
-				var vm = new PrivilegeDetailsViewModel
-				{
-					Id = privilege.Id,
-					Name = privilege.PrivilegeName,
-					IsActive = privilege.IsActive,
-					CreatedBy = privilege.CreatedBy.ToString(),
-					CreatedDate = privilege.CreatedDate,
-					ModifiedBy = privilege.ModifiedBy?.ToString(),
-					ModifiedDate = privilege.ModifiedDate
-				};
+			var allPrivileges = _service.GetAll().ToList();
+			var parent = allPrivileges.FirstOrDefault(p => p.Id == item.PrivilegeParentId);
 
-				return View(vm);
-			}
-			catch (Exception ex)
+			var vm = new PrivilegeDetailsViewModel
 			{
-				_logger.LogError(ex, $"Error occurred while getting privilege details for ID: {id}");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+				Id = item.Id,
+				PrivilegeName = item.PrivilegeName ?? string.Empty,
+				IsActive = item.IsActive,
+				ParentPrivilegeName = parent?.PrivilegeName ?? string.Empty,
+			};
+			return View(vm);
 		}
 
 		[HttpGet]
@@ -84,6 +80,7 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create()
 		{
 			var vm = new PrivilegeViewModel();
+			PopulateDropdowns(vm);
 			return View(vm);
 		}
 
@@ -94,75 +91,54 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
+				PopulateDropdowns(model);
+				return View(model);
+			}
+			var userIdStr = HttpContext.Session.GetString("UserId");
+			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			{
+				ModelState.AddModelError(string.Empty, "Please login to create privilege.");
+				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			try
+			var entity = new Privileges
 			{
-				var userIdStr = HttpContext.Session.GetString("UserId");
-				var companyIdStr = HttpContext.Session.GetString("CompanyId");
-				var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+				Id = Guid.NewGuid(),
+				PrivilegeName = model.PrivilegeName,
+				IsActive = model.IsActive,
+				CreatedBy = userId,
+				CreatedDate = DateTime.UtcNow,
+				PrivilegeParentId = model.PrivilegeParentId,
+				Status = string.Empty,
+				StatusMessage = string.Empty,
+			};
 
-				if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) ||
-					string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-					string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
-				{
-					ModelState.AddModelError(string.Empty, "Please login to create a privilege.");
-					return View(model);
-				}
-
-				var entity = new Privileges
-				{
-					Id = Guid.Empty,
-					PrivilegeName = model.Name?.Trim() ?? string.Empty,
-					IsActive = model.IsActive,
-					CreatedBy = userId,
-					CreatedDate = DateTime.UtcNow
-				};
-
-				var newId = _service.Create(entity);
-				if (newId == Guid.Empty)
-				{
-					ModelState.AddModelError(string.Empty, "Failed to create privilege. A privilege with this name may already exist.");
-					return View(model);
-				}
-
-				return RedirectToAction("Details", new { id = newId });
-			}
-			catch (Exception ex)
+			var newId = _service.Create(entity);
+			if (newId == Guid.Empty)
 			{
-				_logger.LogError(ex, "Error occurred while creating privilege");
-				ModelState.AddModelError(string.Empty, "An error occurred while creating the privilege.");
+				ModelState.AddModelError(string.Empty, "Failed to create privilege.");
+				PopulateDropdowns(model);
 				return View(model);
 			}
+			return RedirectToAction("Details", new { id = newId });
 		}
 
 		[HttpGet]
 		[Route("Edit/{id}")]
 		public IActionResult Edit(Guid id)
 		{
-			try
+			var item = _service.GetById(id);
+			if (item == null) return NotFound();
+			var vm = new PrivilegeViewModel
 			{
-				var privilege = _service.GetById(id);
-				if (privilege == null)
-				{
-					return NotFound();
-				}
-
-				var vm = new PrivilegeViewModel
-				{
-					Id = privilege.Id,
-					Name = privilege.PrivilegeName,
-					IsActive = privilege.IsActive
-				};
-
-				return View(vm);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, $"Error occurred while getting privilege for edit, ID: {id}");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+				Id = item.Id,
+				PrivilegeName = item.PrivilegeName,
+				IsActive = item.IsActive,
+				PrivilegeParentId = item.PrivilegeParentId,
+			};
+			PopulateDropdowns(vm);
+			return View(vm);
 		}
 
 		[HttpPost]
@@ -170,102 +146,63 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Edit(Guid id, PrivilegeViewModel model)
 		{
-			if (id != model.Id)
-			{
-				return BadRequest();
-			}
-
+			if (id != model.Id) return BadRequest();
 			if (!ModelState.IsValid)
 			{
+				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			try
+			var userIdStr = HttpContext.Session.GetString("UserId");
+			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
 			{
-				var userIdStr = HttpContext.Session.GetString("UserId");
-				var companyIdStr = HttpContext.Session.GetString("CompanyId");
-				var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-				if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
-				{
-					ModelState.AddModelError(string.Empty, "Please login to update privilege.");
-					return View(model);
-				}
-
-				var entity = new Privileges
-				{
-					Id = model.Id,
-					PrivilegeName = model.Name?.Trim() ?? string.Empty,
-					IsActive = model.IsActive,
-					ModifiedBy = userId,
-					ModifiedDate = DateTime.UtcNow
-				};
-
-				var result = _service.Update(entity);
-				if (!result)
-				{
-					ModelState.AddModelError(string.Empty, "Failed to update privilege. The privilege may have been modified or deleted.");
-					return View(model);
-				}
-
-				return RedirectToAction("Details", new { id = model.Id });
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, $"Error occurred while updating privilege, ID: {id}");
-				ModelState.AddModelError(string.Empty, "An error occurred while updating the privilege.");
+				ModelState.AddModelError(string.Empty, "Please login to update privilege.");
+				PopulateDropdowns(model);
 				return View(model);
 			}
+
+			var entity = new Privileges
+			{
+				Id = id,
+				PrivilegeName = model.PrivilegeName,
+				IsActive = model.IsActive,
+				ModifiedBy = userId,
+				ModifiedDate = DateTime.UtcNow,
+				PrivilegeParentId = model.PrivilegeParentId,
+				Status = string.Empty,
+				StatusMessage = string.Empty,
+			};
+
+			if (!_service.Update(entity))
+			{
+				ModelState.AddModelError(string.Empty, "Failed to update privilege.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
+			return RedirectToAction("Details", new { id });
 		}
 
 		[HttpGet]
 		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
-			try
-			{
-				var privilege = _service.GetById(id);
-				if (privilege == null)
-				{
-					return NotFound();
-				}
-
-				var vm = new PrivilegeDetailsViewModel
-				{
-					Id = privilege.Id,
-					Name = privilege.PrivilegeName,
-					IsActive = privilege.IsActive
-				};
-
-				return View(vm);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, $"Error occurred while getting privilege for delete, ID: {id}");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+			var item = _service.GetById(id);
+			if (item == null) return NotFound();
+			return View(item);
 		}
 
-		[HttpPost, ActionName("Delete")]
+		[HttpPost]
 		[Route("Delete/{id}")]
+		[ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public IActionResult DeleteConfirmed(Guid id)
+		public IActionResult ConfirmDelete(Guid id)
 		{
-			try
+			if (!_service.Delete(id))
 			{
-				var result = _service.Delete(id);
-				if (!result)
-				{
-					return NotFound();
-				}
-
-				return RedirectToAction(nameof(Index));
+				TempData["ErrorMessage"] = "Failed to delete privilege.";
+				return RedirectToAction("Delete", new { id });
 			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, $"Error occurred while deleting privilege, ID: {id}");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+			return RedirectToAction("Index");
 		}
 	}
 }

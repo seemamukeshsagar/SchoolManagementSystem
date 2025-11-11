@@ -26,6 +26,9 @@
 						</select>
 					</div>
 				</div>
+				<div class="col-md-8 text-right">
+					<button id="viewDetails" class="btn btn-info" disabled>View Details</button>
+				</div>
 			</div>
 
 			<div class="row mt-3">
@@ -40,6 +43,9 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Hidden field forAntiForgeryToken -->
+	@Html.AntiForgeryToken()
 </div>
 
 @section Styles {
@@ -54,13 +60,24 @@
 	<script>
 		// Global variable to store the DataTable instance
 		var privilegesTable;
+		var selectedRoleId = null;
+		
 		$(document).ready(function() {
 			$('#roleSelect').change(function() {
 				var roleId = $(this).val();
+				selectedRoleId = roleId;
+				$('#viewDetails').prop('disabled', !roleId);
+				
 				if (roleId) {
 					loadPrivileges(roleId);
 				} else {
 					$('#privilegesContainer').html('<div class="alert alert-info">Please select a role to manage its privileges.</div>');
+				}
+			});
+			
+			$('#viewDetails').click(function() {
+				if (selectedRoleId) {
+					window.location.href = '@Url.Action("Details", "RolePrivileges")/' + selectedRoleId;
 				}
 			});
 
@@ -128,6 +145,11 @@
 				.done(function(data) {
 					$('#privilegesContainer').html(data);
 					initializeDataTable();
+					
+					// Add save button functionality
+					$('#savePrivileges').off('click').on('click', function() {
+						savePrivileges(roleId);
+					});
 				})
 				.fail(function(xhr, status, error) {
 					console.error('Error loading privileges:', status, error);
@@ -141,6 +163,43 @@
 						}
 					}
 					$('#privilegesContainer').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+				});
+			}
+			
+			function savePrivileges(roleId) {
+				// Collect selected privilege IDs
+				var selectedPrivilegeIds = [];
+				$('.privilege-tree input[type="checkbox"]:checked').each(function() {
+					var id = $(this).val();
+					if (id) {
+						selectedPrivilegeIds.push(id);
+					}
+				});
+				
+				var updateModel = {
+					RoleId: roleId,
+					PrivilegeIds: selectedPrivilegeIds
+				};
+				
+				$.ajax({
+					url: '@Url.Action("UpdatePrivileges", "RolePrivileges")',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(updateModel),
+					headers: {
+						'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+					}
+				})
+				.done(function(response) {
+					if (response.success) {
+						showAlert('success', 'Privileges updated successfully!');
+					} else {
+						showAlert('danger', 'Failed to update privileges.');
+					}
+				})
+				.fail(function(xhr, status, error) {
+					console.error('Error updating privileges:', status, error);
+					showAlert('danger', 'Error updating privileges: ' + (xhr.responseText || error));
 				});
 			}
 

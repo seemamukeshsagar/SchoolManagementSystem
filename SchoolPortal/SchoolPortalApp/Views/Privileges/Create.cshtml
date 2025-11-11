@@ -1,48 +1,30 @@
 @model SchoolPortalApp.Models.PrivilegeViewModel
-
 @{
-	var actionName = ViewContext.RouteData.Values["action"]?.ToString() ?? "Create";
-	ViewData["Title"] = $"{actionName} Privilege";
+	ViewData["Title"] = "Create Privilege";
 }
-
-<div class="card">
-	<div class="card-header">
-		<h3 class="card-title">@ViewData["Title"]</h3>
+<h2>Create Privilege</h2>
+<form asp-action="Create" method="post">
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="PrivilegeName" class="form-label"></label>
+		<input asp-for="PrivilegeName" class="form-control" />
+		<span asp-validation-for="PrivilegeName" class="text-danger"></span>
 	</div>
-	<div class="card-body">
-		<form asp-action="@actionName">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			
-			@if (string.Equals(actionName, "Edit", StringComparison.OrdinalIgnoreCase))
-			{
-				<input type="hidden" asp-for="Id" />
-			}
-
-			<div class="form-group">
-				<label asp-for="Name" class="control-label"></label>
-				<input asp-for="Name" class="form-control" />
-				<span asp-validation-for="Name" class="text-danger"></span>
-			</div>
-
-			<div class="form-group">
-				<label asp-for="Description" class="control-label"></label>
-				<textarea asp-for="Description" class="form-control" rows="3"></textarea>
-				<span asp-validation-for="Description" class="text-danger"></span>
-			</div>
-
-			<div class="form-group form-check">
-				<input class="form-check-input" asp-for="IsActive" />
-				<label class="form-check-label" asp-for="IsActive"></label>
-			</div>
-
-			<div class="form-group">
-				<input type="submit" value="Save" class="btn btn-primary" />
-				<a asp-action="Index" class="btn btn-default">Cancel</a>
-			</div>
-		</form>
+	<div class="mb-3">
+		<label asp-for="PrivilegeParentId" class="form-label"></label>
+		<select asp-for="PrivilegeParentId" class="form-select" asp-items="Model.ParentPrivileges">
+			<option value="">-- No Parent (Root Privilege) --</option>
+		</select>
+		<span asp-validation-for="PrivilegeParentId" class="text-danger"></span>
 	</div>
-</div>
-
+	<div class="form-check mb-3">
+		<input asp-for="IsActive" class="form-check-input" />
+		<label asp-for="IsActive" class="form-check-label"></label>
+	</div>
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 @section Scripts {
-	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<partial name="_ValidationScriptsPartial" />
 }
