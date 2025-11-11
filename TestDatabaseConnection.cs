@@ -10,7 +10,7 @@ class Program
             Console.WriteLine("Testing database connection...");
             
             // Get connection string from environment or config
-            string connectionString = "Server=localhost;Database=SchoolManagementSystem;Integrated Security=true;";
+            string connectionString = "Server=DESKTOP-L9I46P8;Database=SchoolManagementSystem;Integrated Security=true;";
             
             using (var connection = new SqlConnection(connectionString))
             {
