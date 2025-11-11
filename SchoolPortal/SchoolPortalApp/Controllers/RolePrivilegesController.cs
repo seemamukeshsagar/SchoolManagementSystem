@@ -59,6 +59,35 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpGet]
+		[Route("Details/{roleId}")]
+		public async Task<IActionResult> Details(Guid roleId)
+		{
+			try
+			{
+				var role = _roleService.GetById(roleId);
+				if (role == null)
+				{
+					return NotFound();
+				}
+
+				var privileges = await _rolePrivilegeService.GetRolePrivilegesByRoleIdAsync(roleId);
+				var viewModel = new RolePrivilegeDetailsViewModel
+				{
+					RoleId = roleId,
+					RoleName = role.Name,
+					AssignedPrivileges = privileges.ToList()
+				};
+
+				return View(viewModel);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, $"Error loading role privileges details for role {roleId}");
+				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
+			}
+		}
+
+		[HttpGet]
 		[Route("GetPrivileges/{roleId}")]
 		public async Task<IActionResult> GetPrivileges(Guid roleId)
 		{
