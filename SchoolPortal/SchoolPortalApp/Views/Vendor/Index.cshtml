@@ -3,7 +3,7 @@
 	ViewData["Title"] = "Vendors";
 }
 <h2>Vendors</h2>
-@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create Vendor"))
+@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create Vendors"))
 {
 	<p>
 		<a class="btn btn-primary" asp-controller="Vendor" asp-action="Create">Create New</a>
