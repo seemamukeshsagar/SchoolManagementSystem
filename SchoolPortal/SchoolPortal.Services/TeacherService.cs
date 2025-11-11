@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
@@ -9,6 +11,13 @@ namespace SchoolPortal.Services
 {
     public class TeacherService : ITeacherService
     {
+        private readonly ILogger<TeacherService> _logger;
+        
+        public TeacherService(ILogger<TeacherService> logger)
+        {
+            _logger = logger;
+        }
+        
         private static TeacherMaster Map(DataRow r)
         {
             var t = new TeacherMaster();
@@ -70,44 +79,70 @@ namespace SchoolPortal.Services
 
         public Guid Create(TeacherMaster t)
         {
-            Proc p = new Proc("Teacher_Create");
-            p["@FirstName"] = t.FirstName;
-            p["@LastName"] = t.LastName ?? string.Empty;
-            p["@DOB"] = t.DOB;
-            p["@DOJ"] = (object?)t.DOJ ?? DBNull.Value;
-            p["@DateOfLeaving"] = (object?)t.DateOfLeaving ?? DBNull.Value;
-            p["@Address"] = t.Address ?? string.Empty;
-            p["@CityId"] = (object?)t.CityId ?? DBNull.Value;
-            p["@StateId"] = (object?)t.StateId ?? DBNull.Value;
-            p["@CountryId"] = (object?)t.CountryId ?? DBNull.Value;
-            p["@ZipCode"] = t.ZipCode ?? string.Empty;
-            p["@Gender"] = (object?)t.Gender ?? DBNull.Value;
-            p["@MaritalStatusId"] = (object?)t.MaritalStatusId ?? DBNull.Value;
-            p["@Image"] = t.Image ?? string.Empty;
-            p["@Email"] = t.Email ?? string.Empty;
-            p["@Phone"] = t.Phone ?? string.Empty;
-            p["@MobilePhone"] = t.MobilePhone ?? string.Empty;
-            p["@YearsOfExperience"] = t.YearsOfExperience ?? string.Empty;
-            p["@PreviousSchool"] = t.PreviousSchool ?? string.Empty;
-            p["@Salutation"] = t.Salutation ?? string.Empty;
-            p["@IsActive"] = t.IsActive;
-            p["@IsDeleted"] = t.IsDeleted;
-            p["@CompanyId"] = t.CompanyId;
-            p["@SchoolId"] = t.SchoolId;
-            p["@CreatedBy"] = t.CreatedBy;
-            p["@Status"] = t.Status ?? string.Empty;
-            p["@StatusMessage"] = t.StatusMessage ?? string.Empty;
-            var dt = new DataTable();
-            p.Exec(dt);
-            if (dt.Rows.Count > 0)
+            try
             {
-                var idObj = dt.Rows[0]["Id"];
-                if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
+                _logger.LogInformation("Creating teacher: {FirstName} {LastName}", t.FirstName, t.LastName);
+                _logger.LogInformation("Teacher details - DOB: {DOB}, Email: {Email}, SchoolId: {SchoolId}, CompanyId: {CompanyId}", t.DOB, t.Email, t.SchoolId, t.CompanyId);
+                
+                Proc p = new Proc("Teacher_Create");
+                p["@FirstName"] = t.FirstName;
+                p["@LastName"] = t.LastName ?? string.Empty;
+                p["@DOB"] = t.DOB;
+                p["@DOJ"] = (object?)t.DOJ ?? DBNull.Value;
+                p["@DateOfLeaving"] = (object?)t.DateOfLeaving ?? DBNull.Value;
+                p["@Address"] = t.Address ?? string.Empty;
+                p["@CityId"] = (object?)t.CityId ?? DBNull.Value;
+                p["@StateId"] = (object?)t.StateId ?? DBNull.Value;
+                p["@CountryId"] = (object?)t.CountryId ?? DBNull.Value;
+                p["@ZipCode"] = t.ZipCode ?? string.Empty;
+                p["@Gender"] = (object?)t.Gender ?? DBNull.Value;
+                p["@MaritalStatusId"] = (object?)t.MaritalStatusId ?? DBNull.Value;
+                p["@Image"] = t.Image ?? string.Empty;
+                p["@Email"] = t.Email ?? string.Empty;
+                p["@Phone"] = t.Phone ?? string.Empty;
+                p["@MobilePhone"] = t.MobilePhone ?? string.Empty;
+                p["@YearsOfExperience"] = t.YearsOfExperience ?? string.Empty;
+                p["@PreviousSchool"] = t.PreviousSchool ?? string.Empty;
+                p["@Salutation"] = t.Salutation ?? string.Empty;
+                p["@IsActive"] = t.IsActive;
+                p["@IsDeleted"] = t.IsDeleted;
+                p["@CompanyId"] = t.CompanyId;
+                p["@SchoolId"] = t.SchoolId;
+                p["@CreatedBy"] = t.CreatedBy;
+                p["@Status"] = t.Status ?? string.Empty;
+                p["@StatusMessage"] = t.StatusMessage ?? string.Empty;
+                
+                _logger.LogInformation("Executing Teacher_Create stored procedure");
+                var dt = new DataTable();
+                p.Exec(dt);
+                _logger.LogInformation("Teacher_Create stored procedure executed, rows returned: {RowCount}", dt.Rows.Count);
+                
+                // The Teacher_Create stored procedure returns the ID using SELECT Id = @NewId
+                if (dt.Rows.Count > 0)
                 {
-                    return newId;
+                    var idObj = dt.Rows[0]["Id"];
+                    if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
+                    {
+                        _logger.LogInformation("Successfully created teacher with ID: {TeacherId}", newId);
+                        return newId;
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Failed to parse ID from stored procedure result");
+                    }
                 }
+                else
+                {
+                    _logger.LogWarning("No rows returned from Teacher_Create stored procedure");
+                }
+                return Guid.Empty;
             }
-            return Guid.Empty;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating teacher: {Message}", ex.Message);
+                // Log the exception for debugging
+                throw new Exception($"Error creating teacher: {ex.Message}", ex);
+            }
         }
 
         public bool Update(TeacherMaster t)

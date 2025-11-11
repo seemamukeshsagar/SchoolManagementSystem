@@ -62,6 +62,13 @@ builder.Services.AddAntiforgery(o =>
 // Register IHttpContextAccessor (singleton)
 builder.Services.AddHttpContextAccessor();
 
+// Register logging
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole();
+    loggingBuilder.AddDebug();
+});
+
 // DI registrations
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
 	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);

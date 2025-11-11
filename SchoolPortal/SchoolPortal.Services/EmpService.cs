@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
@@ -9,6 +11,13 @@ namespace SchoolPortal.Services
 {
     public class EmpService : IEmpService
     {
+        private readonly ILogger<EmpService> _logger;
+        
+        public EmpService(ILogger<EmpService> logger)
+        {
+            _logger = logger;
+        }
+        
         private static EmpMaster MapEmp(DataRow r)
         {
             var e = new EmpMaster();
@@ -106,79 +115,105 @@ namespace SchoolPortal.Services
 
         public Guid Create(EmpMaster emp)
         {
-            Proc p = new Proc("Emp_Create");
-            p["@FirstName"] = emp.FirstName ?? string.Empty;
-            p["@LastName"] = emp.LastName ?? string.Empty;
-            p["@DOB"] = emp.DOB;
-            p["@DOJ"] = emp.DOJ;
-            p["@ProbationStartDate"] = (object?)emp.ProbationStartDate ?? DBNull.Value;
-            p["@ProbationPeriod"] = (object?)emp.ProbationPeriod ?? DBNull.Value;
-            p["@ConfirmationDate"] = (object?)emp.ConfirmationDate ?? DBNull.Value;
-            p["@PANNumber"] = emp.PANNumber ?? string.Empty;
-            p["@ESICNumber"] = emp.ESICNumber ?? string.Empty;
-            p["@PFNumeber"] = emp.PFNumeber ?? string.Empty;
-            p["@CurrentAddress1"] = emp.CurrentAddress1 ?? string.Empty;
-            p["@CurrentAddress2"] = emp.CurrentAddress2 ?? string.Empty;
-            p["@CurrentCityId"] = (object?)emp.CurrentCityId ?? DBNull.Value;
-            p["@CurrentStateId"] = (object?)emp.CurrentStateId ?? DBNull.Value;
-            p["@CurrentCountryId"] = (object?)emp.CurrentCountryId ?? DBNull.Value;
-            p["@CurrentZipCode"] = emp.CurrentZipCode ?? string.Empty;
-            p["@PermanentAddress1"] = emp.PermanentAddress1 ?? string.Empty;
-            p["@PermanentAddress2"] = emp.PermanentAddress2 ?? string.Empty;
-            p["@PermanentCityId"] = (object?)emp.PermanentCityId ?? DBNull.Value;
-            p["@PermanentStateId"] = (object?)emp.PermanentStateId ?? DBNull.Value;
-            p["@PermanentCountryId"] = (object?)emp.PermanentCountryId ?? DBNull.Value;
-            p["@PermanentZipCode"] = emp.PermanentZipCode ?? string.Empty;
-            p["@PhoneNumber"] = emp.PhoneNumber ?? string.Empty;
-            p["@MobileNumber"] = emp.MobileNumber ?? string.Empty;
-            p["@EmailId"] = emp.EmailId ?? string.Empty;
-            p["@DepartmentId"] = (object?)emp.DepartmentId ?? DBNull.Value;
-            p["@DesignationId"] = (object?)emp.DesignationId ?? DBNull.Value;
-            p["@PaymentModeId"] = (object?)emp.PaymentModeId ?? DBNull.Value;
-            p["@EmployeeTypeId"] = (object?)emp.EmployeeTypeId ?? DBNull.Value;
-            p["@CategoryId"] = (object?)emp.CategoryId ?? DBNull.Value;
-            p["@BankAccountNumber"] = emp.BankAccountNumber ?? string.Empty;
-            p["@BankName"] = emp.BankName ?? string.Empty;
-            p["@GenderId"] = (object?)emp.GenderId ?? DBNull.Value;
-            p["@BloodGroupId"] = (object?)emp.BloodGroupId ?? DBNull.Value;
-            p["@GradeId"] = (object?)emp.GradeId ?? DBNull.Value;
-            p["@Image"] = emp.Image ?? string.Empty;
-            p["@EmployeeOldId"] = (object?)emp.EmployeeOldId ?? DBNull.Value;
-            p["@FathersName"] = emp.FathersName ?? string.Empty;
-            p["@MothersName"] = emp.MothersName ?? string.Empty;
-            p["@Description"] = emp.Description ?? string.Empty;
-            p["@LicenceNumber"] = emp.LicenceNumber ?? string.Empty;
-            p["@LicenceIssueDate"] = (object?)emp.LicenceIssueDate ?? DBNull.Value;
-            p["@LicenceValidUpto"] = (object?)emp.LicenceValidUpto ?? DBNull.Value;
-            p["@LicenceDescription"] = emp.LicenceDescription ?? string.Empty;
-            p["@LicenceImage"] = emp.LicenceImage ?? string.Empty;
-            p["@LicenceType"] = emp.LicenceType ?? string.Empty;
-            p["@Salutation"] = emp.Salutation ?? string.Empty;
-            p["@DateOfLeaving"] = (object?)emp.DateOfLeaving ?? DBNull.Value;
-            p["@MaritalStatus"] = emp.MaritalStatus ?? string.Empty;
-            p["@YearsOfExperience"] = emp.YearsOfExperience ?? string.Empty;
-            p["@PrevioudSchoolCompany"] = emp.PrevioudSchoolCompany ?? string.Empty;
-            p["@AadhaarNumber"] = emp.AadhaarNumber ?? string.Empty;
-            p["@MathUpToClass"] = (object?)emp.MathUpToClass ?? DBNull.Value;
-            p["@EnglishUptoClass"] = (object?)emp.EnglishUptoClass ?? DBNull.Value;
-            p["@SSTUptoClass"] = (object?)emp.SSTUptoClass ?? DBNull.Value;
-            p["@CompanyId"] = emp.CompanyId;
-            p["@SchoolId"] = emp.SchoolId;
-            p["@IsActive"] = emp.IsActive;
-            p["@CreatedBy"] = emp.CreatedBy;
-            p["@Status"] = emp.Status ?? string.Empty;
-            p["@StatusMessage"] = emp.StatusMessage ?? string.Empty;
-            var dt = new DataTable();
-            p.Exec(dt);
-            if (dt.Rows.Count > 0)
+            try
             {
-                var idObj = dt.Rows[0]["Id"];
-                if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
+                _logger.LogInformation("Creating employee: {FirstName} {LastName}", emp.FirstName, emp.LastName);
+                _logger.LogInformation("Employee details - DOB: {DOB}, Email: {Email}, SchoolId: {SchoolId}, CompanyId: {CompanyId}", emp.DOB, emp.EmailId, emp.SchoolId, emp.CompanyId);
+                
+                Proc p = new Proc("Emp_Create");
+                p["@FirstName"] = emp.FirstName ?? string.Empty;
+                p["@LastName"] = emp.LastName ?? string.Empty;
+                p["@DOB"] = emp.DOB;
+                p["@DOJ"] = emp.DOJ;
+                p["@ProbationStartDate"] = (object?)emp.ProbationStartDate ?? DBNull.Value;
+                p["@ProbationPeriod"] = (object?)emp.ProbationPeriod ?? DBNull.Value;
+                p["@ConfirmationDate"] = (object?)emp.ConfirmationDate ?? DBNull.Value;
+                p["@PANNumber"] = emp.PANNumber ?? string.Empty;
+                p["@ESICNumber"] = emp.ESICNumber ?? string.Empty;
+                p["@PFNumeber"] = emp.PFNumeber ?? string.Empty;
+                p["@CurrentAddress1"] = emp.CurrentAddress1 ?? string.Empty;
+                p["@CurrentAddress2"] = emp.CurrentAddress2 ?? string.Empty;
+                p["@CurrentCityId"] = (object?)emp.CurrentCityId ?? DBNull.Value;
+                p["@CurrentStateId"] = (object?)emp.CurrentStateId ?? DBNull.Value;
+                p["@CurrentCountryId"] = (object?)emp.CurrentCountryId ?? DBNull.Value;
+                p["@CurrentZipCode"] = emp.CurrentZipCode ?? string.Empty;
+                p["@PermanentAddress1"] = emp.PermanentAddress1 ?? string.Empty;
+                p["@PermanentAddress2"] = emp.PermanentAddress2 ?? string.Empty;
+                p["@PermanentCityId"] = (object?)emp.PermanentCityId ?? DBNull.Value;
+                p["@PermanentStateId"] = (object?)emp.PermanentStateId ?? DBNull.Value;
+                p["@PermanentCountryId"] = (object?)emp.PermanentCountryId ?? DBNull.Value;
+                p["@PermanentZipCode"] = emp.PermanentZipCode ?? string.Empty;
+                p["@PhoneNumber"] = emp.PhoneNumber ?? string.Empty;
+                p["@MobileNumber"] = emp.MobileNumber ?? string.Empty;
+                p["@EmailId"] = emp.EmailId ?? string.Empty;
+                p["@DepartmentId"] = (object?)emp.DepartmentId ?? DBNull.Value;
+                p["@DesignationId"] = (object?)emp.DesignationId ?? DBNull.Value;
+                p["@PaymentModeId"] = (object?)emp.PaymentModeId ?? DBNull.Value;
+                p["@EmployeeTypeId"] = (object?)emp.EmployeeTypeId ?? DBNull.Value;
+                p["@CategoryId"] = (object?)emp.CategoryId ?? DBNull.Value;
+                p["@BankAccountNumber"] = emp.BankAccountNumber ?? string.Empty;
+                p["@BankName"] = emp.BankName ?? string.Empty;
+                p["@GenderId"] = (object?)emp.GenderId ?? DBNull.Value;
+                p["@BloodGroupId"] = (object?)emp.BloodGroupId ?? DBNull.Value;
+                p["@GradeId"] = (object?)emp.GradeId ?? DBNull.Value;
+                p["@Image"] = emp.Image ?? string.Empty;
+                p["@EmployeeOldId"] = (object?)emp.EmployeeOldId ?? DBNull.Value;
+                p["@FathersName"] = emp.FathersName ?? string.Empty;
+                p["@MothersName"] = emp.MothersName ?? string.Empty;
+                p["@Description"] = emp.Description ?? string.Empty;
+                p["@LicenceNumber"] = emp.LicenceNumber ?? string.Empty;
+                p["@LicenceIssueDate"] = (object?)emp.LicenceIssueDate ?? DBNull.Value;
+                p["@LicenceValidUpto"] = (object?)emp.LicenceValidUpto ?? DBNull.Value;
+                p["@LicenceDescription"] = emp.LicenceDescription ?? string.Empty;
+                p["@LicenceImage"] = emp.LicenceImage ?? string.Empty;
+                p["@LicenceType"] = emp.LicenceType ?? string.Empty;
+                p["@Salutation"] = emp.Salutation ?? string.Empty;
+                p["@DateOfLeaving"] = (object?)emp.DateOfLeaving ?? DBNull.Value;
+                p["@MaritalStatus"] = emp.MaritalStatus ?? string.Empty;
+                p["@YearsOfExperience"] = emp.YearsOfExperience ?? string.Empty;
+                p["@PrevioudSchoolCompany"] = emp.PrevioudSchoolCompany ?? string.Empty;
+                p["@AadhaarNumber"] = emp.AadhaarNumber ?? string.Empty;
+                p["@MathUpToClass"] = (object?)emp.MathUpToClass ?? DBNull.Value;
+                p["@EnglishUptoClass"] = (object?)emp.EnglishUptoClass ?? DBNull.Value;
+                p["@SSTUptoClass"] = (object?)emp.SSTUptoClass ?? DBNull.Value;
+                p["@CompanyId"] = emp.CompanyId;
+                p["@SchoolId"] = emp.SchoolId;
+                p["@IsActive"] = emp.IsActive;
+                p["@CreatedBy"] = emp.CreatedBy;
+                p["@Status"] = emp.Status ?? string.Empty;
+                p["@StatusMessage"] = emp.StatusMessage ?? string.Empty;
+                
+                _logger.LogInformation("Executing Emp_Create stored procedure");
+                var dt = new DataTable();
+                p.Exec(dt);
+                _logger.LogInformation("Emp_Create stored procedure executed, rows returned: {RowCount}", dt.Rows.Count);
+                
+                // The Emp_Create stored procedure returns the ID using SELECT Id = @NewId
+                if (dt.Rows.Count > 0)
                 {
-                    return newId;
+                    var idObj = dt.Rows[0]["Id"];
+                    if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
+                    {
+                        _logger.LogInformation("Successfully created employee with ID: {EmpId}", newId);
+                        return newId;
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Failed to parse ID from stored procedure result");
+                    }
                 }
+                else
+                {
+                    _logger.LogWarning("No rows returned from Emp_Create stored procedure");
+                }
+                return Guid.Empty;
             }
-            return Guid.Empty;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating employee: {Message}", ex.Message);
+                // Log the exception for debugging
+                throw new Exception($"Error creating employee: {ex.Message}", ex);
+            }
         }
 
         public bool Update(EmpMaster emp)

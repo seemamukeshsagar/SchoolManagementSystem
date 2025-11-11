@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <sheetPr/>
+    <dimension ref="A1:S3"/>
+    <sheetViews>
+        <sheetView workbookViewId="0"/>
+    </sheetViews>
+    <sheetFormatPr defaultRowHeight="15"/>
+    <cols>
+        <col min="1" max="1" width="15"/>
+        <col min="2" max="2" width="15"/>
+        <col min="3" max="3" width="20"/>
+        <col min="4" max="4" width="20"/>
+        <col min="5" max="5" width="25"/>
+        <col min="6" max="6" width="15"/>
+        <col min="7" max="7" width="15"/>
+        <col min="8" max="8" width="20"/>
+        <col min="9" max="9" width="15"/>
+        <col min="10" max="10" width="15"/>
+        <col min="11" max="11" width="15"/>
+        <col min="12" max="12" width="10"/>
+        <col min="13" max="13" width="10"/>
+        <col min="14" max="14" width="15"/>
+        <col min="15" max="15" width="20"/>
+        <col min="16" max="16" width="20"/>
+        <col min="17" max="17" width="10"/>
+        <col min="18" max="18" width="10"/>
+        <col min="19" max="19" width="20"/>
+    </cols>
+    <sheetData>
+        <row r="1">
+            <c r="A1" t="str"><v>First Name</v></c>
+            <c r="B1" t="str"><v>Last Name</v></c>
+            <c r="C1" t="str"><v>Date of Birth (YYYY-MM-DD)</v></c>
+            <c r="D1" t="str"><v>Date of Joining (YYYY-MM-DD)</v></c>
+            <c r="E1" t="str"><v>Email</v></c>
+            <c r="F1" t="str"><v>Phone</v></c>
+            <c r="G1" t="str"><v>Mobile Phone</v></c>
+            <c r="H1" t="str"><v>Address</v></c>
+            <c r="I1" t="str"><v>City</v></c>
+            <c r="J1" t="str"><v>State</v></c>
+            <c r="K1" t="str"><v>Country</v></c>
+            <c r="L1" t="str"><v>Zip Code</v></c>
+            <c r="M1" t="str"><v>Gender</v></c>
+            <c r="N1" t="str"><v>Marital Status</v></c>
+            <c r="O1" t="str"><v>Years of Experience</v></c>
+            <c r="P1" t="str"><v>Previous School</v></c>
+            <c r="Q1" t="str"><v>Salutation</v></c>
+            <c r="R1" t="str"><v>Is Active</v></c>
+            <c r="S1" t="str"><v>School Name</v></c>
+        </row>
+        <row r="2">
+            <c r="A2" t="str"><v>John</v></c>
+            <c r="B2" t="str"><v>Doe</v></c>
+            <c r="C2" t="str"><v>1980-01-15</v></c>
+            <c r="D2" t="str"><v>2020-06-01</v></c>
+            <c r="E2" t="str"><v>john.doe@school.edu</v></c>
+            <c r="F2" t="str"><v>123-456-7890</v></c>
+            <c r="G2" t="str"><v>987-654-3210</v></c>
+            <c r="H2" t="str"><v>123 Main St</v></c>
+            <c r="I2" t="str"><v>New York</v></c>
+            <c r="J2" t="str"><v>NY</v></c>
+            <c r="K2" t="str"><v>USA</v></c>
+            <c r="L2" t="str"><v>10001</v></c>
+            <c r="M2" t="str"><v>Male</v></c>
+            <c r="N2" t="str"><v>Married</v></c>
+            <c r="O2" t="str"><v>10</v></c>
+            <c r="P2" t="str"><v>Previous School</v></c>
+            <c r="Q2" t="str"><v>Mr.</v></c>
+            <c r="R2" t="str"><v>Yes</v></c>
+            <c r="S2" t="str"><v>Test School</v></c>
+        </row>
+        <row r="3">
+            <c r="A3" t="str"><v>Jane</v></c>
+            <c r="B3" t="str"><v>Smith</v></c>
+            <c r="C3" t="str"><v>1985-03-22</v></c>
+            <c r="D3" t="str"><v>2019-09-15</v></c>
+            <c r="E3" t="str"><v>jane.smith@school.edu</v></c>
+            <c r="F3" t="str"><v>234-567-8901</v></c>
+            <c r="G3" t="str"><v>876-543-2109</v></c>
+            <c r="H3" t="str"><v>456 Oak Ave</v></c>
+            <c r="I3" t="str"><v>Los Angeles</v></c>
+            <c r="J3" t="str"><v>CA</v></c>
+            <c r="K3" t="str"><v>USA</v></c>
+            <c r="L3" t="str"><v>90210</v></c>
+            <c r="M3" t="str"><v>Female</v></c>
+            <c r="N3" t="str"><v>Single</v></c>
+            <c r="O3" t="str"><v>8</v></c>
+            <c r="P3" t="str"><v>Another School</v></c>
+            <c r="Q3" t="str"><v>Ms.</v></c>
+            <c r="R3" t="str"><v>Yes</v></c>
+            <c r="S3" t="str"><v>Test School</v></c>
+        </row>
+    </sheetData>
+    <pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>
+</worksheet>

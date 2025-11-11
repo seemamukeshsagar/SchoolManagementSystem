@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Import Teachers";
+}
+
+<h2>Import Teachers from Excel</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Upload Excel File</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Import" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="excelFile" class="control-label">Select Excel File</label>
+                        <input type="file" name="excelFile" class="form-control" accept=".xlsx,.xls" />
+                        <small class="form-text text-muted">Please upload a valid Excel file (.xlsx or .xls) with teacher data.</small>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Import Teachers" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Download Template</h4>
+            </div>
+            <div class="card-body">
+                <p>Download the Excel template to ensure your data is in the correct format:</p>
+                <a asp-action="DownloadTemplate" class="btn btn-success">Download Excel Template</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Instructions</h4>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li>Click "Download Excel Template" to get the properly formatted Excel file.</li>
+                    <li>Fill in the teacher data in the rows below the header.</li>
+                    <li>Required fields are: First Name, Date of Birth, Email, and School Name.</li>
+                    <li>Use the dropdown lists in the template for Gender, Marital Status, Salutation, and Is Active fields.</li>
+                    <li>Date format should be YYYY-MM-DD (e.g., 1990-01-31).</li>
+                    <li>Save the Excel file.</li>
+                    <li>Click "Choose File" above to select your completed Excel file.</li>
+                    <li>Click "Import Teachers" to upload the data.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
