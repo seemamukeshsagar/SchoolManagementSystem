@@ -134,6 +134,7 @@ namespace SchoolPortalApp.Controllers
 				IsActive = item.IsActive,
 				SchoolId = item.SchoolId
 			};
+			PopulateDropdowns(vm);
 			return View(vm);
 		}
 
