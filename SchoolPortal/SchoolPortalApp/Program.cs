@@ -118,6 +118,7 @@ builder.Services.AddScoped<IItemTypeService, SchoolPortal.Services.ItemTypeServi
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IInventoryService, SchoolPortal.Services.InventoryService>();
+builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetailsService>();
 
 var app = builder.Build();
 
