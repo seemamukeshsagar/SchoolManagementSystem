@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -30,33 +31,33 @@ namespace SchoolPortalApp.Controllers
 		private void PopulateDropdowns(VendorViewModel vm)
 		{
 			var countries = _lookup.GetCountries();
-			vm.Countries = countries.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CountryId }).ToList();
+			vm.Countries = countries.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CountryId }).ToList();
 
 			if (vm.CountryId != Guid.Empty)
 			{
 				var states = _lookup.GetStates(vm.CountryId);
-				vm.States = states.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.StateId }).ToList();
+				vm.States = states.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.StateId }).ToList();
 			}
 			else
 			{
-				vm.States = Array.Empty<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+				vm.States = Array.Empty<SelectListItem>();
 			}
 
 			if (vm.StateId != Guid.Empty)
 			{
 				var cities = _lookup.GetCities(vm.StateId);
-				vm.Cities = cities.Select(ci => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = ci.Id.ToString(), Text = ci.Name, Selected = ci.Id == vm.CityId }).ToList();
+				vm.Cities = cities.Select(ci => new SelectListItem { Value = ci.Id.ToString(), Text = ci.Name, Selected = ci.Id == vm.CityId }).ToList();
 			}
 			else
 			{
-				vm.Cities = Array.Empty<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+				vm.Cities = Array.Empty<SelectListItem>();
 			}
 
 			var companies = _lookup.GetCompanies();
-			vm.Companies = companies.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CompanyId }).ToList();
+			vm.Companies = companies.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.CompanyId }).ToList();
 
 			var schools = _schoolService.GetAll();
-			vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
+			vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
 		}
 
 		[HttpGet]

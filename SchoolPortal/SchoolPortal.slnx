@@ -3,6 +3,15 @@
     <Platform Name="Any CPU" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/SSISPackages/" />
+  <Folder Name="/SSISPackages/SSIS_EmpMaster_Project/">
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/Create_EmpMaster_Table.sql" />
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/Deploy_Package.bat" />
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/EmpMaster_Import.dtsx" />
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/EmpMaster_Template.csv" />
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/README.txt" />
+    <File Path="SSISPackages/SSIS_EmpMaster_Project/Upsert_Employee_StoredProc.sql" />
+  </Folder>
   <Project Path="DBAccess/DBAccess.csproj" Id="06c46e69-2643-401f-9d84-8d31baf6a4ee">
     <Platform Solution="*|x86" Project="x86" />
   </Project>
