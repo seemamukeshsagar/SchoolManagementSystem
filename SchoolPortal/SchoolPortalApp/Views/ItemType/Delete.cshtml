@@ -1,0 +1,27 @@
+@model SchoolPortal.Entities.Models.ItemTypeMaster
+@{
+    ViewData["Title"] = "Delete Item Type";
+}
+<h2>Delete Item Type</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="mb-3">
+    <strong>Name:</strong> @Model.Name
+</div>
+<div class="mb-3">
+    <strong>Description:</strong> @Model.Description
+</div>
+<div class="mb-3">
+    <strong>Is Active:</strong> @(Model.IsActive == true ? "Yes" : "No")
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

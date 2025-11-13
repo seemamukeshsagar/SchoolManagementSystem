@@ -1,0 +1,43 @@
+@model IEnumerable<SchoolPortalApp.Models.UserDetailsListItemViewModel>
+@{
+    ViewData["Title"] = "Users";
+}
+<h2>Users</h2>
+<p>
+    <a class="btn btn-primary" asp-controller="UserDetails" asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Designation</th>
+            <th>Company</th>
+            <th>School</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UserName</td>
+            <td>@item.FullName</td>
+            <td>@item.EmailAddress</td>
+            <td>@item.RoleName</td>
+            <td>@item.DesignationName</td>
+            <td>@item.CompanyName</td>
+            <td>@item.SchoolName</td>
+            <td>@item.IsActive</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="bi bi-eye"></i></a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="bi bi-pencil"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

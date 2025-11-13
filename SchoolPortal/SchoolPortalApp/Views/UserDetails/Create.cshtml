@@ -1,0 +1,78 @@
+@model SchoolPortalApp.Models.UserDetailsViewModel
+@{
+    ViewData["Title"] = "Create User";
+}
+<h2>Create User</h2>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="UserName" class="form-label"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="UserPassword" class="form-label"></label>
+        <input asp-for="UserPassword" type="password" class="form-control" />
+        <span asp-validation-for="UserPassword" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EmailAddress" class="form-label"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="DesignationId" class="form-label"></label>
+            <select asp-for="DesignationId" asp-items="Model.Designations" class="form-select"></select>
+            <span asp-validation-for="DesignationId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="UserRoleId" class="form-label"></label>
+            <select asp-for="UserRoleId" asp-items="Model.Roles" class="form-select">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="UserRoleId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="CompanyId" class="form-label"></label>
+            <select asp-for="CompanyId" asp-items="Model.Companies" class="form-select">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="CompanyId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="SchoolId" class="form-label"></label>
+            <select asp-for="SchoolId" asp-items="Model.Schools" class="form-select">
+                <option value="">-- None --</option>
+            </select>
+            <span asp-validation-for="SchoolId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="IsSuperUser" class="form-check-input" />
+        <label asp-for="IsSuperUser" class="form-check-label"></label>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

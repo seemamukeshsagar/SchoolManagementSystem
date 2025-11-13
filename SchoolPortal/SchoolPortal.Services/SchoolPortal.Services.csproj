@@ -20,4 +20,8 @@
     <ProjectReference Include="..\SchoolPortal.Entities\SchoolPortal.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="IServices\ItemService.cs" />
+  </ItemGroup>
+
 </Project>

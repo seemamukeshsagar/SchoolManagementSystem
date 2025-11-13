@@ -1,0 +1,22 @@
+@model SchoolPortalApp.Models.UserDetailsDetailsViewModel
+@{
+    ViewData["Title"] = "User Details";
+}
+<h2>User Details</h2>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">User Name</dt><dd class="col-sm-9">@Model.UserName</dd>
+            <dt class="col-sm-3">Full Name</dt><dd class="col-sm-9">@Model.FullName</dd>
+            <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.EmailAddress</dd>
+            <dt class="col-sm-3">Role</dt><dd class="col-sm-9">@Model.RoleName</dd>
+            <dt class="col-sm-3">Designation</dt><dd class="col-sm-9">@Model.DesignationName</dd>
+            <dt class="col-sm-3">Company</dt><dd class="col-sm-9">@Model.CompanyName</dd>
+            <dt class="col-sm-3">School</dt><dd class="col-sm-9">@Model.SchoolName</dd>
+            <dt class="col-sm-3">Super User</dt><dd class="col-sm-9">@Model.IsSuperUser</dd>
+            <dt class="col-sm-3">Active</dt><dd class="col-sm-9">@Model.IsActive</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

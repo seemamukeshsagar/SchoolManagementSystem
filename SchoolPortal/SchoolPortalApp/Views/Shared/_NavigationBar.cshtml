@@ -45,7 +45,7 @@
 			}
 			@if (lstPrivileges.Contains("Manage Users"))
 			{
-				<li><a href="@Url.Action("Index", "Users")" class="nav-link">Users</a></li>
+				<li><a href="@Url.Action("Index", "UserDetails")" class="nav-link">Users</a></li>
 			}
 			@if (lstPrivileges.Contains("Manage Roles"))
 			{
@@ -242,10 +242,10 @@
 		  <i class="bi bi-gear"></i> <span>Inventory</span>
 		</a>
 		<ul class="collapse nav flex-column ms-3" id="submenu-inventory" data-bs-parent="#sidebarAccordion">
-		  <li><a href="@Url.Action("ItemTypes", "Inventory")" class="nav-link">Item Types</a></li>
+		  <li><a href="@Url.Action("ItemTypes", "ItemType")" class="nav-link">Item Types</a></li>
 		  <li><a href="@Url.Action("ItemLocation", "Inventory")" class="nav-link">Item Locations</a></li>
-		  <li><a href="@Url.Action("Index", "Inventory")" class="nav-link">Items</a></li>
-		  <li><a href="@Url.Action("ViewInventory", "Inventory")" class="nav-link">Inventory</a></li>
+		  <li><a href="@Url.Action("Index", "InventoryMaster")" class="nav-link">Items</a></li>
+		  <li><a href="@Url.Action("ViewInventory", "InventoryMaster")" class="nav-link">Inventory</a></li>
 		</ul>
 	  </li>
 	  

@@ -587,12 +587,13 @@
 				loadCities(stateId, '#BirthCityId');
 			});
 
-			var selectedClassId = $("#ClassId").val();
-			var currentSectionId = '@Model.SectionId';
-			if (selectedClassId) {
-				loadSections(selectedClassId, currentSectionId);
+			// Initialize cascading dropdowns for address section
+			var selectedCountryId = $("#CountryId").val();
+			if (selectedCountryId) {
+				loadStates(selectedCountryId, '#StateId', '@Model?.StateId');
 			}
-
+			
+			// Initialize cascading dropdowns for birth place
 			var selectedBirthCountryId = $("#BirthCountryId").val();
 			var selectedBirthStateId = '@Model?.BirthStateId';
 			var selectedBirthCityId = '@Model?.BirthCityId';
@@ -611,6 +612,8 @@
 				var stateId = $(this).val();
 				loadCities(stateId, '#ParentCityId');
 			});
+			
+			// Initialize cascading dropdowns for parent address
 			var selectedParentCountryId = $("#ParentCountryId").val();
 			var selectedParentStateId = '@Model?.ParentStateId';
 			var selectedParentCityId = '@Model?.ParentCityId';

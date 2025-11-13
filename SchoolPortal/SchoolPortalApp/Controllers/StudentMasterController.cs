@@ -160,6 +160,7 @@ namespace SchoolPortalApp.Controllers
 			var boards = _lookupService.GetSchoolBoards();
 			vm.PreviousSchoolBoards = boards.Select(b => new SelectListItem { Value = b.Id.ToString(), Text = b.Name, Selected = b.Id == vm.PreviousSchoolBoardId }).ToList();
 
+			// Fix for cascading dropdowns - Always populate states and cities if IDs are set
 			if (vm.CountryId != Guid.Empty)
 			{
 				var states = _lookupService.GetStates(vm.CountryId);
@@ -169,6 +170,17 @@ namespace SchoolPortalApp.Controllers
 					var cities = _lookupService.GetCities(vm.StateId);
 					vm.Cities = cities.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.CityId }).ToList();
 				}
+				else
+				{
+					// Initialize empty cities list if no state is selected
+					vm.Cities = new List<SelectListItem>();
+				}
+			}
+			else
+			{
+				// Initialize empty states and cities lists if no country is selected
+				vm.States = new List<SelectListItem>();
+				vm.Cities = new List<SelectListItem>();
 			}
 
 			if (vm.BirthCountryId != Guid.Empty)
@@ -180,6 +192,17 @@ namespace SchoolPortalApp.Controllers
 					var birthCities = _lookupService.GetCities(vm.BirthStateId);
 					vm.BirthCities = birthCities.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.BirthCityId }).ToList();
 				}
+				else
+				{
+					// Initialize empty birth cities list if no birth state is selected
+					vm.BirthCities = new List<SelectListItem>();
+				}
+			}
+			else
+			{
+				// Initialize empty birth states and cities lists if no birth country is selected
+				vm.BirthStates = new List<SelectListItem>();
+				vm.BirthCities = new List<SelectListItem>();
 			}
 
 			// Parents tab lookups
@@ -196,6 +219,7 @@ namespace SchoolPortalApp.Controllers
 			// Parent address dropdowns
 			vm.ParentCountries = _lookupService.GetCountries()
 				.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.ParentCountryId.HasValue && c.Id == vm.ParentCountryId.Value }).ToList();
+			
 			if (vm.ParentCountryId.HasValue && vm.ParentCountryId.Value != Guid.Empty)
 			{
 				var pstates = _lookupService.GetStates(vm.ParentCountryId.Value);
@@ -205,6 +229,17 @@ namespace SchoolPortalApp.Controllers
 					var pcities = _lookupService.GetCities(vm.ParentStateId.Value);
 					vm.ParentCities = pcities.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = vm.ParentCityId.HasValue && c.Id == vm.ParentCityId.Value }).ToList();
 				}
+				else
+				{
+					// Initialize empty parent cities list if no parent state is selected
+					vm.ParentCities = new List<SelectListItem>();
+				}
+			}
+			else
+			{
+				// Initialize empty parent states and cities lists if no parent country is selected
+				vm.ParentStates = new List<SelectListItem>();
+				vm.ParentCities = new List<SelectListItem>();
 			}
 		}
 

@@ -1,0 +1,15 @@
+@model SchoolPortalApp.Models.InventoryMasterDetailsViewModel
+@{
+    ViewData["Title"] = "Inventory Details";
+}
+<h2>Inventory Details</h2>
+<div class="mb-3"><strong>Name:</strong> @Model.Name</div>
+<div class="mb-3"><strong>Item:</strong> @Model.ItemName</div>
+<div class="mb-3"><strong>Location:</strong> @Model.LocationName</div>
+<div class="mb-3"><strong>Quantity:</strong> @Model.Quantity</div>
+<div class="mb-3"><strong>Cost Per Item:</strong> @Model.CostPerItem</div>
+<div class="mb-3"><strong>Is Active:</strong> @(Model.IsActive ? "Yes" : "No")</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</p>

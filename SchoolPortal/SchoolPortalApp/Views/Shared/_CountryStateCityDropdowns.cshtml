@@ -35,7 +35,7 @@
 			<option value="">-- Select @countryLabel --</option>
 			@foreach (var country in countries)
 			{
-				<option value="@country.Value" selected="@(country.Value == countryValue ? "selected" : null)">
+				<option value="@country.Value" selected="@((country.Value == countryValue || country.Selected) ? "selected" : null)">
 					@country.Text
 				</option>
 			}
@@ -51,7 +51,7 @@
 			<option value="">-- Select @stateLabel --</option>
 			@foreach (var state in states)
 			{
-				<option value="@state.Value" selected="@(state.Value == stateValue ? "selected" : null)">
+				<option value="@state.Value" selected="@((state.Value == stateValue || state.Selected) ? "selected" : null)">
 					@state.Text
 				</option>
 			}
@@ -67,7 +67,7 @@
 			<option value="">-- Select @cityLabel --</option>
 			@foreach (var city in cities)
 			{
-				<option value="@city.Value" selected="@(city.Value == cityValue ? "selected" : null)">
+				<option value="@city.Value" selected="@((city.Value == cityValue || city.Selected) ? "selected" : null)">
 					@city.Text
 				</option>
 			}
