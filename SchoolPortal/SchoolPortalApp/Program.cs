@@ -73,6 +73,7 @@ builder.Services.AddLogging(loggingBuilder =>
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
 	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
+builder.Services.AddScoped<ICategoryMasterService, SchoolPortal.Services.CategoryMasterService>();
 builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
 builder.Services.AddScoped<ISchoolService, SchoolPortal.Services.SchoolService>();

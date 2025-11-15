@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -10,8 +11,9 @@ namespace SchoolPortalApp.Models
         public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        [Required(ErrorMessage = "DOB is required.")]
         public DateTime DOB { get; set; } = DateTime.UtcNow.Date;
-        public DateTime DOJ { get; set; } = DateTime.UtcNow.Date;
+        public DateTime? DOJ { get; set; }
         public DateTime? ProbationStartDate { get; set; }
         public int? ProbationPeriod { get; set; }
         public DateTime? ConfirmationDate { get; set; }

@@ -43,7 +43,7 @@ namespace SchoolPortalApp.Controllers
             vm.Roles = roles.Select(r => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
             {
                 Value = r.Id.ToString(),
-                Text = r.RoleName ?? string.Empty,
+                Text = r.Name ?? string.Empty,
                 Selected = vm.UserRoleId.HasValue && r.Id == vm.UserRoleId.Value
             }).ToList();
 
@@ -78,7 +78,7 @@ namespace SchoolPortalApp.Controllers
             var result = list.Select(u =>
             {
                 var desigName = designations.FirstOrDefault(d => d.Id == u.DesignationId)?.Name ?? string.Empty;
-                var roleName = u.UserRoleId.HasValue ? (roles.FirstOrDefault(r => r.Id == u.UserRoleId.Value)?.RoleName ?? string.Empty) : string.Empty;
+                var roleName = u.UserRoleId.HasValue ? (roles.FirstOrDefault(r => r.Id == u.UserRoleId.Value)?.Name ?? string.Empty) : string.Empty;
                 var companyName = u.CompanyId.HasValue ? (companies.FirstOrDefault(c => c.Id == u.CompanyId.Value)?.Name ?? string.Empty) : string.Empty;
                 var schoolName = u.SchoolId.HasValue ? (schools.FirstOrDefault(s => s.Id == u.SchoolId.Value)?.Name ?? string.Empty) : string.Empty;
 
@@ -117,7 +117,7 @@ namespace SchoolPortalApp.Controllers
                 UserName = u.UserName ?? string.Empty,
                 FullName = $"{u.FirstName} {u.LastName}".Trim(),
                 EmailAddress = u.EmailAddress ?? string.Empty,
-                RoleName = u.UserRoleId.HasValue ? (roles.FirstOrDefault(r => r.Id == u.UserRoleId.Value)?.RoleName ?? string.Empty) : string.Empty,
+                RoleName = u.UserRoleId.HasValue ? (roles.FirstOrDefault(r => r.Id == u.UserRoleId.Value)?.Name ?? string.Empty) : string.Empty,
                 DesignationName = designations.FirstOrDefault(d => d.Id == u.DesignationId)?.Name ?? string.Empty,
                 CompanyName = u.CompanyId.HasValue ? (companies.FirstOrDefault(c => c.Id == u.CompanyId.Value)?.Name ?? string.Empty) : string.Empty,
                 SchoolName = u.SchoolId.HasValue ? (schools.FirstOrDefault(s => s.Id == u.SchoolId.Value)?.Name ?? string.Empty) : string.Empty,

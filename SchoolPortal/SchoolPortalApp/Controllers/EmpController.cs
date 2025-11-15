@@ -305,14 +305,14 @@ namespace SchoolPortalApp.Controllers
 			}
 
 			// Exclude server-bound fields from validation
-			ModelState.Remove(nameof(EmpViewModel.CompanyId));
-			ModelState.Remove(nameof(EmpViewModel.SchoolId));
+			//ModelState.Remove(nameof(EmpViewModel.CompanyId));
+			//ModelState.Remove(nameof(EmpViewModel.SchoolId));
 
-			if (!ModelState.IsValid)
-			{
-				PopulateDropdowns(model);
-				return View(model);
-			}
+			//if (!ModelState.IsValid)
+			//{
+			//	PopulateDropdowns(model);
+			//	return View(model);
+			//}
 
 			// Validate user
 			var userIdStr = HttpContext.Session.GetString("UserId");
@@ -330,7 +330,8 @@ namespace SchoolPortalApp.Controllers
 				FirstName = model.FirstName,
 				LastName = model.LastName,
 				DOB = model.DOB,
-				DOJ = model.DOJ,
+				DOJ = model.DOJ ?? DateTime.UtcNow.Date,
+
 				ProbationStartDate = model.ProbationStartDate,
 				ProbationPeriod = model.ProbationPeriod,
 				ConfirmationDate = model.ConfirmationDate,
@@ -385,6 +386,7 @@ namespace SchoolPortalApp.Controllers
 				CompanyId = companyId,
 				SchoolId = schoolId,
 				IsActive = model.IsActive,
+				IsDeleted = false,
 				CreatedBy = userId,
 				CreatedDate = DateTime.UtcNow,
 				Status = model.Status ?? DefaultStatus,
@@ -505,7 +507,7 @@ namespace SchoolPortalApp.Controllers
 							FirstName = model.FirstName ?? string.Empty,
 							LastName = model.LastName ?? string.Empty,
 							DOB = model.DOB,
-							DOJ = model.DOJ,
+							DOJ = model.DOJ ?? DateTime.UtcNow.Date,
 							Address = ($"{model.CurrentAddress1 ?? string.Empty} {model.CurrentAddress2 ?? string.Empty}").Trim(),
 							Email = model.EmailId ?? string.Empty,
 							Phone = model.PhoneNumber ?? string.Empty,
