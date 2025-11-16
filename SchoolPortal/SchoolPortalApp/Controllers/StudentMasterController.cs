@@ -131,7 +131,7 @@ namespace SchoolPortalApp.Controllers
 			vm.Sections = sections.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SectionId }).ToList();
 
 			// Teachers (Class Teachers)
-			var teachers = _teacherService.GetAll();
+			var teachers = _teacherService.GetAll(vm.SchoolId);
 			vm.ClassTeachers = teachers.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))), Selected = vm.ClassTeacherId.HasValue && t.Id == vm.ClassTeacherId.Value }).ToList();
 
 			// Genders

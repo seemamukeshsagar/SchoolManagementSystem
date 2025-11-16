@@ -20,6 +20,8 @@ namespace SchoolPortalApp.Models
 		public List<DriverDocumentDetails> Documents { get; set; } = new List<DriverDocumentDetails>();
 		public List<DriverQualificationDetails> Qualifications { get; set; } = new List<DriverQualificationDetails>();
 		public List<IFormFile> DocumentFiles { get; set; } = new List<IFormFile>();
+		public IFormFile DriverImageFile { get; set; }
+		public IFormFile LicenceImageFile { get; set; }
 
 		public IEnumerable<SelectListItem> Countries { get; set; } = Array.Empty<SelectListItem>();
 		public IEnumerable<SelectListItem> States { get; set; } = Array.Empty<SelectListItem>();

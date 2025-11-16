@@ -148,7 +148,14 @@ namespace SchoolPortalApp.Controllers
             // Normalize optional strings
             model.Id = Guid.Empty;
             model.Name = model.Name ?? string.Empty;
-            model.Image = model.Image ?? string.Empty;
+            if (vm.ImageFile != null && vm.ImageFile.Length > 0)
+            {
+                model.Image = SaveUpload(vm.ImageFile, "cleaners");
+            }
+            else
+            {
+                model.Image = model.Image ?? string.Empty;
+            }
             model.FatherName = model.FatherName ?? string.Empty;
             model.Description = model.Description ?? string.Empty;
             model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;
@@ -280,7 +287,14 @@ namespace SchoolPortalApp.Controllers
 
             // Normalize optional strings
             model.Name = model.Name ?? string.Empty;
-            model.Image = model.Image ?? string.Empty;
+            if (vm.ImageFile != null && vm.ImageFile.Length > 0)
+            {
+                model.Image = SaveUpload(vm.ImageFile, "cleaners");
+            }
+            else
+            {
+                model.Image = model.Image ?? string.Empty;
+            }
             model.FatherName = model.FatherName ?? string.Empty;
             model.Description = model.Description ?? string.Empty;
             model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;

@@ -23,6 +23,13 @@
 		<dd class="col-sm-9">@Model.Master.Address</dd>
 		<dt class="col-sm-3">Zip Code</dt>
 		<dd class="col-sm-9">@Model.Master.ZipCode</dd>
+		<dt class="col-sm-3">Image</dt>
+		<dd class="col-sm-9">
+			@if (!string.IsNullOrWhiteSpace(Model.Master.Image))
+			{
+				<img src="@Model.Master.Image" alt="Teacher Image" class="img-thumbnail" style="max-height:150px;" />
+			}
+		</dd>
 		<dt class="col-sm-3">Email</dt>
 		<dd class="col-sm-9">@Model.Master.Email</dd>
 		<dt class="col-sm-3">Phone</dt>

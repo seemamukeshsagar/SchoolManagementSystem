@@ -97,7 +97,14 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="Master.Image"></label>
-				<input asp-for="Master.Image" class="form-control" />
+				@if (!string.IsNullOrWhiteSpace(Model.Master.Image))
+				{
+					<div class="mb-2">
+						<img src="@Model.Master.Image" alt="Teacher image" class="img-thumbnail" style="max-height:150px;" />
+					</div>
+				}
+				<input asp-for="Master.Image" type="hidden" />
+				<input type="file" name="ImageFile" class="form-control" />
 			</div>
 			<div class="form-group">
 				<label asp-for="Master.YearsOfExperience"></label>

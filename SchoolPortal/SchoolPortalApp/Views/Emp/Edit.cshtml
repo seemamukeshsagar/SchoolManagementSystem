@@ -7,134 +7,116 @@
 		<h4>Edit Employee</h4>
 	</div>
 	<div class="card-body">
-		<form asp-action="Edit" asp-route-id="@Model.Id">
+		<form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="Id" />
 			<input type="hidden" asp-for="CompanyId" />
 			<input type="hidden" asp-for="SchoolId" />
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 			<ul class="nav nav-tabs" id="empEditTabs" role="tablist">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="e-tab-basic-tab" data-bs-toggle="tab" data-bs-target="#e-tab-basic" type="button" role="tab" aria-controls="e-tab-basic" aria-selected="true">Basic Info</button>
+					<button class="nav-link active" id="tab-basic-tab" data-bs-toggle="tab" data-bs-target="#tab-basic" type="button" role="tab" aria-controls="tab-basic" aria-selected="true">Basic Info</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-classification-tab" data-bs-toggle="tab" data-bs-target="#e-tab-classification" type="button" role="tab" aria-controls="e-tab-classification" aria-selected="false">Classification</button>
+					<button class="nav-link" id="tab-contact-bank-tab" data-bs-toggle="tab" data-bs-target="#tab-contact-bank" type="button" role="tab" aria-controls="tab-contact-bank" aria-selected="false">Contact & Bank</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-contact-bank-tab" data-bs-toggle="tab" data-bs-target="#e-tab-contact-bank" type="button" role="tab" aria-controls="e-tab-contact-bank" aria-selected="false">Contact & Bank</button>
+					<button class="nav-link" id="tab-addresses-tab" data-bs-toggle="tab" data-bs-target="#tab-addresses" type="button" role="tab" aria-controls="tab-addresses" aria-selected="false">Addresses</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-addresses-tab" data-bs-toggle="tab" data-bs-target="#e-tab-addresses" type="button" role="tab" aria-controls="e-tab-addresses" aria-selected="false">Addresses</button>
+					<button class="nav-link" id="tab-experience-tab" data-bs-toggle="tab" data-bs-target="#tab-experience" type="button" role="tab" aria-controls="tab-experience" aria-selected="false">Experience & IDs</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-experience-tab" data-bs-toggle="tab" data-bs-target="#e-tab-experience" type="button" role="tab" aria-controls="e-tab-experience" aria-selected="false">Experience & IDs</button>
+					<button class="nav-link" id="tab-subjects-tab" data-bs-toggle="tab" data-bs-target="#tab-subjects" type="button" role="tab" aria-controls="tab-subjects" aria-selected="false">Subjects</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-subjects-tab" data-bs-toggle="tab" data-bs-target="#e-tab-subjects" type="button" role="tab" aria-controls="e-tab-subjects" aria-selected="false">Subjects</button>
+					<button class="nav-link" id="tab-family-tab" data-bs-toggle="tab" data-bs-target="#tab-family" type="button" role="tab" aria-controls="tab-family" aria-selected="false">Family</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-family-tab" data-bs-toggle="tab" data-bs-target="#e-tab-family" type="button" role="tab" aria-controls="e-tab-family" aria-selected="false">Family</button>
+					<button class="nav-link" id="tab-docs-tab" data-bs-toggle="tab" data-bs-target="#tab-docs" type="button" role="tab" aria-controls="tab-docs" aria-selected="false">Documents & Licence</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-docs-tab" data-bs-toggle="tab" data-bs-target="#e-tab-docs" type="button" role="tab" aria-controls="e-tab-docs" aria-selected="false">Documents & Licence</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="e-tab-status-tab" data-bs-toggle="tab" data-bs-target="#e-tab-status" type="button" role="tab" aria-controls="e-tab-status" aria-selected="false">Status</button>
+					<button class="nav-link" id="tab-status-tab" data-bs-toggle="tab" data-bs-target="#tab-status" type="button" role="tab" aria-controls="tab-status" aria-selected="false">Status</button>
 				</li>
 			</ul>
 			<div class="tab-content mt-3" id="empEditTabsContent">
-				<div class="tab-pane fade show active" id="e-tab-basic" role="tabpanel" aria-labelledby="e-tab-basic-tab">
-			<div class="row mb-3">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label asp-for="FirstName" class="control-label">First Name</label>
-						<input asp-for="FirstName" class="form-control" />
-						<span asp-validation-for="FirstName" class="text-danger"></span>
+				<div class="tab-pane fade show active" id="tab-basic" role="tabpanel" aria-labelledby="tab-basic-tab">
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="FirstName" class="control-label">First Name</label>
+								<input asp-for="FirstName" class="form-control" />
+								<span asp-validation-for="FirstName" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="LastName" class="control-label">Last Name</label>
+								<input asp-for="LastName" class="form-control" />
+								<span asp-validation-for="LastName" class="text-danger"></span>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label asp-for="LastName" class="control-label">Last Name</label>
-						<input asp-for="LastName" class="form-control" />
-						<span asp-validation-for="LastName" class="text-danger"></span>
-					</div>
-				</div>
-			</div>
 
-			<div class="row mb-3">
-				<div class="col-md-3">
-					<label asp-for="DOB" class="control-label">DOB</label>
-					<input asp-for="DOB" class="form-control" type="date" />
-					<span asp-validation-for="DOB" class="text-danger"></span>
-				</div>
-				<div class="col-md-3">
-					<label asp-for="DOJ" class="control-label">DOJ</label>
-					<input asp-for="DOJ" class="form-control" type="date" />
-					<span asp-validation-for="DOJ" class="text-danger"></span>
-				</div>
-				<div class="col-md-3">
-					<label asp-for="ProbationStartDate" class="control-label">Probation Start</label>
-					<input asp-for="ProbationStartDate" class="form-control" type="date" />
-				</div>
-				<div class="col-md-3">
-					<label asp-for="ProbationPeriod" class="control-label">Probation (months)</label>
-					<input asp-for="ProbationPeriod" class="form-control" type="number" />
-				</div>
-			</div>
-			<div class="row mb-3">
-				<div class="col-md-3">
-					<label asp-for="ConfirmationDate" class="control-label">Confirmation</label>
-					<input asp-for="ConfirmationDate" class="form-control" type="date" />
-				</div>
-				<div class="col-md-3">
-					<label asp-for="PANNumber" class="control-label">PAN</label>
-					<input asp-for="PANNumber" class="form-control" />
-				</div>
-				<div class="col-md-3">
-					<label asp-for="ESICNumber" class="control-label">ESIC</label>
-					<input asp-for="ESICNumber" class="form-control" />
-				</div>
-				<div class="col-md-3">
-					<label asp-for="PFNumeber" class="control-label">PF Number</label>
-					<input asp-for="PFNumeber" class="form-control" />
-				</div>
-			</div>
-
-			<div class="row mb-3">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label asp-for="DepartmentId" class="control-label">Department</label>
-						<select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
-							<option value="">-- Select Department --</option>
-						</select>
-						<span asp-validation-for="DepartmentId" class="text-danger"></span>
+					<div class="row mb-3">
+						<div class="col-md-3">
+							<label asp-for="DOB" class="control-label">DOB</label>
+							<input asp-for="DOB" class="form-control" type="date" />
+							<span asp-validation-for="DOB" class="text-danger"></span>
+						</div>
+						<div class="col-md-3">
+							<label asp-for="DOJ" class="control-label">DOJ</label>
+							<input asp-for="DOJ" class="form-control" type="date" />
+							<span asp-validation-for="DOJ" class="text-danger"></span>
+						</div>
+						<div class="col-md-3">
+							<label asp-for="ProbationStartDate" class="control-label">Probation Start</label>
+							<input asp-for="ProbationStartDate" class="form-control" type="date" />
+						</div>
+						<div class="col-md-3">
+							<label asp-for="ProbationPeriod" class="control-label">Probation (months)</label>
+							<input asp-for="ProbationPeriod" class="form-control" type="number" />
+						</div>
 					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label asp-for="DesignationId" class="control-label">Designation</label>
-						<select asp-for="DesignationId" class="form-control" asp-items="Model.Designations">
-							<option value="">-- Select Designation --</option>
-						</select>
-						<span asp-validation-for="DesignationId" class="text-danger"></span>
+					<div class="row mb-3">
+						<div class="col-md-3">
+							<label asp-for="ConfirmationDate" class="control-label">Confirmation</label>
+							<input asp-for="ConfirmationDate" class="form-control" type="date" />
+						</div>
+						<div class="col-md-3">
+							<label asp-for="PANNumber" class="control-label">PAN</label>
+							<input asp-for="PANNumber" class="form-control" />
+						</div>
+						<div class="col-md-3">
+							<label asp-for="ESICNumber" class="control-label">ESIC</label>
+							<input asp-for="ESICNumber" class="form-control" />
+						</div>
+						<div class="col-md-3">
+							<label asp-for="PFNumeber" class="control-label">PF Number</label>
+							<input asp-for="PFNumeber" class="form-control" />
+						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="row mb-3">
-				<div class="col-md-4">
-					<label asp-for="GenderId" class="control-label">Gender</label>
-					<select asp-for="GenderId" class="form-control" asp-items="Model.Genders">
-						<option value="">-- Select Gender --</option>
-					</select>
-				</div>
-				<div class="col-md-4">
-					<label asp-for="PaymentModeId" class="control-label">Payment Mode</label>
-					<select asp-for="PaymentModeId" class="form-control" asp-items="Model.PaymentModes">
-						<option value="">-- Select Payment Mode --</option>
-					</select>
-				</div>
-				<div class="col-md-4">
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="DepartmentId" class="control-label">Department</label>
+								<select asp-for="DepartmentId" class="form-control" asp-items="Model.Departments">
+									<option value="">-- Select Department --</option>
+								</select>
+								<span asp-validation-for="DepartmentId" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="DesignationId" class="control-label">Designation</label>
+								<select asp-for="DesignationId" class="form-control" asp-items="Model.Designations">
+									<option value="">-- Select Designation --</option>
+								</select>
+								<span asp-validation-for="DesignationId" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
 
 					<div class="row mb-3">
 						<div class="col-md-4">
@@ -156,7 +138,6 @@
 							</select>
 						</div>
 					</div>
-
 					<div class="row mb-3">
 						<div class="col-md-4">
 							<label asp-for="CategoryId" class="control-label">Category</label>
@@ -177,7 +158,9 @@
 							</select>
 						</div>
 					</div>
+				</div>
 
+				<div class="tab-pane fade" id="tab-contact-bank" role="tabpanel" aria-labelledby="tab-contact-bank-tab">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<label asp-for="BankAccountNumber" class="control-label">Bank A/C</label>
@@ -211,7 +194,7 @@
 					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-addresses" role="tabpanel" aria-labelledby="e-tab-addresses-tab">
+				<div class="tab-pane fade" id="tab-addresses" role="tabpanel" aria-labelledby="tab-addresses-tab">
 					<div class="row mb-3">
 						<div class="col-12"><strong>Current Address</strong></div>
 						<div class="col-md-6">
@@ -281,7 +264,7 @@
 					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-experience" role="tabpanel" aria-labelledby="e-tab-experience-tab">
+				<div class="tab-pane fade" id="tab-experience" role="tabpanel" aria-labelledby="tab-experience-tab">
 					<div class="row mb-3">
 						<div class="col-md-4">
 							<label asp-for="DateOfLeaving" class="control-label">Date Of Leaving</label>
@@ -289,7 +272,9 @@
 						</div>
 						<div class="col-md-4">
 							<label asp-for="MaritalStatus" class="control-label">Marital Status</label>
-							<input asp-for="MaritalStatus" class="form-control" />
+							<select asp-for="MaritalStatus" class="form-control" asp-items="Model.MaritalStatuses">
+								<option value="">-- Select Marital Status --</option>
+							</select>
 						</div>
 						<div class="col-md-4">
 							<label asp-for="YearsOfExperience" class="control-label">Experience</label>
@@ -308,7 +293,7 @@
 					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-subjects" role="tabpanel" aria-labelledby="e-tab-subjects-tab">
+				<div class="tab-pane fade" id="tab-subjects" role="tabpanel" aria-labelledby="tab-subjects-tab">
 					<div class="row mb-3">
 						<div class="col-md-4">
 							<label asp-for="MathUpToClass" class="control-label">Math Up To Class</label>
@@ -325,7 +310,7 @@
 					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-family" role="tabpanel" aria-labelledby="e-tab-family-tab">
+				<div class="tab-pane fade" id="tab-family" role="tabpanel" aria-labelledby="tab-family-tab">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<label asp-for="FathersName" class="control-label">Father's Name</label>
@@ -338,20 +323,57 @@
 					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-docs" role="tabpanel" aria-labelledby="e-tab-docs-tab">
+				<div class="tab-pane fade" id="tab-docs" role="tabpanel" aria-labelledby="tab-docs-tab">
 					<div class="row mb-3">
 						<div class="col-md-6">
-							<label asp-for="Image" class="control-label">Image</label>
-							<input asp-for="Image" class="form-control" />
+							<label asp-for="ImageFile" class="control-label">Image</label>
+							<input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
+							@if (!string.IsNullOrWhiteSpace(Model.Image))
+							{
+								<div class="mt-2">
+									<img src="@Model.Image" alt="Employee Image" class="img-thumbnail" style="max-height:150px;" />
+								</div>
+							}
 						</div>
 						<div class="col-md-6">
 							<label asp-for="EmployeeOldId" class="control-label">Old Employee Id</label>
 							<input asp-for="EmployeeOldId" class="form-control" />
 						</div>
 					</div>
+
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<label asp-for="LicenceNumber" class="control-label">Licence Number</label>
+							<input asp-for="LicenceNumber" class="form-control" />
+						</div>
+						<div class="col-md-6">
+							<label asp-for="LicenceType" class="control-label">Licence Type</label>
+							<select asp-for="LicenceType" class="form-control" asp-items="Model.LicenceTypes"></select>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<label asp-for="LicenceIssueDate" class="control-label">Licence Issue Date</label>
+							<input asp-for="LicenceIssueDate" class="form-control" type="date" />
+						</div>
+						<div class="col-md-4">
+							<label asp-for="LicenceValidUpto" class="control-label">Licence Valid Upto</label>
+							<input asp-for="LicenceValidUpto" class="form-control" type="date" />
+						</div>
+						<div class="col-md-4">
+							<label asp-for="LicenceImageFile" class="control-label">Licence Image</label>
+							<input asp-for="LicenceImageFile" class="form-control" type="file" accept="image/*" />
+							@if (!string.IsNullOrWhiteSpace(Model.LicenceImage))
+							{
+								<div class="mt-2">
+									<img src="@Model.LicenceImage" alt="Licence Image" class="img-thumbnail" style="max-height:150px;" />
+								</div>
+							}
+						</div>
+					</div>
 				</div>
 
-				<div class="tab-pane fade" id="e-tab-status" role="tabpanel" aria-labelledby="e-tab-status-tab">
+				<div class="tab-pane fade" id="tab-status" role="tabpanel" aria-labelledby="tab-status-tab">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<div class="form-check">
@@ -359,6 +381,9 @@
 								<label class="form-check-label" asp-for="IsActive">Active</label>
 							</div>
 						</div>
+					</div>
+
+					<div class="row mb-3">
 						<div class="col-12">
 							<div class="form-group">
 								<label asp-for="Status" class="control-label"></label>
@@ -366,6 +391,9 @@
 								<span asp-validation-for="Status" class="text-danger"></span>
 							</div>
 						</div>
+					</div>
+
+					<div class="row mb-3">
 						<div class="col-12">
 							<div class="form-group">
 								<label asp-for="StatusMessage" class="control-label">Status Message</label>

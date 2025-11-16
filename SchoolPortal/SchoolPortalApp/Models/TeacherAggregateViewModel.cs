@@ -20,6 +20,7 @@ namespace SchoolPortalApp.Models
         public List<TeacherDocumentDetails> Documents { get; set; } = new List<TeacherDocumentDetails>();
         public List<TeacherQualificationDetails> Qualifications { get; set; } = new List<TeacherQualificationDetails>();
         public List<IFormFile> DocumentFiles { get; set; } = new List<IFormFile>();
+        public IFormFile? ImageFile { get; set; }
 
         public IEnumerable<SelectListItem> Countries { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> States { get; set; } = Array.Empty<SelectListItem>();

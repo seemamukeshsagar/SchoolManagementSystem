@@ -44,9 +44,19 @@ namespace SchoolPortalApp.Controllers
 			var depts = vm.SchoolId != Guid.Empty
 				? _deptService.GetBySchool(vm.SchoolId)
 				: _deptService.GetAll();
+			// Fallback to all departments if school-specific query returns nothing
+			if (depts == null || !depts.Any())
+			{
+				depts = _deptService.GetAll();
+			}
 			depts = (depts ?? new List<DeptMaster>()).Where(d => d != null && d.IsActive).ToList();
 			vm.Departments = depts
-				.Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.DeptName ?? string.Empty })
+				.Select(d => new SelectListItem
+				{
+					Value = d.Id.ToString(),
+					Text = d.DeptName ?? string.Empty,
+					Selected = vm.DepartmentId.HasValue && vm.DepartmentId.Value == d.Id
+				})
 				.ToList();
 			var designations = _lookup.GetDesignations() ?? new List<LookupItem>();
 			vm.Designations = designations
@@ -58,14 +68,20 @@ namespace SchoolPortalApp.Controllers
 				.ToList();
 			var paymentModes = vm.SchoolId != Guid.Empty
 				? (_lookup.GetPaymentModes(vm.SchoolId) ?? new List<LookupItem>())
-				: (_lookup.GetPaymentModes() ?? new List<LookupItem>());
-			if (paymentModes.Count == 0)
+				: new List<LookupItem>();
+			// Fallback to global list if school-specific list is empty
+			if (paymentModes == null || paymentModes.Count == 0)
 			{
 				paymentModes = _lookup.GetPaymentModes() ?? new List<LookupItem>();
 			}
-			vm.PaymentModes = paymentModes
+			vm.PaymentModes = (paymentModes ?? new List<LookupItem>())
 				.OrderBy(x => x.Name)
-				.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name ?? string.Empty, Selected = vm.PaymentModeId.HasValue && vm.PaymentModeId.Value == x.Id })
+				.Select(x => new SelectListItem
+				{
+					Value = x.Id.ToString(),
+					Text = x.Name ?? string.Empty,
+					Selected = vm.PaymentModeId.HasValue && vm.PaymentModeId.Value == x.Id
+				})
 				.ToList();
 			var empTypes = vm.SchoolId != Guid.Empty
 				? (_lookup.GetEmployeeTypes(vm.SchoolId) ?? new List<LookupItem>())
@@ -79,8 +95,18 @@ namespace SchoolPortalApp.Controllers
 				.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name ?? string.Empty, Selected = vm.EmployeeTypeId.HasValue && vm.EmployeeTypeId.Value == x.Id })
 				.ToList();
 			var empCats = _lookup.GetEmployeeCategories() ?? new List<LookupItem>();
-			vm.EmployeeCategories = empCats
-				.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name ?? string.Empty, Selected = vm.CategoryId.HasValue && vm.CategoryId.Value == x.Id })
+			// Fallback: if no employee categories defined, use generic categories
+			if (empCats == null || empCats.Count == 0)
+			{
+				empCats = _lookup.GetCategories() ?? new List<LookupItem>();
+			}
+			vm.EmployeeCategories = (empCats ?? new List<LookupItem>())
+				.Select(x => new SelectListItem
+				{
+					Value = x.Id.ToString(),
+					Text = x.Name ?? string.Empty,
+					Selected = vm.CategoryId.HasValue && vm.CategoryId.Value == x.Id
+				})
 				.ToList();
 			var grades = vm.SchoolId != Guid.Empty
 				? (_lookup.GetGrades(vm.SchoolId) ?? new List<LookupItem>())
@@ -304,16 +330,6 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			// Exclude server-bound fields from validation
-			//ModelState.Remove(nameof(EmpViewModel.CompanyId));
-			//ModelState.Remove(nameof(EmpViewModel.SchoolId));
-
-			//if (!ModelState.IsValid)
-			//{
-			//	PopulateDropdowns(model);
-			//	return View(model);
-			//}
-
 			// Validate user
 			var userIdStr = HttpContext.Session.GetString("UserId");
 			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
@@ -531,6 +547,201 @@ namespace SchoolPortalApp.Controllers
 			}
 
 			return RedirectToAction("Details", new { id = newId });
+		}
+
+		[HttpGet]
+		[Route("Edit/{id}")]
+		public IActionResult Edit(Guid id)
+		{
+			var item = _service.GetById(id);
+			if (item == null) return NotFound();
+			var vm = new EmpViewModel
+			{
+				Id = item.Id,
+				FirstName = item.FirstName ?? string.Empty,
+				LastName = item.LastName ?? string.Empty,
+				DOB = item.DOB,
+				DOJ = item.DOJ,
+				ProbationStartDate = item.ProbationStartDate,
+				ProbationPeriod = item.ProbationPeriod,
+				ConfirmationDate = item.ConfirmationDate,
+				PANNumber = item.PANNumber ?? string.Empty,
+				ESICNumber = item.ESICNumber ?? string.Empty,
+				PFNumeber = item.PFNumeber ?? string.Empty,
+				CurrentAddress1 = item.CurrentAddress1 ?? string.Empty,
+				CurrentAddress2 = item.CurrentAddress2 ?? string.Empty,
+				CurrentCityId = item.CurrentCityId,
+				CurrentStateId = item.CurrentStateId,
+				CurrentCountryId = item.CurrentCountryId,
+				CurrentZipCode = item.CurrentZipCode ?? string.Empty,
+				PermanentAddress1 = item.PermanentAddress1 ?? string.Empty,
+				PermanentAddress2 = item.PermanentAddress2 ?? string.Empty,
+				PermanentCityId = item.PermanentCityId,
+				PermanentStateId = item.PermanentStateId,
+				PermanentCountryId = item.PermanentCountryId,
+				PermanentZipCode = item.PermanentZipCode ?? string.Empty,
+				PhoneNumber = item.PhoneNumber ?? string.Empty,
+				MobileNumber = item.MobileNumber ?? string.Empty,
+				EmailId = item.EmailId ?? string.Empty,
+				DepartmentId = item.DepartmentId,
+				DesignationId = item.DesignationId,
+				PaymentModeId = item.PaymentModeId,
+				EmployeeTypeId = item.EmployeeTypeId,
+				CategoryId = item.CategoryId,
+				BankAccountNumber = item.BankAccountNumber ?? string.Empty,
+				BankName = item.BankName ?? string.Empty,
+				GenderId = item.GenderId,
+				BloodGroupId = item.BloodGroupId,
+				GradeId = item.GradeId,
+				Image = item.Image ?? string.Empty,
+				EmployeeOldId = item.EmployeeOldId,
+				FathersName = item.FathersName ?? string.Empty,
+				MothersName = item.MothersName ?? string.Empty,
+				Description = item.Description ?? string.Empty,
+				LicenceNumber = item.LicenceNumber ?? string.Empty,
+				LicenceIssueDate = item.LicenceIssueDate,
+				LicenceValidUpto = item.LicenceValidUpto,
+				LicenceDescription = item.LicenceDescription ?? string.Empty,
+				LicenceImage = item.LicenceImage ?? string.Empty,
+				LicenceType = item.LicenceType ?? string.Empty,
+				Salutation = item.Salutation ?? string.Empty,
+				DateOfLeaving = item.DateOfLeaving,
+				MaritalStatus = item.MaritalStatus ?? string.Empty,
+				YearsOfExperience = item.YearsOfExperience ?? string.Empty,
+				PrevioudSchoolCompany = item.PrevioudSchoolCompany ?? string.Empty,
+				AadhaarNumber = item.AadhaarNumber ?? string.Empty,
+				MathUpToClass = item.MathUpToClass,
+				EnglishUptoClass = item.EnglishUptoClass,
+				SSTUptoClass = item.SSTUptoClass,
+				CompanyId = item.CompanyId,
+				SchoolId = item.SchoolId,
+				IsActive = item.IsActive,
+				IsDeleted = item.IsDeleted,
+				Status = item.Status ?? DefaultStatus,
+				StatusMessage = item.StatusMessage ?? string.Empty
+			};
+			PopulateDropdowns(vm);
+			return View(vm);
+		}
+
+		[HttpPost]
+		[Route("Edit/{id}")]
+		[ValidateAntiForgeryToken]
+		public IActionResult Edit(Guid id, EmpViewModel model)
+		{
+			if (id != model.Id) return BadRequest();
+			var companyIdStr = HttpContext.Session.GetString("CompanyId");
+			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+			if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
+				string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			{
+				ModelState.AddModelError(string.Empty, "Please login and select company and school before updating the entry.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
+			var userIdStr = HttpContext.Session.GetString("UserId");
+			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			{
+				ModelState.AddModelError(string.Empty, "Please login to update employee.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
+			var existing = _service.GetById(id);
+			if (existing == null) return NotFound();
+			existing.FirstName = model.FirstName;
+			existing.LastName = model.LastName;
+			existing.DOB = model.DOB;
+			existing.DOJ = model.DOJ ?? existing.DOJ;
+			existing.ProbationStartDate = model.ProbationStartDate;
+			existing.ProbationPeriod = model.ProbationPeriod;
+			existing.ConfirmationDate = model.ConfirmationDate;
+			existing.PANNumber = model.PANNumber;
+			existing.ESICNumber = model.ESICNumber;
+			existing.PFNumeber = model.PFNumeber;
+			existing.CurrentAddress1 = model.CurrentAddress1;
+			existing.CurrentAddress2 = model.CurrentAddress2;
+			existing.CurrentCityId = model.CurrentCityId;
+			existing.CurrentStateId = model.CurrentStateId;
+			existing.CurrentCountryId = model.CurrentCountryId;
+			existing.CurrentZipCode = model.CurrentZipCode;
+			existing.PermanentAddress1 = model.PermanentAddress1;
+			existing.PermanentAddress2 = model.PermanentAddress2;
+			existing.PermanentCityId = model.PermanentCityId;
+			existing.PermanentStateId = model.PermanentStateId;
+			existing.PermanentCountryId = model.PermanentCountryId;
+			existing.PermanentZipCode = model.PermanentZipCode;
+			existing.PhoneNumber = model.PhoneNumber;
+			existing.MobileNumber = model.MobileNumber;
+			existing.EmailId = model.EmailId;
+			existing.DepartmentId = model.DepartmentId;
+			existing.DesignationId = model.DesignationId;
+			existing.PaymentModeId = model.PaymentModeId;
+			existing.EmployeeTypeId = model.EmployeeTypeId;
+			existing.CategoryId = model.CategoryId;
+			existing.BankAccountNumber = model.BankAccountNumber;
+			existing.BankName = model.BankName;
+			existing.GenderId = model.GenderId;
+			existing.BloodGroupId = model.BloodGroupId;
+			existing.GradeId = model.GradeId;
+			existing.EmployeeOldId = model.EmployeeOldId;
+			existing.FathersName = model.FathersName;
+			existing.MothersName = model.MothersName;
+			existing.Description = model.Description;
+			existing.LicenceNumber = model.LicenceNumber;
+			existing.LicenceIssueDate = model.LicenceIssueDate;
+			existing.LicenceValidUpto = model.LicenceValidUpto;
+			existing.LicenceDescription = model.LicenceDescription;
+			existing.LicenceType = model.LicenceType;
+			existing.Salutation = model.Salutation;
+			existing.DateOfLeaving = model.DateOfLeaving;
+			existing.MaritalStatus = model.MaritalStatus;
+			existing.YearsOfExperience = model.YearsOfExperience;
+			existing.PrevioudSchoolCompany = model.PrevioudSchoolCompany;
+			existing.AadhaarNumber = model.AadhaarNumber;
+			existing.MathUpToClass = model.MathUpToClass;
+			existing.EnglishUptoClass = model.EnglishUptoClass;
+			existing.SSTUptoClass = model.SSTUptoClass;
+			existing.CompanyId = companyId;
+			existing.SchoolId = schoolId;
+			existing.IsActive = model.IsActive;
+			existing.Status = model.Status ?? existing.Status ?? DefaultStatus;
+			existing.StatusMessage = model.StatusMessage ?? existing.StatusMessage ?? string.Empty;
+			existing.ModifiedBy = userId;
+			existing.ModifiedDate = DateTime.UtcNow;
+			try
+			{
+				var uploadsRoot = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "employees");
+				if (!Directory.Exists(uploadsRoot)) Directory.CreateDirectory(uploadsRoot);
+				if (model.ImageFile != null && model.ImageFile.Length > 0)
+				{
+					var ext = Path.GetExtension(model.ImageFile.FileName);
+					var fileName = $"emp_{Guid.NewGuid():N}{ext}";
+					var filePath = Path.Combine(uploadsRoot, fileName);
+					using var stream = new FileStream(filePath, FileMode.Create);
+					model.ImageFile.CopyTo(stream);
+					existing.Image = $"/uploads/employees/{fileName}";
+				}
+				if (model.LicenceImageFile != null && model.LicenceImageFile.Length > 0)
+				{
+					var ext = Path.GetExtension(model.LicenceImageFile.FileName);
+					var fileName = $"lic_{Guid.NewGuid():N}{ext}";
+					var filePath = Path.Combine(uploadsRoot, fileName);
+					using var stream = new FileStream(filePath, FileMode.Create);
+					model.LicenceImageFile.CopyTo(stream);
+					existing.LicenceImage = $"/uploads/employees/{fileName}";
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error saving uploaded files for employee edit {EmployeeId}", id);
+			}
+			if (!_service.Update(existing))
+			{
+				ModelState.AddModelError(string.Empty, "Failed to update employee.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
+			return RedirectToAction("Details", new { id });
 		}
 
 		[HttpPost]

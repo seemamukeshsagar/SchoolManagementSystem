@@ -45,7 +45,16 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
+			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+			List<TeacherMaster> list;
+			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			{
+				list = _service.GetAll(schoolId);
+			}
+			else
+			{
+				list = _service.GetAll();
+			}
 			var schools = _schoolService.GetAll();
 			var genders = _lookupService.GetGenders();
 			var maritalStatuses = _lookupService.GetMaritalStatuses();
@@ -219,7 +228,24 @@ namespace SchoolPortalApp.Controllers
 			model.LastName = model.LastName ?? string.Empty;
 			model.Address = model.Address ?? string.Empty;
 			model.ZipCode = model.ZipCode ?? string.Empty;
-			model.Image = model.Image ?? string.Empty;
+			if (vm.ImageFile != null && vm.ImageFile.Length > 0)
+			{
+				// Save teacher image under /uploads/teachers
+				var uploadsFolder = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "teachers");
+				Directory.CreateDirectory(uploadsFolder);
+				var safeName = Path.GetFileName(vm.ImageFile.FileName);
+				var savedName = $"{Guid.NewGuid()}_{safeName}";
+				var savePath = Path.Combine(uploadsFolder, savedName);
+				using (var stream = new FileStream(savePath, FileMode.Create))
+				{
+					vm.ImageFile.CopyTo(stream);
+				}
+				model.Image = $"/uploads/teachers/{savedName}";
+			}
+			else
+			{
+				model.Image = model.Image ?? string.Empty;
+			}
 			model.Phone = model.Phone ?? string.Empty;
 			model.MobilePhone = model.MobilePhone ?? string.Empty;
 			model.YearsOfExperience = model.YearsOfExperience ?? string.Empty;
@@ -395,6 +421,10 @@ namespace SchoolPortalApp.Controllers
 				vm.Qualifications = (_qualService.GetAll() ?? new List<TeacherQualificationDetails>()).Where(q => q.TeacherId == id).ToList();
 				var quals = _lookupService.GetQualifications();
 				vm.QualificationItems = quals.Select(q => new SelectListItem { Value = q.Id.ToString(), Text = q.Name }).ToList();
+				var genders = _lookupService.GetGenders();
+				vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = g.Id == (item.Gender ?? Guid.Empty) }).ToList();
+				var maritalStatuses = _lookupService.GetMaritalStatuses();
+				vm.MaritalStatuses = maritalStatuses.Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == (item.MaritalStatusId ?? Guid.Empty) }).ToList();
 			}
 			catch { }
 			return View(vm);
@@ -430,6 +460,34 @@ namespace SchoolPortalApp.Controllers
 
 			if (!ModelState.IsValid)
 			{
+				try
+				{
+					var countries = _lookupService.GetCountries();
+					vm.Countries = countries.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CountryId.HasValue && c.Id == model.CountryId.Value }).ToList();
+					if (model.CountryId.HasValue && model.CountryId.Value != Guid.Empty)
+					{
+						var states = _lookupService.GetStates(model.CountryId.Value);
+						vm.States = states.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = model.StateId.HasValue && s.Id == model.StateId.Value }).ToList();
+						if (model.StateId.HasValue && model.StateId.Value != Guid.Empty)
+						{
+							var cities = _lookupService.GetCities(model.StateId.Value);
+							vm.Cities = cities.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CityId.HasValue && c.Id == model.CityId.Value }).ToList();
+						}
+						else vm.Cities = Enumerable.Empty<SelectListItem>().ToList();
+					}
+					else
+					{
+						vm.States = Enumerable.Empty<SelectListItem>().ToList();
+						vm.Cities = Enumerable.Empty<SelectListItem>().ToList();
+					}
+					var quals = _lookupService.GetQualifications();
+					vm.QualificationItems = quals.Select(q => new SelectListItem { Value = q.Id.ToString(), Text = q.Name }).ToList();
+					var genders = _lookupService.GetGenders();
+					vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = g.Id == (model.Gender ?? Guid.Empty) }).ToList();
+					var maritalStatuses = _lookupService.GetMaritalStatuses();
+					vm.MaritalStatuses = maritalStatuses.Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == (model.MaritalStatusId ?? Guid.Empty) }).ToList();
+				}
+				catch { }
 				return View(vm);
 			}
 
@@ -459,6 +517,10 @@ namespace SchoolPortalApp.Controllers
 					}
 					var quals = _lookupService.GetQualifications();
 					vm.QualificationItems = quals.Select(q => new SelectListItem { Value = q.Id.ToString(), Text = q.Name }).ToList();
+					var genders = _lookupService.GetGenders();
+					vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = g.Id == (model.Gender ?? Guid.Empty) }).ToList();
+					var maritalStatuses = _lookupService.GetMaritalStatuses();
+					vm.MaritalStatuses = maritalStatuses.Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == (model.MaritalStatusId ?? Guid.Empty) }).ToList();
 				}
 				catch { }
 				return View(vm);
@@ -469,7 +531,23 @@ namespace SchoolPortalApp.Controllers
 			model.LastName = model.LastName ?? string.Empty;
 			model.Address = model.Address ?? string.Empty;
 			model.ZipCode = model.ZipCode ?? string.Empty;
-			model.Image = model.Image ?? string.Empty;
+			if (vm.ImageFile != null && vm.ImageFile.Length > 0)
+			{
+				var uploadsFolder = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "teachers");
+				Directory.CreateDirectory(uploadsFolder);
+				var safeName = Path.GetFileName(vm.ImageFile.FileName);
+				var savedName = $"{Guid.NewGuid()}_{safeName}";
+				var savePath = Path.Combine(uploadsFolder, savedName);
+				using (var stream = new FileStream(savePath, FileMode.Create))
+				{
+					vm.ImageFile.CopyTo(stream);
+				}
+				model.Image = $"/uploads/teachers/{savedName}";
+			}
+			else
+			{
+				model.Image = model.Image ?? string.Empty;
+			}
 			model.Phone = model.Phone ?? string.Empty;
 			model.MobilePhone = model.MobilePhone ?? string.Empty;
 			model.YearsOfExperience = model.YearsOfExperience ?? string.Empty;
@@ -506,6 +584,10 @@ namespace SchoolPortalApp.Controllers
 					}
 					var quals = _lookupService.GetQualifications();
 					vm.QualificationItems = quals.Select(q => new SelectListItem { Value = q.Id.ToString(), Text = q.Name }).ToList();
+					var genders = _lookupService.GetGenders();
+					vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = g.Id == (model.Gender ?? Guid.Empty) }).ToList();
+					var maritalStatuses = _lookupService.GetMaritalStatuses();
+					vm.MaritalStatuses = maritalStatuses.Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == (model.MaritalStatusId ?? Guid.Empty) }).ToList();
 				}
 				catch { }
 				return View(vm);
@@ -1328,34 +1410,35 @@ namespace SchoolPortalApp.Controllers
 			}
 		}
 
-		[HttpGet]
-		[Route("TestDatabase")]
-		public IActionResult TestDatabase()
-		{
-			try
-			{
-				_logger.LogInformation("Testing database connection and stored procedures");
+		//[HttpGet]
+		//[Route("TestDatabase")]
+		//public IActionResult TestDatabase()
+		//{
+		//	try
+		//	{
+		//		_logger.LogInformation("Testing database connection and stored procedures");
 				
-				// Test Teacher_GetAll stored procedure
-				Proc p = new Proc("Teacher_GetAll");
-				var dt = new DataTable();
-				p.Exec(dt);
-				_logger.LogInformation("Teacher_GetAll executed successfully, returned {RowCount} rows", dt.Rows.Count);
+		//		// Test Teacher_GetAll stored procedure
+		//		Proc p = new Proc("Teacher_GetAll_SchoolId");
+		//		p[""
+		//		var dt = new DataTable();
+		//		p.Exec(dt);
+		//		_logger.LogInformation("Teacher_GetAll executed successfully, returned {RowCount} rows", dt.Rows.Count);
 				
-				// Test Emp_GetAll stored procedure
-				Proc p2 = new Proc("Emp_GetAll");
-				var dt2 = new DataTable();
-				p2.Exec(dt2);
-				_logger.LogInformation("Emp_GetAll executed successfully, returned {RowCount} rows", dt2.Rows.Count);
+		//		// Test Emp_GetAll stored procedure
+		//		Proc p2 = new Proc("Emp_GetAll");
+		//		var dt2 = new DataTable();
+		//		p2.Exec(dt2);
+		//		_logger.LogInformation("Emp_GetAll executed successfully, returned {RowCount} rows", dt2.Rows.Count);
 				
-				return Content($"Database test successful. Teachers: {dt.Rows.Count}, Employees: {dt2.Rows.Count}");
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Database test failed");
-				return Content($"Database test failed: {ex.Message}");
-			}
-		}
+		//		return Content($"Database test successful. Teachers: {dt.Rows.Count}, Employees: {dt2.Rows.Count}");
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		_logger.LogError(ex, "Database test failed");
+		//		return Content($"Database test failed: {ex.Message}");
+		//	}
+		//}
 
 		[HttpGet]
 		[Route("TestStoredProcedure")]

@@ -33,6 +33,20 @@
         <dd class="col-sm-9">@(Model.LicenceValidUptoDate?.ToString("yyyy-MM-dd"))</dd>
         <dt class="col-sm-3">Licence Type</dt>
         <dd class="col-sm-9">@Model.LicenceType</dd>
+        <dt class="col-sm-3">Driver Image</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.DriverImage))
+            {
+                <img src="@Model.DriverImage" alt="Driver Image" style="max-height:150px;" />
+            }
+        </dd>
+        <dt class="col-sm-3">Licence Image</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.LicenceImage))
+            {
+                <img src="@Model.LicenceImage" alt="Licence Image" style="max-height:150px;" />
+            }
+        </dd>
         <dt class="col-sm-3">Active</dt>
         <dd class="col-sm-9">@Model.IsActive</dd>
     </dl>

@@ -20,6 +20,7 @@ namespace SchoolPortalApp.Models
 		public List<CleanerDocumentDetails> Documents { get; set; } = new List<CleanerDocumentDetails>();
 		public List<CleanerQualificationDetails> Qualifications { get; set; } = new List<CleanerQualificationDetails>();
 		public List<IFormFile> DocumentFiles { get; set; } = new List<IFormFile>();
+		public IFormFile? ImageFile { get; set; }
 
 		public IEnumerable<SelectListItem> QualificationItems { get; set; } = Array.Empty<SelectListItem>();
 	}

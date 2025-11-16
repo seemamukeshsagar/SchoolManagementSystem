@@ -12,7 +12,16 @@
         <dt class="col-sm-3">Description</dt>
         <dd class="col-sm-9">@Model.Description</dd>
         <dt class="col-sm-3">Image</dt>
-        <dd class="col-sm-9">@Model.Image</dd>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.Image))
+            {
+                <img src="@Model.Image" alt="Cleaner Image" class="img-thumbnail" style="max-height:150px;" />
+            }
+            else
+            {
+                @Model.Image
+            }
+        </dd>
         <dt class="col-sm-3">Active</dt>
         <dd class="col-sm-9">@Model.IsActive</dd>
     </dl>

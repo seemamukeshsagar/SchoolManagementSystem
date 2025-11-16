@@ -220,6 +220,16 @@ namespace SchoolPortalApp.Controllers
 				return View(vm);
 			}
 
+			// Handle main images
+			if (vm.DriverImageFile != null)
+			{
+				model.DriverImage = SaveUpload(vm.DriverImageFile, "drivers");
+			}
+			if (vm.LicenceImageFile != null)
+			{
+				model.LicenceImage = SaveUpload(vm.LicenceImageFile, "drivers");
+			}
+
 			// Normalize optional strings
 			model.Id = Guid.Empty;
 			model.FirstName = model.FirstName ?? string.Empty;
@@ -380,6 +390,11 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (vm?.Master == null || vm.Master.Id == Guid.Empty || vm.Master.Id != id) return BadRequest();
 			var model = vm.Master;
+			var existing = _service.GetById(id);
+			if (existing == null) return NotFound();
+			// Preserve existing image paths by default
+			model.DriverImage = existing.DriverImage;
+			model.LicenceImage = existing.LicenceImage;
 
 			// Validate location fields
 			if (model.CountryId == Guid.Empty)
@@ -424,6 +439,16 @@ namespace SchoolPortalApp.Controllers
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to save driver.");
 				return View(vm);
+			}
+
+			// Handle main images (keep existing if no new upload)
+			if (vm.DriverImageFile != null)
+			{
+				model.DriverImage = SaveUpload(vm.DriverImageFile, "drivers");
+			}
+			if (vm.LicenceImageFile != null)
+			{
+				model.LicenceImage = SaveUpload(vm.LicenceImageFile, "drivers");
 			}
 
 			// Normalize some fields

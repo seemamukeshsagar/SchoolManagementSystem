@@ -78,7 +78,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Master.DriverImage"></label>
-                <input asp-for="Master.DriverImage" class="form-control" />
+                @if (!string.IsNullOrWhiteSpace(Model.Master.DriverImage))
+                {
+                    <div class="mb-2">
+                        <img src="@Model.Master.DriverImage" alt="Driver Image" style="max-height:100px;" />
+                    </div>
+                }
+                <input asp-for="DriverImageFile" type="file" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Master.LicenceNumber"></label>
@@ -98,7 +104,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Master.LicenceImage"></label>
-                <input asp-for="Master.LicenceImage" class="form-control" />
+                @if (!string.IsNullOrWhiteSpace(Model.Master.LicenceImage))
+                {
+                    <div class="mb-2">
+                        <img src="@Model.Master.LicenceImage" alt="Licence Image" style="max-height:100px;" />
+                    </div>
+                }
+                <input asp-for="LicenceImageFile" type="file" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Master.LicenceType"></label>
