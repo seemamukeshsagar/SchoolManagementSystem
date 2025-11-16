@@ -14,7 +14,8 @@
   </style>
 
 @{
-	var lstPrivileges = Accessor.HttpContext.Session.GetString("Privileges").Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+	var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
+	var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
 }
 
   <!-- Sidebar -->
@@ -101,12 +102,11 @@
 		  <li><a href="@Url.Action("Index", "ClassRoom")" class="nav-link">Class Rooms</a></li>
 		  <li><a href="@Url.Action("Index", "Subject")" class="nav-link">Subjects</a></li>
 		  <li><a href="@Url.Action("Index", "SubCategory")" class="nav-link">Subjects - Sub Categories</a></li>
-		  <li><a href="@Url.Action("Index", "Professions")" class="nav-link">Professions</a></li>
-		  <li><a href="@Url.Action("Index", "Qualification")" class="nav-link">Qualifications</a></li>
-		  <li><a href="@Url.Action("Index", "FeesCategory")" class="nav-link">Fees Categories</a></li>
-		  <li><a href="@Url.Action("Index", "DiscountCategory")" class="nav-link">Discount Categories</a></li>
-		  <li><a href="@Url.Action("Index", "Assessments")" class="nav-link">Assesments</a></li>
-		  <li><a href="@Url.Action("Index", "AttendenceReason")" class="nav-link">Attendance Reasons</a></li>
+		  <li><a href="@Url.Action("Index", "ProfessionMaster")" class="nav-link">Professions</a></li>
+		  <li><a href="@Url.Action("Index", "QualificationMaster")" class="nav-link">Qualifications</a></li>
+		  <li><a href="@Url.Action("Index", "FeesCategoryMaster")" class="nav-link">Fees Categories</a></li>
+		  <li><a href="@Url.Action("Index", "Assessment")" class="nav-link">Assesments</a></li>
+		  <li><a href="@Url.Action("Index", "AttendenceReasonMaster")" class="nav-link">Attendance Reasons</a></li>
 		  <li><a href="@Url.Action("Index", "SystemParameters")" class="nav-link">System Parameters</a></li>
 		  <li><a href="@Url.Action("Index", "VisitorMaster")" class="nav-link">Visitors</a></li>
 		</ul>

@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using SchoolPortal.DBAccess;
+using SchoolPortal.Entities.Models;
+using SchoolPortal.Services.IServices;
+
+namespace SchoolPortal.Services
+{
+	public class QualificationMasterService : IQualificationMasterService
+	{
+		private QualificationMaster Map(DataRow row)
+		{
+			if (row == null) return new QualificationMaster();
+
+			var entity = new QualificationMaster();
+			if (row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"].ToString(), out var id)) entity.Id = id;
+			entity.QualificationName = row.Table.Columns.Contains("QualificationName") ? row["QualificationName"].ToString() ?? string.Empty : string.Empty;
+			if (row.Table.Columns.Contains("IsTeachingQualification") && bool.TryParse(row["IsTeachingQualification"].ToString(), out var isTeaching)) entity.IsTeachingQualification = isTeaching;
+			if (row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"].ToString(), out var isActive)) entity.IsActive = isActive;
+			if (row.Table.Columns.Contains("IsDeleted") && bool.TryParse(row["IsDeleted"].ToString(), out var isDeleted)) entity.IsDeleted = isDeleted;
+			if (row.Table.Columns.Contains("CreatedBy") && Guid.TryParse(row["CreatedBy"].ToString(), out var createdBy)) entity.CreatedBy = createdBy;
+			if (row.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(row["CreatedDate"].ToString(), out var createdDate)) entity.CreatedDate = createdDate;
+			if (row.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(row["ModifiedBy"].ToString(), out var modifiedBy)) entity.ModifiedBy = modifiedBy;
+			if (row.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(row["ModifiedDate"].ToString(), out var modifiedDate)) entity.ModifiedDate = modifiedDate;
+			entity.Status = row.Table.Columns.Contains("Status") ? row["Status"].ToString() ?? string.Empty : string.Empty;
+			entity.StatusMessage = row.Table.Columns.Contains("StatusMessage") ? row["StatusMessage"].ToString() ?? string.Empty : string.Empty;
+			return entity;
+		}
+
+		public List<QualificationMaster> GetAll()
+		{
+			Proc p = new Proc("QualificationMaster_GetAll");
+			var dt = new DataTable();
+			p.Exec(dt);
+			var list = new List<QualificationMaster>();
+			foreach (DataRow r in dt.Rows)
+			{
+				list.Add(Map(r));
+			}
+			return list;
+		}
+
+		public QualificationMaster? GetById(Guid id)
+		{
+			Proc p = new Proc("QualificationMaster_GetById");
+			p["@Id"] = id;
+			var dt = new DataTable();
+			p.Exec(dt);
+			if (dt.Rows.Count == 0) return null;
+			return Map(dt.Rows[0]);
+		}
+
+		public Guid Create(QualificationMaster qualification)
+		{
+			Proc p = new Proc("QualificationMaster_Create");
+			p["@QualificationName"] = qualification.QualificationName;
+			p["@IsTeachingQualification"] = qualification.IsTeachingQualification;
+			p["@IsActive"] = qualification.IsActive;
+			p["@CreatedBy"] = qualification.CreatedBy;
+			var dt = new DataTable();
+			p.Exec(dt);
+			if (dt.Rows.Count > 0)
+			{
+				var idObj = dt.Rows[0]["Id"];
+				if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
+				{
+					return newId;
+				}
+			}
+			return Guid.Empty;
+		}
+
+		public bool Update(QualificationMaster qualification)
+		{
+			Proc p = new Proc("QualificationMaster_Update");
+			p["@Id"] = qualification.Id;
+			p["@QualificationName"] = qualification.QualificationName;
+			p["@IsTeachingQualification"] = qualification.IsTeachingQualification;
+			p["@IsActive"] = qualification.IsActive;
+			p["@ModifiedBy"] = qualification.ModifiedBy ?? Guid.Empty;
+			p.Exec();
+			var ret = p.Parameters["@RETURN_VALUE"].Value;
+			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
+			return code == 1;
+		}
+
+		public bool Delete(Guid id)
+		{
+			Proc p = new Proc("QualificationMaster_Delete");
+			p["@Id"] = id;
+			p.Exec();
+			var ret = p.Parameters["@RETURN_VALUE"].Value;
+			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
+			return code == 1;
+		}
+	}
+}

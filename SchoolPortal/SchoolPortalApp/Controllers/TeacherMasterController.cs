@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
@@ -1167,7 +1167,7 @@ namespace SchoolPortalApp.Controllers
 					foreach (var key in ModelState.Keys)
 					{
 						var state = ModelState[key];
-						if (state.Errors.Count > 0)
+						if (state != null && state.Errors.Count > 0)
 						{
 							_logger.LogWarning("ModelState error for {Key}: {Errors}", key, string.Join(", ", state.Errors.Select(e => e.ErrorMessage)));
 						}
@@ -1527,12 +1527,12 @@ namespace SchoolPortalApp.Controllers
 			{
 				_logger.LogInformation("Testing database connection");
 				
-				using (var connection = new System.Data.SqlClient.SqlConnection(SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager.ConnectionString))
+				using (var connection = new SqlConnection(SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager.ConnectionString))
 				{
 					connection.Open();
 					_logger.LogInformation("Database connection successful");
 					
-					using (var command = new System.Data.SqlClient.SqlCommand("SELECT COUNT(*) FROM TeacherMaster", connection))
+					using (var command = new SqlCommand("SELECT COUNT(*) FROM TeacherMaster", connection))
 					{
 						var count = (int)command.ExecuteScalar();
 						_logger.LogInformation("TeacherMaster table count: {Count}", count);

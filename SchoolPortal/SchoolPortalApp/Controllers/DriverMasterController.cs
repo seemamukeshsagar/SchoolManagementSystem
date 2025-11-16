@@ -117,7 +117,7 @@ namespace SchoolPortalApp.Controllers
 				StatusMessage = "In Process....",
 				CreatedDate = DateTime.UtcNow
 			};
-			var vm = new DriverAggregateViewModel { Master = entity };
+			var vm = new DriverViewModel { Master = entity };
 			try
 			{
 				var quals = _lookup.GetQualifications() ?? new List<LookupItem>();
@@ -134,7 +134,7 @@ namespace SchoolPortalApp.Controllers
 		[HttpPost]
 		[Route("Create")]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(DriverAggregateViewModel vm)
+		public IActionResult Create(DriverViewModel vm)
 		{
 			var model = vm.Master;
 			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
@@ -351,7 +351,7 @@ namespace SchoolPortalApp.Controllers
 		{
 			var item = _service.GetById(id);
 			if (item == null) return NotFound();
-			var vm = new DriverAggregateViewModel { Master = item };
+			var vm = new DriverViewModel { Master = item };
 			try
 			{
 				// Select lists
@@ -386,7 +386,7 @@ namespace SchoolPortalApp.Controllers
 		[HttpPost]
 		[Route("Edit/{id}")]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit(Guid id, DriverAggregateViewModel vm)
+		public IActionResult Edit(Guid id, DriverViewModel vm)
 		{
 			if (vm?.Master == null || vm.Master.Id == Guid.Empty || vm.Master.Id != id) return BadRequest();
 			var model = vm.Master;

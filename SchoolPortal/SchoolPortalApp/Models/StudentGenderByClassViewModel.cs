@@ -5,7 +5,7 @@ namespace SchoolPortalApp.Models
 {
     public class StudentGenderByClassViewModel
     {
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = string.Empty;
         public int BoysCount { get; set; }
         public int GirlsCount { get; set; }
     }

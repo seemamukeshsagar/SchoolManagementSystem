@@ -91,6 +91,8 @@ builder.Services.AddScoped<ITeacherDocumentDetailsService, SchoolPortal.Services
 builder.Services.AddScoped<ITeacherQualificationDetailsService, SchoolPortal.Services.TeacherQualificationDetailsService>();
 builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
 builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMasterService>();
+builder.Services.AddScoped<IProfessionMasterService, SchoolPortal.Services.ProfessionMasterService>();
+builder.Services.AddScoped<IQualificationMasterService, SchoolPortal.Services.QualificationMasterService>();
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
 builder.Services.AddScoped<IDeptDesigDetailsService, SchoolPortal.Services.DeptDesigDetailsService>();
 builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
@@ -120,6 +122,8 @@ builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IInventoryService, SchoolPortal.Services.InventoryService>();
 builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetailsService>();
+builder.Services.AddScoped<IFeesCategoryMasterService, SchoolPortal.Services.FeesCategoryMasterService>();
+builder.Services.AddScoped<IAssesmentMasterService, SchoolPortal.Services.AssesmentMasterService>();
 
 var app = builder.Build();
 
