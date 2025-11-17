@@ -12,6 +12,10 @@ namespace SchoolPortalApp.Models
 		[Display(Name = "Subject Name")]
 		public string SubjectName { get; set; } = string.Empty;
 
+		[Required]
+		[Display(Name = "Class")]
+		public Guid ClassId { get; set; }
+
 		[Display(Name = "Is Scholastic")]
 		public bool IsScholastic { get; set; } = false;
 
@@ -21,6 +25,8 @@ namespace SchoolPortalApp.Models
 		[Required]
 		[Display(Name = "School")]
 		public Guid SchoolId { get; set; }
+
+		public IEnumerable<SelectListItem> Classes { get; set; } = Array.Empty<SelectListItem>();
 
 		public IEnumerable<SelectListItem> Schools { get; set; } = Array.Empty<SelectListItem>();
 	}

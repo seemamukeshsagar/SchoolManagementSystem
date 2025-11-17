@@ -12,6 +12,9 @@ namespace SchoolPortal.Entities.ViewModels
         [Display(Name = "Subject Name")]
         public string SubjectName { get; set; } = string.Empty;
 
+        [Required]
+        public Guid ClassId { get; set; }
+
         [Display(Name = "Is Scholastic")]
         public bool? IsScholastic { get; set; } = false;
 

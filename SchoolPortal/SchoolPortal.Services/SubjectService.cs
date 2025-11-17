@@ -14,6 +14,7 @@ namespace SchoolPortal.Services
             var s = new SubjectMaster();
             if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) s.Id = id;
             s.SubjectName = r.Table.Columns.Contains("SubjectName") ? r["SubjectName"].ToString() ?? string.Empty : string.Empty;
+            if (r.Table.Columns.Contains("ClassId") && Guid.TryParse(r["ClassId"].ToString(), out var classId)) s.ClassId = classId;
             if (r.Table.Columns.Contains("IsScholastic") && bool.TryParse(r["IsScholastic"].ToString(), out var scholastic)) s.IsScholastic = scholastic;
             if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"].ToString(), out var active)) s.IsActive = active;
             if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"].ToString(), out var deleted)) s.IsDeleted = deleted;
@@ -55,6 +56,7 @@ namespace SchoolPortal.Services
         {
             Proc p = new Proc("Subject_Create");
             p["@SubjectName"] = subject.SubjectName;
+            p["@ClassId"] = subject.ClassId;
             p["@IsScholastic"] = subject.IsScholastic ?? false;
             p["@IsActive"] = subject.IsActive;
             p["@CompanyId"] = subject.CompanyId;
@@ -78,6 +80,7 @@ namespace SchoolPortal.Services
             Proc p = new Proc("Subject_Update");
             p["@Id"] = subject.Id;
             p["@SubjectName"] = subject.SubjectName;
+            p["@ClassId"] = subject.ClassId;
             p["@IsScholastic"] = subject.IsScholastic ?? false;
             p["@IsActive"] = subject.IsActive;
             p["@SchoolId"] = subject.SchoolId;

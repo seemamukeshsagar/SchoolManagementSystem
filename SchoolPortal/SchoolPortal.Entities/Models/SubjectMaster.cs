@@ -10,6 +10,8 @@ public partial class SubjectMaster
 
     public string SubjectName { get; set; } = string.Empty;
 
+    public Guid ClassId { get; set; }
+
     public Guid CompanyId { get; set; }
 
     public Guid SchoolId { get; set; }

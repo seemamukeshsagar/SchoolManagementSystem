@@ -15,12 +15,14 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly ISubjectService _service;
 		private readonly ISchoolService _schoolService;
+		private readonly IClassService _classService;
 		private readonly ILogger<SubjectController> _logger;
 
-		public SubjectController(ISubjectService service, ISchoolService schoolService, ILogger<SubjectController> logger)
+		public SubjectController(ISubjectService service, ISchoolService schoolService, IClassService classService, ILogger<SubjectController> logger)
 		{
 			_service = service;
 			_schoolService = schoolService;
+			_classService = classService;
 			_logger = logger;
 		}
 
@@ -28,6 +30,16 @@ namespace SchoolPortalApp.Controllers
 		{
 			var schools = _schoolService.GetAll();
 			vm.Schools = schools.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
+
+			var classes = _classService.GetAll();
+			vm.Classes = classes
+				.Where(c => c != null && !string.IsNullOrEmpty(c.Name))
+				.Select(c => new SelectListItem
+				{
+					Value = c.Id.ToString(),
+					Text = c.Name,
+					Selected = c.Id == vm.ClassId
+				}).ToList();
 		}
 
 		[HttpGet]
@@ -58,6 +70,8 @@ namespace SchoolPortalApp.Controllers
 		{
 			var item = _service.GetById(id);
 			if (item == null) return NotFound();
+			var className = _classService.ClassNameById(item.ClassId);
+			ViewBag.ClassName = className;
 			return View(item);
 		}
 
@@ -66,6 +80,7 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create()
 		{
 			var vm = new SubjectViewModel();
+			PopulateDropdowns(vm);
 			return View(vm);
 		}
 
@@ -76,6 +91,7 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
+				PopulateDropdowns(model);
 				return View(model);
 			}
 
@@ -109,6 +125,7 @@ namespace SchoolPortalApp.Controllers
 				SubjectName = model.SubjectName,
 				IsScholastic = model.IsScholastic,
 				IsActive = model.IsActive,
+				ClassId = model.ClassId,
 				CompanyId = companyId,
 				SchoolId = schoolId,
 				CreatedBy = userId,
@@ -137,6 +154,7 @@ namespace SchoolPortalApp.Controllers
 				SubjectName = item.SubjectName,
 				IsScholastic = item.IsScholastic ?? false,
 				IsActive = item.IsActive,
+				ClassId = item.ClassId,
 				SchoolId = item.SchoolId
 			};
 			PopulateDropdowns(vm);
@@ -175,6 +193,7 @@ namespace SchoolPortalApp.Controllers
 				SubjectName = model.SubjectName,
 				IsScholastic = model.IsScholastic,
 				IsActive = model.IsActive,
+				ClassId = model.ClassId,
 				SchoolId = model.SchoolId,
 				ModifiedBy = userId,
 				ModifiedDate = DateTime.UtcNow
@@ -183,6 +202,7 @@ namespace SchoolPortalApp.Controllers
 			if (!_service.Update(entity))
 			{
 				ModelState.AddModelError(string.Empty, "Failed to update subject.");
+				PopulateDropdowns(model);
 				return View(model);
 			}
 			return RedirectToAction("Details", new { id });
