@@ -3,16 +3,25 @@
 	ViewData["Title"] = "Attendance Reasons";
 }
 <h2>Attendance Reasons</h2>
-<p>
-	<a class="btn btn-primary" asp-controller="AttendanceReasonMaster" asp-action="Create">Create New</a>
-</p>
-<table class="table table-striped">
+
+<a class="btn btn-primary" asp-controller="AttendanceReasonMaster" asp-action="Create">
+	<i class="bi bi-plus-lg"></i> Create New
+</a>
+
+<table id="attendance-reasons-grid" class="table table-striped" data-datatable="true">
 	<thead>
 		<tr>
 			<th>Code</th>
 			<th>Name</th>
 			<th>Description</th>
 			<th>Is Active</th>
+			<th></th>
+		</tr>
+		<tr>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Code" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Name" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Description" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Active" /></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -24,10 +33,16 @@
 			<td>@item.Name</td>
 			<td>@item.Description</td>
 			<td>@item.IsActive</td>
-			<td>
-				<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details"><i class="bi bi-eye"></i></a> |
-				<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit"><i class="bi bi-pencil"></i></a> |
-				<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete"><i class="bi bi-trash"></i></a>
+			<td class="text-nowrap" style="white-space: nowrap;">
+				<a asp-action="Details" asp-route-id="@item.Id" class="text-info me-2" title="View Details">
+					<i class="bi bi-eye"></i>
+				</a>
+				<a asp-action="Edit" asp-route-id="@item.Id" class="text-warning me-2" title="Edit">
+					<i class="bi bi-pencil"></i>
+				</a>
+				<a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" title="Delete">
+					<i class="bi bi-trash"></i>
+				</a>
 			</td>
 		</tr>
 	}

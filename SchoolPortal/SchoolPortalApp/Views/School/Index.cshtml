@@ -3,12 +3,13 @@
 	ViewData["Title"] = "Schools";
 }
 <h2>Schools</h2>
-<p>
+@if (SchoolPortal.Services.Common.AuthorizedManager.HasPrivilege("Create School"))
+{
 	<a asp-action="Create" class="btn btn-primary">
 		<i class="bi bi-plus-lg"></i> Create New
-	</a>	
-</p>
-<table class="table table-striped">
+	</a>
+}
+<table id="schools-grid" class="table table-striped" data-datatable="true">
 	<thead>
 		<tr>
 			<th>Name</th>
@@ -17,7 +18,17 @@
 			<th>City</th>
 			<th>State</th>
 			<th>Country</th>
-			<th>Establishment Year</th>
+			<th>Est. Year</th>
+			<th></th>
+		</tr>
+		<tr>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Name" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Email" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Address" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search City" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search State" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Country" /></th>
+			<th><input type="text" class="form-control form-control-sm" placeholder="Search Year" /></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -32,12 +43,12 @@
 		<td>@item.StateName</td>
 		<td>@item.CountryName</td>
 		<td>@item.EstablishmentYear</td>
-		<td>
-				<a asp-action="Details" asp-route-id="@item.Id"class="btn btn-info" title="View Details">
-				<i class="bi bi-eye"></i></a> |
-				<a asp-action="Edit" asp-route-id="@item.Id"class="btn btn-warning" title="Edit">
-				<i class="bi bi-pencil"></i></a> |
-				<a asp-action="Delete" asp-route-id="@item.Id"class="btn btn-danger" title="Delete">
+		<td class="text-nowrap" style="white-space: nowrap;">
+				<a asp-action="Details" asp-route-id="@item.Id" class="text-info me-2" title="View Details">
+				<i class="bi bi-eye"></i></a>
+				<a asp-action="Edit" asp-route-id="@item.Id" class="text-warning me-2" title="Edit">
+				<i class="bi bi-pencil"></i></a>
+				<a asp-action="Delete" asp-route-id="@item.Id" class="text-danger" title="Delete">
 				<i class="bi bi-trash"></i></a>
 					<!-- @if (!item.HasContact)
 					{
