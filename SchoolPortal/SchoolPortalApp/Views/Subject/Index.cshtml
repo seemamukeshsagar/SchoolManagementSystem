@@ -1,43 +1,62 @@
 @model IEnumerable<SchoolPortalApp.Models.SubjectListItemViewModel>
+@using Microsoft.AspNetCore.Mvc.Rendering
 @{
-	ViewData["Title"] = "Subjects";
+    ViewData["Title"] = "Subjects";
 }
 <h2>Subjects</h2>
+
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="classId" class="mr-2">Class</label>
+        <select id="classId" name="classId" class="form-control">
+            <option value="">All</option>
+            @if (ViewBag.Classes != null)
+            {
+                foreach (var cls in (IEnumerable<SelectListItem>)ViewBag.Classes)
+				{
+					<option value="@cls.Value" selected="@cls.Selected">@cls.Text</option>
+				}
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-secondary">Filter</button>
+</form>
+
 <p>
-	<a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Class</th>
-			<th>Subject Name</th>
-			<th>Scholastic</th>
-			<th>Active</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@item.ClassName</td>
-				<td>@item.SubjectName</td>
-				<td>@(item.IsScholastic == true ? "Yes" : "No")</td>
-				<td>@(item.IsActive ? "Yes" : "No")</td>
-				<td>
-					<div class="btn-group btn-group-sm">
-						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details">
-							<i class="bi bi-eye"></i>
-						</a>
-						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
-							<i class="bi bi-pencil"></i>
-						</a>
-						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
-							<i class="bi bi-trash"></i>
-						</a>
-					</div>
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Class</th>
+            <th>Subject Name</th>
+            <th>Scholastic</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ClassName</td>
+                <td>@item.SubjectName</td>
+                <td>@(item.IsScholastic == true ? "Yes" : "No")</td>
+                <td>@(item.IsActive ? "Yes" : "No")</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

@@ -1,0 +1,49 @@
+@model SchoolPortalApp.Models.TeacherSectionDetailsViewModel
+@{
+    ViewData["Title"] = "Create Teacher Section Details";
+}
+<h2>Create Teacher Section Details</h2>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="TeacherId" class="form-label"></label>
+        <select asp-for="TeacherId" class="form-select" asp-items="Model.Teachers"></select>
+        <span asp-validation-for="TeacherId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ClassId" class="form-label"></label>
+        <select asp-for="ClassId" class="form-select" asp-items="Model.Classes"></select>
+        <span asp-validation-for="ClassId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SectionId" class="form-label"></label>
+        <select asp-for="SectionId" class="form-select" asp-items="Model.Sections"></select>
+        <span asp-validation-for="SectionId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SubjectId" class="form-label"></label>
+        <select asp-for="SubjectId" class="form-select" asp-items="Model.Subjects"></select>
+        <span asp-validation-for="SubjectId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsClassTeacher" class="form-check-input" />
+        <label asp-for="IsClassTeacher" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

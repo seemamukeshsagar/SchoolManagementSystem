@@ -45,22 +45,53 @@ namespace SchoolPortalApp.Controllers
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
-		public IActionResult Index()
+		public IActionResult Index(Guid? classId)
 		{
 			var list = _service.GetAll();
 			var schools = _schoolService.GetAll();
+
+			// Apply class filter if a specific class is selected
+			if (classId.HasValue && classId.Value != Guid.Empty)
+			{
+				list = list.Where(x => x.ClassId == classId.Value).ToList();
+			}
+
+			// Prepare class dropdown data
+			var classes = _classService.GetAll();
+			var classItems = classes
+				.Where(c => c != null && !string.IsNullOrEmpty(c.Name))
+				.Select(c => new SelectListItem
+				{
+					Value = c.Id.ToString(),
+					Text = c.Name,
+					Selected = classId.HasValue && c.Id == classId.Value
+				})
+				.ToList();
+
+			ViewBag.Classes = classItems;
+			ViewBag.SelectedClassId = classId;
+
 			var result = list.Select(item =>
 			{
 				var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
+				var className = _classService.ClassNameById(item.ClassId);
+				if (string.IsNullOrWhiteSpace(className))
+				{
+					className = "-";
+				}
+
 				return new SubjectListItemViewModel
 				{
 					Id = item.Id,
 					SubjectName = item.SubjectName,
+					ClassId = item.ClassId,
+					ClassName = className,
 					IsScholastic = item.IsScholastic ?? false,
 					IsActive = item.IsActive,
 					SchoolName = school?.Name ?? string.Empty
 				};
 			}).ToList();
+
 			return View(result);
 		}
 

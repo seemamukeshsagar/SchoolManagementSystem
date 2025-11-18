@@ -10,6 +10,7 @@ BEGIN
     SELECT 
         Id,
         SubjectName,
+        ClassId,
         IsScholastic,
         IsActive,
         IsDeleted,
@@ -39,6 +40,7 @@ BEGIN
     SELECT 
         Id,
         SubjectName,
+        ClassId,
         IsScholastic,
         IsActive,
         IsDeleted,
@@ -61,6 +63,7 @@ IF OBJECT_ID(N'[dbo].[Subject_Create]', N'P') IS NOT NULL
 GO
 CREATE PROCEDURE [dbo].[Subject_Create]
     @SubjectName NVARCHAR(100),
+    @ClassId UNIQUEIDENTIFIER,
     @IsScholastic BIT,
     @IsActive BIT,
     @CompanyId UNIQUEIDENTIFIER,
@@ -76,6 +79,7 @@ BEGIN
     (
         Id,
         SubjectName,
+        ClassId,
         IsScholastic,
         IsActive,
         IsDeleted,
@@ -90,6 +94,7 @@ BEGIN
     (
         @NewId,
         @SubjectName,
+        @ClassId,
         @IsScholastic,
         @IsActive,
         0,
@@ -112,6 +117,7 @@ GO
 CREATE PROCEDURE [dbo].[Subject_Update]
     @Id UNIQUEIDENTIFIER,
     @SubjectName NVARCHAR(100),
+    @ClassId UNIQUEIDENTIFIER,
     @IsScholastic BIT,
     @IsActive BIT,
     @SchoolId UNIQUEIDENTIFIER,
@@ -123,6 +129,7 @@ BEGIN
     UPDATE [dbo].[SubjectMaster]
     SET 
         SubjectName = @SubjectName,
+        ClassId = @ClassId,
         IsScholastic = @IsScholastic,
         IsActive = @IsActive,
         SchoolId = @SchoolId,

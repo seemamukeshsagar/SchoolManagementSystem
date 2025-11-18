@@ -1,0 +1,32 @@
+@model SchoolPortal.Entities.Models.TeacherSectionDetails
+@{
+    ViewData["Title"] = "Teacher Section Details";
+}
+<h2>Teacher Section Details</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Teacher Id</dt>
+        <dd class="col-sm-9">@Model.TeacherId</dd>
+
+        <dt class="col-sm-3">Class Id</dt>
+        <dd class="col-sm-9">@Model.ClassId</dd>
+
+        <dt class="col-sm-3">Section Id</dt>
+        <dd class="col-sm-9">@Model.SectionId</dd>
+
+        <dt class="col-sm-3">Subject Id</dt>
+        <dd class="col-sm-9">@Model.SubjectId</dd>
+
+        <dt class="col-sm-3">Class Teacher</dt>
+        <dd class="col-sm-9">@Model.IsClassTeacher</dd>
+
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">@Model.IsActive</dd>
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>
