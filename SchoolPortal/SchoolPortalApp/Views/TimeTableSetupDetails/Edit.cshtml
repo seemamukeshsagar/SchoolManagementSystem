@@ -1,0 +1,82 @@
+@model SchoolPortalApp.Models.TimeTableSetupDetailsViewModel
+@{
+    ViewData["Title"] = "Edit Time Table Setup";
+}
+<h2>Edit Time Table Setup</h2>
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="SchoolStartTime" class="form-label"></label>
+        <input asp-for="SchoolStartTime" class="form-control" />
+        <span asp-validation-for="SchoolStartTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SchoolEndTime" class="form-label"></label>
+        <input asp-for="SchoolEndTime" class="form-control" />
+        <span asp-validation-for="SchoolEndTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodStartTime" class="form-label"></label>
+        <input asp-for="PeriodStartTime" class="form-control" />
+        <span asp-validation-for="PeriodStartTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TotalPeriods" class="form-label"></label>
+        <input asp-for="TotalPeriods" class="form-control" />
+        <span asp-validation-for="TotalPeriods" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodDuration" class="form-label"></label>
+        <input asp-for="PeriodDuration" class="form-control" />
+        <span asp-validation-for="PeriodDuration" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RecessDuration" class="form-label"></label>
+        <input asp-for="RecessDuration" class="form-control" />
+        <span asp-validation-for="RecessDuration" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="RecessAfterPeriod" class="form-label"></label>
+        <input asp-for="RecessAfterPeriod" class="form-control" />
+        <span asp-validation-for="RecessAfterPeriod" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FruitRecessDuration" class="form-label"></label>
+        <input asp-for="FruitRecessDuration" class="form-control" />
+        <span asp-validation-for="FruitRecessDuration" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FruitRecessAfterPeriod" class="form-label"></label>
+        <input asp-for="FruitRecessAfterPeriod" class="form-control" />
+        <span asp-validation-for="FruitRecessAfterPeriod" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SessionId" class="form-label"></label>
+        <input asp-for="SessionId" class="form-control" />
+        <span asp-validation-for="SessionId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

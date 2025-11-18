@@ -1,0 +1,23 @@
+@model SchoolPortal.Entities.Models.SessionMaster
+@{
+    ViewData["Title"] = "Session Details";
+}
+<h2>Session Details</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Value</dt>
+        <dd class="col-sm-9">@Model.Value</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">@Model.IsActive</dd>
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>

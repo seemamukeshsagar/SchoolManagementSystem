@@ -126,6 +126,8 @@ builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetail
 builder.Services.AddScoped<IFeesCategoryMasterService, SchoolPortal.Services.FeesCategoryMasterService>();
 builder.Services.AddScoped<IAssesmentMasterService, SchoolPortal.Services.AssesmentMasterService>();
 builder.Services.AddScoped<ITimeTablePeriodMasterService, SchoolPortal.Services.TimeTablePeriodMasterService>();
+builder.Services.AddScoped<ITimeTableSetupDetailsService, SchoolPortal.Services.TimeTableSetupDetailsService>();
+builder.Services.AddScoped<ISessionMasterService, SchoolPortal.Services.SessionMasterService>();
 
 var app = builder.Build();
 

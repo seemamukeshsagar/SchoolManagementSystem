@@ -1,0 +1,47 @@
+@model SchoolPortal.Entities.Models.TimeTableSetupDetails
+@{
+    ViewData["Title"] = "Time Table Setup Details";
+}
+<h2>Time Table Setup Details</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-4">School Start Time</dt>
+        <dd class="col-sm-8">@Model.SchoolStartTime</dd>
+
+        <dt class="col-sm-4">School End Time</dt>
+        <dd class="col-sm-8">@Model.SchoolEndTime</dd>
+
+        <dt class="col-sm-4">Period Start Time</dt>
+        <dd class="col-sm-8">@Model.PeriodStartTime</dd>
+
+        <dt class="col-sm-4">Total Periods</dt>
+        <dd class="col-sm-8">@Model.TotalPeriods</dd>
+
+        <dt class="col-sm-4">Period Duration</dt>
+        <dd class="col-sm-8">@Model.PeriodDuration</dd>
+
+        <dt class="col-sm-4">Recess Duration</dt>
+        <dd class="col-sm-8">@Model.RecessDuration</dd>
+
+        <dt class="col-sm-4">Recess After Period</dt>
+        <dd class="col-sm-8">@Model.RecessAfterPeriod</dd>
+
+        <dt class="col-sm-4">Fruit Recess Duration</dt>
+        <dd class="col-sm-8">@Model.FruitRecessDuration</dd>
+
+        <dt class="col-sm-4">Fruit Recess After Period</dt>
+        <dd class="col-sm-8">@Model.FruitRecessAfterPeriod</dd>
+
+        <dt class="col-sm-4">Session Id</dt>
+        <dd class="col-sm-8">@Model.SessionId</dd>
+
+        <dt class="col-sm-4">Active</dt>
+        <dd class="col-sm-8">@Model.IsActive</dd>
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>
