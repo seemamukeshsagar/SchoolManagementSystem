@@ -9,13 +9,13 @@ using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
 {
-	[Route("FeesCategory")]
-	public class FeesCategoryController : Controller
+	[Route("FeesCategoryMaster")]
+	public class FeesCategoryMasterController : Controller
 	{
 		private readonly IFeesCategoryMasterService _service;
-		private readonly ILogger<FeesCategoryController> _logger;
+		private readonly ILogger<FeesCategoryMasterController> _logger;
 
-		public FeesCategoryController(IFeesCategoryMasterService service, ILogger<FeesCategoryController> logger)
+		public FeesCategoryMasterController(IFeesCategoryMasterService service, ILogger<FeesCategoryMasterController> logger)
 		{
 			_service = service;
 			_logger = logger;
