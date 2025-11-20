@@ -1,9 +1,18 @@
 <Solution>
   <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Development" />
+    <BuildType Name="Release" />
     <Platform Name="Any CPU" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/SSISPackages/" />
+  <Folder Name="/SSISPackages/">
+    <File Path="TextFile1.txt" />
+    <Project Path="../SSIS/SSIS_Dept_Import/SSIS_Dept_Import.dtproj" Type="c9674dcb-5085-4a16-b785-4c70dd1589bd">
+      <BuildType Project="Development" />
+      <Platform Project="?" />
+    </Project>
+  </Folder>
   <Folder Name="/SSISPackages/SSIS_EmpMaster_Project/">
     <File Path="SSISPackages/SSIS_EmpMaster_Project/Create_EmpMaster_Table.sql" />
     <File Path="SSISPackages/SSIS_EmpMaster_Project/Deploy_Package.bat" />
@@ -13,9 +22,16 @@
     <File Path="SSISPackages/SSIS_EmpMaster_Project/Upsert_Employee_StoredProc.sql" />
   </Folder>
   <Project Path="DBAccess/DBAccess.csproj" Id="06c46e69-2643-401f-9d84-8d31baf6a4ee">
+    <BuildType Solution="Development|*" Project="Release" />
     <Platform Solution="*|x86" Project="x86" />
   </Project>
-  <Project Path="SchoolPortal.Entities/SchoolPortal.Entities.csproj" />
-  <Project Path="SchoolPortal.Services/SchoolPortal.Services.csproj" />
-  <Project Path="SchoolPortalApp/SchoolPortalApp.csproj" />
+  <Project Path="SchoolPortal.Entities/SchoolPortal.Entities.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="SchoolPortal.Services/SchoolPortal.Services.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="SchoolPortalApp/SchoolPortalApp.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
 </Solution>
