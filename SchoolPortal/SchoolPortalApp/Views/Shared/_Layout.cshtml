@@ -279,7 +279,7 @@
 				} else {
 					loadCompanies('');
 				}
-
+			
 				companySelect.addEventListener('change', async () => {
 					const val = companySelect.value;
 					try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}

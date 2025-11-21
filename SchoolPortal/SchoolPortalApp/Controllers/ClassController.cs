@@ -34,7 +34,18 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
+			// Filter classes by SchoolId from session
+			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+			if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			{
+				// No valid school in session: show empty list
+				return View(Enumerable.Empty<ClassListItemViewModel>());
+			}
+
+			var list = _service.GetAll()
+				.Where(c => c.SchoolId == schoolId)
+				.ToList();
+
 			var schools = _schoolService.GetAll();
 			var result = list.Select(item =>
 			{

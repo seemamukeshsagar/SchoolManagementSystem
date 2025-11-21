@@ -96,6 +96,42 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpGet]
+		[Route("FilterByClass")]
+		public IActionResult FilterByClass(Guid? classId)
+		{
+			var list = _service.GetAll();
+			var schools = _schoolService.GetAll();
+
+			if (classId.HasValue && classId.Value != Guid.Empty)
+			{
+				list = list.Where(x => x.ClassId == classId.Value).ToList();
+			}
+
+			var result = list.Select(item =>
+			{
+				var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
+				var className = _classService.ClassNameById(item.ClassId);
+				if (string.IsNullOrWhiteSpace(className))
+				{
+					className = "-";
+				}
+
+				return new SubjectListItemViewModel
+				{
+					Id = item.Id,
+					SubjectName = item.SubjectName,
+					ClassId = item.ClassId,
+					ClassName = className,
+					IsScholastic = item.IsScholastic ?? false,
+					IsActive = item.IsActive,
+					SchoolName = school?.Name ?? string.Empty
+				};
+			}).ToList();
+
+			return PartialView("_SubjectTable", result);
+		}
+
+		[HttpGet]
 		[Route("Details/{id}")]
 		public IActionResult Details(Guid id)
 		{

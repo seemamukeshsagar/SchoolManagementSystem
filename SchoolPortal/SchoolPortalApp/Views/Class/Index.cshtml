@@ -6,38 +6,48 @@
 <p>
 	<a class="btn btn-primary" asp-controller="Class" asp-action="Create">Create New</a>
 </p>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Exam Assessment</th>
-			<th>Is Active</th>
-			<th>School</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach (var item in Model)
-	{
-		<tr>
-			<td>@item.Name</td>
-			<td>@item.ExamAssessment</td>
-			<td>@item.IsActive</td>
-			<td>@item.SchoolName</td>
-			<td>
-				<div class="btn-group btn-group-sm">
-					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details">
-						<i class="bi bi-eye"></i>
-					</a>
-					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
-						<i class="bi bi-pencil"></i>
-					</a>
-					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
-						<i class="bi bi-trash"></i>
-					</a>
-				</div>
-			</td>
-		</tr>
-	}
-	</tbody>
-</table>
+
+@if (Model == null || !Model.Any())
+{
+	<div class="alert alert-info">
+		No classes found. Please make sure a school is selected or create a new class.
+	</div>
+}
+else
+{
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Exam Assessment</th>
+				<th>Is Active</th>
+				<th>School</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.ExamAssessment</td>
+				<td>@item.IsActive</td>
+				<td>@item.SchoolName</td>
+				<td>
+					<div class="btn-group btn-group-sm">
+						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="View Details">
+							<i class="bi bi-eye"></i>
+						</a>
+						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
+							<i class="bi bi-pencil"></i>
+						</a>
+						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
+							<i class="bi bi-trash"></i>
+						</a>
+					</div>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}

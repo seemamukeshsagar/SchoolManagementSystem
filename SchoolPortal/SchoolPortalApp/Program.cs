@@ -118,6 +118,7 @@ builder.Services.AddScoped<IVehicleMasterService, SchoolPortal.Services.VehicleM
 builder.Services.AddScoped<IVehicleTypeMasterService, SchoolPortal.Services.VehicleTypeMasterService>();
 builder.Services.AddScoped<IVehicleExpenseDetailsService, SchoolPortal.Services.VehicleExpenseDetailsService>();
 builder.Services.AddScoped<IBookCategoryService, SchoolPortal.Services.BookCategoryService>();
+builder.Services.AddScoped<IBookTypeService, SchoolPortal.Services.BookTypeService>();
 builder.Services.AddScoped<IItemTypeService, SchoolPortal.Services.ItemTypeService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();

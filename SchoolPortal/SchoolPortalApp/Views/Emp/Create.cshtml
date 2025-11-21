@@ -225,7 +225,13 @@
 					</div>
 
 					<div class="row mb-3">
-						<div class="col-12"><strong>Permanent Address</strong></div>
+						<div class="col-6"><strong>Permanent Address</strong></div>
+						<div class="col-6 text-end">
+							<div class="form-check d-inline-block mt-1">
+								<input type="checkbox" class="form-check-input" id="copyCurrentToPermanent" />
+								<label class="form-check-label" for="copyCurrentToPermanent">Same as Current Address</label>
+							</div>
+						</div>
 						<div class="col-md-6">
 							<label asp-for="PermanentAddress1" class="control-label">Address 1</label>
 							<input asp-for="PermanentAddress1" class="form-control" />
@@ -509,6 +515,44 @@
 			if (perCountryVal) {
 				loadStates(perCountryVal, $perState, perStateSelected);
 				if (perStateSelected) { loadCities(perStateSelected, $perCity, perCitySelected); }
+			}
+			var $copyAddr = $('#copyCurrentToPermanent');
+			if ($copyAddr.length) {
+				var $curAddr1 = $('#CurrentAddress1');
+				var $curAddr2 = $('#CurrentAddress2');
+				var $curZip = $('#CurrentZipCode');
+				var $curCountryId = $('#CurrentCountryId');
+				var $curStateId = $('#CurrentStateId');
+				var $curCityId = $('#CurrentCityId');
+				var togglePermanentEnabled = function (enabled) {
+					$('#PermanentAddress1, #PermanentAddress2, #PermanentZipCode').prop('disabled', !enabled);
+					$('#PermanentCountryId, #PermanentStateId, #PermanentCityId').prop('disabled', !enabled);
+				};
+				$copyAddr.on('change', function () {
+					if (this.checked) {
+						$('#PermanentAddress1').val($curAddr1.val());
+						$('#PermanentAddress2').val($curAddr2.val());
+						$('#PermanentZipCode').val($curZip.val());
+						$('#PermanentCountryId').val($curCountryId.val()).trigger('change');
+						$('#PermanentStateId').val($curStateId.val()).trigger('change');
+						$('#PermanentCityId').val($curCityId.val());
+						togglePermanentEnabled(false);
+					} else {
+						togglePermanentEnabled(true);
+					}
+				});
+			}
+			var $probationStart = $('#ProbationStartDate');
+			var $confirmationDate = $('#ConfirmationDate');
+			if ($probationStart.length && $confirmationDate.length) {
+				if ($probationStart.val() && !$confirmationDate.val()) {
+					$confirmationDate.val($probationStart.val());
+				}
+				$probationStart.on('change', function () {
+					if (!$confirmationDate.val()) {
+						$confirmationDate.val($probationStart.val());
+					}
+				});
 			}
 		});
 	</script>
