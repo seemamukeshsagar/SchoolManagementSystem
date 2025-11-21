@@ -280,14 +280,34 @@
 					loadCompanies('');
 				}
 			
-				companySelect.addEventListener('change', async () => {
+				companySelect.addEventListener('change', async (event) => {
 					const val = companySelect.value;
 					try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
 					await loadSchools(val, currentSchoolId); // Pass the session school ID
+
+					// OPTIONAL: If you want to refresh immediately on company change (even before school is picked),
+					// only do it for user-triggered changes to avoid loops.
+					// if (event.isTrusted) {
+					// 	window.location.reload();
+					// }
 				});
-				schoolSelect.addEventListener('change', async () => {
+				schoolSelect.addEventListener('change', async (event) => {
 					const val = schoolSelect.value;
 					try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(val)}`); } catch {}
+
+					// Determine the previously known school (from initial render / last change)
+					const previous = (schoolSelect.getAttribute('data-current-school-id') || '').toLowerCase();
+					const current = (val || '').toLowerCase();
+
+					// Update the attribute to the new value so we don't reload again for the same school
+					schoolSelect.setAttribute('data-current-school-id', val || '');
+
+					// Reload if either:
+					// 1) The user changed the dropdown (event.isTrusted), OR
+					// 2) Code selected a *different* school than before (e.g. after changing company)
+					if (event.isTrusted || previous !== current) {
+						window.location.reload();
+					}
 				});
 			}
 
