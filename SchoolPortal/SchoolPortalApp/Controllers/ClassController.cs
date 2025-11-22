@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Class")]
-	public class ClassController : Controller
+	public class ClassController : BaseController
 	{
 		private readonly IClassService _service;
 		private readonly ISchoolService _schoolService;
@@ -35,15 +35,15 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Index()
 		{
 			// Filter classes by SchoolId from session
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (!schoolId.HasValue)
 			{
 				// No valid school in session: show empty list
 				return View(Enumerable.Empty<ClassListItemViewModel>());
 			}
 
 			var list = _service.GetAll()
-				.Where(c => c.SchoolId == schoolId)
+				.Where(c => c.SchoolId == schoolId.Value)
 				.ToList();
 
 			var schools = _schoolService.GetAll();
@@ -85,11 +85,11 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create(ClassViewModel model)
 		{
 			// Take SchoolId from session instead of user input
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(ClassViewModel.SchoolId));
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -97,9 +97,9 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create class.");
 				return View(model);
@@ -112,9 +112,9 @@ namespace SchoolPortalApp.Controllers
 				ExamAssessment = (model.ExamAssessment ?? false) ? "Yes" : "No",
 				IsGradePointApplicable = model.IsGradePointApplicable ?? false,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
+				CompanyId = companyId.Value,
 				SchoolId = model.SchoolId,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -157,11 +157,11 @@ namespace SchoolPortalApp.Controllers
 			if (id != model.Id) return BadRequest();
 
 			// Take SchoolId from session instead of user input
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(ClassViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -169,8 +169,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update class.");
 				return View(model);

@@ -7,7 +7,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
     [Route("Lookup")]
-    public class LookupController : Controller
+    public class LookupController : BaseController
     {
         private readonly ILookupService _lookup;
         private readonly ISchoolService _schoolService;

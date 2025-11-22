@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
     [Route("ItemType")]
-    public class ItemTypeMasterController : Controller
+    public class ItemTypeMasterController : BaseController
     {
         private readonly IItemTypeService _service;
         private readonly ILogger<ItemTypeMasterController> _logger;
@@ -72,25 +72,12 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
-                ModelState.AddModelError(string.Empty, "Please login to create item type.");
-                return View(model);
-            }
-
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-            if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId))
-            {
-                ModelState.AddModelError(string.Empty, "Company information not found in session.");
-                return View(model);
-            }
-
-            if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
-            {
-                ModelState.AddModelError(string.Empty, "School information not found in session.");
+                ModelState.AddModelError(string.Empty, "Company/School information not found. Please login again.");
                 return View(model);
             }
 
@@ -100,9 +87,9 @@ namespace SchoolPortalApp.Controllers
                 Name = model.Name,
                 Description = model.Description ?? string.Empty,
                 IsActive = model.IsActive,
-                CompanyId = companyId,
-                SchoolId = schoolId,
-                CreatedBy = userId,
+                CompanyId = companyId.Value,
+                SchoolId = schoolId.Value,
+                CreatedBy = userId.Value,
                 CreatedDate = DateTime.UtcNow,
             };
 
@@ -143,25 +130,12 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
-                ModelState.AddModelError(string.Empty, "Please login to update item type.");
-                return View(model);
-            }
-
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-            if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId))
-            {
-                ModelState.AddModelError(string.Empty, "Company information not found in session.");
-                return View(model);
-            }
-
-            if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
-            {
-                ModelState.AddModelError(string.Empty, "School information not found in session.");
+                ModelState.AddModelError(string.Empty, "Company/School information not found. Please login again.");
                 return View(model);
             }
 
@@ -171,9 +145,9 @@ namespace SchoolPortalApp.Controllers
                 Name = model.Name,
                 Description = model.Description ?? string.Empty,
                 IsActive = model.IsActive,
-                CompanyId = companyId,
-                SchoolId = schoolId,
-                ModifiedBy = userId,
+                CompanyId = companyId.Value,
+                SchoolId = schoolId.Value,
+                ModifiedBy = userId.Value,
                 ModifiedDate = DateTime.UtcNow,
             };
 

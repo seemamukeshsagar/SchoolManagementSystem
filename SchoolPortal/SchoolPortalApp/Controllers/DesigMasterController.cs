@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Designation")]
-	public class DesigMasterController : Controller
+	public class DesigMasterController : BaseController
 	{
 		private readonly IDesigMasterService _service;
 		private readonly ISchoolService _schoolService;
@@ -91,11 +91,11 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create(DesigMasterViewModel model)
 		{
 			// Take SchoolId from session instead of user input
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(DesigMasterViewModel.SchoolId));
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -104,11 +104,9 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || 
-				string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || 
-				model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create designation.");
 				PopulateDropdowns(model);
@@ -121,9 +119,9 @@ namespace SchoolPortalApp.Controllers
 				Code = model.Code,
 				Name = model.Name,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
+				CompanyId = companyId.Value,
 				SchoolId = model.SchoolId,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				IsDeleted = false
 			};
@@ -163,13 +161,13 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Edit(Guid id, DesigMasterViewModel model)
 		{
 			if (id != model.Id) return BadRequest();
-
+			
 			// Take SchoolId from session instead of user input
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(DesigMasterViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -178,9 +176,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || 
-				model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update designation.");
 				PopulateDropdowns(model);

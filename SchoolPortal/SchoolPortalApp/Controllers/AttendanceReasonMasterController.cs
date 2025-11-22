@@ -9,7 +9,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("AttendanceReasonMaster")]
-	public class AttendanceReasonMasterController : Controller
+	public class AttendanceReasonMasterController : BaseController
 	{
 		private readonly IAttendanceReasonMasterService _service;
 		private readonly ILogger<AttendanceReasonMasterController> _logger;
@@ -55,21 +55,12 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-			if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue || !userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
-				return View(model);
-			}
-
-			if (!Guid.TryParse(companyIdStr, out var companyId) ||
-				!Guid.TryParse(schoolIdStr, out var schoolId) ||
-				!Guid.TryParse(userIdStr, out var userId))
-			{
-				ModelState.AddModelError(string.Empty, "Invalid session data format.");
 				return View(model);
 			}
 
@@ -79,11 +70,11 @@ namespace SchoolPortalApp.Controllers
 				Code = model.Code,
 				Name = model.Name,
 				Description = model.Description,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive ?? true,
 				IsDeleted = false,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = "INC",
 				StatusMessage = "In Process...."
@@ -118,8 +109,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update attendance reason.");
 				return View(model);
@@ -132,7 +123,7 @@ namespace SchoolPortalApp.Controllers
 				Name = model.Name,
 				Description = model.Description,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

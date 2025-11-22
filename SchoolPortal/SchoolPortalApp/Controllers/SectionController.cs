@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Section")]
-	public class SectionController : Controller
+	public class SectionController : BaseController
 	{
 		private readonly ISectionService _service;
 		private readonly ISchoolService _schoolService;
@@ -73,11 +73,11 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(SectionViewModel model)
 		{
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(SectionViewModel.SchoolId));
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -85,9 +85,9 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create section.");
 				return View(model);
@@ -98,9 +98,9 @@ namespace SchoolPortalApp.Controllers
 				Id = Guid.Empty,
 				Name = model.Name,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
+				CompanyId = companyId.Value,
 				SchoolId = model.SchoolId,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -137,11 +137,11 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (id != model.Id) return BadRequest();
 
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(SectionViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -149,8 +149,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update section.");
 				return View(model);

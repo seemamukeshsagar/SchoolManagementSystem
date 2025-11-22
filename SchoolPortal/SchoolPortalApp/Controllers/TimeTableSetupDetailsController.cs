@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
     [Route("TimeTableSetupDetails")]
-    public class TimeTableSetupDetailsController : Controller
+    public class TimeTableSetupDetailsController : BaseController
     {
         private readonly ITimeTableSetupDetailsService _service;
         private readonly ILogger<TimeTableSetupDetailsController> _logger;
@@ -69,23 +69,12 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-            if (string.IsNullOrEmpty(companyIdStr) ||
-                string.IsNullOrEmpty(schoolIdStr) ||
-                string.IsNullOrEmpty(userIdStr))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!companyId.HasValue || !schoolId.HasValue || !userId.HasValue)
             {
                 ModelState.AddModelError(string.Empty, "Missing required session data.");
-                return View(model);
-            }
-
-            if (!Guid.TryParse(companyIdStr, out var companyId) ||
-                !Guid.TryParse(schoolIdStr, out var schoolId) ||
-                !Guid.TryParse(userIdStr, out var userId))
-            {
-                ModelState.AddModelError(string.Empty, "Invalid session data format.");
                 return View(model);
             }
 
@@ -102,10 +91,10 @@ namespace SchoolPortalApp.Controllers
                 FruitRecessDuration = model.FruitRecessDuration,
                 FruitRecessAfterPeriod = model.FruitRecessAfterPeriod,
                 SessionId = model.SessionId,
-                CompanyId = companyId,
-                SchoolId = schoolId,
+                CompanyId = companyId.Value,
+                SchoolId = schoolId.Value,
                 IsActive = model.IsActive,
-                CreatedBy = userId,
+                CreatedBy = userId.Value,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -157,10 +146,8 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) ||
-                !Guid.TryParse(userIdStr, out var userId) ||
-                model.SchoolId == Guid.Empty)
+            var userId = CurrentUserId;
+            if (!userId.HasValue || model.SchoolId == Guid.Empty)
             {
                 ModelState.AddModelError(string.Empty, "Please login to update.");
                 return View(model);
@@ -181,7 +168,7 @@ namespace SchoolPortalApp.Controllers
                 SessionId = model.SessionId,
                 IsActive = model.IsActive,
                 SchoolId = model.SchoolId,
-                ModifiedBy = userId,
+                ModifiedBy = userId.Value,
                 ModifiedDate = DateTime.UtcNow
             };
 

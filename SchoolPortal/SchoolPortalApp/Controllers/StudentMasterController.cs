@@ -13,7 +13,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("StudentMaster")]
-	public class StudentMasterController : Controller
+	public class StudentMasterController : BaseController
 	{
 		private readonly IStudentService _service;
 		private readonly ISchoolService _schoolService;
@@ -570,11 +570,11 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(StudentViewModel model)
 		{
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(StudentViewModel.SchoolId));
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			// Server-side required validations for location fields
@@ -591,9 +591,9 @@ namespace SchoolPortalApp.Controllers
 				ModelState.AddModelError(nameof(StudentViewModel.CityId), "City is required.");
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create student.");
 				PopulateDropdowns(model);
@@ -669,11 +669,11 @@ namespace SchoolPortalApp.Controllers
 				TransportFees = model.TransportFees,
 				UseTransportFees = model.UseTransportFees,
 				SessionId = model.SessionId,
-				CompanyId = companyId,
+				CompanyId = companyId.Value,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
 				IsDeleted = model.IsDeleted,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = model.Status ?? string.Empty,
 				StatusMessage = model.StatusMessage ?? string.Empty,
@@ -694,8 +694,8 @@ namespace SchoolPortalApp.Controllers
 				_parentService.CreateForStudent(
 					newId,
 					model.SchoolId,
-					companyId,
-					userId,
+					companyId.Value,
+					userId.Value,
 					model.ParentFirstName,
 					model.ParentLastName,
 					model.ParentDOB,
@@ -833,11 +833,11 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (id != model.Id) return BadRequest();
 
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(StudentViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -846,8 +846,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update student.");
 				PopulateDropdowns(model);
@@ -925,7 +925,7 @@ namespace SchoolPortalApp.Controllers
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
 				IsDeleted = model.IsDeleted,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 				Status = model.Status ?? string.Empty,
 				StatusMessage = model.StatusMessage ?? string.Empty,

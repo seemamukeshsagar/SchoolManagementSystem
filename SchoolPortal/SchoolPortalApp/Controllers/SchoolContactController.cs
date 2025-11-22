@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("SchoolContact")]
-	public class SchoolContactController : Controller
+	public class SchoolContactController : BaseController
 	{
 		private readonly ISchoolContactService _service;
 		private readonly ILookupService _lookup;
@@ -92,8 +92,8 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create school contact.");
 				PopulateDropdowns(model);
@@ -115,7 +115,7 @@ namespace SchoolPortalApp.Controllers
 				StateId = model.StateId,
 				CountryId = model.CountryId,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -167,8 +167,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update school contact.");
 				PopulateDropdowns(model);
@@ -190,7 +190,7 @@ namespace SchoolPortalApp.Controllers
 				StateId = model.StateId,
 				CountryId = model.CountryId,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

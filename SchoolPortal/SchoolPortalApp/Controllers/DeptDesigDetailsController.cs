@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("DeptDesigDetails")]
-	public class DeptDesigDetailsController : Controller
+	public class DeptDesigDetailsController : BaseController
 	{
 		private readonly IDeptDesigDetailsService _service;
 		private readonly ILookupService _lookup;
@@ -120,18 +120,19 @@ namespace SchoolPortalApp.Controllers
 				Status = DefaultStatus,
 				StatusMessage = string.Empty
 			};
+		
+			// Prefill CompanyId and SchoolId from BaseController properties
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (companyId.HasValue)
+			{
+				vm.CompanyId = companyId.Value;
+			}
+			if (schoolId.HasValue)
+			{
+				vm.SchoolId = schoolId.Value;
+			}
 
-			// Prefill CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
-			{
-				vm.CompanyId = companyId;
-			}
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
-			{
-				vm.SchoolId = schoolId;
-			}
 			PopulateDropdowns(vm);
 			return View(vm);
 		}
@@ -141,17 +142,16 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(DeptDesigDetailsViewModel model)
 		{
-			// Take CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-				string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			// Take CompanyId and SchoolId from BaseController properties
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company and school before creating the entry.");
 				PopulateDropdowns(model);
 				return View(model);
 			}
-
+		
 			// Ensure model validation does not expect user-provided values for these
 			ModelState.Remove(nameof(DeptDesigDetailsViewModel.CompanyId));
 			ModelState.Remove(nameof(DeptDesigDetailsViewModel.SchoolId));
@@ -161,9 +161,9 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+		
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create department designation details.");
 				PopulateDropdowns(model);
@@ -175,10 +175,10 @@ namespace SchoolPortalApp.Controllers
 				Id = Guid.Empty,
 				DepartmentId = model.DepartmentId,
 				DesignationId = model.DesignationId,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = model.Status ?? DefaultStatus,
 				StatusMessage = model.StatusMessage ?? string.Empty
@@ -225,11 +225,10 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (id != model.Id) return BadRequest();
 			
-			// Take CompanyId and SchoolId from session and override model values
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-				string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			// Take CompanyId and SchoolId from BaseController and override model values
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company and school before updating the entry.");
 				PopulateDropdowns(model);
@@ -244,9 +243,9 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+		
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update department designation details.");
 				PopulateDropdowns(model);
@@ -261,12 +260,12 @@ namespace SchoolPortalApp.Controllers
 				Id = id,
 				DepartmentId = model.DepartmentId,
 				DesignationId = model.DesignationId,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
 				CreatedBy = existingItem.CreatedBy,
 				CreatedDate = existingItem.CreatedDate,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 				Status = model.Status ?? DefaultStatus,
 				StatusMessage = model.StatusMessage ?? string.Empty

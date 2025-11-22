@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("DriverMaster")]
-	public class DriverMasterController : Controller
+	public class DriverMasterController : BaseController
 	{
 		private readonly IDriverMasterService _service;
 		private readonly ISchoolService _schoolService;
@@ -137,10 +137,10 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create(DriverViewModel vm)
 		{
 			var model = vm.Master;
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			// Basic validations for location fields similar to Teacher
@@ -212,9 +212,9 @@ namespace SchoolPortalApp.Controllers
 				return View(vm);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create driver.");
 				return View(vm);
@@ -248,8 +248,8 @@ namespace SchoolPortalApp.Controllers
 			model.LicenceType = model.LicenceType ?? string.Empty;
 			model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;
 			model.StatusMessage = string.IsNullOrWhiteSpace(model.StatusMessage) ? "In Process...." : model.StatusMessage;
-			model.CompanyId = companyId;
-			model.CreatedBy = userId;
+			model.CompanyId = companyId.Value;
+			model.CreatedBy = userId.Value;
 			model.CreatedDate = DateTime.UtcNow;
 
 			var newId = _service.Create(model);
@@ -268,9 +268,9 @@ namespace SchoolPortalApp.Controllers
 					if (d == null) continue;
 					if (d.IsDeleted) continue; // skip soft-deleted new rows
 					d.DriverId = newId;
-					d.CompanyId = companyId;
+					d.CompanyId = companyId.Value;
 					d.SchoolId = model.SchoolId;
-					d.CreatedBy = userId;
+					d.CreatedBy = userId.Value;
 					d.CreatedDate = DateTime.UtcNow;
 					d.Status = d.Status ?? "INC";
 					d.StatusMessage = d.StatusMessage ?? "In Process....";
@@ -291,9 +291,9 @@ namespace SchoolPortalApp.Controllers
 					if (q == null) continue;
 					if (q.IsDeleted) continue; // skip soft-deleted new rows
 					q.DriverId = newId;
-					q.CompanyId = companyId;
+					q.CompanyId = companyId.Value;
 					q.SchoolId = model.SchoolId;
-					q.CreatedBy = userId;
+					q.CreatedBy = userId.Value;
 					q.CreatedDate = DateTime.UtcNow;
 					q.Status = q.Status ?? "INC";
 					q.StatusMessage = q.StatusMessage ?? "In Process....";
@@ -433,9 +433,9 @@ namespace SchoolPortalApp.Controllers
 				return View(vm);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to save driver.");
 				return View(vm);
@@ -466,7 +466,7 @@ namespace SchoolPortalApp.Controllers
 			model.LicenceDescription = model.LicenceDescription ?? string.Empty;
 			model.LicenceImage = model.LicenceImage ?? string.Empty;
 			model.LicenceType = model.LicenceType ?? string.Empty;
-			model.ModifiedBy = userId;
+			model.ModifiedBy = userId.Value;
 			model.ModifiedDate = DateTime.UtcNow;
 
 			if (!_service.Update(model))
@@ -483,13 +483,13 @@ namespace SchoolPortalApp.Controllers
 					var d = vm.Documents[i];
 					if (d == null) continue;
 					d.DriverId = model.Id;
-					d.CompanyId = companyId;
+					d.CompanyId = companyId.Value;
 					d.SchoolId = model.SchoolId;
 					var hasNewFile = vm.DocumentFiles != null && i < vm.DocumentFiles.Count && vm.DocumentFiles[i] != null;
 					if (d.Id == Guid.Empty)
 					{
 						if (d.IsDeleted) continue; // skip brand-new rows marked deleted
-						d.CreatedBy = userId;
+						d.CreatedBy = userId.Value;
 						d.CreatedDate = DateTime.UtcNow;
 						d.Status = d.Status ?? "INC";
 						d.StatusMessage = d.StatusMessage ?? "In Process....";
@@ -503,7 +503,7 @@ namespace SchoolPortalApp.Controllers
 					else
 					{
 						if (d.IsDeleted) { _docService.Delete(d.Id); continue; }
-						d.ModifiedBy = userId;
+						d.ModifiedBy = userId.Value;
 						d.ModifiedDate = DateTime.UtcNow;
 						if (hasNewFile)
 						{
@@ -522,12 +522,12 @@ namespace SchoolPortalApp.Controllers
 				{
 					if (q == null) continue;
 					q.DriverId = model.Id;
-					q.CompanyId = companyId;
+					q.CompanyId = companyId.Value;
 					q.SchoolId = model.SchoolId;
 					if (q.Id == Guid.Empty)
 					{
 						if (q.IsDeleted) continue; // skip brand-new rows marked deleted
-						q.CreatedBy = userId;
+						q.CreatedBy = userId.Value;
 						q.CreatedDate = DateTime.UtcNow;
 						q.Status = q.Status ?? "INC";
 						q.StatusMessage = q.StatusMessage ?? "In Process....";
@@ -536,7 +536,7 @@ namespace SchoolPortalApp.Controllers
 					else
 					{
 						if (q.IsDeleted) { _qualService.Delete(q.Id); continue; }
-						q.ModifiedBy = userId;
+						q.ModifiedBy = userId.Value;
 						q.ModifiedDate = DateTime.UtcNow;
 						_qualService.Update(q);
 					}

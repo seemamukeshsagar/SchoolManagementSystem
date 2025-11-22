@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Account")]
-	public class AccountController : Controller
+	public class AccountController : BaseController
 	{
 		private readonly ILoginService _loginService;
 		private readonly ILogger<AccountController> _logger;

@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Subject")]
-	public class SubjectController : Controller
+	public class SubjectController : BaseController
 	{
 		private readonly ISubjectService _service;
 		private readonly ISchoolService _schoolService;
@@ -162,30 +162,16 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-		   
-			// Get CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			
-			// Check if required session values are present
-			if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue || !userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			// Parse all GUIDs in a single check
-			if (!Guid.TryParse(companyIdStr, out var companyId) || 
-				!Guid.TryParse(schoolIdStr, out var schoolId) || 
-				!Guid.TryParse(userIdStr, out var userId))
-			{
-				ModelState.AddModelError(string.Empty, "Invalid session data format.");
-				PopulateDropdowns(model);
-				return View(model);
-			}
-			
 			var entity = new SubjectMaster
 			{
 				Id = Guid.Empty,
@@ -193,9 +179,9 @@ namespace SchoolPortalApp.Controllers
 				IsScholastic = model.IsScholastic,
 				IsActive = model.IsActive,
 				ClassId = model.ClassId,
-				CompanyId = companyId,
-				SchoolId = schoolId,
-				CreatedBy = userId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -235,11 +221,11 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (id != model.Id) return BadRequest();
 
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(SubjectViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -247,8 +233,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update subject.");
 				return View(model);
@@ -262,7 +248,7 @@ namespace SchoolPortalApp.Controllers
 				IsActive = model.IsActive,
 				ClassId = model.ClassId,
 				SchoolId = model.SchoolId,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

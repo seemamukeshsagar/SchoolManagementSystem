@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("ProfessionMaster")]
-	public class ProfessionMasterController : Controller
+	public class ProfessionMasterController : BaseController
 	{
 		private readonly IProfessionMasterService _service;
 		private readonly ILogger<ProfessionMasterController> _logger;
@@ -69,13 +69,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) ||
-				string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-				string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				return View(model);
@@ -86,9 +83,9 @@ namespace SchoolPortalApp.Controllers
 				Id = Guid.Empty,
 				Name = model.Name,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
-				SchoolId = schoolId,
-				CreatedBy = userId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -127,10 +124,9 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) ||
-				string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			var userId = CurrentUserId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				return View(model);
@@ -141,8 +137,8 @@ namespace SchoolPortalApp.Controllers
 				Id = id,
 				Name = model.Name,
 				IsActive = model.IsActive,
-				SchoolId = schoolId,
-				ModifiedBy = userId,
+				SchoolId = schoolId.Value,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

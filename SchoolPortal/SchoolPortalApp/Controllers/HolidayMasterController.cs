@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("HolidayMaster")]
-	public class HolidayMasterController : Controller
+	public class HolidayMasterController : BaseController
 	{
 		private readonly IHolidayMasterService _service;
 		private readonly ILogger<HolidayMasterController> _logger;
@@ -28,17 +28,17 @@ namespace SchoolPortalApp.Controllers
 		{
 			try
 			{
-				var companyIdStr = HttpContext.Session.GetString("CompanyId");
-				var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+				var companyId = CurrentCompanyId;
+				var schoolId = CurrentSchoolId;
 				var items = _holidayTypeService.GetAll().AsQueryable();
 
-				if (Guid.TryParse(companyIdStr, out var companyId))
+				if (companyId.HasValue)
 				{
-					items = items.Where(x => x.CompanyId == companyId);
+					items = items.Where(x => x.CompanyId == companyId.Value);
 				}
-				if (Guid.TryParse(schoolIdStr, out var schoolId))
+				if (schoolId.HasValue)
 				{
-					items = items.Where(x => x.SchoolId == schoolId);
+					items = items.Where(x => x.SchoolId == schoolId.Value);
 				}
 
 				vm.HolidayTypes = items
@@ -104,22 +104,12 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-			if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue || !userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
-				PopulateDropdowns(model);
-				return View(model);
-			}
-
-			if (!Guid.TryParse(companyIdStr, out var companyId) ||
-				!Guid.TryParse(schoolIdStr, out var schoolId) ||
-				!Guid.TryParse(userIdStr, out var userId))
-			{
-				ModelState.AddModelError(string.Empty, "Invalid session data format.");
 				PopulateDropdowns(model);
 				return View(model);
 			}
@@ -133,12 +123,12 @@ namespace SchoolPortalApp.Controllers
 				FromDate = model.FromDate,
 				ToDate = model.ToDate,
 				Year = model.Year,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsStaffApplicable = model.IsStaffApplicable ?? false,
 				SessionId = model.SessionId,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -188,8 +178,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update holiday.");
 				PopulateDropdowns(model);
@@ -209,7 +199,7 @@ namespace SchoolPortalApp.Controllers
 				SessionId = model.SessionId,
 				IsActive = model.IsActive,
 				SchoolId = model.SchoolId,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

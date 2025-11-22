@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Company")]
-	public class CompanyController : Controller
+	public class CompanyController : BaseController
 	{
 		private readonly ICompanyService _service;
 		private readonly ILookupService _lookup;
@@ -132,8 +132,8 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create company.");
 				PopulateDropdowns(model);
@@ -152,7 +152,7 @@ namespace SchoolPortalApp.Controllers
 				ZipCode = model.ZipCode ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				EstablishmentYear = model.EstablishmentYear ?? string.Empty,
 				JudistrictionArea = model.JudistrictionArea,
@@ -205,8 +205,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update company.");
 				PopulateDropdowns(model);
@@ -225,7 +225,7 @@ namespace SchoolPortalApp.Controllers
 				ZipCode = model.ZipCode ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 				EstablishmentYear = model.EstablishmentYear ?? string.Empty,
 				JudistrictionArea = model.JudistrictionArea,

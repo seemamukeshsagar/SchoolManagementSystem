@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("ClassSectionDetail")]
-	public class ClassSectionDetailController : Controller
+	public class ClassSectionDetailController : BaseController
 	{
 		private readonly IClassSectionDetailService _service;
 		private readonly ILookupService _lookup;
@@ -126,8 +126,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create a class section.");
 				PopulateDropdowns(model);
@@ -142,9 +144,9 @@ namespace SchoolPortalApp.Controllers
 				LocationId = model.LocationId,
 				IsActive = model.IsActive,
 				IsDeleted = false,
-				CompanyId = model.CompanyId,
-				SchoolId = model.SchoolId,
-				CreatedBy = userId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = "Active"
 			};
@@ -195,8 +197,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update class section.");
 				PopulateDropdowns(model);
@@ -210,7 +212,7 @@ namespace SchoolPortalApp.Controllers
 			entity.SectionMasterId = model.SectionMasterId;
 			entity.LocationId = model.LocationId;
 			entity.IsActive = model.IsActive;
-			entity.ModifiedBy = userId;
+			entity.ModifiedBy = userId.Value;
 			entity.ModifiedDate = DateTime.UtcNow;
 
 			var success = _service.Update(entity);
@@ -229,13 +231,13 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ToggleStatus(Guid id)
 		{
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				return Json(new { success = false, message = "Please login to perform this action." });
 			}
 
-			var success = _service.ToggleStatus(id, userId);
+			var success = _service.ToggleStatus(id, userId.Value);
 			return Json(new { success });
 		}
 	}

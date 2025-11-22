@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("FeesCategoryMaster")]
-	public class FeesCategoryMasterController : Controller
+	public class FeesCategoryMasterController : BaseController
 	{
 		private readonly IFeesCategoryMasterService _service;
 		private readonly ILogger<FeesCategoryMasterController> _logger;
@@ -71,8 +71,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				return View(model);
@@ -84,7 +84,7 @@ namespace SchoolPortalApp.Controllers
 				FeesCatgoryName = model.FeesCatgoryName,
 				Description = model.Description ?? string.Empty,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 

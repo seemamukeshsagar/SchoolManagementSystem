@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Vendor")]
-	public class VendorController : Controller
+	public class VendorController : BaseController
 	{
 		private readonly IVendorService _service;
 		private readonly ILookupService _lookup;
@@ -136,16 +136,16 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create()
 		{
 			var vm = new VendorViewModel();
-			// Prefill CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
+			// Prefill CompanyId and SchoolId from BaseController properties
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (companyId.HasValue)
 			{
-				vm.CompanyId = companyId;
+				vm.CompanyId = companyId.Value;
 			}
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			if (schoolId.HasValue)
 			{
-				vm.SchoolId = schoolId;
+				vm.SchoolId = schoolId.Value;
 			}
 			PopulateDropdowns(vm);
 			return View(vm);
@@ -161,8 +161,10 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create vendor.");
 				PopulateDropdowns(model);
@@ -183,10 +185,10 @@ namespace SchoolPortalApp.Controllers
 				ContactNumber = model.ContactNumber ?? string.Empty,
 				MobileNumber = model.MobileNumber ?? string.Empty,
 				EmailId = model.EmailId ?? string.Empty,
-				CompanyId = model.CompanyId,
-				SchoolId = model.SchoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = string.Empty,
 				StatusMessage = string.Empty,
@@ -242,8 +244,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update vendor.");
 				PopulateDropdowns(model);
@@ -264,10 +268,10 @@ namespace SchoolPortalApp.Controllers
 				ContactNumber = model.ContactNumber ?? string.Empty,
 				MobileNumber = model.MobileNumber ?? string.Empty,
 				EmailId = model.EmailId ?? string.Empty,
-				CompanyId = model.CompanyId,
-				SchoolId = model.SchoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 				Status = string.Empty,
 				StatusMessage = string.Empty,

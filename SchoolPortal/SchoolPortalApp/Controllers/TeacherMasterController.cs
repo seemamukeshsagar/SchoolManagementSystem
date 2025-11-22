@@ -17,7 +17,7 @@ using SchoolPortalApp.Models;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("TeacherMaster")]
-	public class TeacherMasterController : Controller
+	public class TeacherMasterController : BaseController
 	{
 		private readonly ITeacherService _service;
 		private readonly ISchoolService _schoolService;
@@ -45,11 +45,11 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
+			var schoolId = CurrentSchoolId;
 			List<TeacherMaster> list;
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			if (schoolId.HasValue)
 			{
-				list = _service.GetAll(schoolId);
+				list = _service.GetAll(schoolId.Value);
 			}
 			else
 			{
@@ -139,10 +139,10 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create(TeacherAggregateViewModel vm)
 		{
 			var model = vm.Master;
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
-				model.SchoolId = schoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			// Server-side required validations for location fields
@@ -192,34 +192,34 @@ namespace SchoolPortalApp.Controllers
 				return View(vm);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create teacher.");
 				try
 				{
 					var countries = _lookupService.GetCountries();
-					ViewBag.Countries = countries.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CountryId.HasValue && c.Id == model.CountryId.Value }).ToList();
+					vm.Countries = countries.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CountryId.HasValue && c.Id == model.CountryId.Value }).ToList();
 					if (model.CountryId.HasValue && model.CountryId.Value != Guid.Empty)
 					{
 						var states = _lookupService.GetStates(model.CountryId.Value);
-						ViewBag.States = states.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = model.StateId.HasValue && s.Id == model.StateId.Value }).ToList();
+						vm.States = states.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = model.StateId.HasValue && s.Id == model.StateId.Value }).ToList();
 						if (model.StateId.HasValue && model.StateId.Value != Guid.Empty)
 						{
 							var cities = _lookupService.GetCities(model.StateId.Value);
-							ViewBag.Cities = cities.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CityId.HasValue && c.Id == model.CityId.Value }).ToList();
+							vm.Cities = cities.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = model.CityId.HasValue && c.Id == model.CityId.Value }).ToList();
 						}
-						else ViewBag.Cities = Enumerable.Empty<SelectListItem>().ToList();
+						else vm.Cities = Enumerable.Empty<SelectListItem>().ToList();
 					}
 					else
 					{
-						ViewBag.States = Enumerable.Empty<SelectListItem>().ToList();
-						ViewBag.Cities = Enumerable.Empty<SelectListItem>().ToList();
+						vm.States = Enumerable.Empty<SelectListItem>().ToList();
+						vm.Cities = Enumerable.Empty<SelectListItem>().ToList();
 					}
 				}
 				catch { }
-				return View(model);
+				return View(vm);
 			}
 
 			// Normalize optional strings to avoid nulls
@@ -254,8 +254,8 @@ namespace SchoolPortalApp.Controllers
 			model.Email = model.Email ?? string.Empty;
 			model.Status = string.IsNullOrWhiteSpace(model.Status) ? "INC" : model.Status;
 			model.StatusMessage = string.IsNullOrWhiteSpace(model.StatusMessage) ? "In Process...." : model.StatusMessage;
-			model.CompanyId = companyId;
-			model.CreatedBy = userId;
+			model.CompanyId = companyId.Value;
+			model.CreatedBy = userId.Value;
 			model.CreatedDate = DateTime.UtcNow;
 			model.IsDeleted = model.IsDeleted;
 
@@ -283,12 +283,6 @@ namespace SchoolPortalApp.Controllers
 						vm.States = Enumerable.Empty<SelectListItem>().ToList();
 						vm.Cities = Enumerable.Empty<SelectListItem>().ToList();
 					}
-					var quals = _lookupService.GetQualifications();
-					vm.QualificationItems = quals.Select(q => new SelectListItem { Value = q.Id.ToString(), Text = q.Name }).ToList();
-					var genders = _lookupService.GetGenders();
-					vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = g.Id == (model.Gender ?? Guid.Empty) }).ToList();
-					var maritalStatuses = _lookupService.GetMaritalStatuses();
-					vm.MaritalStatuses = maritalStatuses.Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name, Selected = m.Id == (model.MaritalStatusId ?? Guid.Empty) }).ToList();
 				}
 				catch { }
 				return View(vm);
@@ -310,7 +304,7 @@ namespace SchoolPortalApp.Controllers
 					SchoolId = model.SchoolId,
 					IsActive = model.IsActive,
 					IsDeleted = model.IsDeleted,
-					CreatedBy = userId,
+					CreatedBy = userId.Value,
 					CreatedDate = DateTime.UtcNow,
 					DOJ = model.DOJ ?? DateTime.UtcNow,
 					Status = "ACT",
@@ -360,9 +354,9 @@ namespace SchoolPortalApp.Controllers
 
 				d.Id = Guid.Empty;
 				d.TeacherId = newId;
-				d.CompanyId = companyId;
+				d.CompanyId = companyId.Value;
 				d.SchoolId = model.SchoolId;
-				d.CreatedBy = userId;
+				d.CreatedBy = userId.Value;
 				d.CreatedDate = DateTime.UtcNow;
 				d.IsDeleted = d.IsDeleted;
 				d.IsActive = d.IsActive;
@@ -376,9 +370,9 @@ namespace SchoolPortalApp.Controllers
 				if (q == null || q.QualificationId == Guid.Empty) continue;
 				q.Id = Guid.Empty;
 				q.TeacherId = newId;
-				q.CompanyId = companyId;
+				q.CompanyId = companyId.Value;
 				q.SchoolId = model.SchoolId;
-				q.CreatedBy = userId;
+				q.CreatedBy = userId.Value;
 				q.CreatedDate = DateTime.UtcNow;
 				q.IsDeleted = q.IsDeleted;
 				q.IsActive = q.IsActive;
@@ -437,11 +431,11 @@ namespace SchoolPortalApp.Controllers
 		{
 			var model = vm.Master;
 			if (id != model.Id) return BadRequest();
-
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			// Server-side required validations for location fields
@@ -490,9 +484,9 @@ namespace SchoolPortalApp.Controllers
 				catch { }
 				return View(vm);
 			}
-
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update teacher.");
 				try
@@ -661,7 +655,7 @@ namespace SchoolPortalApp.Controllers
 					d.TeacherId = id;
 					d.CompanyId = model.CompanyId;
 					d.SchoolId = model.SchoolId;
-					d.CreatedBy = userId;
+					d.CreatedBy = userId.Value;
 					d.CreatedDate = DateTime.UtcNow;
 					d.Status = d.Status ?? "INC";
 					d.StatusMessage = d.StatusMessage ?? "In Process....";
@@ -686,7 +680,7 @@ namespace SchoolPortalApp.Controllers
 					q.TeacherId = id;
 					q.CompanyId = model.CompanyId;
 					q.SchoolId = model.SchoolId;
-					q.CreatedBy = userId;
+					q.CreatedBy = userId.Value;
 					q.CreatedDate = DateTime.UtcNow;
 					q.Status = q.Status ?? "INC";
 					q.StatusMessage = q.StatusMessage ?? "In Process....";
@@ -696,7 +690,7 @@ namespace SchoolPortalApp.Controllers
 				{
 					q.TeacherId = id;
 					q.SchoolId = model.SchoolId;
-					q.ModifiedBy = userId;
+					q.ModifiedBy = userId.Value;
 					q.ModifiedDate = DateTime.UtcNow;
 					_qualService.Update(q);
 				}

@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Privileges")]
-	public class PrivilegesController : Controller
+	public class PrivilegesController : BaseController
 	{
 		private readonly IPrivilegeService _service;
 		private readonly ILogger<PrivilegesController> _logger;
@@ -94,8 +94,8 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create privilege.");
 				PopulateDropdowns(model);
@@ -107,7 +107,7 @@ namespace SchoolPortalApp.Controllers
 				Id = Guid.NewGuid(),
 				PrivilegeName = model.PrivilegeName,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				PrivilegeParentId = model.PrivilegeParentId,
 				Status = string.Empty,
@@ -153,8 +153,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update privilege.");
 				PopulateDropdowns(model);
@@ -166,7 +166,7 @@ namespace SchoolPortalApp.Controllers
 				Id = id,
 				PrivilegeName = model.PrivilegeName,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 				PrivilegeParentId = model.PrivilegeParentId,
 				Status = string.Empty,

@@ -11,7 +11,7 @@ using SchoolPortalApp.Models;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("SystemParameters")]
-	public class SystemParametersController : Controller
+	public class SystemParametersController : BaseController
 	{
 		private readonly ISystemParametersService _service;
 		private readonly ILookupService _lookup;
@@ -66,22 +66,16 @@ namespace SchoolPortalApp.Controllers
 		[HttpPost]
 		[Route("Create")]
 		[ValidateAntiForgeryToken]
-		[HttpPost]
 		public IActionResult Create(SystemParameterViewModel model)
 		{
 			if (!ModelState.IsValid)
 				return View(model);
 
-			// Validate session user
-			if (!TryGetSessionGuid("UserId", out var userId))
-			{
-				ModelState.AddModelError(string.Empty, "Please login to create a system parameter.");
-				return View(model);
-			}
-
-			// Validate company and school
-			if (!TryGetSessionGuid("CompanyId", out var companyId) ||
-				!TryGetSessionGuid("SchoolId", out var schoolId))
+			// Validate user and scope via BaseController
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
 				return View(model);
@@ -94,10 +88,10 @@ namespace SchoolPortalApp.Controllers
 				ParameterName = model.ParameterName.Trim(),
 				ParameterValue = model.ParameterValue?.Trim() ?? string.Empty,
 				Description = model.Description?.Trim() ?? string.Empty,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -122,14 +116,6 @@ namespace SchoolPortalApp.Controllers
 			}
 		}
 
-		private bool TryGetSessionGuid(string key, out Guid guid)
-		{
-			guid = Guid.Empty;
-			var value = HttpContext.Session.GetString(key);
-			return !string.IsNullOrWhiteSpace(value) && Guid.TryParse(value, out guid);
-		}
-
-
 		[HttpGet]
 		[Route("Edit/{id}")]
 		public IActionResult Edit(Guid id)
@@ -137,24 +123,22 @@ namespace SchoolPortalApp.Controllers
 			var item = _service.GetById(id);
 			if (item == null) return NotFound();
 
-			// Get CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			
-			if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-				string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
 				return View();
 			}
+
 			var vm = new SystemParameterViewModel
 			{
 				Id = item.Id,
 				ParameterName = item.ParameterName,
 				ParameterValue = item.ParameterValue,
 				Description = item.Description,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = item.IsActive,
 			};
 			//PopulateDropdowns(vm);
@@ -173,20 +157,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
-			{
-				ModelState.AddModelError(string.Empty, "Please login to update system parameter.");
-				//PopulateDropdowns(model);
-				return View(model);
-			}
-
-			// Get CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			
-			if (string.IsNullOrEmpty(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-				string.IsNullOrEmpty(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Company or school information is missing. Please login again.");
 				return View(model);
@@ -198,10 +172,10 @@ namespace SchoolPortalApp.Controllers
 				ParameterName = model.ParameterName,
 				ParameterValue = model.ParameterValue ?? string.Empty,
 				Description = model.Description ?? string.Empty,
-				CompanyId = companyId,
-				SchoolId = schoolId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 			};
 

@@ -8,7 +8,7 @@ using System.Linq;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Home")]
-	public class HomeController : Controller
+	public class HomeController : BaseController
 	{
 		private readonly IStudentService _studentService;
 		private readonly IClassService _classService;

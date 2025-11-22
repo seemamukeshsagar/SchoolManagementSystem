@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("RoleMaster")]
-	public class RoleMasterController : Controller
+	public class RoleMasterController : BaseController
 	{
 		private readonly IRoleMasterService _service;
 		private readonly ILogger<RoleMasterController> _logger;
@@ -100,13 +100,10 @@ namespace SchoolPortalApp.Controllers
 
 			try
 			{
-				var userIdStr = HttpContext.Session.GetString("UserId");
-				var companyIdStr = HttpContext.Session.GetString("CompanyId");
-				var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-				if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) ||
-					string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-					string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+				var userId = CurrentUserId;
+				var companyId = CurrentCompanyId;
+				var schoolId = CurrentSchoolId;
+				if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 				{
 					ModelState.AddModelError(string.Empty, "Please login to create a role.");
 					return View(model);
@@ -118,9 +115,9 @@ namespace SchoolPortalApp.Controllers
 					Name = model.RoleName?.Trim() ?? string.Empty,
 					Description = model.Description?.Trim(),
 					IsActive = model.IsActive,
-					CompanyId = companyId,
-					SchoolId = schoolId,
-					CreatedBy = userId,
+					CompanyId = companyId.Value,
+					SchoolId = schoolId.Value,
+					CreatedBy = userId.Value,
 					CreatedDate = DateTime.UtcNow
 				};
 
@@ -187,13 +184,10 @@ namespace SchoolPortalApp.Controllers
 
 			try
 			{
-				var userIdStr = HttpContext.Session.GetString("UserId");
-				var companyIdStr = HttpContext.Session.GetString("CompanyId");
-				var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-
-				if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) ||
-					string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId) ||
-					string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+				var userId = CurrentUserId;
+				var companyId = CurrentCompanyId;
+				var schoolId = CurrentSchoolId;
+				if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 				{
 					ModelState.AddModelError(string.Empty, "Please login to update role.");
 					return View(model);
@@ -206,7 +200,7 @@ namespace SchoolPortalApp.Controllers
 				}
 				
 				// Ensure the role belongs to the same company and school
-				if (existingRole.CompanyId != companyId || existingRole.SchoolId != schoolId)
+				if (existingRole.CompanyId != companyId.Value || existingRole.SchoolId != schoolId.Value)
 				{
 					ModelState.AddModelError(string.Empty, "You don't have permission to update this role.");
 					return View(model);
@@ -215,7 +209,7 @@ namespace SchoolPortalApp.Controllers
 				existingRole.Name = model.RoleName?.Trim() ?? string.Empty;
 				existingRole.Description = model.Description?.Trim();
 				existingRole.IsActive = model.IsActive;
-				existingRole.ModifiedBy = userId;
+				existingRole.ModifiedBy = userId.Value;
 				existingRole.ModifiedDate = DateTime.UtcNow;
 
 				var success = _service.Update(existingRole);

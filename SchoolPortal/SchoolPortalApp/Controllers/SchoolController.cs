@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("School")]
-	public class SchoolController : Controller
+	public class SchoolController : BaseController
 	{
 		private readonly ISchoolService _service;
 		private readonly ILookupService _lookup;
@@ -222,9 +222,9 @@ namespace SchoolPortalApp.Controllers
 				PopulateDropdowns(model);
 				return View(model);
 			}
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			if (!userId.HasValue || !companyId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login and select company to create school.");
 				PopulateDropdowns(model);
@@ -250,8 +250,8 @@ namespace SchoolPortalApp.Controllers
 				JudistrictionStateId = model.StateId,
 				JudistrictionCountryId = model.CountryId,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
-				CreatedBy = userId,
+				CompanyId = companyId.Value,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -299,20 +299,13 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Edit(Guid id, SchoolViewModel model)
 		{
 			if (id != model.Id) return BadRequest();
-			if (!ModelState.IsValid)
-			{
-				PopulateDropdowns(model);
-				return View(model);
-			}
-
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update school.");
 				PopulateDropdowns(model);
 				return View(model);
 			}
-
 			var entity = new SchoolMaster
 			{
 				Id = id,
@@ -332,7 +325,7 @@ namespace SchoolPortalApp.Controllers
 				JudistrictionStateId = model.StateId,
 				JudistrictionCountryId = model.CountryId,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

@@ -11,7 +11,7 @@ using SchoolPortalApp.Models;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("Visitor")]
-	public class VisitorController : Controller
+	public class VisitorController : BaseController
 	{
 		private readonly IVisitorService _service;
 		private readonly ILookupService _lookup;
@@ -127,6 +127,10 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Create()
 		{
 			var vm = new VisitorViewModel();
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (companyId.HasValue) vm.CompanyId = companyId;
+			if (schoolId.HasValue) vm.SchoolId = schoolId;
 			PopulateDropdowns(vm);
 			return View(vm);
 		}
@@ -142,8 +146,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create visitor entry.");
 				PopulateDropdowns(model);
@@ -166,10 +172,10 @@ namespace SchoolPortalApp.Controllers
 				StateId = model.StateId,
 				CountryId = model.CountryId,
 				ZipCode = model.ZipCode ?? string.Empty,
-				CompanyId = model.CompanyId,
-				SchoolId = model.SchoolId,
+				CompanyId = companyId,
+				SchoolId = schoolId,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -226,8 +232,10 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update visitor entry.");
 				PopulateDropdowns(model);
@@ -250,10 +258,10 @@ namespace SchoolPortalApp.Controllers
 				StateId = model.StateId,
 				CountryId = model.CountryId,
 				ZipCode = model.ZipCode ?? string.Empty,
-				CompanyId = model.CompanyId,
-				SchoolId = model.SchoolId,
+				CompanyId = companyId,
+				SchoolId = schoolId,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

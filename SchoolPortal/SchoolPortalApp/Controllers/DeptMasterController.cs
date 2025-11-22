@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("DeptMaster")]
-	public class DeptMasterController : Controller
+	public class DeptMasterController : BaseController
 	{
 		private readonly IDeptMasterService _service;
 		private readonly ISchoolService _schoolService;
@@ -83,11 +83,11 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(DeptMasterViewModel model)
 		{
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var parsedSchoolId))
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(DeptMasterViewModel.SchoolId));
-				model.SchoolId = parsedSchoolId;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -96,46 +96,36 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-
-			if (string.IsNullOrEmpty(companyIdStr) || string.IsNullOrEmpty(schoolIdStr) || string.IsNullOrEmpty(userIdStr))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			
+			if (!companyId.HasValue || !schoolId.HasValue || !userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				PopulateDropdowns(model);
 				return View(model);
 			}
 
-			if (Guid.TryParse(companyIdStr, out var companyId) && 
-				Guid.TryParse(schoolIdStr, out var schoolId) && 
-				Guid.TryParse(userIdStr, out var userId))
+			var entity = new DeptMaster
 			{
-				var entity = new DeptMaster
-				{
-					Id = Guid.Empty,
-					DeptCode = model.DeptCode,
-					DeptName = model.DeptName,
-					IsActive = model.IsActive,
-					CompanyId = companyId,
-					SchoolId = schoolId,
-					CreatedBy = userId,
-					CreatedDate = DateTime.UtcNow
-				};
+				Id = Guid.Empty,
+				DeptCode = model.DeptCode,
+				DeptName = model.DeptName,
+				IsActive = model.IsActive,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				CreatedBy = userId.Value,
+				CreatedDate = DateTime.UtcNow
+			};
 
-				var newId = _service.Create(entity);
-				if (newId == Guid.Empty)
-				{
-					ModelState.AddModelError(string.Empty, "Failed to create department.");
-					PopulateDropdowns(model);
-					return View(model);
-				}
-				return RedirectToAction("Details", new { id = newId });
+			var newId = _service.Create(entity);
+			if (newId == Guid.Empty)
+			{
+				ModelState.AddModelError(string.Empty, "Failed to create department.");
+				PopulateDropdowns(model);
+				return View(model);
 			}
-			
-			// If we get here, there was an error parsing the GUIDs
-			ModelState.AddModelError(string.Empty, "Invalid session data format.");
-			PopulateDropdowns(model);
-			return View(model);
+			return RedirectToAction("Details", new { id = newId });
 		}
 
 		[HttpGet]
@@ -164,12 +154,12 @@ namespace SchoolPortalApp.Controllers
 		public IActionResult Edit(Guid id, DeptMasterViewModel model)
 		{
 			if (id != model.Id) return BadRequest();
-
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolIdFromSession))
+			
+			var schoolId = CurrentSchoolId;
+			if (schoolId.HasValue)
 			{
 				ModelState.Remove(nameof(DeptMasterViewModel.SchoolId));
-				model.SchoolId = schoolIdFromSession;
+				model.SchoolId = schoolId.Value;
 			}
 
 			if (!ModelState.IsValid)
@@ -178,8 +168,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId) || model.SchoolId == Guid.Empty)
+			var userId = CurrentUserId;
+			if (!userId.HasValue || model.SchoolId == Guid.Empty)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update department.");
 				PopulateDropdowns(model);

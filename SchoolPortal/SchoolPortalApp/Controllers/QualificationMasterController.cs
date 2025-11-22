@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("QualificationMaster")]
-	public class QualificationMasterController : Controller
+	public class QualificationMasterController : BaseController
 	{
 		private readonly IQualificationMasterService _service;
 		private readonly ILogger<QualificationMasterController> _logger;
@@ -71,8 +71,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Missing required session data.");
 				return View(model);
@@ -84,7 +84,7 @@ namespace SchoolPortalApp.Controllers
 				QualificationName = model.QualificationName,
 				IsTeachingQualification = model.IsTeachingQualification,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow
 			};
 

@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("BookCategory")]
-	public class BookCategoryMasterController : Controller
+	public class BookCategoryMasterController : BaseController
 	{
 		private readonly IBookCategoryService _service;
 		private readonly ILogger<BookCategoryMasterController> _logger;
@@ -72,38 +72,34 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 			
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create book category.");
 				return View(model);
 			}
-			
-			// Get CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			
-			if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId))
+			if (!companyId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Company information not found in session.");
 				return View(model);
 			}
-			
-			if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			if (!schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "School information not found in session.");
 				return View(model);
 			}
-
+		
 			var entity = new BookCategoryMaster
 			{
 				Id = Guid.Empty,
 				Name = model.Name,
 				Description = model.Description ?? string.Empty,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
-				SchoolId = schoolId,
-				CreatedBy = userId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 			};
 
@@ -144,38 +140,34 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			var schoolId = CurrentSchoolId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update book category.");
 				return View(model);
 			}
-			
-			// Get CompanyId and SchoolId from session
-			var companyIdStr = HttpContext.Session.GetString("CompanyId");
-			var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-			
-			if (string.IsNullOrWhiteSpace(companyIdStr) || !Guid.TryParse(companyIdStr, out var companyId))
+			if (!companyId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Company information not found in session.");
 				return View(model);
 			}
-			
-			if (string.IsNullOrWhiteSpace(schoolIdStr) || !Guid.TryParse(schoolIdStr, out var schoolId))
+			if (!schoolId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "School information not found in session.");
 				return View(model);
 			}
-
+		
 			var entity = new BookCategoryMaster
 			{
 				Id = id,
 				Name = model.Name,
 				Description = model.Description ?? string.Empty,
 				IsActive = model.IsActive,
-				CompanyId = companyId,
-				SchoolId = schoolId,
-				ModifiedBy = userId,
+				CompanyId = companyId.Value,
+				SchoolId = schoolId.Value,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 			};
 

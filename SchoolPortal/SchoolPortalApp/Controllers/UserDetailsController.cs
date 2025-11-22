@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
     [Route("UserDetails")]
-    public class UserDetailsController : Controller
+    public class UserDetailsController : BaseController
     {
         private readonly IUserDetailsService _service;
         private readonly ILookupService _lookup;
@@ -132,6 +132,10 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Create()
         {
             var vm = new UserDetailsViewModel();
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (companyId.HasValue) vm.CompanyId = companyId;
+            if (schoolId.HasValue) vm.SchoolId = schoolId;
             PopulateDropdowns(vm);
             return View(vm);
         }
@@ -147,8 +151,10 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
                 ModelState.AddModelError(string.Empty, "Please login to create user.");
                 PopulateDropdowns(model);
@@ -166,10 +172,10 @@ namespace SchoolPortalApp.Controllers
                 DesignationId = model.DesignationId,
                 UserRoleId = model.UserRoleId,
                 IsSuperUser = model.IsSuperUser ?? false,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
-                CreatedBy = userId,
+                CreatedBy = userId.Value,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -221,8 +227,10 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
                 ModelState.AddModelError(string.Empty, "Please login to update user.");
                 PopulateDropdowns(model);
@@ -240,10 +248,10 @@ namespace SchoolPortalApp.Controllers
                 DesignationId = model.DesignationId,
                 UserRoleId = model.UserRoleId,
                 IsSuperUser = model.IsSuperUser ?? false,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
+                CompanyId = companyId,
+                SchoolId = schoolId,
                 IsActive = model.IsActive,
-                ModifiedBy = userId,
+                ModifiedBy = userId.Value,
                 ModifiedDate = DateTime.UtcNow
             };
 

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace SchoolPortalApp.Controllers
 {
     [Route("VehicleExpenseDetails")]
-    public class VehicleExpenseDetailsController : Controller
+    public class VehicleExpenseDetailsController : BaseController
     {
         private readonly IVehicleExpenseDetailsService _service;
         private readonly IVehicleMasterService _vehicleService;
@@ -133,16 +133,16 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Create()
         {
             var vm = new VehicleExpenseDetailsViewModel();
-            // Prefill CompanyId and SchoolId from session
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-            if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId))
+            // Prefill CompanyId and SchoolId from BaseController properties
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (companyId.HasValue)
             {
-                vm.CompanyId = companyId;
+                vm.CompanyId = companyId.Value;
             }
-            if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId))
+            if (schoolId.HasValue)
             {
-                vm.SchoolId = schoolId;
+                vm.SchoolId = schoolId.Value;
             }
             PopulateDropdowns(vm);
             return View(vm);
@@ -159,8 +159,8 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            if (!userId.HasValue)
             {
                 ModelState.AddModelError(string.Empty, "Please login to create vehicle expense.");
                 PopulateDropdowns(model);
@@ -179,7 +179,7 @@ namespace SchoolPortalApp.Controllers
                 CompanyId = model.CompanyId,
                 SchoolId = model.SchoolId,
                 IsActive = model.IsActive,
-                CreatedBy = userId,
+                CreatedBy = userId.Value,
                 CreatedDate = DateTime.UtcNow,
                 Status = "ACT",
                 StatusMessage = "Active"
@@ -233,8 +233,8 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            if (!userId.HasValue)
             {
                 ModelState.AddModelError(string.Empty, "Please login to update vehicle expense.");
                 PopulateDropdowns(model);
@@ -253,7 +253,7 @@ namespace SchoolPortalApp.Controllers
                 CompanyId = model.CompanyId,
                 SchoolId = model.SchoolId,
                 IsActive = model.IsActive,
-                ModifiedBy = userId,
+                ModifiedBy = userId.Value,
                 ModifiedDate = DateTime.UtcNow
             };
 

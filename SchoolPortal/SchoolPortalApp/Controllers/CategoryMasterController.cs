@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("CategoryMaster")]
-	public class CategoryMasterController : Controller
+	public class CategoryMasterController : BaseController
 	{
 		private readonly ICategoryMasterService _service;
 		private readonly ILogger<CategoryMasterController> _logger;
@@ -72,8 +72,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create category.");
 				return View(model);
@@ -85,7 +85,7 @@ namespace SchoolPortalApp.Controllers
 				Name = model.Name,
 				IsActive = model.IsActive,
 				IsDeleted = false,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = "ACT",
 				StatusMessage = "Active"
@@ -127,8 +127,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update category.");
 				return View(model);
@@ -139,7 +139,7 @@ namespace SchoolPortalApp.Controllers
 				Id = id,
 				Name = model.Name,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

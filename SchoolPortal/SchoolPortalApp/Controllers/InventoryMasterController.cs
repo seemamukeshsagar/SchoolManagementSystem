@@ -11,7 +11,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
     [Route("InventoryMaster")]
-    public class InventoryMasterController : Controller
+    public class InventoryMasterController : BaseController
     {
         private readonly IInventoryService _service;
         private readonly IItemService _itemService;
@@ -107,10 +107,10 @@ namespace SchoolPortalApp.Controllers
         public IActionResult Create()
         {
             var vm = new InventoryMasterViewModel();
-            var companyIdStr = HttpContext.Session.GetString("CompanyId");
-            var schoolIdStr = HttpContext.Session.GetString("SchoolId");
-            if (!string.IsNullOrWhiteSpace(companyIdStr) && Guid.TryParse(companyIdStr, out var companyId)) vm.CompanyId = companyId;
-            if (!string.IsNullOrWhiteSpace(schoolIdStr) && Guid.TryParse(schoolIdStr, out var schoolId)) vm.SchoolId = schoolId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (companyId.HasValue) vm.CompanyId = companyId.Value;
+            if (schoolId.HasValue) vm.SchoolId = schoolId.Value;
             PopulateDropdowns(vm);
             return View(vm);
         }
@@ -126,17 +126,12 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
-                ModelState.AddModelError(string.Empty, "Please login to create inventory.");
-                PopulateDropdowns(model);
-                return View(model);
-            }
-
-            if (model.CompanyId == Guid.Empty || model.SchoolId == Guid.Empty)
-            {
-                ModelState.AddModelError(string.Empty, "Company/School information not found in session.");
+                ModelState.AddModelError(string.Empty, "Company/School information not found. Please login again.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -150,9 +145,9 @@ namespace SchoolPortalApp.Controllers
                 Quantity = model.Quantity,
                 CostPerItem = model.CostPerItem,
                 IsActive = model.IsActive,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
-                CreatedBy = userId,
+                CompanyId = companyId.Value,
+                SchoolId = schoolId.Value,
+                CreatedBy = userId.Value,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -201,10 +196,12 @@ namespace SchoolPortalApp.Controllers
                 return View(model);
             }
 
-            var userIdStr = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+            var userId = CurrentUserId;
+            var companyId = CurrentCompanyId;
+            var schoolId = CurrentSchoolId;
+            if (!userId.HasValue || !companyId.HasValue || !schoolId.HasValue)
             {
-                ModelState.AddModelError(string.Empty, "Please login to update inventory.");
+                ModelState.AddModelError(string.Empty, "Company/School information not found. Please login again.");
                 PopulateDropdowns(model);
                 return View(model);
             }
@@ -218,9 +215,9 @@ namespace SchoolPortalApp.Controllers
                 Quantity = model.Quantity,
                 CostPerItem = model.CostPerItem,
                 IsActive = model.IsActive,
-                CompanyId = model.CompanyId,
-                SchoolId = model.SchoolId,
-                ModifiedBy = userId,
+                CompanyId = companyId.Value,
+                SchoolId = schoolId.Value,
+                ModifiedBy = userId.Value,
                 ModifiedDate = DateTime.UtcNow
             };
 

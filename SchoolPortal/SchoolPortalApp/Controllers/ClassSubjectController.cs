@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("ClassSubject")]
-	public class ClassSubjectController : Controller
+	public class ClassSubjectController : BaseController
 	{
 		private readonly IClassSubjectService _classSubjectService;
 		private readonly IClassService _classService;

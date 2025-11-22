@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("VehicleTypeMaster")]
-	public class VehicleTypeMasterController : Controller
+	public class VehicleTypeMasterController : BaseController
 	{
 		private readonly IVehicleTypeMasterService _service;
 		private readonly ICompanyService _companyService;
@@ -110,8 +110,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 			
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create vehicle type.");
 				PopulateDropdowns(model);
@@ -125,7 +125,7 @@ namespace SchoolPortalApp.Controllers
 				CompanyId = model.CompanyId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 				Status = "ACT",
 				StatusMessage = "Active"
@@ -175,8 +175,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update vehicle type.");
 				PopulateDropdowns(model);
@@ -190,7 +190,7 @@ namespace SchoolPortalApp.Controllers
 				CompanyId = model.CompanyId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow
 			};
 

@@ -10,7 +10,7 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("EmpTypeMaster")]
-	public class EmpTypeMasterController : Controller
+	public class EmpTypeMasterController : BaseController
 	{
 		private readonly IEmpTypeService _service;
 		private readonly ILookupService _lookup;
@@ -110,8 +110,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to create employee type.");
 				PopulateDropdowns(model);
@@ -126,7 +126,7 @@ namespace SchoolPortalApp.Controllers
 				CompanyId = model.CompanyId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
-				CreatedBy = userId,
+				CreatedBy = userId.Value,
 				CreatedDate = DateTime.UtcNow,
 			};
 
@@ -171,8 +171,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			var userIdStr = HttpContext.Session.GetString("UserId");
-			if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+			var userId = CurrentUserId;
+			if (!userId.HasValue)
 			{
 				ModelState.AddModelError(string.Empty, "Please login to update employee type.");
 				PopulateDropdowns(model);
@@ -187,7 +187,7 @@ namespace SchoolPortalApp.Controllers
 				CompanyId = model.CompanyId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
-				ModifiedBy = userId,
+				ModifiedBy = userId.Value,
 				ModifiedDate = DateTime.UtcNow,
 			};
 

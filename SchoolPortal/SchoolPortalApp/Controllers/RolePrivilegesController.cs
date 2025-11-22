@@ -13,7 +13,7 @@ using SchoolPortalApp.Models.RolePrivilege;
 namespace SchoolPortalApp.Controllers
 {
 	[Route("RolePrivileges")]
-	public class RolePrivilegesController : Controller
+	public class RolePrivilegesController : BaseController
 	{
 		private readonly IRolePrivilegeService _rolePrivilegeService;
 		private readonly IRoleMasterService _roleService;
@@ -115,8 +115,8 @@ namespace SchoolPortalApp.Controllers
 
 			try
 			{
-				var userIdStr = HttpContext.Session.GetString("UserId");
-				if (string.IsNullOrEmpty(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
+				var userId = CurrentUserId;
+				if (!userId.HasValue)
 				{
 					return Unauthorized("User not authenticated");
 				}
@@ -125,7 +125,7 @@ namespace SchoolPortalApp.Controllers
 				{
 					RoleId = model.RoleId,
 					PrivilegeIds = model.PrivilegeIds ?? new List<Guid>(),
-					ModifiedBy = userId
+					ModifiedBy = userId.Value
 				};
 
 				var result = await _rolePrivilegeService.UpdateRolePrivilegesAsync(updateModel);
