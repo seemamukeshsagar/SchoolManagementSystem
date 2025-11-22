@@ -1,75 +1,8 @@
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor Accessor;
 
-<style>
-	.nav-sidebar .nav-link {
-		color: white;
-		padding: 10px 20px;
-	}
-
-	.nav-sidebar .nav-link:hover,
-	.nav-sidebar .nav-link.active {
-		background-color: #495057 !important;
-	}
-
-	/* Light gray background for submenu area (force override) */
-	.nav-sidebar .accordion-collapse.show,
-	.nav-sidebar .accordion-body {
-		background-color: #f5f5f5 !important;
-	}
-
-	.nav-sidebar .accordion-body .nav-link {
-		color: #212529;
-		padding: 6px 20px;
-	}
-
-	.nav-sidebar .accordion-body .nav-link:hover {
-		background-color: #e0e0e0;
-		color: #000;
-	}
-
-	.nav-sidebar .accordion-button {
-		background-color: #343a40;
-		color: #fff;
-	}
-
-	.nav-sidebar .accordion-button:not(.collapsed) {
-		background-color: #f5f5f5;
-		color: #212529;
-	}
-
-	.nav-sidebar .accordion-button:focus {
-		box-shadow: none;
-	}
-</style>
-
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
-		const sidebarAccordion = document.getElementById('sidebarAccordion');
-		if (!sidebarAccordion) return;
-
-		let currentOpenId = null;
-
-		// Track which accordion panel is currently open
-		sidebarAccordion.addEventListener('shown.bs.collapse', function (e) {
-			currentOpenId = '#' + e.target.id;
-		});
-
-		// Prevent closing the currently open panel when its header is clicked again
-		sidebarAccordion.addEventListener('click', function (e) {
-			const button = e.target.closest('.accordion-button[data-bs-target]');
-			if (!button) return;
-
-			const target = button.getAttribute('data-bs-target');
-			if (!target) return;
-
-			if (currentOpenId === target) {
-				e.preventDefault();
-				e.stopPropagation();
-			}
-		});
-	});
-</script>
+<link rel="stylesheet" href="~/css/navigationbar.css" />
+<script src="~/js/navigationbar.js"></script>
 
 @{
 	var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
