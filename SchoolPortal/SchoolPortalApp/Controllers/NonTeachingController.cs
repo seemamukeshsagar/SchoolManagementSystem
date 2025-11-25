@@ -52,23 +52,44 @@ namespace SchoolPortalApp.Controllers
         [HttpGet]
         [Route("")]
         [Route("Index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string searchTerm = null)
         {
             try
             {
                 var schoolId = CurrentSchoolId;
-                List<NonTeachingMaster> list;
+                IEnumerable<NonTeachingMaster> list;
                 
                 if (schoolId.HasValue)
                 {
-                    list = _service.GetBySchoolId(schoolId.Value);
+                    list = await _service.GetBySchoolIdAsync(schoolId.Value);
                 }
                 else
                 {
-                    list = _service.GetAll();
+                    list = await _service.GetAllAsync();
                 }
 
-                var viewModelList = list.Select(item => new NonTeachingListItemViewModel
+                // Apply search filter if search term is provided
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    var searchTermLower = searchTerm.ToLower();
+                    list = list.Where(x => 
+                        (x.FirstName != null && x.FirstName.ToLower().Contains(searchTermLower)) ||
+                        (x.LastName != null && x.LastName.ToLower().Contains(searchTermLower)) ||
+                        (x.Email != null && x.Email.ToLower().Contains(searchTermLower)) ||
+                        (x.EmployeeCode != null && x.EmployeeCode.ToLower().Contains(searchTermLower)) ||
+                        (x.Designation != null && x.Designation.ToLower().Contains(searchTermLower))
+                    );
+                }
+
+                // Apply pagination
+                var totalItems = list.Count();
+                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                var paginatedList = list
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var viewModelList = paginatedList.Select(item => new NonTeachingListItemViewModel
                 {
                     Id = item.Id,
                     Name = $"{item.FirstName} {item.MiddleName} {item.LastName}".Trim(),
@@ -77,8 +98,16 @@ namespace SchoolPortalApp.Controllers
                     Designation = item.Designation ?? string.Empty,
                     Department = item.Department ?? string.Empty,
                     IsActive = item.IsActive,
-                    EmployeeCode = item.EmployeeCode ?? string.Empty
+                    EmployeeCode = item.EmployeeCode ?? string.Empty,
+                    DOJ = item.DOJ,
+                    DateOfLeaving = item.DateOfLeaving
                 }).ToList();
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.PageSize = pageSize;
+                ViewBag.TotalItems = totalItems;
+                ViewBag.SearchTerm = searchTerm;
 
                 return View(viewModelList);
             }
@@ -127,7 +156,7 @@ namespace SchoolPortalApp.Controllers
                 model.CreatedDate = DateTime.UtcNow;
                 model.IsActive = true;
 
-                var result = _service.Add(model);
+                var result = await _service.AddAsync(model);
 
                 if (result > 0)
                 {
@@ -154,7 +183,7 @@ namespace SchoolPortalApp.Controllers
         {
             try
             {
-                var model = _service.GetById(id);
+                var model = await _service.GetByIdAsync(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -189,7 +218,7 @@ namespace SchoolPortalApp.Controllers
                     return View(model);
                 }
 
-                var existing = _service.GetById(id);
+                var existing = await _service.GetByIdAsync(id);
                 if (existing == null)
                 {
                     return NotFound();
@@ -229,7 +258,7 @@ namespace SchoolPortalApp.Controllers
                 existing.ModifiedBy = CurrentUserId;
                 existing.ModifiedDate = DateTime.UtcNow;
 
-                var result = _service.Update(existing);
+                var result = await _service.UpdateAsync(existing);
 
                 if (result)
                 {
@@ -252,11 +281,11 @@ namespace SchoolPortalApp.Controllers
 
         [HttpGet]
         [Route("Details/{id}")]
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
             try
             {
-                var model = _service.GetById(id);
+                var model = await _service.GetByIdAsync(id);
                 if (model == null)
                 {
                     return NotFound();
@@ -304,11 +333,11 @@ namespace SchoolPortalApp.Controllers
         [HttpPost]
         [Route("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             try
             {
-                var result = _service.Delete(id, CurrentUserId);
+                var result = await _service.DeleteAsync(id, CurrentUserId);
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Non-teaching staff deleted successfully.";
@@ -331,9 +360,9 @@ namespace SchoolPortalApp.Controllers
         {
             try
             {
-                var genders = _lookupService.GetGenders();
-                var maritalStatuses = _lookupService.GetMaritalStatuses();
-                var countries = _lookupService.GetCountries();
+                var genders = await _lookupService.GetGendersAsync();
+                var maritalStatuses = await _lookupService.GetMaritalStatusesAsync();
+                var countries = await _lookupService.GetCountriesAsync();
                 var states = new List<Lookup>();
                 var cities = new List<Lookup>();
 
@@ -357,11 +386,11 @@ namespace SchoolPortalApp.Controllers
 
         [HttpGet]
         [Route("GetStatesByCountry/{countryId}")]
-        public IActionResult GetStatesByCountry(Guid countryId)
+        public async Task<IActionResult> GetStatesByCountry(Guid countryId)
         {
             try
             {
-                var states = _lookupService.GetStatesByCountry(countryId);
+                var states = await _lookupService.GetStatesByCountryAsync(countryId);
                 return Json(states.Select(s => new { Id = s.Id, Name = s.Name }));
             }
             catch (Exception ex)
@@ -373,11 +402,11 @@ namespace SchoolPortalApp.Controllers
 
         [HttpGet]
         [Route("GetCitiesByState/{stateId}")]
-        public IActionResult GetCitiesByState(Guid stateId)
+        public async Task<IActionResult> GetCitiesByState(Guid stateId)
         {
             try
             {
-                var cities = _lookupService.GetCitiesByState(stateId);
+                var cities = await _lookupService.GetCitiesByStateAsync(stateId);
                 return Json(cities.Select(c => new { Id = c.Id, Name = c.Name }));
             }
             catch (Exception ex)
@@ -389,7 +418,7 @@ namespace SchoolPortalApp.Controllers
 
         [HttpGet]
         [Route("ExportToExcel")]
-        public IActionResult ExportToExcel()
+        public async Task<IActionResult> ExportToExcel()
         {
             try
             {
@@ -398,11 +427,11 @@ namespace SchoolPortalApp.Controllers
 
                 if (schoolId.HasValue)
                 {
-                    data = _service.GetBySchoolId(schoolId.Value);
+                    data = await _service.GetBySchoolIdAsync(schoolId.Value);
                 }
                 else
                 {
-                    data = _service.GetAll();
+                    data = await _service.GetAllAsync();
                 }
 
                 using (var workbook = new XLWorkbook())
@@ -463,17 +492,41 @@ namespace SchoolPortalApp.Controllers
 
         [HttpPost]
         [Route("ToggleStatus/{id}")]
-        public IActionResult ToggleStatus(Guid id)
+        public async Task<IActionResult> ToggleStatus(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return Json(new { success = false, error = "Invalid staff ID" });
+            }
+
             try
             {
-                var result = _service.ToggleStatus(id, CurrentUserId);
-                return Json(new { success = result });
+                var result = await _service.ToggleStatusAsync(id, CurrentUserId);
+                if (!result)
+                {
+                    return Json(new { success = false, error = "Failed to update status. Staff member not found." });
+                }
+                
+                return Json(new { 
+                    success = true, 
+                    message = "Status updated successfully" 
+                });
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogError(ex, $"Application error toggling status for non-teaching staff ID: {id}");
+                return Json(new { 
+                    success = false, 
+                    error = ex.Message 
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error toggling status for non-teaching staff ID: {id}");
-                return Json(new { success = false, error = "An error occurred while updating status." });
+                _logger.LogError(ex, $"Unexpected error toggling status for non-teaching staff ID: {id}");
+                return Json(new { 
+                    success = false, 
+                    error = "An unexpected error occurred while updating status. Please try again later." 
+                });
             }
         }
     }

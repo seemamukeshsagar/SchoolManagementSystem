@@ -39,20 +39,13 @@ namespace SchoolPortal.Services.Services
         }
 
         public NonTeachingQualificationDetails GetQualificationById(Guid id)
-        {
-            try
-            {
-                using (var p = new Proc("sp_NonTeachingQualification_GetById"))
-                {
-                    p["@Id"] = id;
-                    return p.Exec<NonTeachingQualificationDetails>().FirstOrDefault();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.GetQualificationById for ID: {id}");
-                throw;
-            }
+        {  
+            Proc p = new Proc("sp_NonTeachingQualification_GetById");
+            p["@Id"] = id;
+            var dt = new DataTable();
+            p.Exec(dt);
+            if (dt.Rows.Count == 0) return null;
+            return Map(dt.Rows[0]);
         }
 
         public bool Add(NonTeachingQualificationDetails entity)
@@ -105,8 +98,16 @@ namespace SchoolPortal.Services.Services
                     p["@VerifiedOn"] = entity.VerifiedOn;
                     p["@Remarks"] = entity.Remarks;
                     p["@ModifiedBy"] = entity.ModifiedBy;
-
-                    return p.ExecNonQuery() > 0;
+                    var dt = new DataTable();
+                    p.Exec(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -117,20 +118,13 @@ namespace SchoolPortal.Services.Services
         }
 
         public bool Delete(Guid id)
-        {
-            try
-            {
-                using (var p = new Proc("sp_NonTeachingQualification_Delete"))
-                {
-                    p["@Id"] = id;
-                    return p.ExecNonQuery() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.Delete for ID: {id}");
-                throw;
-            }
+        {            
+            Proc p = new Proc("sp_NonTeachingQualification_Delete");
+            p["@Id"] = id;
+            p.Exec();
+            var ret = p.Parameters["@RETURN_VALUE"].Value;
+            int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
+            return code == 1;
         }
     }
 }
