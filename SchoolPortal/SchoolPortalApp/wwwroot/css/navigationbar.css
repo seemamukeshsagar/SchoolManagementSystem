@@ -1,39 +1,74 @@
-.nav-sidebar .nav-link {
-	color: white;
-	padding: 10px 20px;
+/* Collapsed state - only show icons */
+.nav-sidebar.collapsed .nav-link span,
+.nav-sidebar.collapsed .accordion-button span {
+    display: none !important;
 }
 
-.nav-sidebar .nav-link:hover,
-.nav-sidebar .nav-link.active {
-	background-color: #495057 !important;
+/* Ensure icons are centered when collapsed */
+.nav-sidebar.collapsed .nav-link,
+.nav-sidebar.collapsed .accordion-button {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+    text-align: center;
 }
 
-/* Light gray background for submenu area (force override) */
-.nav-sidebar .accordion-collapse.show,
-.nav-sidebar .accordion-body {
-	background-color: #f5f5f5 !important;
+/* Hide section headers when collapsed */
+.nav-sidebar.collapsed .text-uppercase {
+    display: none !important;
 }
 
-.nav-sidebar .accordion-body .nav-link {
-	color: #212529;
-	padding: 6px 20px;
+/* Adjust icon size and spacing */
+.nav-sidebar.collapsed .bi {
+    font-size: 1.25rem;
+    margin: 0 !important;
+    display: inline-block;
 }
 
-.nav-sidebar .accordion-body .nav-link:hover {
-	background-color: #e0e0e0;
-	color: #000;
+/* Ensure the sidebar has a fixed width when collapsed */
+.nav-sidebar.collapsed {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
 }
 
-.nav-sidebar .accordion-button {
-	background-color: #343a40;
-	color: #fff;
+/* Hide the accordion arrow when collapsed */
+.nav-sidebar.collapsed .accordion-button::after {
+    display: none !important;
 }
 
-.nav-sidebar .accordion-button:not(.collapsed) {
-	background-color: #f5f5f5;
-	color: #212529;
+/* Adjust padding for collapsed state */
+.nav-sidebar.collapsed .nav-item {
+    padding: 0 5px !important;
 }
 
-.nav-sidebar .accordion-button:focus {
-	box-shadow: none;
+/* Ensure proper hover states */
+.nav-sidebar.collapsed .nav-link:hover,
+.nav-sidebar.collapsed .accordion-button:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Tooltip styles for collapsed state */
+.nav-sidebar.collapsed .nav-link[data-tooltip] {
+    position: relative;
+}
+
+.nav-sidebar.collapsed .nav-link[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #343a40;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-left: 10px;
+    z-index: 1000;
+    font-size: 0.875rem;
+}
+
+/* Ensure accordion content is hidden when collapsed */
+.nav-sidebar.collapsed .accordion-collapse {
+    display: none !important;
 }

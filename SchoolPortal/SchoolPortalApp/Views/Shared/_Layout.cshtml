@@ -24,12 +24,36 @@
 	}
 	<!-- HEADER -->
 	<header>
+		@{
+			var companyIdStr1 = Context.Session.GetString("CompanyId");
+			var schoolIdStr1 = Context.Session.GetString("SchoolId");
+			var companyName = string.Empty;
+			var schoolName = string.Empty;
+			if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var companyId))
+			{
+				var companies = Lookup.GetCompanies();
+				var comp = companies.FirstOrDefault(c => c.Id == companyId);
+				companyName = comp?.Name ?? string.Empty;
+			}
+			if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
+			{
+				var schools = Lookup.GetSchools();
+				var sch = schools.FirstOrDefault(s => s.Id == schoolId);
+				schoolName = sch?.Name ?? string.Empty;
+			}
+			
+		}
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 			<div class="container-fluid">
 				<button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
 					<i class="bi bi-list"></i>
 				</button>
-				<a class="navbar-brand ms-2" asp-area="" asp-page="/Index">School Management System</a>
+				<a class="navbar-brand ms-2" asp-area="" asp-page="/Index">@{
+						if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
+						{
+							<text>@companyName@(string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(schoolName) ? "" : " | ")@schoolName&nbsp;&nbsp;</text>
+						}
+				}</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
@@ -79,28 +103,7 @@
 									  data-bs-toggle="tooltip"
 									  data-bs-placement="bottom"
 									  title="Name: @fullName&#10;Role: @role&#10;Designation: @designation">
-									@{ 
-										var companyIdStr1 = Context.Session.GetString("CompanyId");
-										var schoolIdStr1 = Context.Session.GetString("SchoolId");
-										var companyName = string.Empty;
-										var schoolName = string.Empty;
-										if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var companyId))
-										{
-											var companies = Lookup.GetCompanies();
-											var comp = companies.FirstOrDefault(c => c.Id == companyId);
-											companyName = comp?.Name ?? string.Empty;
-										}
-										if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
-										{
-											var schools = Lookup.GetSchools();
-											var sch = schools.FirstOrDefault(s => s.Id == schoolId);
-											schoolName = sch?.Name ?? string.Empty;
-										}
-										if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
-										{
-											<text>@companyName@(string.IsNullOrEmpty(companyName) || string.IsNullOrEmpty(schoolName) ? "" : " | ")@schoolName&nbsp;&nbsp;</text>
-										}
-									}
+									
 									Welcome, @displayName
 								</span>
 								<script>

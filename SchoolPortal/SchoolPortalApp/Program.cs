@@ -73,6 +73,10 @@ builder.Services.AddLogging(loggingBuilder =>
 // DI registrations
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
 	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
+
+ builder.Services.AddScoped<System.Data.IDbConnection>(sp => 
+  	sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());	
+	
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ICategoryMasterService, SchoolPortal.Services.CategoryMasterService>();
 builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
