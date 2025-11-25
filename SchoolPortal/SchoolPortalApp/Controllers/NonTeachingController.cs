@@ -1,533 +1,604 @@
-// SchoolPortalApp/Controllers/NonTeachingController.cs
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SchoolPortal.Entities.Models;
+using SchoolPortal.Services.IServices;
+using SchoolPortal.Web.Models;
+using SchoolPortal.Web.Models.NonTeaching;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ClosedXML.Excel;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
-using SchoolPortal.DBAccess;
-using SchoolPortal.Entities.Models;
-using SchoolPortal.Services.IServices;
-using SchoolPortalApp.Models;
 
-namespace SchoolPortalApp.Controllers
+namespace SchoolPortal.Web.Controllers
 {
-    [Route("NonTeaching")]
-    public class NonTeachingController : BaseController
+    [Authorize]
+    public class NonTeachingController : Controller
     {
-        private readonly INonTeachingService _service;
-        private readonly ISchoolService _schoolService;
         private readonly ILogger<NonTeachingController> _logger;
-        private readonly INonTeachingDocumentDetailsService _docService;
-        private readonly INonTeachingQualificationDetailsService _qualService;
-        private readonly ILookupService _lookupService;
-        private readonly IWebHostEnvironment _env;
-        private readonly IEmpService _empService;
+        private readonly INonTeachingService _nonTeachingService;
+        private readonly INonTeachingDocumentDetailsService _documentService;
+        private readonly INonTeachingQualificationDetailsService _qualificationService;
 
         public NonTeachingController(
-            INonTeachingService service,
-            ISchoolService schoolService,
-            ILookupService lookupService,
             ILogger<NonTeachingController> logger,
-            INonTeachingDocumentDetailsService docService,
-            INonTeachingQualificationDetailsService qualService,
-            IWebHostEnvironment env,
-            IEmpService empService)
+            INonTeachingService nonTeachingService,
+            INonTeachingDocumentDetailsService documentService,
+            INonTeachingQualificationDetailsService qualificationService)
         {
-            _service = service;
-            _schoolService = schoolService;
-            _lookupService = lookupService;
             _logger = logger;
-            _docService = docService;
-            _qualService = qualService;
-            _env = env;
-            _empService = empService;
+            _nonTeachingService = nonTeachingService;
+            _documentService = documentService;
+            _qualificationService = qualificationService;
         }
 
-        [HttpGet]
-        [Route("")]
-        [Route("Index")]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string searchTerm = null)
+        // GET: NonTeaching
+        public IActionResult Index()
         {
             try
             {
-                var schoolId = CurrentSchoolId;
-                IEnumerable<NonTeachingMaster> list;
+                var nonTeachingList = _nonTeachingService.GetAll();
+                return View(nonTeachingList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving non-teaching staff list");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the staff list.";
+                return View(new List<NonTeachingMaster>());
+            }
+        }
+
+        // GET: NonTeaching/Details/5
+        public IActionResult Details(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Invalid ID");
+                }
+
+                var nonTeaching = _nonTeachingService.GetById(id);
+                if (nonTeaching == null)
+                {
+                    return NotFound();
+                }
+
+                return View(nonTeaching);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving non-teaching staff with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the staff details.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // GET: NonTeaching/Create
+        public IActionResult Create()
+        {
+            return View(new NonTeachingViewModel
+            {
+                Id = Guid.Empty,
+                DOB = DateTime.Today.AddYears(-25), // Default age 25
+                DOJ = DateTime.Today,
+                IsActive = true
+            });
+        }
+
+        // POST: NonTeaching/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(NonTeachingViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await model.ImageFile.CopyToAsync(memoryStream).ConfigureAwait(false);
+                            model.Image = (byte[])(memoryStream.ToArray());
+                        }
+                    }
+
+                    var nonTeaching = MapToNonTeachingMaster(model);
+                    nonTeaching.Id = Guid.NewGuid();
+                    nonTeaching.CreatedDate = DateTime.UtcNow;
+                    nonTeaching.CreatedBy = model.CreatedBy; // Or get the current user ID
+
+                    _nonTeachingService.Add(nonTeaching);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error creating non-teaching staff");
+                    ModelState.AddModelError("", "An error occurred while saving the record.");
+                }
+            }
+
+            return View(model);
+        }
+
+        // GET: NonTeaching/Edit/5
+        public IActionResult Edit(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Invalid ID");
+                }
+
+                var nonTeaching = _nonTeachingService.GetById(id);
+                if (nonTeaching == null)
+                {
+                    return NotFound();
+                }
+
+                var model = MapToNonTeachingViewModel(nonTeaching);
+                return View("Form", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving non-teaching staff for edit with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the staff details for editing.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // POST: NonTeaching/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, NonTeachingViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingStaff = _nonTeachingService.GetById(id);
+                    if (existingStaff == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var nonTeaching = MapToNonTeachingMaster(model);
+                    nonTeaching.ModifiedOn = DateTime.UtcNow;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await model.ImageFile.CopyToAsync(memoryStream).ConfigureAwait(false);
+                            nonTeaching.Image = memoryStream.ToArray();
+                        }
+                    }
+                    else
+                    {
+                        // Keep the existing image if no new image is uploaded
+                        nonTeaching.Image = existingStaff.Image;
+                    }
+
+                    _nonTeachingService.Update(nonTeaching);
+                    TempData["SuccessMessage"] = "Non-teaching staff updated successfully!";
+                    return RedirectToAction(nameof(Details), new { id = nonTeaching.Id });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error updating non-teaching staff with ID: {id}");
+                    ModelState.AddModelError("", "An error occurred while updating the staff member. Please try again.");
+                }
+            }
+
+            return View("Form", model);
+        }
+
+        // GET: NonTeaching/Delete/5
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Invalid ID");
+                }
+
+                var nonTeaching = _nonTeachingService.GetById(id);
+                if (nonTeaching == null)
+                {
+                    return NotFound();
+                }
+
+                return View(nonTeaching);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving non-teaching staff for delete with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the staff details for deletion.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // POST: NonTeaching/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(Guid id)
+        {
+            try
+            {
+                var nonTeaching = _nonTeachingService.GetById(id);
+                if (nonTeaching == null)
+                {
+                    return NotFound();
+                }
+
+                _nonTeachingService.Delete(id);
+                TempData["SuccessMessage"] = "Non-teaching staff deleted successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting non-teaching staff with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while deleting the staff member.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+        }
+
+        // GET: NonTeaching/Documents/5
+        public IActionResult Documents(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest("Invalid ID");
+                }
+
+                var nonTeaching = _nonTeachingService.GetById(id);
+                if (nonTeaching == null)
+                {
+                    return NotFound();
+                }
+
+                var model = MapToNonTeachingViewModel(nonTeaching);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving documents for non-teaching staff with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while retrieving the documents.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // POST: NonTeaching/AddDocument
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDocument(
+            Guid nonTeachingId, 
+            IFormFile documentFile, 
+            string documentType, 
+            string documentNumber, 
+            DateTime issueDate, 
+            DateTime? expiryDate, 
+            string description)
+        {
+            try
+            {
+                // Validate file
+                if (documentFile == null || documentFile.Length == 0)
+                {
+                    ModelState.AddModelError("", "Please select a file to upload.");
+                    return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
+                }
+
+                // Check file size (5MB limit)
+                if (documentFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("", "The file size should not exceed 5MB.");
+                    return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
+                }
+
+                // Validate file extension
+                var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+                var fileExtension = Path.GetExtension(documentFile.FileName).ToLowerInvariant();
                 
-                if (schoolId.HasValue)
+                if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
                 {
-                    list = await _service.GetBySchoolIdAsync(schoolId.Value);
-                }
-                else
-                {
-                    list = await _service.GetAllAsync();
+                    ModelState.AddModelError("", "Only PDF, JPG, JPEG, and PNG files are allowed.");
+                    return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
                 }
 
-                // Apply search filter if search term is provided
-                if (!string.IsNullOrWhiteSpace(searchTerm))
+                // Process the file
+                using (var memoryStream = new MemoryStream())
                 {
-                    var searchTermLower = searchTerm.ToLower();
-                    list = list.Where(x => 
-                        (x.FirstName != null && x.FirstName.ToLower().Contains(searchTermLower)) ||
-                        (x.LastName != null && x.LastName.ToLower().Contains(searchTermLower)) ||
-                        (x.Email != null && x.Email.ToLower().Contains(searchTermLower)) ||
-                        (x.EmployeeCode != null && x.EmployeeCode.ToLower().Contains(searchTermLower)) ||
-                        (x.Designation != null && x.Designation.ToLower().Contains(searchTermLower))
-                    );
+                    await documentFile.CopyToAsync(memoryStream).ConfigureAwait(false);
+                    
+                    var document = new NonTeachingDocumentDetails
+                    {
+                        Id = Guid.NewGuid(),
+                        NonTeachingId = nonTeachingId,
+                        DocumentType = documentType,
+                        DocumentNumber = documentNumber,
+                        IssueDate = issueDate,
+                        ExpiryDate = expiryDate,
+                        Description = description,
+                        FileName = documentFile.FileName,
+                        FileType = fileExtension,
+                        FileContent = memoryStream.ToArray(),
+                        CreatedDate = DateTime.UtcNow,
+                        IsActive = true
+                        // Add other required properties
+                    };
+
+                    // Save the document using your service
+                    _documentService.Add(document);
                 }
 
-                // Apply pagination
-                var totalItems = list.Count();
-                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-                var paginatedList = list
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
+                TempData["SuccessMessage"] = "Document uploaded successfully!";
+                return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error uploading document for non-teaching staff ID: {nonTeachingId}");
+                ModelState.AddModelError("", "An error occurred while uploading the document. Please try again.");
+                return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
+            }
+        }
 
-                var viewModelList = paginatedList.Select(item => new NonTeachingListItemViewModel
+        // POST: NonTeaching/DeleteDocument/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteDocument(Guid id, Guid nonTeachingId)
+        {
+            try
+            {
+                _documentService.Delete(id);
+                TempData["SuccessMessage"] = "Document deleted successfully!";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting document with ID: {id}");
+                TempData["ErrorMessage"] = "An error occurred while deleting the document.";
+            }
+
+            return RedirectToAction(nameof(Documents), new { id = nonTeachingId });
+        }
+
+        #region Helper Methods
+
+        private NonTeachingMaster MapToNonTeachingMaster(NonTeachingViewModel model)
+        {
+            if (model == null) return null;
+
+            var nonTeachingMaster = new NonTeachingMaster
+            {
+                // Basic Information
+                Id = model.Id,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Phone = model.Phone,
+                MobilePhone = model.MobilePhone,
+                EmployeeCode = model.EmployeeCode,
+                Designation = model.Designation,
+                Department = model.Department,
+        
+                // Personal Details
+                DOB = model.DOB,
+                Gender = model.Gender,
+                MaritalStatusId = model.MaritalStatusId,
+        
+                // Address Information
+                Address = model.Address,
+                CityId = model.CityId,
+                StateId = model.StateId,
+                CountryId = model.CountryId,
+                ZipCode = model.ZipCode,
+        
+                // Employment Details
+                DOJ = model.DOJ,
+                DateOfLeaving = model.DateOfLeaving,
+                Salary = model.Salary,
+        
+                // Financial Information
+                BankAccountNumber = model.BankAccountNumber,
+                BankName = model.BankName,
+                IFSCCode = model.IFSCCode,
+                PAN = model.PAN,
+                AadharNumber = model.AadharNumber,
+        
+                // Emergency Contact
+                EmergencyContactName = model.EmergencyContactName,
+                EmergencyContactNumber = model.EmergencyContactNumber,
+                EmergencyContactRelation = model.EmergencyContactRelation,
+        
+                // System Fields
+                IsActive = model.IsActive,
+                IsDeleted = model.IsDeleted,
+                CompanyId = model.CompanyId,
+                SchoolId = model.SchoolId,
+                CreatedBy = model.CreatedBy,
+                CreatedDate = model.CreatedDate,
+                ModifiedBy = model.ModifiedBy,
+                ModifiedDate = model.ModifiedDate,
+                ModifiedOn = model.ModifiedDate,
+        
+                // Image
+                Image = model.Image,
+                Qualification = model.Qualification
+            };
+
+            // Map Documents if they exist
+            if (model.Documents != null)
+            {
+                nonTeachingMaster.Documents = model.Documents.Select(d => new NonTeachingDocumentDetails
                 {
-                    Id = item.Id,
-                    Name = $"{item.FirstName} {item.MiddleName} {item.LastName}".Trim(),
-                    Email = item.Email ?? string.Empty,
-                    Phone = item.Phone ?? item.MobilePhone ?? string.Empty,
-                    Designation = item.Designation ?? string.Empty,
-                    Department = item.Department ?? string.Empty,
-                    IsActive = item.IsActive,
-                    EmployeeCode = item.EmployeeCode ?? string.Empty,
-                    DOJ = item.DOJ,
-                    DateOfLeaving = item.DateOfLeaving
+                    Id = d.Id,
+                    NonTeachingId = model.Id,
+                    DocumentType = d.DocumentType,
+                    DocumentTypeId = d.DocumentTypeId,
+                    DocumentNumber = d.DocumentNumber,
+                    DocumentPath = d.DocumentPath,
+                    IssueDate = d.IssueDate,
+                    ExpiryDate = d.ExpiryDate,
+                    Remarks = d.Remarks,
+                    IsVerified = d.IsVerified,
+                    VerifiedBy = d.VerifiedBy,
+                    VerifiedOn = d.VerifiedOn,
+                    FileContent = d.FileContent,
+                    FileType = d.FileType,
+                    FileName = d.FileName,
+                    Description = d.Description,
+                    IsActive = d.IsActive,
+                    CreatedBy = d.CreatedBy,
+                    CreatedDate = d.CreatedDate,
+                    ModifiedBy = d.ModifiedBy,
+                    ModifiedDate = d.ModifiedDate
                 }).ToList();
-
-                ViewBag.CurrentPage = page;
-                ViewBag.TotalPages = totalPages;
-                ViewBag.PageSize = pageSize;
-                ViewBag.TotalItems = totalItems;
-                ViewBag.SearchTerm = searchTerm;
-
-                return View(viewModelList);
             }
-            catch (Exception ex)
+
+            // Map Qualifications if they exist
+            if (model.Qualifications != null)
             {
-                _logger.LogError(ex, "Error in NonTeaching/Index");
-                TempData["ErrorMessage"] = "An error occurred while retrieving non-teaching staff list.";
-                return View(new List<NonTeachingListItemViewModel>());
+                nonTeachingMaster.Qualifications = model.Qualifications.Select(q => new NonTeachingQualificationDetails
+                {
+                    Id = q.Id,
+                    NonTeachingId = model.Id,
+                    Qualification = q.Qualification,
+                    QualificationTypeId = q.QualificationTypeId,
+                    Institution = q.Institution,
+                    BoardUniversity = q.BoardUniversity,
+                    YearOfPassing = q.YearOfPassing,
+                    Percentage = q.Percentage,
+                    Division = q.Division,
+                    DocumentPath = q.DocumentPath,
+                    IsVerified = q.IsVerified,
+                    VerifiedBy = q.VerifiedBy,
+                    VerifiedOn = q.VerifiedOn,
+                    Remarks = q.Remarks,
+                    IsActive = q.IsActive,
+                    CreatedBy = q.CreatedBy,
+                    CreatedDate = q.CreatedDate,
+                    ModifiedBy = q.ModifiedBy,
+                    ModifiedDate = q.ModifiedDate
+                }).ToList();
             }
+
+            return nonTeachingMaster;
         }
 
-        [HttpGet]
-        [Route("Create")]
-        public async Task<IActionResult> Create()
+        private NonTeachingViewModel MapToNonTeachingViewModel(NonTeachingMaster entity)
         {
-            try
+            // Return an empty view model when input is null to ensure all code paths return a value
+            if (entity == null)
+                return new NonTeachingViewModel();
+
+            var viewModel = new NonTeachingViewModel
             {
-                await PopulateDropdowns();
-                return View(new NonTeachingMaster());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in NonTeaching/Create[GET]");
-                TempData["ErrorMessage"] = "An error occurred while loading the create form.";
-                return RedirectToAction(nameof(Index));
-            }
+                Id = entity.Id,
+                FirstName = entity.FirstName,
+                MiddleName = entity.MiddleName,
+                LastName = entity.LastName,
+                Email = entity.Email,
+                Phone = entity.Phone,
+                MobilePhone = entity.MobilePhone,
+                Designation = entity.Designation,
+                Department = entity.Department,
+                IsActive = entity.IsActive,
+                IsDeleted = entity.IsDeleted,
+                EmployeeCode = entity.EmployeeCode,
+                DOB = entity.DOB,
+                DOJ = entity.DOJ,
+                DateOfLeaving = entity.DateOfLeaving,
+                Address = entity.Address,
+                CityId = entity.CityId ?? Guid.Empty,
+                StateId = entity.StateId ?? Guid.Empty,
+                CountryId = entity.CountryId ?? Guid.Empty,
+                ZipCode = entity.ZipCode,
+                Gender = entity.Gender,
+                MaritalStatusId = entity.MaritalStatusId ?? Guid.Empty,
+                Image = entity.Image,
+                Qualification = entity.Qualification,
+                Salary = entity.Salary,
+                BankAccountNumber = entity.BankAccountNumber,
+                BankName = entity.BankName,
+                IFSCCode = entity.IFSCCode,
+                PAN = entity.PAN,
+                AadharNumber = entity.AadharNumber,
+                EmergencyContactName = entity.EmergencyContactName,
+                EmergencyContactNumber = entity.EmergencyContactNumber,
+                EmergencyContactRelation = entity.EmergencyContactRelation,
+                CompanyId = entity.CompanyId,
+                SchoolId = entity.SchoolId,
+                CreatedBy = entity.CreatedBy,
+                CreatedDate = entity.CreatedDate,
+                ModifiedBy = entity.ModifiedBy,
+                ModifiedDate = entity.ModifiedDate,
+                // Map documents safely: project if not null otherwise use empty list to avoid null assignment
+                Documents = entity.Documents?.Select(d => new NonTeachingDocumentDetails
+                {
+                    Id = d.Id,
+                    NonTeachingId = entity.Id,
+                    DocumentType = d.DocumentType,
+                    DocumentTypeId = d.DocumentTypeId,
+                    DocumentNumber = d.DocumentNumber,
+                    DocumentPath = d.DocumentPath,
+                    IssueDate = d.IssueDate,
+                    ExpiryDate = d.ExpiryDate,
+                    Remarks = d.Remarks,
+                    IsVerified = d.IsVerified,
+                    VerifiedBy = d.VerifiedBy,
+                    VerifiedOn = d.VerifiedOn,
+                    FileContent = d.FileContent,
+                    FileType = d.FileType,
+                    FileName = d.FileName,
+                    Description = d.Description,
+                    IsActive = d.IsActive,
+                    CreatedBy = d.CreatedBy,
+                    CreatedDate = d.CreatedDate,
+                    ModifiedBy = d.ModifiedBy,
+                    ModifiedDate = d.ModifiedDate
+                }).ToList() ?? new List<NonTeachingDocumentDetails>(),
+
+                // Map qualifications safely: project if not null otherwise use empty list
+                Qualifications = entity.Qualifications?.Select(q => new NonTeachingQualificationDetails
+                {
+                    Id = q.Id,
+                    NonTeachingId = entity.Id,
+                    Qualification = q.Qualification,
+                    QualificationTypeId = q.QualificationTypeId,
+                    Institution = q.Institution,
+                    BoardUniversity = q.BoardUniversity,
+                    YearOfPassing = q.YearOfPassing,
+                    Percentage = q.Percentage,
+                    Division = q.Division,
+                    DocumentPath = q.DocumentPath,
+                    IsVerified = q.IsVerified,
+                    VerifiedBy = q.VerifiedBy,
+                    VerifiedOn = q.VerifiedOn,
+                    Remarks = q.Remarks,
+                    IsActive = q.IsActive,
+                    CreatedBy = q.CreatedBy,
+                    CreatedDate = q.CreatedDate,
+                    ModifiedBy = q.ModifiedBy,
+                    ModifiedDate = q.ModifiedDate
+                }).ToList() ?? new List<NonTeachingQualificationDetails>()
+            };
+
+            return viewModel;
         }
 
-        [HttpPost]
-        [Route("Create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NonTeachingMaster model)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    await PopulateDropdowns();
-                    return View(model);
-                }
-
-                model.Id = Guid.NewGuid();
-                model.CompanyId = CurrentCompanyId;
-                model.SchoolId = CurrentSchoolId ?? Guid.Empty;
-                model.CreatedBy = CurrentUserId;
-                model.CreatedDate = DateTime.UtcNow;
-                model.IsActive = true;
-
-                var result = await _service.AddAsync(model);
-
-                if (result > 0)
-                {
-                    TempData["SuccessMessage"] = "Non-teaching staff created successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                TempData["ErrorMessage"] = "Failed to create non-teaching staff.";
-                await PopulateDropdowns();
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in NonTeaching/Create[POST]");
-                TempData["ErrorMessage"] = "An error occurred while creating non-teaching staff.";
-                await PopulateDropdowns();
-                return View(model);
-            }
-        }
-
-        [HttpGet]
-        [Route("Edit/{id}")]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            try
-            {
-                var model = await _service.GetByIdAsync(id);
-                if (model == null)
-                {
-                    return NotFound();
-                }
-
-                await PopulateDropdowns();
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeaching/Edit[GET] for ID: {id}");
-                TempData["ErrorMessage"] = "An error occurred while loading the edit form.";
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpPost]
-        [Route("Edit/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, NonTeachingMaster model)
-        {
-            try
-            {
-                if (id != model.Id)
-                {
-                    return NotFound();
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    await PopulateDropdowns();
-                    return View(model);
-                }
-
-                var existing = await _service.GetByIdAsync(id);
-                if (existing == null)
-                {
-                    return NotFound();
-                }
-
-                // Update properties
-                existing.FirstName = model.FirstName;
-                existing.MiddleName = model.MiddleName;
-                existing.LastName = model.LastName;
-                existing.DOB = model.DOB;
-                existing.DOJ = model.DOJ;
-                existing.DateOfLeaving = model.DateOfLeaving;
-                existing.Address = model.Address;
-                existing.CityId = model.CityId;
-                existing.StateId = model.StateId;
-                existing.CountryId = model.CountryId;
-                existing.ZipCode = model.ZipCode;
-                existing.Gender = model.Gender;
-                existing.MaritalStatusId = model.MaritalStatusId;
-                existing.Phone = model.Phone;
-                existing.MobilePhone = model.MobilePhone;
-                existing.Email = model.Email;
-                existing.EmployeeCode = model.EmployeeCode;
-                existing.Designation = model.Designation;
-                existing.Department = model.Department;
-                existing.Qualification = model.Qualification;
-                existing.Salary = model.Salary;
-                existing.BankAccountNumber = model.BankAccountNumber;
-                existing.BankName = model.BankName;
-                existing.IFSCCode = model.IFSCCode;
-                existing.PAN = model.PAN;
-                existing.AadharNumber = model.AadharNumber;
-                existing.EmergencyContactName = model.EmergencyContactName;
-                existing.EmergencyContactNumber = model.EmergencyContactNumber;
-                existing.EmergencyContactRelation = model.EmergencyContactRelation;
-                existing.IsActive = model.IsActive;
-                existing.ModifiedBy = CurrentUserId;
-                existing.ModifiedDate = DateTime.UtcNow;
-
-                var result = await _service.UpdateAsync(existing);
-
-                if (result)
-                {
-                    TempData["SuccessMessage"] = "Non-teaching staff updated successfully.";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                TempData["ErrorMessage"] = "Failed to update non-teaching staff.";
-                await PopulateDropdowns();
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeaching/Edit[POST] for ID: {id}");
-                TempData["ErrorMessage"] = "An error occurred while updating non-teaching staff.";
-                await PopulateDropdowns();
-                return View(model);
-            }
-        }
-
-        [HttpGet]
-        [Route("Details/{id}")]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            try
-            {
-                var model = await _service.GetByIdAsync(id);
-                if (model == null)
-                {
-                    return NotFound();
-                }
-
-                var viewModel = new NonTeachingDetailsViewModel
-                {
-                    Id = model.Id,
-                    Name = $"{model.FirstName} {model.MiddleName} {model.LastName}".Trim(),
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    MobilePhone = model.MobilePhone,
-                    EmployeeCode = model.EmployeeCode,
-                    Designation = model.Designation,
-                    Department = model.Department,
-                    DOB = model.DOB?.ToString("dd/MM/yyyy"),
-                    DOJ = model.DOJ?.ToString("dd/MM/yyyy"),
-                    DateOfLeaving = model.DateOfLeaving?.ToString("dd/MM/yyyy"),
-                    Address = model.Address,
-                    Gender = model.GenderLookup?.Name,
-                    MaritalStatus = model.MaritalStatus?.Name,
-                    Qualification = model.Qualification,
-                    Salary = model.Salary,
-                    BankName = model.BankName,
-                    BankAccountNumber = model.BankAccountNumber,
-                    IFSCCode = model.IFSCCode,
-                    PAN = model.PAN,
-                    AadharNumber = model.AadharNumber,
-                    EmergencyContactName = model.EmergencyContactName,
-                    EmergencyContactNumber = model.EmergencyContactNumber,
-                    EmergencyContactRelation = model.EmergencyContactRelation,
-                    IsActive = model.IsActive
-                };
-
-                return View(viewModel);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeaching/Details for ID: {id}");
-                TempData["ErrorMessage"] = "An error occurred while retrieving non-teaching staff details.";
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpPost]
-        [Route("Delete/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            try
-            {
-                var result = await _service.DeleteAsync(id, CurrentUserId);
-                if (result)
-                {
-                    TempData["SuccessMessage"] = "Non-teaching staff deleted successfully.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Failed to delete non-teaching staff or record not found.";
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error in NonTeaching/Delete for ID: {id}");
-                TempData["ErrorMessage"] = "An error occurred while deleting non-teaching staff.";
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        private async Task PopulateDropdowns()
-        {
-            try
-            {
-                var genders = await _lookupService.GetGendersAsync();
-                var maritalStatuses = await _lookupService.GetMaritalStatusesAsync();
-                var countries = await _lookupService.GetCountriesAsync();
-                var states = new List<Lookup>();
-                var cities = new List<Lookup>();
-
-                ViewBag.GenderList = new SelectList(genders, "Id", "Name");
-                ViewBag.MaritalStatusList = new SelectList(maritalStatuses, "Id", "Name");
-                ViewBag.CountryList = new SelectList(countries, "Id", "Name");
-                ViewBag.StateList = new SelectList(states, "Id", "Name");
-                ViewBag.CityList = new SelectList(cities, "Id", "Name");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error populating dropdowns");
-                // Initialize empty select lists in case of error
-                ViewBag.GenderList = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.MaritalStatusList = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.CountryList = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.StateList = new SelectList(Enumerable.Empty<SelectListItem>());
-                ViewBag.CityList = new SelectList(Enumerable.Empty<SelectListItem>());
-            }
-        }
-
-        [HttpGet]
-        [Route("GetStatesByCountry/{countryId}")]
-        public async Task<IActionResult> GetStatesByCountry(Guid countryId)
-        {
-            try
-            {
-                var states = await _lookupService.GetStatesByCountryAsync(countryId);
-                return Json(states.Select(s => new { Id = s.Id, Name = s.Name }));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error getting states for country ID: {countryId}");
-                return Json(new List<object>());
-            }
-        }
-
-        [HttpGet]
-        [Route("GetCitiesByState/{stateId}")]
-        public async Task<IActionResult> GetCitiesByState(Guid stateId)
-        {
-            try
-            {
-                var cities = await _lookupService.GetCitiesByStateAsync(stateId);
-                return Json(cities.Select(c => new { Id = c.Id, Name = c.Name }));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error getting cities for state ID: {stateId}");
-                return Json(new List<object>());
-            }
-        }
-
-        [HttpGet]
-        [Route("ExportToExcel")]
-        public async Task<IActionResult> ExportToExcel()
-        {
-            try
-            {
-                var schoolId = CurrentSchoolId;
-                List<NonTeachingMaster> data;
-
-                if (schoolId.HasValue)
-                {
-                    data = await _service.GetBySchoolIdAsync(schoolId.Value);
-                }
-                else
-                {
-                    data = await _service.GetAllAsync();
-                }
-
-                using (var workbook = new XLWorkbook())
-                {
-                    var worksheet = workbook.Worksheets.Add("NonTeachingStaff");
-                    var currentRow = 1;
-
-                    // Header
-                    worksheet.Cell(currentRow, 1).Value = "Employee Code";
-                    worksheet.Cell(currentRow, 2).Value = "Name";
-                    worksheet.Cell(currentRow, 3).Value = "Designation";
-                    worksheet.Cell(currentRow, 4).Value = "Department";
-                    worksheet.Cell(currentRow, 5).Value = "Email";
-                    worksheet.Cell(currentRow, 6).Value = "Phone";
-                    worksheet.Cell(currentRow, 7).Value = "Mobile";
-                    worksheet.Cell(currentRow, 8).Value = "Status";
-
-                    // Style header
-                    var headerRange = worksheet.Range(1, 1, 1, 8);
-                    headerRange.Style.Font.Bold = true;
-                    headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
-
-                    // Data
-                    foreach (var item in data)
-                    {
-                        currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.EmployeeCode;
-                        worksheet.Cell(currentRow, 2).Value = $"{item.FirstName} {item.MiddleName} {item.LastName}".Trim();
-                        worksheet.Cell(currentRow, 3).Value = item.Designation;
-                        worksheet.Cell(currentRow, 4).Value = item.Department;
-                        worksheet.Cell(currentRow, 5).Value = item.Email;
-                        worksheet.Cell(currentRow, 6).Value = item.Phone;
-                        worksheet.Cell(currentRow, 7).Value = item.MobilePhone;
-                        worksheet.Cell(currentRow, 8).Value = item.IsActive ? "Active" : "Inactive";
-                    }
-
-                    // Auto-fit columns
-                    worksheet.Columns().AdjustToContents();
-
-                    using (var stream = new MemoryStream())
-                    {
-                        workbook.SaveAs(stream);
-                        var content = stream.ToArray();
-                        return File(
-                            content,
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            $"NonTeachingStaff_{DateTime.Now:yyyyMMddHHmmss}.xlsx");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error exporting non-teaching staff to Excel");
-                TempData["ErrorMessage"] = "An error occurred while exporting data to Excel.";
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-        [HttpPost]
-        [Route("ToggleStatus/{id}")]
-        public async Task<IActionResult> ToggleStatus(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return Json(new { success = false, error = "Invalid staff ID" });
-            }
-
-            try
-            {
-                var result = await _service.ToggleStatusAsync(id, CurrentUserId);
-                if (!result)
-                {
-                    return Json(new { success = false, error = "Failed to update status. Staff member not found." });
-                }
-                
-                return Json(new { 
-                    success = true, 
-                    message = "Status updated successfully" 
-                });
-            }
-            catch (ApplicationException ex)
-            {
-                _logger.LogError(ex, $"Application error toggling status for non-teaching staff ID: {id}");
-                return Json(new { 
-                    success = false, 
-                    error = ex.Message 
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected error toggling status for non-teaching staff ID: {id}");
-                return Json(new { 
-                    success = false, 
-                    error = "An unexpected error occurred while updating status. Please try again later." 
-                });
-            }
-        }
+        #endregion
     }
 }

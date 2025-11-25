@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using SchoolPortal.Services.Common;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolPortal.DBAccess;
+using SchoolPortal.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,6 +105,7 @@ builder.Services.AddScoped<IRoleMasterService, SchoolPortal.Services.RoleMasterS
 builder.Services.AddScoped<IPrivilegeService, SchoolPortal.Services.PrivilegeService>();
 builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePrivilegeService>();
 builder.Services.AddScoped<IHolidayMasterService, SchoolPortal.Services.HolidayMasterService>();
+builder.Services.AddScoped<IHolidayTypeMasterService, SchoolPortal.Services.HolidayTypeMasterService>();
 builder.Services.AddScoped<IEmpTypeService, SchoolPortal.Services.EmpTypeService>();
 builder.Services.AddScoped<IVisitorService, SchoolPortal.Services.VisitorService>();
 builder.Services.AddScoped<ICleanerMasterService, SchoolPortal.Services.CleanerMasterService>();
@@ -121,14 +123,17 @@ builder.Services.AddScoped<IBookCategoryService, SchoolPortal.Services.BookCateg
 builder.Services.AddScoped<IBookTypeService, SchoolPortal.Services.BookTypeService>();
 builder.Services.AddScoped<IItemTypeService, SchoolPortal.Services.ItemTypeService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
-builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IInventoryService, SchoolPortal.Services.InventoryService>();
 builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetailsService>();
 builder.Services.AddScoped<IFeesCategoryMasterService, SchoolPortal.Services.FeesCategoryMasterService>();
 builder.Services.AddScoped<IAssesmentMasterService, SchoolPortal.Services.AssesmentMasterService>();
+builder.Services.AddScoped<IAttendanceReasonMasterService, SchoolPortal.Services.AttendanceReasonMasterService>();
 builder.Services.AddScoped<ITimeTablePeriodMasterService, SchoolPortal.Services.TimeTablePeriodMasterService>();
 builder.Services.AddScoped<ITimeTableSetupDetailsService, SchoolPortal.Services.TimeTableSetupDetailsService>();
 builder.Services.AddScoped<ISessionMasterService, SchoolPortal.Services.SessionMasterService>();
+builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
+builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
+builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
 
 var app = builder.Build();
 

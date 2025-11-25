@@ -7,6 +7,8 @@ namespace SchoolPortal.Entities.Models
     [Table("NonTeachingQualificationDetails")]
     public class NonTeachingQualificationDetails
     {
+        public object QualificationType;
+
         [Key]
         public Guid Id { get; set; }
         
@@ -27,23 +29,22 @@ namespace SchoolPortal.Entities.Models
         [StringLength(20)]
         public string YearOfPassing { get; set; }
         
-        [StringLength(10)]
-        public string Percentage { get; set; }
+        public decimal Percentage { get; set; }
 
         public string Division { get; set; }
         public string DocumentPath { get; set; }
 
         public bool IsVerified { get; set; }
-        public string VerifiedBy { get; set; }
+        public Guid VerifiedBy { get; set; }
 
         public DateTime VerifiedOn { get; set; }
         [StringLength(500)]
         public string Remarks { get; set; }
         
         public bool IsActive { get; set; } = true;
-        public string CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string ModifiedBy { get; set; }
+        public Guid ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         
         [ForeignKey("NonTeachingId")]

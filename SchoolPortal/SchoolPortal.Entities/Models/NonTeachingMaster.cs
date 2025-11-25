@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -49,9 +50,9 @@ namespace SchoolPortal.Entities.Models
         [StringLength(500)]
         public string Address { get; set; }
         
-        public int? CityId { get; set; }
-        public int? StateId { get; set; }
-        public int? CountryId { get; set; }
+        public Guid? CityId { get; set; }
+        public Guid? StateId { get; set; }
+        public Guid? CountryId { get; set; }
         
         [StringLength(20)]
         public string ZipCode { get; set; }
@@ -59,10 +60,10 @@ namespace SchoolPortal.Entities.Models
         [StringLength(10)]
         public string Gender { get; set; }
         
-        public int? MaritalStatusId { get; set; }
+        public Guid? MaritalStatusId { get; set; }
         
         [StringLength(500)]
-        public string Image { get; set; }
+        public byte[] Image { get; set; }
         
         [StringLength(200)]
         public string Qualification { get; set; }
@@ -96,13 +97,20 @@ namespace SchoolPortal.Entities.Models
 
         public Guid CompanyId { get; set; }
         public Guid SchoolId { get; set; }
-        public string CreatedBy { get; set; }
+
+        public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+
+         [Required]
+        public bool IsDeleted { get; set; } = false;
+
 
         // Navigation properties
-        public virtual ICollection<NonTeachingDocumentDetails> Documents { get; set; }
-        public virtual ICollection<NonTeachingQualificationDetails> Qualifications { get; set; }
+        public virtual List<NonTeachingDocumentDetails> Documents { get; set; } = new List<NonTeachingDocumentDetails>();
+        public virtual List<NonTeachingQualificationDetails> Qualifications { get; set; } = new List<NonTeachingQualificationDetails>();
+
     }
 }

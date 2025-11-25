@@ -1,212 +1,129 @@
-@* SchoolPortalApp/Views/NonTeaching/Details.cshtml *@
-@model SchoolPortalApp.Models.NonTeachingDetailsViewModel
+@* SchoolPortal.Web/Views/NonTeaching/Details.cshtml *@
+@model SchoolPortal.Entities.Models.NonTeachingMaster
 
 @{
-    ViewData["Title"] = "Non-Teaching Staff Details";
+    ViewData["Title"] = "Staff Details";
 }
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">@ViewData["Title"]</h3>
-        <div class="card-tools">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
-                <i class="fas fa-edit"></i> Edit
-            </a>
-            <a asp-action="Index" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4>@ViewData["Title"]</h4>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-3 text-center">
-                @if (!string.IsNullOrEmpty(Model.Image))
+                @if (Model.Image != null)
                 {
-                    <img src="@Model.Image" class="img-thumbnail" style="max-height: 200px;" alt="Profile Photo" />
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Image)" 
+                         class="img-thumbnail mb-3" style="max-width: 200px;" alt="Profile Image" />
                 }
                 else
                 {
-                    <div class="text-center p-5 bg-light">
-                        <i class="fas fa-user-circle fa-5x text-muted"></i>
-                        <p class="mt-2">No photo available</p>
+                    <div class="bg-light p-5 text-center mb-3">
+                        <i class="fas fa-user fa-5x text-muted"></i>
                     </div>
                 }
-                <h4 class="mt-3">@Model.Name</h4>
+                <h4>@($"{Model.FirstName} {Model.LastName}")</h4>
                 <p class="text-muted">@Model.Designation</p>
-                <div class="mt-3">
-                    <span class="badge @(Model.IsActive ? "badge-success" : "badge-danger")">
-                        @(Model.IsActive ? "Active" : "Inactive")
-                    </span>
-                </div>
+                <p>
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </p>
             </div>
             <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs" id="profileTabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab">Personal Info</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab">Contact Info</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="employment-tab" data-toggle="tab" href="#employment" role="tab">Employment</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="bank-tab" data-toggle="tab" href="#bank" role="tab">Bank Details</a>
-                            </li>
-                        </ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Personal Information</h5>
+                        <hr />
+                        <dl class="row">
+                            <dt class="col-sm-4">Employee Code</dt>
+                            <dd class="col-sm-8">@Model.EmployeeCode</dd>
+
+                            <dt class="col-sm-4">Date of Birth</dt>
+                            <dd class="col-sm-8">@Model.DOB.ToString()</dd>
+
+                            <dt class="col-sm-4">Gender</dt>
+                            <dd class="col-sm-8">@Model.Gender</dd>
+
+                            <dt class="col-sm-4">Email</dt>
+                            <dd class="col-sm-8">@Model.Email</dd>
+
+                            <dt class="col-sm-4">Phone</dt>
+                            <dd class="col-sm-8">@Model.Phone</dd>
+
+                            <dt class="col-sm-4">Mobile</dt>
+                            <dd class="col-sm-8">@Model.MobilePhone</dd>
+                        </dl>
                     </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="profileTabsContent">
-                            <!-- Personal Info Tab -->
-                            <div class="tab-pane fade show active" id="personal" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <dl class="row">
-                                            <dt class="col-sm-4">Employee Code</dt>
-                                            <dd class="col-sm-8">@Model.EmployeeCode</dd>
+                    <div class="col-md-6">
+                        <h5>Employment Details</h5>
+                        <hr />
+                        <dl class="row">
+                            <dt class="col-sm-4">Department</dt>
+                            <dd class="col-sm-8">@Model.Department</dd>
 
-                                            <dt class="col-sm-4">Date of Birth</dt>
-                                            <dd class="col-sm-8">@Model.DOB</dd>
+                            <dt class="col-sm-4">Date of Joining</dt>
+                            <dd class="col-sm-8">@Model.DOJ.ToString()</dd>
 
-                                            <dt class="col-sm-4">Gender</dt>
-                                            <dd class="col-sm-8">@Model.Gender</dd>
+                            <dt class="col-sm-4">Date of Leaving</dt>
+                            <dd class="col-sm-8">@(Model.DateOfLeaving?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
 
-                                            <dt class="col-sm-4">Marital Status</dt>
-                                            <dd class="col-sm-8">@Model.MaritalStatus</dd>
-                                        </dl>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <dl class="row">
-                                            <dt class="col-sm-4">Aadhar Number</dt>
-                                            <dd class="col-sm-8">@Model.AadharNumber</dd>
+                            <dt class="col-sm-4">Qualification</dt>
+                            <dd class="col-sm-8">@Model.Qualification</dd>
 
-                                            <dt class="col-sm-4">PAN Number</dt>
-                                            <dd class="col-sm-8">@Model.PAN</dd>
-                                        </dl>
-                                    </div>
-                                </div>
+                            <dt class="col-sm-4">Salary</dt>
+                            <dd class="col-sm-8">@(Model.Salary?.ToString("C") ?? "N/A")</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5>Documents</h5>
+                        <hr />
+                        @if (Model.Documents != null && Model.Documents.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Document Type</th>
+                                            <th>Document Number</th>
+                                            <th>Issue Date</th>
+                                            <th>Expiry Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var doc in Model.Documents)
+                                        {
+                                            <tr>
+                                                <td>@doc.DocumentType</td>
+                                                <td>@doc.DocumentNumber</td>
+                                                <td>@doc.IssueDate.ToString()</td>
+                                                <td>@doc.ExpiryDate?.ToString()</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-
-                            <!-- Contact Info Tab -->
-                            <div class="tab-pane fade" id="contact" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h5>Address</h5>
-                                        <p>@Model.Address</p>
-                                        <p>
-                                            @if (!string.IsNullOrEmpty(Model.City))
-                                            {
-                                                @Model.City@:,
-                                            }
-                                            @if (!string.IsNullOrEmpty(Model.State))
-                                            {
-                                                @Model.State@:,
-                                            }
-                                            @if (!string.IsNullOrEmpty(Model.Country))
-                                            {
-                                                @Model.Country
-                                            }
-                                            @if (!string.IsNullOrEmpty(Model.ZipCode))
-                                            {
-                                                <br />@Model.ZipCode
-                                            }
-                                        </p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5>Contact Information</h5>
-                                        <dl>
-                                            <dt>Email</dt>
-                                            <dd>@Model.Email</dd>
-
-                                            <dt>Phone</dt>
-                                            <dd>@Model.Phone</dd>
-
-                                            <dt>Mobile</dt>
-                                            <dd>@Model.MobilePhone</dd>
-                                        </dl>
-
-                                        <h5 class="mt-4">Emergency Contact</h5>
-                                        <dl>
-                                            <dt>Name</dt>
-                                            <dd>@Model.EmergencyContactName</dd>
-
-                                            <dt>Relation</dt>
-                                            <dd>@Model.EmergencyContactRelation</dd>
-
-                                            <dt>Contact Number</dt>
-                                            <dd>@Model.EmergencyContactNumber</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Employment Tab -->
-                            <div class="tab-pane fade" id="employment" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h5>Current Employment</h5>
-                                        <dl class="row">
-                                            <dt class="col-sm-4">Designation</dt>
-                                            <dd class="col-sm-8">@Model.Designation</dd>
-
-                                            <dt class="col-sm-4">Department</dt>
-                                            <dd class="col-sm-8">@Model.Department</dd>
-
-                                            <dt class="col-sm-4">Date of Joining</dt>
-                                            <dd class="col-sm-8">@Model.DOJ</dd>
-
-                                            <dt class="col-sm-4">Date of Leaving</dt>
-                                            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.DateOfLeaving) ? "Currently Working" : Model.DateOfLeaving)</dd>
-                                        </dl>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5>Qualification</h5>
-                                        <p>@Model.Qualification</p>
-
-                                        <h5 class="mt-4">Salary</h5>
-                                        <p>@(Model.Salary?.ToString("C") ?? "Not specified")</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Bank Details Tab -->
-                            <div class="tab-pane fade" id="bank" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <dl class="row">
-                                            <dt class="col-sm-4">Bank Name</dt>
-                                            <dd class="col-sm-8">@Model.BankName</dd>
-
-                                            <dt class="col-sm-4">Account Number</dt>
-                                            <dd class="col-sm-8">@Model.BankAccountNumber</dd>
-
-                                            <dt class="col-sm-4">IFSC Code</dt>
-                                            <dd class="col-sm-8">@Model.IFSCCode</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        }
+                        else
+                        {
+                            <p>No documents found.</p>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            // Initialize tabs
-            $('#profileTabs a').on('click', function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
-
-            // Show the first tab by default
-            $('#profileTabs a:first').tab('show');
-        });
-    </script>
-}

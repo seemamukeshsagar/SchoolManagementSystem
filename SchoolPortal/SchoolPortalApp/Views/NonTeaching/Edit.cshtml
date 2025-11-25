@@ -1,62 +1,111 @@
-@* SchoolPortalApp/Views/NonTeaching/Edit.cshtml *@
-@model SchoolPortal.Entities.Models.NonTeachingMaster
+@* SchoolPortal.Web/Views/NonTeaching/Form.cshtml *@
+@model SchoolPortal.Web.Models.NonTeaching.NonTeachingViewModel
 
 @{
-    ViewData["Title"] = "Edit Non-Teaching Staff";
+    ViewData["Title"] = Model.Id == Guid.Empty ? "Add New Staff" : "Edit Staff";
 }
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">@ViewData["Title"]</h3>
+        <h4>@ViewData["Title"]</h4>
     </div>
     <div class="card-body">
-        <form asp-action="Edit" enctype="multipart/form-data" id="nonTeachingForm">
-            @Html.AntiForgeryToken()
+        <form asp-action="@(Model.Id == Guid.Empty ? "Create" : "Edit")" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            
-            @if (ViewData.ModelState.ErrorCount > 0)
-            {
-                <div class="alert alert-danger">
-                    <h5>Please correct the following errors:</h5>
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                </div>
-            }
 
-            <!-- Same form fields as Create.cshtml, but with values populated from the model -->
             <div class="row">
                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="DOB" class="control-label"></label>
+                        <input asp-for="DOB" class="form-control" type="date" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <select asp-for="Gender" class="form-control">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="ImageFile" class="control-label"></label>
+                        <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="MobilePhone" class="control-label"></label>
+                        <input asp-for="MobilePhone" class="form-control" />
+                        <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Designation" class="control-label"></label>
+                        <input asp-for="Designation" class="form-control" />
+                        <span asp-validation-for="Designation" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Department" class="control-label"></label>
+                        <input asp-for="Department" class="form-control" />
+                        <span asp-validation-for="Department" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="EmployeeCode" class="control-label"></label>
                         <input asp-for="EmployeeCode" class="form-control" />
                         <span asp-validation-for="EmployeeCode" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Salutation" class="control-label"></label>
-                        <select asp-for="Salutation" class="form-control">
-                            <option value="">-- Select --</option>
-                            <option value="Mr.">Mr.</option>
-                            <option value="Mrs.">Mrs.</option>
-                            <option value="Ms.">Ms.</option>
-                            <option value="Dr.">Dr.</option>
-                            <option value="Prof.">Prof.</option>
-                        </select>
-                        <span asp-validation-for="Salutation" class="text-danger"></span>
-                    </div>
-                </div>
             </div>
 
-            <!-- Include all other fields from Create.cshtml, but with values populated from the model -->
-            <!-- ... (similar to Create.cshtml but with model values) ... -->
+            <!-- Add more form fields as needed -->
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Update
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to List
-                </a>
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
@@ -64,8 +113,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        // Similar JavaScript as in Create.cshtml for form validation and dynamic dropdowns
-        // ... (same as Create.cshtml) ...
-    </script>
 }

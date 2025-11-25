@@ -1,13 +1,13 @@
-// SchoolPortal.Services/Services/NonTeachingService.cs
+using System;
+using System.Collections.Generic;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using System.Data.Common;
 
 namespace SchoolPortal.Services.Services
 {
@@ -15,562 +15,317 @@ namespace SchoolPortal.Services.Services
     {
         private readonly ILogger<NonTeachingService> _logger;
         private readonly IDbConnection _connection;
+        private readonly INonTeachingDocumentDetailsService _documentService;
+        private readonly INonTeachingQualificationDetailsService _qualificationService;
 
-        public NonTeachingService(ILogger<NonTeachingService> logger, IDbConnection connection)
+        public NonTeachingService(
+            ILogger<NonTeachingService> logger,
+            IDbConnection connection,
+            INonTeachingDocumentDetailsService documentService,
+            INonTeachingQualificationDetailsService qualificationService)
         {
-            _logger = logger;
-            _connection = connection;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
+            _qualificationService = qualificationService ?? throw new ArgumentNullException(nameof(qualificationService));
         }
 
-        public async Task<IEnumerable<NonTeachingMaster>> GetAllAsync()
+        // Implement the interface methods
+        public IEnumerable<NonTeachingMaster> GetAll()
         {
             try
             {
-                using (var p = new Proc("sp_NonTeaching_GetAll"))
+                var nonTeachingList = new List<NonTeachingMaster>();
+                using (var proc = new Proc("sp_NonTeaching_GetAll"))
                 {
-                    var result = await p.ExecAsync<NonTeachingMaster>();
-                    return result ?? new List<NonTeachingMaster>();
+                    var dt = new DataTable();
+                    proc.Exec(dt);
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        nonTeachingList.Add(MapToNonTeaching(row));
+                    }
                 }
+                return nonTeachingList;
             }
             catch (SqlException sqlEx)
             {
-                _logger.LogError(sqlEx, "Database error in NonTeachingService.GetAllAsync");
-                throw new ApplicationException("An error occurred while retrieving non-teaching staff. Please try again.", sqlEx);
+                _logger.LogError(sqlEx, "Database error in NonTeachingService.GetAll");
+                throw new ApplicationException("An error occurred while retrieving non-teaching staff.", sqlEx);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error in NonTeachingService.GetAllAsync");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
+                _logger.LogError(ex, "Unexpected error in NonTeachingService.GetAll");
+                throw new ApplicationException("An unexpected error occurred.", ex);
             }
         }
 
-        public async Task<IEnumerable<NonTeachingMaster>> GetBySchoolIdAsync(Guid schoolId)
-        {
-            if (schoolId == Guid.Empty)
-            {
-                throw new ArgumentException("School ID cannot be empty", nameof(schoolId));
-            }
-
-            try
-            {
-                using (var p = new Proc("sp_NonTeaching_GetBySchoolId"))
-                {
-                    p["@SchoolId"] = schoolId;
-                    var result = await p.ExecAsync<NonTeachingMaster>();
-                    return result ?? new List<NonTeachingMaster>();
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                _logger.LogError(sqlEx, $"Database error in NonTeachingService.GetBySchoolId for SchoolId: {schoolId}");
-                throw new ApplicationException("An error occurred while retrieving non-teaching staff for the school. Please try again.", sqlEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected error in NonTeachingService.GetBySchoolId for SchoolId: {schoolId}");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
-            }
-        }
-
-        public async Task<NonTeachingMaster> GetByIdAsync(Guid id)
+        public NonTeachingMaster GetById(Guid id)
         {
             if (id == Guid.Empty)
-            {
                 throw new ArgumentException("ID cannot be empty", nameof(id));
-            }
 
             try
             {
-                using (var p = new Proc("sp_NonTeaching_GetById"))
-                {
-                    p["@Id"] = id;
-                    var result = await p.ExecAsync<NonTeachingMaster>();
-                    return result?.FirstOrDefault();
-                }
+                Proc p = new Proc("sp_NonTeaching_GetById");
+                p["@Id"] = id;
+                var dt = new DataTable();
+                p.Exec(dt);
+                if (dt.Rows.Count == 0) return null;
+                return MapToNonTeaching(dt.Rows[0]);
             }
-            catch (SqlException sqlEx)
+            catch
             {
-                _logger.LogError(sqlEx, $"Database error in NonTeachingService.GetById for ID: {id}");
-                throw new ApplicationException("An error occurred while retrieving the non-teaching staff details. Please try again.", sqlEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected error in NonTeachingService.GetById for ID: {id}");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
+                return null;
             }
         }
 
-        public async Task<int> AddAsync(NonTeachingMaster entity)
+        public int Add(NonTeachingMaster entity)
         {
             if (entity == null)
-            {
                 throw new ArgumentNullException(nameof(entity));
-            }
 
             ValidateNonTeachingEntity(entity);
 
-            try
+            using (var transaction = _connection.BeginTransaction())
             {
-                using (var p = new Proc("sp_NonTeaching_Insert"))
+                try
                 {
-                    p["@Id"] = entity.Id;
-                    p["@FirstName"] = entity.FirstName;
-                    p["@MiddleName"] = entity.MiddleName ?? (object)DBNull.Value;
-                    p["@LastName"] = entity.LastName;
-                    p["@DOB"] = entity.DOB;
-                    p["@DOJ"] = entity.DOJ;
-                    p["@DateOfLeaving"] = entity.DateOfLeaving ?? (object)DBNull.Value;
-                    p["@Address"] = entity.Address ?? (object)DBNull.Value;
-                    p["@CityId"] = entity.CityId ?? (object)DBNull.Value;
-                    p["@StateId"] = entity.StateId ?? (object)DBNull.Value;
-                    p["@CountryId"] = entity.CountryId ?? (object)DBNull.Value;
-                    p["@ZipCode"] = entity.ZipCode ?? (object)DBNull.Value;
-                    p["@Gender"] = entity.Gender ?? (object)DBNull.Value;
-                    p["@MaritalStatusId"] = entity.MaritalStatusId ?? (object)DBNull.Value;
-                    p["@Image"] = entity.Image ?? (object)DBNull.Value;
-                    p["@Phone"] = entity.Phone ?? (object)DBNull.Value;
-                    p["@MobilePhone"] = entity.MobilePhone ?? (object)DBNull.Value;
-                    p["@Email"] = entity.Email ?? (object)DBNull.Value;
-                    p["@EmployeeCode"] = entity.EmployeeCode ?? (object)DBNull.Value;
-                    p["@Designation"] = entity.Designation ?? (object)DBNull.Value;
-                    p["@Department"] = entity.Department ?? (object)DBNull.Value;
-                    p["@Qualification"] = entity.Qualification ?? (object)DBNull.Value;
-                    p["@Salary"] = entity.Salary ?? (object)DBNull.Value;
-                    p["@BankAccountNumber"] = entity.BankAccountNumber ?? (object)DBNull.Value;
-                    p["@BankName"] = entity.BankName ?? (object)DBNull.Value;
-                    p["@IFSCCode"] = entity.IFSCCode ?? (object)DBNull.Value;
-                    p["@PAN"] = entity.PAN ?? (object)DBNull.Value;
-                    p["@AadharNumber"] = entity.AadharNumber ?? (object)DBNull.Value;
-                    p["@EmergencyContactName"] = entity.EmergencyContactName ?? (object)DBNull.Value;
-                    p["@EmergencyContactNumber"] = entity.EmergencyContactNumber ?? (object)DBNull.Value;
-                    p["@EmergencyContactRelation"] = entity.EmergencyContactRelation ?? (object)DBNull.Value;
-                    p["@CompanyId"] = entity.CompanyId;
-                    p["@SchoolId"] = entity.SchoolId;
-                    p["@IsActive"] = entity.IsActive;
-                    p["@CreatedBy"] = entity.CreatedBy;
+                    Proc proc = new Proc("sp_NonTeaching_Insert");
+                    
+                        // Add parameters
+                        // Inside the Add method, in the using block where you create the Proc object:
+                        proc["@Id"] = entity.Id;
+                        proc["@FirstName"] = entity.FirstName;
+                        proc["@MiddleName"] = entity.MiddleName ?? (object)DBNull.Value;
+                        proc["@LastName"] = entity.LastName;
+                        proc["@DOB"] = entity.DOB;
+                        proc["@DOJ"] = entity.DOJ;
+                        proc["@DateOfLeaving"] = entity.DateOfLeaving ?? (object)DBNull.Value;
+                        proc["@Address"] = entity.Address ?? (object)DBNull.Value;
+                        proc["@CityId"] = entity.CityId ?? (object)DBNull.Value;
+                        proc["@StateId"] = entity.StateId ?? (object)DBNull.Value;
+                        proc["@CountryId"] = entity.CountryId ?? (object)DBNull.Value;
+                        proc["@ZipCode"] = entity.ZipCode ?? (object)DBNull.Value;
+                        proc["@Gender"] = entity.Gender ?? (object)DBNull.Value;
+                        proc["@MaritalStatusId"] = entity.MaritalStatusId ?? (object)DBNull.Value;
+                        proc["@Image"] = entity.Image ?? (object)DBNull.Value;
+                        proc["@Phone"] = entity.Phone ?? (object)DBNull.Value;
+                        proc["@MobilePhone"] = entity.MobilePhone ?? (object)DBNull.Value;
+                        proc["@Email"] = entity.Email ?? (object)DBNull.Value;
+                        proc["@EmployeeCode"] = entity.EmployeeCode ?? (object)DBNull.Value;
+                        proc["@Designation"] = entity.Designation ?? (object)DBNull.Value;
+                        proc["@Department"] = entity.Department ?? (object)DBNull.Value;
+                        proc["@Qualification"] = entity.Qualification ?? (object)DBNull.Value;
+                        proc["@Salary"] = entity.Salary ?? (object)DBNull.Value;
+                        proc["@BankAccountNumber"] = entity.BankAccountNumber ?? (object)DBNull.Value;
+                        proc["@BankName"] = entity.BankName ?? (object)DBNull.Value;
+                        proc["@IFSCCode"] = entity.IFSCCode ?? (object)DBNull.Value;
+                        proc["@PAN"] = entity.PAN ?? (object)DBNull.Value;
+                        proc["@AadharNumber"] = entity.AadharNumber ?? (object)DBNull.Value;
+                        proc["@EmergencyContactName"] = entity.EmergencyContactName ?? (object)DBNull.Value;
+                        proc["@EmergencyContactNumber"] = entity.EmergencyContactNumber ?? (object)DBNull.Value;
+                        proc["@EmergencyContactRelation"] = entity.EmergencyContactRelation ?? (object)DBNull.Value;
+                        proc["@CompanyId"] = entity.CompanyId;
+                        proc["@SchoolId"] = entity.SchoolId;
+                        proc["@IsActive"] = entity.IsActive;
+                        proc["@CreatedBy"] = entity.CreatedBy;
 
-                    var result = await p.ExecNonQueryAsync();
-                    return result;
+                    var dt = new DataTable();
+                    proc.Exec(dt);
+                    return dt.Rows.Count;
                 }
-            }
-            catch (SqlException sqlEx) when (sqlEx.Number == 2627) // Unique constraint violation
-            {
-                _logger.LogError(sqlEx, "Duplicate entry in NonTeachingService.Add");
-                throw new ApplicationException("A non-teaching staff with the same employee code or email already exists.", sqlEx);
-            }
-            catch (SqlException sqlEx)
-            {
-                _logger.LogError(sqlEx, "Database error in NonTeachingService.Add");
-                throw new ApplicationException("An error occurred while adding the non-teaching staff. Please try again.", sqlEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error in NonTeachingService.Add");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
-        public async Task<bool> UpdateAsync(NonTeachingMaster entity)
+        public bool Update(NonTeachingMaster entity)
         {
             if (entity == null)
-            {
                 throw new ArgumentNullException(nameof(entity));
-            }
-
-            if (entity.Id == Guid.Empty)
-            {
-                throw new ArgumentException("ID cannot be empty", nameof(entity.Id));
-            }
 
             ValidateNonTeachingEntity(entity);
 
-            try
+            using (var transaction = _connection.BeginTransaction())
             {
-                using (var p = new Proc("sp_NonTeaching_Update"))
+                try
                 {
-                    p["@Id"] = entity.Id;
-                    p["@FirstName"] = entity.FirstName;
-                    p["@MiddleName"] = entity.MiddleName ?? (object)DBNull.Value;
-                    p["@LastName"] = entity.LastName;
-                    p["@DOB"] = entity.DOB;
-                    p["@DOJ"] = entity.DOJ;
-                    p["@DateOfLeaving"] = entity.DateOfLeaving ?? (object)DBNull.Value;
-                    p["@Address"] = entity.Address ?? (object)DBNull.Value;
-                    p["@CityId"] = entity.CityId ?? (object)DBNull.Value;
-                    p["@StateId"] = entity.StateId ?? (object)DBNull.Value;
-                    p["@CountryId"] = entity.CountryId ?? (object)DBNull.Value;
-                    p["@ZipCode"] = entity.ZipCode ?? (object)DBNull.Value;
-                    p["@Gender"] = entity.Gender ?? (object)DBNull.Value;
-                    p["@MaritalStatusId"] = entity.MaritalStatusId ?? (object)DBNull.Value;
-                    p["@Image"] = entity.Image ?? (object)DBNull.Value;
-                    p["@Phone"] = entity.Phone ?? (object)DBNull.Value;
-                    p["@MobilePhone"] = entity.MobilePhone ?? (object)DBNull.Value;
-                    p["@Email"] = entity.Email ?? (object)DBNull.Value;
-                    p["@EmployeeCode"] = entity.EmployeeCode ?? (object)DBNull.Value;
-                    p["@Designation"] = entity.Designation ?? (object)DBNull.Value;
-                    p["@Department"] = entity.Department ?? (object)DBNull.Value;
-                    p["@Qualification"] = entity.Qualification ?? (object)DBNull.Value;
-                    p["@Salary"] = entity.Salary ?? (object)DBNull.Value;
-                    p["@BankAccountNumber"] = entity.BankAccountNumber ?? (object)DBNull.Value;
-                    p["@BankName"] = entity.BankName ?? (object)DBNull.Value;
-                    p["@IFSCCode"] = entity.IFSCCode ?? (object)DBNull.Value;
-                    p["@PAN"] = entity.PAN ?? (object)DBNull.Value;
-                    p["@AadharNumber"] = entity.AadharNumber ?? (object)DBNull.Value;
-                    p["@EmergencyContactName"] = entity.EmergencyContactName ?? (object)DBNull.Value;
-                    p["@EmergencyContactNumber"] = entity.EmergencyContactNumber ?? (object)DBNull.Value;
-                    p["@EmergencyContactRelation"] = entity.EmergencyContactRelation ?? (object)DBNull.Value;
-                    p["@IsActive"] = entity.IsActive;
-                    p["@ModifiedBy"] = entity.ModifiedBy;
+                    Proc proc = new Proc("sp_NonTeaching_Update");
+                    
+                        proc["@Id"] = entity.Id;
+                        proc["@FirstName"] = entity.FirstName;
+                        proc["@MiddleName"] = entity.MiddleName ?? (object)DBNull.Value;
+                        proc["@LastName"] = entity.LastName;
+                        proc["@DOB"] = entity.DOB;
+                        proc["@DOJ"] = entity.DOJ;
+                        proc["@DateOfLeaving"] = entity.DateOfLeaving ?? (object)DBNull.Value;
+                        proc["@Address"] = entity.Address ?? (object)DBNull.Value;
+                        proc["@CityId"] = entity.CityId ?? (object)DBNull.Value;
+                        proc["@StateId"] = entity.StateId ?? (object)DBNull.Value;
+                        proc["@CountryId"] = entity.CountryId ?? (object)DBNull.Value;
+                        proc["@ZipCode"] = entity.ZipCode ?? (object)DBNull.Value;
+                        proc["@Gender"] = entity.Gender ?? (object)DBNull.Value;
+                        proc["@MaritalStatusId"] = entity.MaritalStatusId ?? (object)DBNull.Value;
+                        proc["@Image"] = entity.Image ?? (object)DBNull.Value;
+                        proc["@Phone"] = entity.Phone ?? (object)DBNull.Value;
+                        proc["@MobilePhone"] = entity.MobilePhone ?? (object)DBNull.Value;
+                        proc["@Email"] = entity.Email ?? (object)DBNull.Value;
+                        proc["@EmployeeCode"] = entity.EmployeeCode ?? (object)DBNull.Value;
+                        proc["@Designation"] = entity.Designation ?? (object)DBNull.Value;
+                        proc["@Department"] = entity.Department ?? (object)DBNull.Value;
+                        proc["@Qualification"] = entity.Qualification ?? (object)DBNull.Value;
+                        proc["@Salary"] = entity.Salary ?? (object)DBNull.Value;
+                        proc["@BankAccountNumber"] = entity.BankAccountNumber ?? (object)DBNull.Value;
+                        proc["@BankName"] = entity.BankName ?? (object)DBNull.Value;
+                        proc["@IFSCCode"] = entity.IFSCCode ?? (object)DBNull.Value;
+                        proc["@PAN"] = entity.PAN ?? (object)DBNull.Value;
+                        proc["@AadharNumber"] = entity.AadharNumber ?? (object)DBNull.Value;
+                        proc["@EmergencyContactName"] = entity.EmergencyContactName ?? (object)DBNull.Value;
+                        proc["@EmergencyContactNumber"] = entity.EmergencyContactNumber ?? (object)DBNull.Value;
+                        proc["@EmergencyContactRelation"] = entity.EmergencyContactRelation ?? (object)DBNull.Value;
+                        proc["@IsActive"] = entity.IsActive;
+                        proc["@ModifiedBy"] = entity.ModifiedBy == Guid.Empty ? (object)DBNull.Value : entity.ModifiedBy;
 
-                    var result = await p.ExecNonQueryAsync();
-                    return result > 0;
+                    var dt = new DataTable();
+                    proc.Exec(dt);
+                    return dt.Rows.Count > 0;
                 }
-            }
-            catch (SqlException sqlEx) when (sqlEx.Number == 2627) // Unique constraint violation
-            {
-                _logger.LogError(sqlEx, $"Duplicate entry in NonTeachingService.Update for ID: {entity.Id}");
-                throw new ApplicationException("A non-teaching staff with the same employee code or email already exists.", sqlEx);
-            }
-            catch (SqlException sqlEx)
-            {
-                _logger.LogError(sqlEx, $"Database error in NonTeachingService.Update for ID: {entity.Id}");
-                throw new ApplicationException("An error occurred while updating the non-teaching staff. Please try again.", sqlEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected error in NonTeachingService.Update for ID: {entity.Id}");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
-        public async Task<bool> DeleteAsync(Guid id, Guid? deletedBy)
+        public bool Delete(Guid id)
         {
             if (id == Guid.Empty)
-            {
                 throw new ArgumentException("ID cannot be empty", nameof(id));
-            }
 
             try
             {
-                using (var p = new Proc("sp_NonTeaching_Delete"))
-                {
-                    p["@Id"] = id;
-                    p["@DeletedBy"] = deletedBy ?? (object)DBNull.Value;
-                    var result = await p.ExecNonQueryAsync();
-                    return result > 0;
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                _logger.LogError(sqlEx, $"Database error in NonTeachingService.Delete for ID: {id}");
-                throw new ApplicationException("An error occurred while deleting the non-teaching staff. Please try again.", sqlEx);
+                var entity = GetById(id);
+                if (entity == null)
+                    return false;
+
+                entity.IsDeleted = true;
+                entity.ModifiedBy = GetCurrentUserId(); // Implement this method to get the current user ID
+                entity.ModifiedDate = DateTime.UtcNow;
+
+                return Update(entity);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Unexpected error in NonTeachingService.Delete for ID: {id}");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
+                _logger.LogError(ex, "Error deleting non-teaching staff with ID {Id}", id);
+                throw;
             }
         }
 
-        public async Task<bool> ToggleStatusAsync(Guid id, Guid? modifiedBy)
+        private NonTeachingMaster MapToNonTeaching(DataRow r)
         {
-            if (id == Guid.Empty)
+            var t = new NonTeachingMaster
             {
-                throw new ArgumentException("ID cannot be empty", nameof(id));
-            }
+                Id = r.Table.Columns.Contains("Id") ? (Guid)r["Id"] : Guid.Empty,
+                FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty,
+                MiddleName = r.Table.Columns.Contains("MiddleName") ? r["MiddleName"]?.ToString() : null,
+                LastName = r.Table.Columns.Contains("LastName") ? r["LastName"]?.ToString() ?? string.Empty : string.Empty,
+                Email = r.Table.Columns.Contains("Email") ? r["Email"]?.ToString() : null,
+                Phone = r.Table.Columns.Contains("Phone") ? r["Phone"]?.ToString() : null,
+                MobilePhone = r.Table.Columns.Contains("MobilePhone") ? r["MobilePhone"]?.ToString() : null,
+                Designation = r.Table.Columns.Contains("Designation") ? r["Designation"]?.ToString() : null,
+                Department = r.Table.Columns.Contains("Department") ? r["Department"]?.ToString() : null,
+                IsActive = r.Table.Columns.Contains("IsActive") && Convert.ToBoolean(r["IsActive"]),
+                EmployeeCode = r.Table.Columns.Contains("EmployeeCode") ? r["EmployeeCode"]?.ToString() : null,
+                DOB = r.Table.Columns.Contains("DOB") && r["DOB"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DOB"]) : null,
+                DOJ = r.Table.Columns.Contains("DOJ") && r["DOJ"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DOJ"]) : null,
+                DateOfLeaving = r.Table.Columns.Contains("DateOfLeaving") && r["DateOfLeaving"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DateOfLeaving"]) : null,
+                Address = r.Table.Columns.Contains("Address") ? r["Address"]?.ToString() : null,
+                CityId = r.Table.Columns.Contains("CityId") && r["CityId"] != DBNull.Value ? Guid.Parse(r["CityId"].ToString()) : Guid.Empty,
+                StateId = r.Table.Columns.Contains("StateId") && r["StateId"] != DBNull.Value ? Guid.Parse(r["StateId"].ToString()) : Guid.Empty,
+                CountryId = r.Table.Columns.Contains("CountryId") && r["CountryId"] != DBNull.Value ? Guid.Parse(r["CountryId"].ToString()) : Guid.Empty,
+                ZipCode = r.Table.Columns.Contains("ZipCode") ? r["ZipCode"]?.ToString() : null,
+                Gender = r.Table.Columns.Contains("Gender") ? r["Gender"]?.ToString() : null,
+                MaritalStatusId = r.Table.Columns.Contains("MaritalStatusId") && r["MaritalStatusId"] != DBNull.Value ? Guid.Parse(r["MaritalStatusId"].ToString()) : Guid.Empty,
+                Image = r.Table.Columns.Contains("Image") && r["Image"] != DBNull.Value ? (byte[])r["Image"] : null,
+                Qualification = r.Table.Columns.Contains("Qualification") ? r["Qualification"]?.ToString() : null,
+                Salary = r.Table.Columns.Contains("Salary") && r["Salary"] != DBNull.Value ? Convert.ToDecimal(r["Salary"]) : (decimal?)null,
+                BankAccountNumber = r.Table.Columns.Contains("BankAccountNumber") ? r["BankAccountNumber"]?.ToString() : null,
+                BankName = r.Table.Columns.Contains("BankName") ? r["BankName"]?.ToString() : null,
+                IFSCCode = r.Table.Columns.Contains("IFSCCode") ? r["IFSCCode"]?.ToString() : null,
+                PAN = r.Table.Columns.Contains("PAN") ? r["PAN"]?.ToString() : null,
+                AadharNumber = r.Table.Columns.Contains("AadharNumber") ? r["AadharNumber"]?.ToString() : null,
+                EmergencyContactName = r.Table.Columns.Contains("EmergencyContactName") ? r["EmergencyContactName"]?.ToString() : null,
+                EmergencyContactNumber = r.Table.Columns.Contains("EmergencyContactNumber") ? r["EmergencyContactNumber"]?.ToString() : null,
+                EmergencyContactRelation = r.Table.Columns.Contains("EmergencyContactRelation") ? r["EmergencyContactRelation"]?.ToString() : null,
+                CompanyId = r.Table.Columns.Contains("CompanyId") && r["CompanyId"] != DBNull.Value ? (Guid)r["CompanyId"] : Guid.Empty,
+                SchoolId = r.Table.Columns.Contains("SchoolId") && r["SchoolId"] != DBNull.Value ? (Guid)r["SchoolId"] : Guid.Empty,
+                CreatedBy = r.Table.Columns.Contains("CreatedBy") && r["CreatedBy"] != DBNull.Value ? (Guid)r["CreatedBy"] : Guid.Empty,
+                CreatedDate = r.Table.Columns.Contains("CreatedDate") && r["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(r["CreatedDate"]) : DateTime.UtcNow,
+                ModifiedBy = r.Table.Columns.Contains("ModifiedBy") && r["ModifiedBy"] != DBNull.Value ? (Guid)r["ModifiedBy"] : (Guid?)null,
+                ModifiedDate = r.Table.Columns.Contains("ModifiedDate") && r["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(r["ModifiedDate"]) : (DateTime?)null
+            };
 
+            return t;
+        }
+
+        private void ValidateNonTeachingEntity(NonTeachingMaster entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            if (string.IsNullOrWhiteSpace(entity.FirstName))
+                throw new ArgumentException("First name is required", nameof(entity.FirstName));
+                
+            if (string.IsNullOrWhiteSpace(entity.LastName))
+                throw new ArgumentException("Last name is required", nameof(entity.LastName));
+                
+            if (entity.DOB == default || entity.DOB > DateTime.Today.AddYears(-18))
+                throw new ArgumentException("Date of birth is required and must be at least 18 years ago", nameof(entity.DOB));
+                
+            if (entity.DOJ == default || entity.DOJ < entity.DOB)
+                throw new ArgumentException("Date of joining is required and must be after date of birth", nameof(entity.DOJ));
+                
+            if (entity.DateOfLeaving.HasValue && entity.DateOfLeaving < entity.DOJ)
+                throw new ArgumentException("Date of leaving cannot be before date of joining", nameof(entity.DateOfLeaving));
+                
+            if (string.IsNullOrWhiteSpace(entity.Email))
+                throw new ArgumentException("Email is required", nameof(entity.Email));
+                
+            if (!string.IsNullOrWhiteSpace(entity.Email) && !IsValidEmail(entity.Email))
+                throw new ArgumentException("Invalid email format", nameof(entity.Email));
+                
+            if (entity.CompanyId == Guid.Empty)
+                throw new ArgumentException("Company ID is required", nameof(entity.CompanyId));
+                
+            if (entity.SchoolId == Guid.Empty)
+                throw new ArgumentException("School ID is required", nameof(entity.SchoolId));
+                
+            if (entity.CreatedBy == Guid.Empty)
+                throw new ArgumentException("CreatedBy is required", nameof(entity.CreatedBy));
+        }
+
+        private bool IsValidEmail(string email)
+        {
             try
             {
-                using (var p = new Proc("sp_NonTeaching_ToggleStatus"))
-                {
-                    p["@Id"] = id;
-                    p["@ModifiedBy"] = modifiedBy;
-                    var result = await p.ExecNonQueryAsync();
-                    return result > 0;
-                }
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
             }
-            catch (SqlException sqlEx)
+            catch
             {
-                _logger.LogError(sqlEx, $"Database error in ToggleStatus for Non-Teaching Staff ID: {id}");
-                throw new ApplicationException("An error occurred while updating the status. Please try again.", sqlEx);
+                return false;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Unexpected error in NonTeachingService.ToggleStatus for ID: {id}");
-                throw new ApplicationException("An unexpected error occurred. Please try again later.", ex);
-            }
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            // Implement this method to get the current user's ID
+            // This is just a placeholder - replace with your actual implementation
+            return Guid.NewGuid(); // Replace with actual user ID
         }
     }
 }
-
-// SchoolPortal.Services/Services/NonTeachingDocumentDetailsService.cs
-//using Microsoft.Data.SqlClient;
-//using Microsoft.Extensions.Logging;
-//using SchoolPortal.DBAccess;
-//using SchoolPortal.Entities.Models;
-//using SchoolPortal.Services.IServices;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Linq;
-
-//namespace SchoolPortal.Services.Services
-//{
-//    public class NonTeachingDocumentDetailsService : INonTeachingDocumentDetailsService
-//    {
-//        private readonly ILogger<NonTeachingDocumentDetailsService> _logger;
-//        private readonly IDbConnection _connection;
-
-//        public NonTeachingDocumentDetailsService(ILogger<NonTeachingDocumentDetailsService> logger, IDbConnection connection)
-//        {
-//            _logger = logger;
-//            _connection = connection;
-//        }
-
-//        public IEnumerable<NonTeachingDocumentDetails> GetByNonTeachingId(Guid nonTeachingId)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingDocument_GetByNonTeachingId"))
-//                {
-//                    p["@NonTeachingId"] = nonTeachingId;
-//                    return p.Exec<NonTeachingDocumentDetails>();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingDocumentDetailsService.GetByNonTeachingId for ID: {nonTeachingId}");
-//                throw;
-//            }
-//        }
-
-//        public NonTeachingDocumentDetails GetDocumentById(Guid id)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingDocument_GetById"))
-//                {
-//                    p["@Id"] = id;
-//                    return p.Exec<NonTeachingDocumentDetails>().FirstOrDefault();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingDocumentDetailsService.GetDocumentById for ID: {id}");
-//                throw;
-//            }
-//        }
-
-//        public bool Add(NonTeachingDocumentDetails entity)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingDocument_Insert"))
-//                {
-//                    p["@Id"] = entity.Id;
-//                    p["@NonTeachingId"] = entity.NonTeachingId;
-//                    p["@DocumentTypeId"] = entity.DocumentTypeId;
-//                    p["@DocumentNumber"] = entity.DocumentNumber;
-//                    p["@DocumentPath"] = entity.DocumentPath;
-//                    p["@IssueDate"] = entity.IssueDate;
-//                    p["@ExpiryDate"] = entity.ExpiryDate;
-//                    p["@IsVerified"] = entity.IsVerified;
-//                    p["@VerifiedBy"] = entity.VerifiedBy;
-//                    p["@VerifiedOn"] = entity.VerifiedOn;
-//                    p["@Remarks"] = entity.Remarks;
-//                    p["@CreatedBy"] = entity.CreatedBy;
-
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, "Error in NonTeachingDocumentDetailsService.Add");
-//                throw;
-//            }
-//        }
-
-//        public bool Update(NonTeachingDocumentDetails entity)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingDocument_Update"))
-//                {
-//                    p["@Id"] = entity.Id;
-//                    p["@DocumentTypeId"] = entity.DocumentTypeId;
-//                    p["@DocumentNumber"] = entity.DocumentNumber;
-//                    p["@DocumentPath"] = entity.DocumentPath;
-//                    p["@IssueDate"] = entity.IssueDate;
-//                    p["@ExpiryDate"] = entity.ExpiryDate;
-//                    p["@IsVerified"] = entity.IsVerified;
-//                    p["@VerifiedBy"] = entity.VerifiedBy;
-//                    p["@VerifiedOn"] = entity.VerifiedOn;
-//                    p["@Remarks"] = entity.Remarks;
-//                    p["@ModifiedBy"] = entity.ModifiedBy;
-
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingDocumentDetailsService.Update for ID: {entity.Id}");
-//                throw;
-//            }
-//        }
-
-//        public bool Delete(Guid id)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingDocument_Delete"))
-//                {
-//                    p["@Id"] = id;
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingDocumentDetailsService.Delete for ID: {id}");
-//                throw;
-//            }
-//        }
-//    }
-//}
-
-//// SchoolPortal.Services/Services/NonTeachingQualificationDetailsService.cs
-//using Microsoft.Data.SqlClient;
-//using Microsoft.Extensions.Logging;
-//using SchoolPortal.DBAccess;
-//using SchoolPortal.Entities.Models;
-//using SchoolPortal.Services.IServices;
-//using System;
-//using System.Collections.Generic;
-//using System.Data;
-//using System.Linq;
-
-//namespace SchoolPortal.Services.Services
-//{
-//    public class NonTeachingQualificationDetailsService : INonTeachingQualificationDetailsService
-//    {
-//        private readonly ILogger<NonTeachingQualificationDetailsService> _logger;
-//        private readonly IDbConnection _connection;
-
-//        public NonTeachingQualificationDetailsService(ILogger<NonTeachingQualificationDetailsService> logger, IDbConnection connection)
-//        {
-//            _logger = logger;
-//            _connection = connection;
-//        }
-
-//        public IEnumerable<NonTeachingQualificationDetails> GetByNonTeachingId(Guid nonTeachingId)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingQualification_GetByNonTeachingId"))
-//                {
-//                    p["@NonTeachingId"] = nonTeachingId;
-//                    return p.Exec<NonTeachingQualificationDetails>();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.GetByNonTeachingId for ID: {nonTeachingId}");
-//                throw;
-//            }
-//        }
-
-//        public NonTeachingQualificationDetails GetQualificationById(Guid id)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingQualification_GetById"))
-//                {
-//                    p["@Id"] = id;
-//                    return p.Exec<NonTeachingQualificationDetails>().FirstOrDefault();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.GetQualificationById for ID: {id}");
-//                throw;
-//            }
-//        }
-
-//        public bool Add(NonTeachingQualificationDetails entity)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingQualification_Insert"))
-//                {
-//                    p["@Id"] = entity.Id;
-//                    p["@NonTeachingId"] = entity.NonTeachingId;
-//                    p["@QualificationTypeId"] = entity.QualificationTypeId;
-//                    p["@Institution"] = entity.Institution;
-//                    p["@BoardUniversity"] = entity.BoardUniversity;
-//                    p["@YearOfPassing"] = entity.YearOfPassing;
-//                    p["@Percentage"] = entity.Percentage;
-//                    p["@Division"] = entity.Division;
-//                    p["@DocumentPath"] = entity.DocumentPath;
-//                    p["@IsVerified"] = entity.IsVerified;
-//                    p["@VerifiedBy"] = entity.VerifiedBy;
-//                    p["@VerifiedOn"] = entity.VerifiedOn;
-//                    p["@Remarks"] = entity.Remarks;
-//                    p["@CreatedBy"] = entity.CreatedBy;
-
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, "Error in NonTeachingQualificationDetailsService.Add");
-//                throw;
-//            }
-//        }
-
-//        public bool Update(NonTeachingQualificationDetails entity)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingQualification_Update"))
-//                {
-//                    p["@Id"] = entity.Id;
-//                    p["@QualificationTypeId"] = entity.QualificationTypeId;
-//                    p["@Institution"] = entity.Institution;
-//                    p["@BoardUniversity"] = entity.BoardUniversity;
-//                    p["@YearOfPassing"] = entity.YearOfPassing;
-//                    p["@Percentage"] = entity.Percentage;
-//                    p["@Division"] = entity.Division;
-//                    p["@DocumentPath"] = entity.DocumentPath;
-//                    p["@IsVerified"] = entity.IsVerified;
-//                    p["@VerifiedBy"] = entity.VerifiedBy;
-//                    p["@VerifiedOn"] = entity.VerifiedOn;
-//                    p["@Remarks"] = entity.Remarks;
-//                    p["@ModifiedBy"] = entity.ModifiedBy;
-
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.Update for ID: {entity.Id}");
-//                throw;
-//            }
-//        }
-
-//        public bool Delete(Guid id)
-//        {
-//            try
-//            {
-//                using (var p = new Proc("sp_NonTeachingQualification_Delete"))
-//                {
-//                    p["@Id"] = id;
-//                    return p.ExecNonQuery() > 0;
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError(ex, $"Error in NonTeachingQualificationDetailsService.Delete for ID: {id}");
-//                throw;
-//            }
-//        }
-//    }
-//}

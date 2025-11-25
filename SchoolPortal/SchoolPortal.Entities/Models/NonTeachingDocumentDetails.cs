@@ -34,15 +34,29 @@ namespace SchoolPortal.Entities.Models
         public bool IsVerified { get; set; }
 
         public Guid VerifiedBy { get; set; }
-        public DateTime? VerifiedOn { get; set; }       
+        public DateTime? VerifiedOn { get; set; }  
+
+        [NotMapped]
+        public byte[] FileContent { get; set; }
+
+        [StringLength(100)]
+        public string FileType { get; set; }
+
+        [StringLength(255)]
+        public string FileName { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; }     
 
         public bool IsActive { get; set; } = true;
-        public string CreatedBy { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string ModifiedBy { get; set; }
+        public Guid ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         
         [ForeignKey("NonTeachingId")]
         public virtual NonTeachingMaster NonTeaching { get; set; }
+
     }
 }

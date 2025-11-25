@@ -1,0 +1,16 @@
+@* SchoolPortal.Web/Views/Shared/EditorTemplates/DocumentUpload.cshtml *@
+@model IFormFile
+
+<div class="custom-file">
+    <input type="file" class="custom-file-input" id="customFile" asp-for="@Model">
+    <label class="custom-file-label" for="customFile">Choose file</label>
+</div>
+
+<script>
+    // Update the label with the file name when a file is selected
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        var fileName = e.target.files[0].name;
+        var nextSibling = e.target.nextElementSibling;
+        nextSibling.innerText = fileName;
+    });
+</script>
