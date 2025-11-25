@@ -14,21 +14,25 @@ namespace SchoolPortal.Entities.Models
         public Guid NonTeachingId { get; set; }
         
         [Required]
-        [StringLength(100)]
+         [StringLength(100, ErrorMessage = "Document type cannot exceed 100 characters")]
+        [Display(Name = "Document Type")]
         public string DocumentType { get; set; }
 
         public Guid DocumentTypeId { get; set; }
 
-         [StringLength(255)]
+         [Display(Name = "Document Number")]
+       [StringLength(255, ErrorMessage = "Document number cannot exceed 255 characters")]
         public string DocumentNumber { get; set; }
         
-        [StringLength(500)]
+         [Display(Name = "Document Path")]
+         [Required]
+         [StringLength(500, ErrorMessage = "Document path cannot exceed 500 characters")]
         public string DocumentPath { get; set; }
         
         public DateTime? IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         
-        [StringLength(500)]
+        [StringLength(500, ErrorMessage = "Remarks cannot exceed 500 characters")]
         public string Remarks { get; set; }
 
         public bool IsVerified { get; set; }
@@ -39,13 +43,13 @@ namespace SchoolPortal.Entities.Models
         [NotMapped]
         public byte[] FileContent { get; set; }
 
-        [StringLength(100)]
+       [StringLength(100, ErrorMessage = "File type cannot exceed 100 characters")]
         public string FileType { get; set; }
 
-        [StringLength(255)]
+       [StringLength(255, ErrorMessage = "File name cannot exceed 255 characters")]
         public string FileName { get; set; }
 
-        [StringLength(500)]
+       [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string Description { get; set; }     
 
         public bool IsActive { get; set; } = true;

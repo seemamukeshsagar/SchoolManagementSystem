@@ -59,7 +59,7 @@ namespace SchoolPortal.Services.Services
             }
         }
 
-        public NonTeachingMaster GetById(Guid id)
+        public NonTeachingMaster? GetById(Guid id)
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("ID cannot be empty", nameof(id));
@@ -213,60 +213,63 @@ namespace SchoolPortal.Services.Services
                     return false;
 
                 entity.IsDeleted = true;
-                entity.ModifiedBy = GetCurrentUserId(); // Implement this method to get the current user ID
+                entity.ModifiedBy = GetCurrentUserId();
                 entity.ModifiedDate = DateTime.UtcNow;
 
                 return Update(entity);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not ArgumentException)
             {
                 _logger.LogError(ex, "Error deleting non-teaching staff with ID {Id}", id);
-                throw;
+                throw new ApplicationException($"An error occurred while deleting non-teaching staff with ID {id}", ex);
             }
         }
 
         private NonTeachingMaster MapToNonTeaching(DataRow r)
         {
+            if (r == null) throw new ArgumentNullException(nameof(r));
+            if (r.Table == null) throw new ArgumentException("DataRow.Table cannot be null", nameof(r));
+
             var t = new NonTeachingMaster
             {
-                Id = r.Table.Columns.Contains("Id") ? (Guid)r["Id"] : Guid.Empty,
-                FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty,
-                MiddleName = r.Table.Columns.Contains("MiddleName") ? r["MiddleName"]?.ToString() : null,
-                LastName = r.Table.Columns.Contains("LastName") ? r["LastName"]?.ToString() ?? string.Empty : string.Empty,
-                Email = r.Table.Columns.Contains("Email") ? r["Email"]?.ToString() : null,
-                Phone = r.Table.Columns.Contains("Phone") ? r["Phone"]?.ToString() : null,
-                MobilePhone = r.Table.Columns.Contains("MobilePhone") ? r["MobilePhone"]?.ToString() : null,
-                Designation = r.Table.Columns.Contains("Designation") ? r["Designation"]?.ToString() : null,
-                Department = r.Table.Columns.Contains("Department") ? r["Department"]?.ToString() : null,
-                IsActive = r.Table.Columns.Contains("IsActive") && Convert.ToBoolean(r["IsActive"]),
-                EmployeeCode = r.Table.Columns.Contains("EmployeeCode") ? r["EmployeeCode"]?.ToString() : null,
-                DOB = r.Table.Columns.Contains("DOB") && r["DOB"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DOB"]) : null,
-                DOJ = r.Table.Columns.Contains("DOJ") && r["DOJ"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DOJ"]) : null,
-                DateOfLeaving = r.Table.Columns.Contains("DateOfLeaving") && r["DateOfLeaving"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["DateOfLeaving"]) : null,
-                Address = r.Table.Columns.Contains("Address") ? r["Address"]?.ToString() : null,
-                CityId = r.Table.Columns.Contains("CityId") && r["CityId"] != DBNull.Value ? Guid.Parse(r["CityId"].ToString()) : Guid.Empty,
-                StateId = r.Table.Columns.Contains("StateId") && r["StateId"] != DBNull.Value ? Guid.Parse(r["StateId"].ToString()) : Guid.Empty,
-                CountryId = r.Table.Columns.Contains("CountryId") && r["CountryId"] != DBNull.Value ? Guid.Parse(r["CountryId"].ToString()) : Guid.Empty,
-                ZipCode = r.Table.Columns.Contains("ZipCode") ? r["ZipCode"]?.ToString() : null,
-                Gender = r.Table.Columns.Contains("Gender") ? r["Gender"]?.ToString() : null,
-                MaritalStatusId = r.Table.Columns.Contains("MaritalStatusId") && r["MaritalStatusId"] != DBNull.Value ? Guid.Parse(r["MaritalStatusId"].ToString()) : Guid.Empty,
+                Id = r.Table.Columns.Contains("Id") && r["Id"] != DBNull.Value ? (Guid)r["Id"] : Guid.Empty,
+                FirstName = r.Table.Columns.Contains("FirstName") && r["FirstName"] != DBNull.Value ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty,
+                MiddleName = r.Table.Columns.Contains("MiddleName") && r["MiddleName"] != DBNull.Value ? r["MiddleName"]?.ToString() : null,
+                LastName = r.Table.Columns.Contains("LastName") && r["LastName"] != DBNull.Value ? r["LastName"]?.ToString() ?? string.Empty : string.Empty,
+                Email = r.Table.Columns.Contains("Email") && r["Email"] != DBNull.Value ? r["Email"]?.ToString() : null,
+                Phone = r.Table.Columns.Contains("Phone") && r["Phone"] != DBNull.Value ? r["Phone"]?.ToString() : null,
+                MobilePhone = r.Table.Columns.Contains("MobilePhone") && r["MobilePhone"] != DBNull.Value ? r["MobilePhone"]?.ToString() : null,
+                Designation = r.Table.Columns.Contains("Designation") && r["Designation"] != DBNull.Value ? r["Designation"]?.ToString() : null,
+                Department = r.Table.Columns.Contains("Department") && r["Department"] != DBNull.Value ? r["Department"]?.ToString() : null,
+                IsActive = r.Table.Columns.Contains("IsActive") && r["IsActive"] != DBNull.Value && Convert.ToBoolean(r["IsActive"]),
+                EmployeeCode = r.Table.Columns.Contains("EmployeeCode") && r["EmployeeCode"] != DBNull.Value ? r["EmployeeCode"]?.ToString() : null,
+                DOB = r.Table.Columns.Contains("DOB") && r["DOB"] != DBNull.Value && r["DOB"] != null ? (DateTime?)Convert.ToDateTime(r["DOB"]) : null,
+                DOJ = r.Table.Columns.Contains("DOJ") && r["DOJ"] != DBNull.Value && r["DOJ"] != null ? (DateTime?)Convert.ToDateTime(r["DOJ"]) : null,
+                DateOfLeaving = r.Table.Columns.Contains("DateOfLeaving") && r["DateOfLeaving"] != DBNull.Value && r["DateOfLeaving"] != null ? (DateTime?)Convert.ToDateTime(r["DateOfLeaving"]) : null,
+                Address = r.Table.Columns.Contains("Address") && r["Address"] != DBNull.Value ? r["Address"]?.ToString() : null,
+                CityId = r.Table.Columns.Contains("CityId") && r["CityId"] != DBNull.Value && Guid.TryParse(r["CityId"]?.ToString(), out var cityId) ? cityId : Guid.Empty,
+                StateId = r.Table.Columns.Contains("StateId") && r["StateId"] != DBNull.Value && Guid.TryParse(r["StateId"]?.ToString(), out var stateId) ? stateId : Guid.Empty,
+                CountryId = r.Table.Columns.Contains("CountryId") && r["CountryId"] != DBNull.Value && Guid.TryParse(r["CountryId"]?.ToString(), out var countryId) ? countryId : Guid.Empty,
+                ZipCode = r.Table.Columns.Contains("ZipCode") && r["ZipCode"] != DBNull.Value ? r["ZipCode"]?.ToString() : null,
+                Gender = r.Table.Columns.Contains("Gender") && r["Gender"] != DBNull.Value ? r["Gender"]?.ToString() : null,
+                MaritalStatusId = r.Table.Columns.Contains("MaritalStatusId") && r["MaritalStatusId"] != DBNull.Value && Guid.TryParse(r["MaritalStatusId"]?.ToString(), out var maritalStatusId) ? maritalStatusId : Guid.Empty,
                 Image = r.Table.Columns.Contains("Image") && r["Image"] != DBNull.Value ? (byte[])r["Image"] : null,
-                Qualification = r.Table.Columns.Contains("Qualification") ? r["Qualification"]?.ToString() : null,
-                Salary = r.Table.Columns.Contains("Salary") && r["Salary"] != DBNull.Value ? Convert.ToDecimal(r["Salary"]) : (decimal?)null,
-                BankAccountNumber = r.Table.Columns.Contains("BankAccountNumber") ? r["BankAccountNumber"]?.ToString() : null,
-                BankName = r.Table.Columns.Contains("BankName") ? r["BankName"]?.ToString() : null,
-                IFSCCode = r.Table.Columns.Contains("IFSCCode") ? r["IFSCCode"]?.ToString() : null,
-                PAN = r.Table.Columns.Contains("PAN") ? r["PAN"]?.ToString() : null,
-                AadharNumber = r.Table.Columns.Contains("AadharNumber") ? r["AadharNumber"]?.ToString() : null,
-                EmergencyContactName = r.Table.Columns.Contains("EmergencyContactName") ? r["EmergencyContactName"]?.ToString() : null,
-                EmergencyContactNumber = r.Table.Columns.Contains("EmergencyContactNumber") ? r["EmergencyContactNumber"]?.ToString() : null,
-                EmergencyContactRelation = r.Table.Columns.Contains("EmergencyContactRelation") ? r["EmergencyContactRelation"]?.ToString() : null,
-                CompanyId = r.Table.Columns.Contains("CompanyId") && r["CompanyId"] != DBNull.Value ? (Guid)r["CompanyId"] : Guid.Empty,
-                SchoolId = r.Table.Columns.Contains("SchoolId") && r["SchoolId"] != DBNull.Value ? (Guid)r["SchoolId"] : Guid.Empty,
-                CreatedBy = r.Table.Columns.Contains("CreatedBy") && r["CreatedBy"] != DBNull.Value ? (Guid)r["CreatedBy"] : Guid.Empty,
-                CreatedDate = r.Table.Columns.Contains("CreatedDate") && r["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(r["CreatedDate"]) : DateTime.UtcNow,
-                ModifiedBy = r.Table.Columns.Contains("ModifiedBy") && r["ModifiedBy"] != DBNull.Value ? (Guid)r["ModifiedBy"] : (Guid?)null,
-                ModifiedDate = r.Table.Columns.Contains("ModifiedDate") && r["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(r["ModifiedDate"]) : (DateTime?)null
+                Qualification = r.Table.Columns.Contains("Qualification") && r["Qualification"] != DBNull.Value ? r["Qualification"]?.ToString() : null,
+                Salary = r.Table.Columns.Contains("Salary") && r["Salary"] != DBNull.Value && decimal.TryParse(r["Salary"]?.ToString(), out var salary) ? salary : (decimal?)null,
+                BankAccountNumber = r.Table.Columns.Contains("BankAccountNumber") && r["BankAccountNumber"] != DBNull.Value ? r["BankAccountNumber"]?.ToString() : null,
+                BankName = r.Table.Columns.Contains("BankName") && r["BankName"] != DBNull.Value ? r["BankName"]?.ToString() : null,
+                IFSCCode = r.Table.Columns.Contains("IFSCCode") && r["IFSCCode"] != DBNull.Value ? r["IFSCCode"]?.ToString() : null,
+                PAN = r.Table.Columns.Contains("PAN") && r["PAN"] != DBNull.Value ? r["PAN"]?.ToString() : null,
+                AadharNumber = r.Table.Columns.Contains("AadharNumber") && r["AadharNumber"] != DBNull.Value ? r["AadharNumber"]?.ToString() : null,
+                EmergencyContactName = r.Table.Columns.Contains("EmergencyContactName") && r["EmergencyContactName"] != DBNull.Value ? r["EmergencyContactName"]?.ToString() : null,
+                EmergencyContactNumber = r.Table.Columns.Contains("EmergencyContactNumber") && r["EmergencyContactNumber"] != DBNull.Value ? r["EmergencyContactNumber"]?.ToString() : null,
+                EmergencyContactRelation = r.Table.Columns.Contains("EmergencyContactRelation") && r["EmergencyContactRelation"] != DBNull.Value ? r["EmergencyContactRelation"]?.ToString() : null,
+                CompanyId = r.Table.Columns.Contains("CompanyId") && r["CompanyId"] != DBNull.Value && r["CompanyId"] is Guid companyIdGuid ? companyIdGuid : Guid.Empty,
+                SchoolId = r.Table.Columns.Contains("SchoolId") && r["SchoolId"] != DBNull.Value && r["SchoolId"] is Guid schoolIdGuid ? schoolIdGuid : Guid.Empty,
+                CreatedBy = r.Table.Columns.Contains("CreatedBy") && r["CreatedBy"] != DBNull.Value && r["CreatedBy"] is Guid createdByGuid ? createdByGuid : Guid.Empty,
+                CreatedDate = r.Table.Columns.Contains("CreatedDate") && r["CreatedDate"] != DBNull.Value && r["CreatedDate"] is DateTime createdDate ? createdDate : DateTime.UtcNow,
+                ModifiedBy = r.Table.Columns.Contains("ModifiedBy") && r["ModifiedBy"] != DBNull.Value && r["ModifiedBy"] is Guid modifiedByGuid ? modifiedByGuid : (Guid?)null,
+                ModifiedDate = r.Table.Columns.Contains("ModifiedDate") && r["ModifiedDate"] != DBNull.Value && r["ModifiedDate"] is DateTime modifiedDate ? modifiedDate : (DateTime?)null
             };
 
             return t;

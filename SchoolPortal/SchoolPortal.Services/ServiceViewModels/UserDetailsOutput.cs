@@ -13,5 +13,6 @@ namespace SchoolPortal.Services.ServiceViewModels
 		public List<string> Privileges { get; set; } = new List<string>();
 		public string DesignationName { get; set; } = string.Empty;
 		public string RoleName { get; set; } = string.Empty;
+		public string? PasswordHash { get; set; } // Added for caching
 	}
 }

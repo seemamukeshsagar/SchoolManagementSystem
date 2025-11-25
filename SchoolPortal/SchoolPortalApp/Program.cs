@@ -30,6 +30,8 @@ builder.Configuration
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddMemoryCache(); 
+
 // Authentication & Authorization
 builder.Services
 	.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

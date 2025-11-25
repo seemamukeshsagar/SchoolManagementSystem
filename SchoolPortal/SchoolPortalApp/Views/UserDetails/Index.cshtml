@@ -1,7 +1,9 @@
-@model IEnumerable<SchoolPortalApp.Models.UserDetailsListItemViewModel>
+@using SchoolPortal.Entities.Models
+@model IEnumerable<SchoolPortal.Entities.Models.UserDetailsListViewModel>
 @{
     ViewData["Title"] = "Users";
 }
+
 <h2>Users</h2>
 <p>
     <a class="btn btn-primary" asp-controller="UserDetails" asp-action="Create">Create New</a>
@@ -24,14 +26,14 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.UserName</td>
-            <td>@item.FullName</td>
-            <td>@item.EmailAddress</td>
-            <td>@item.RoleName</td>
-            <td>@item.DesignationName</td>
-            <td>@item.CompanyName</td>
-            <td>@item.SchoolName</td>
-            <td>@item.IsActive</td>
+            <td>@(item.UserName ?? "-")</td>
+            <td>@(item.FullName ?? "-")</td>
+            <td>@(item.EmailAddress ?? "-")</td>
+            <td>@(item.RoleName ?? "-")</td>
+            <td>@(item.DesignationName ?? "-")</td>
+            <td>@(item.CompanyName ?? "-")</td>
+            <td>@(item.SchoolName ?? "-")</td>
+            <td>@(item.IsActive ? "Yes" : "No")</td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="bi bi-eye"></i></a> |
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="bi bi-pencil"></i></a> |

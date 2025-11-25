@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
@@ -9,38 +10,68 @@ namespace SchoolPortal.Services
 {
 	public class UserDetailsService : IUserDetailsService
 	{
-		private static UserDetails Map(DataRow r)
+		private readonly ILookupService _lookupService;
+		private readonly IRoleMasterService _roleService;
+
+		public UserDetailsService(ILookupService lookupService, IRoleMasterService roleService)
 		{
-			var e = new UserDetails();
-			if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"]?.ToString(), out var id)) e.Id = id;
-			e.UserName = r.Table.Columns.Contains("UserName") ? r["UserName"]?.ToString() ?? string.Empty : string.Empty;
-			e.UserPassword = r.Table.Columns.Contains("UserPassword") ? r["UserPassword"]?.ToString() ?? string.Empty : string.Empty;
-			e.FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty;
-			e.LastName = r.Table.Columns.Contains("LastName") ? r["LastName"]?.ToString() ?? string.Empty : string.Empty;
-			e.EmailAddress = r.Table.Columns.Contains("EmailAddress") ? r["EmailAddress"]?.ToString() ?? string.Empty : string.Empty;
-			if (r.Table.Columns.Contains("DesignationId") && Guid.TryParse(r["DesignationId"]?.ToString(), out var desig)) e.DesignationId = desig;
-			if (r.Table.Columns.Contains("UserRoleId") && Guid.TryParse(r["UserRoleId"]?.ToString(), out var role)) e.UserRoleId = role;
-			if (r.Table.Columns.Contains("IsSuperUser") && bool.TryParse(r["IsSuperUser"]?.ToString(), out var su)) e.IsSuperUser = su;
-			if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"]?.ToString(), out var comp)) e.CompanyId = comp;
-			if (r.Table.Columns.Contains("SchoolId") && Guid.TryParse(r["SchoolId"]?.ToString(), out var school)) e.SchoolId = school;
-			if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"]?.ToString(), out var active)) e.IsActive = active;
-			if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"]?.ToString(), out var deleted)) e.IsDeleted = deleted;
-			if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"]?.ToString(), out var cb)) e.CreatedBy = cb;
-			if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"]?.ToString(), out var cd)) e.CreatedDate = cd;
-			if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"]?.ToString(), out var mb)) e.ModifiedBy = mb;
-			if (r.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(r["ModifiedDate"]?.ToString(), out var md)) e.ModifiedDate = md;
-			e.Status = r.Table.Columns.Contains("Status") ? r["Status"]?.ToString() ?? string.Empty : e.Status;
-			e.StatusMessage = r.Table.Columns.Contains("StatusMessage") ? r["StatusMessage"]?.ToString() ?? string.Empty : e.StatusMessage;
-			return e;
+			_lookupService = lookupService;
+			_roleService = roleService;
 		}
 
-		public List<UserDetails> GetAll()
+		public List<UserDetailsListViewModel> GetAll()
 		{
-			var list = new List<UserDetails>();
+			var list = new List<UserDetailsListViewModel>();
 			Proc p = new Proc("UserDetails_GetAll");
 			var dt = new DataTable();
 			p.Exec(dt);
-			foreach (DataRow r in dt.Rows) list.Add(Map(r));
+
+			// Get all lookup data first
+			var designations = _lookupService.GetDesignations()?.ToDictionary(d => d.Id, d => d.Name) ?? new Dictionary<Guid, string>();
+			var roles = _roleService.GetAll()?.ToDictionary(r => r.Id, r => r.Name) ?? new Dictionary<Guid, string>();
+			var companies = _lookupService.GetCompanies()?.ToDictionary(c => c.Id, c => c.Name) ?? new Dictionary<Guid, string>();
+			var schools = _lookupService.GetSchools()?.ToDictionary(s => s.Id, s => s.Name) ?? new Dictionary<Guid, string>();
+
+			foreach (DataRow row in dt.Rows)
+			{
+				var user = new UserDetailsListViewModel
+				{
+					Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty,
+					UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() ?? string.Empty : string.Empty,
+					FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() ?? string.Empty : string.Empty,
+					LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() ?? string.Empty : string.Empty,
+					EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() ?? string.Empty : string.Empty,
+					IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
+					DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
+					UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
+					CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
+					SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
+				};
+
+				// Set name fields from lookups
+				if (user.UserRoleId.HasValue && roles.TryGetValue(user.UserRoleId.Value, out var roleName))
+				{
+					user.RoleName = roleName;
+				}
+
+				if (designations.TryGetValue(user.DesignationId, out var designationName))
+				{
+					user.DesignationName = designationName;
+				}
+
+				if (user.CompanyId.HasValue && companies.TryGetValue(user.CompanyId.Value, out var companyName))
+				{
+					user.CompanyName = companyName;
+				}
+
+				if (user.SchoolId.HasValue && schools.TryGetValue(user.SchoolId.Value, out var schoolName))
+				{
+					user.SchoolName = schoolName;
+				}
+
+				list.Add(user);
+			}
+
 			return list;
 		}
 
@@ -51,7 +82,21 @@ namespace SchoolPortal.Services
 			var dt = new DataTable();
 			p.Exec(dt);
 			if (dt.Rows.Count == 0) return null;
-			return Map(dt.Rows[0]);
+			
+			var row = dt.Rows[0];
+			return new UserDetails
+			{
+				Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var idVal) ? idVal : Guid.Empty,
+				UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() : string.Empty,
+				FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() : string.Empty,
+				LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() : string.Empty,
+				EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() : string.Empty,
+				IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
+				DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
+				UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
+				CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
+				SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
+			};
 		}
 
 		public Guid Create(UserDetails entity)

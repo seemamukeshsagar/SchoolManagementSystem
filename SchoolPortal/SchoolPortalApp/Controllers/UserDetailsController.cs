@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
-using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
+using SchoolPortalApp.Models;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -69,34 +69,8 @@ namespace SchoolPortalApp.Controllers
         [Route("Index")]
         public IActionResult Index()
         {
-            var list = _service.GetAll();
-            var designations = _lookup.GetDesignations();
-            var companies = _lookup.GetCompanies();
-            var schools = _lookup.GetSchools();
-            var roles = _roles.GetAll().ToList();
-
-            var result = list.Select(u =>
-            {
-                var desigName = designations.FirstOrDefault(d => d.Id == u.DesignationId)?.Name ?? string.Empty;
-                var roleName = u.UserRoleId.HasValue ? (roles.FirstOrDefault(r => r.Id == u.UserRoleId.Value)?.Name ?? string.Empty) : string.Empty;
-                var companyName = u.CompanyId.HasValue ? (companies.FirstOrDefault(c => c.Id == u.CompanyId.Value)?.Name ?? string.Empty) : string.Empty;
-                var schoolName = u.SchoolId.HasValue ? (schools.FirstOrDefault(s => s.Id == u.SchoolId.Value)?.Name ?? string.Empty) : string.Empty;
-
-                return new UserDetailsListItemViewModel
-                {
-                    Id = u.Id,
-                    UserName = u.UserName ?? string.Empty,
-                    FullName = $"{u.FirstName} {u.LastName}".Trim(),
-                    EmailAddress = u.EmailAddress ?? string.Empty,
-                    RoleName = roleName,
-                    DesignationName = desigName,
-                    CompanyName = companyName,
-                    SchoolName = schoolName,
-                    IsActive = u.IsActive
-                };
-            }).ToList();
-
-            return View(result);
+            var users = _service.GetAll();
+            return View(users);
         }
 
         [HttpGet]

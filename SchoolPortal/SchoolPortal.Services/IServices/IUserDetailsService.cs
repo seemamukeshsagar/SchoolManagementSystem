@@ -6,10 +6,10 @@ namespace SchoolPortal.Services.IServices
 {
     public interface IUserDetailsService
     {
-        List<UserDetails> GetAll();
-        UserDetails? GetById(Guid id);
-        Guid Create(UserDetails entity);
-        bool Update(UserDetails entity);
+        List<SchoolPortal.Entities.Models.UserDetailsListViewModel> GetAll();
+        SchoolPortal.Entities.Models.UserDetails? GetById(Guid id);
+        Guid Create(SchoolPortal.Entities.Models.UserDetails entity);
+        bool Update(SchoolPortal.Entities.Models.UserDetails entity);
         bool Delete(Guid id);
     }
 }
