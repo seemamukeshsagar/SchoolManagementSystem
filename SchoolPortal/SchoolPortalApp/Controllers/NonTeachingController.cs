@@ -82,9 +82,47 @@ namespace SchoolPortal.Web.Controllers
             return View(new NonTeachingViewModel
             {
                 Id = Guid.Empty,
+                FirstName = string.Empty,
+                MiddleName = string.Empty,
+                LastName = string.Empty,
+                Email = string.Empty,
+                Phone = string.Empty,
+                MobilePhone = string.Empty,
+                Designation = string.Empty,
+                Department = string.Empty,
+                Qualification = string.Empty,
+                IsActive = true,
+                IsDeleted = false,
+                EmployeeCode = string.Empty,
                 DOB = DateTime.Today.AddYears(-25), // Default age 25
                 DOJ = DateTime.Today,
-                IsActive = true
+                DateOfLeaving = null,
+                Address = string.Empty,
+                CityId = null,
+                StateId = null,
+                CountryId = null,
+                ZipCode = string.Empty,
+                Gender = string.Empty,
+                MaritalStatusId = null,
+                ImageFile = null,
+                Image = Array.Empty<byte>(),
+                Salary = null,
+                BankAccountNumber = string.Empty,
+                BankName = string.Empty,
+                IFSCCode = string.Empty,
+                PAN = string.Empty,
+                AadharNumber = string.Empty,
+                EmergencyContactName = string.Empty,
+                EmergencyContactNumber = string.Empty,
+                EmergencyContactRelation = string.Empty,
+                CompanyId = Guid.Empty,
+                SchoolId = Guid.Empty,
+                CreatedBy = Guid.Empty,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedBy = null,
+                ModifiedDate = null,
+                Documents = new List<NonTeachingDocumentDetails>(),
+                Qualifications = new List<NonTeachingQualificationDetails>()
             });
         }
 
@@ -107,6 +145,11 @@ namespace SchoolPortal.Web.Controllers
                     }
 
                     var nonTeaching = MapToNonTeachingMaster(model);
+                    if (nonTeaching == null)
+                    {
+                        ModelState.AddModelError("", "Invalid staff data.");
+                        return View(model);
+                    }
                     nonTeaching.Id = Guid.NewGuid();
                     nonTeaching.CreatedDate = DateTime.UtcNow;
                     nonTeaching.CreatedBy = model.CreatedBy; // Or get the current user ID
@@ -376,7 +419,7 @@ namespace SchoolPortal.Web.Controllers
 
         #region Helper Methods
 
-        private NonTeachingMaster MapToNonTeachingMaster(NonTeachingViewModel model)
+        private NonTeachingMaster? MapToNonTeachingMaster(NonTeachingViewModel model)
         {
             if (model == null) return null;
 
@@ -502,7 +545,51 @@ namespace SchoolPortal.Web.Controllers
         {
             // Return an empty view model when input is null to ensure all code paths return a value
             if (entity == null)
-                return new NonTeachingViewModel();
+                return new NonTeachingViewModel
+                {
+                    Id = Guid.Empty,
+                    FirstName = string.Empty,
+                    MiddleName = string.Empty,
+                    LastName = string.Empty,
+                    Email = string.Empty,
+                    Phone = string.Empty,
+                    MobilePhone = string.Empty,
+                    Designation = string.Empty,
+                    Department = string.Empty,
+                    IsActive = true,
+                    IsDeleted = false,
+                    EmployeeCode = string.Empty,
+                    DOB = null,
+                    DOJ = null,
+                    DateOfLeaving = null,
+                    Address = string.Empty,
+                    CityId = null,
+                    StateId = null,
+                    CountryId = null,
+                    ZipCode = string.Empty,
+                    Gender = string.Empty,
+                    MaritalStatusId = null,
+                    ImageFile = null,
+                    Image = Array.Empty<byte>(),
+                    Qualification = string.Empty,
+                    Salary = null,
+                    BankAccountNumber = string.Empty,
+                    BankName = string.Empty,
+                    IFSCCode = string.Empty,
+                    PAN = string.Empty,
+                    AadharNumber = string.Empty,
+                    EmergencyContactName = string.Empty,
+                    EmergencyContactNumber = string.Empty,
+                    EmergencyContactRelation = string.Empty,
+                    CompanyId = Guid.Empty,
+                    SchoolId = Guid.Empty,
+                    CreatedBy = Guid.Empty,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedBy = null,
+                    ModifiedDate = null,
+                    Documents = new List<NonTeachingDocumentDetails>(),
+                    Qualifications = new List<NonTeachingQualificationDetails>()
+                };
 
             var viewModel = new NonTeachingViewModel
             {

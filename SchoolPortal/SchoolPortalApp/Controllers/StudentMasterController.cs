@@ -605,11 +605,29 @@ namespace SchoolPortalApp.Controllers
 			// Handle AJAX request
 			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
 			{
-				return await HandleAjaxRequest(model, companyId.Value, userId.Value);
+				if (companyId.HasValue && userId.HasValue)
+				{
+					return await HandleAjaxRequest(model, companyId.Value, userId.Value);
+				}
+				else
+				{
+					ModelState.AddModelError(string.Empty, "Please login and select company to create student.");
+					PopulateDropdowns(model);
+					return View(model);
+				}
 			}
 
-			// Handle traditional form post
-			return await HandleFormPost(model, companyId.Value, userId.Value);
+			// Fix: Add null check before using .Value to avoid CS8629
+			if (companyId.HasValue && userId.HasValue)
+			{
+				return await HandleFormPost(model, companyId.Value, userId.Value);
+			}
+			else
+			{
+				ModelState.AddModelError(string.Empty, "Please login and select company to create student.");
+				PopulateDropdowns(model);
+				return View(model);
+			}
 		}
 
 		#region Private Methods
@@ -633,12 +651,12 @@ namespace SchoolPortalApp.Controllers
 		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult errorResult)
 		{
 			errorResult = null;
-			
+
 			if (!userId.HasValue || !companyId.HasValue || schoolId == Guid.Empty)
 			{
 				var errorMessage = "Please login and select company to create student.";
 				ModelState.AddModelError(string.Empty, errorMessage);
-				
+
 				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
 				{
 					errorResult = Json(new { 
@@ -650,9 +668,10 @@ namespace SchoolPortalApp.Controllers
 					});
 					return false;
 				}
-				
-				PopulateDropdowns(new StudentViewModel());
-				errorResult = View(new StudentViewModel());
+
+				var vm = new StudentViewModel();
+				PopulateDropdowns(vm);
+				errorResult = View(vm);
 				return false;
 			}
 			

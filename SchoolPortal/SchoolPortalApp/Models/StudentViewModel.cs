@@ -207,7 +207,7 @@ namespace SchoolPortalApp.Models
         public decimal? TransportFees { get; set; }
 
         [Display(Name = "Use Transport Fees")]
-        public bool UseTransportFees { get; set; } = false;
+        public bool? UseTransportFees { get; set; } = false;
 
         [Display(Name = "Session")]
         public Guid? SessionId { get; set; }
@@ -301,7 +301,7 @@ namespace SchoolPortalApp.Models
 
         [Display(Name = "Additional Notes")]
         [DataType(DataType.MultilineText)]
-        public string AdditionalNotes { get; set; }
+        public string? AdditionalNotes { get; set; }
     }
 }
 

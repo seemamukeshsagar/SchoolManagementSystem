@@ -148,7 +148,7 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ChangePassword(ChangePasswordViewModel model)
 		{
-			_logger.LogInformation("POST ChangePassword method called");
+            _logger.LogInformation("POST ChangePassword method called");
 			try
 			{
 				if (!ModelState.IsValid)
