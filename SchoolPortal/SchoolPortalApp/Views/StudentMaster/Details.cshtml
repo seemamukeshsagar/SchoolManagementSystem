@@ -37,7 +37,7 @@
 			<dt class="col-sm-3">First Name</dt><dd class="col-sm-9">@Model.FirstName</dd>
 			<dt class="col-sm-3">Last Name</dt><dd class="col-sm-9">@Model.LastName</dd>
 			<dt class="col-sm-3">Date of Birth</dt><dd class="col-sm-9">@Model.DOB.ToString("yyyy-MM-dd")</dd>
-			<dt class="col-sm-3">Gender</dt><dd class="col-sm-9">@(Model.Gender.HasValue ? Model.Genders?.FirstOrDefault(x => x.Value == Model.Gender.Value.ToString())?.Text ?? "N/A" : "N/A")</dd>
+			<dd class="col-sm-9">@(Model.Gender.HasValue && Model.Genders != null ? Model.Genders.FirstOrDefault(x => x.Value == Model.Gender.Value.ToString())?.Text ?? "N/A" : "N/A")</dd>
 			<dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
 			<dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
 			<dt class="col-sm-3">Image</dt><dd class="col-sm-9">
@@ -704,9 +704,9 @@
 			</dd>
 			<dt class="col-sm-3">Avail Transport</dt>
 			<dd class="col-sm-9">
-				@if (Model.AvailTransport.HasValue)
+				@if (Model.AvailTransport)
 				{
-					@Model.AvailTransport.Value
+					@Model.AvailTransport
 				}
 				else
 				{

@@ -136,10 +136,15 @@ namespace SchoolPortalApp.Controllers
 
 			// Genders
 			var genders = _lookupService.GetGenders();
-			vm.Genders = genders.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name, Selected = vm.Gender.HasValue && g.Id == vm.Gender.Value }).ToList();
+            vm.Genders = genders.Select(g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = g.Name,
+                Selected = vm.Gender.HasValue && g.Id == vm.Gender.Value
+            }).ToList();
 
-			// Countries / States / Cities
-			var countries = _lookupService.GetCountries();
+            // Countries / States / Cities
+            var countries = _lookupService.GetCountries();
 			vm.Countries = countries.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.CountryId }).ToList();
 			vm.BirthCountries = countries.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.BirthCountryId }).ToList();
 			vm.Nationalities = countries.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name, Selected = x.Id == vm.Nationality }).ToList();
@@ -301,14 +306,14 @@ namespace SchoolPortalApp.Controllers
 				RegistrationNumber = item.RegistrationNumber,
 				ClassId = item.ClassId,
 				SectionId = item.SectionId,
-				AvailTransport = item.AvailTransport,
+				AvailTransport = item.AvailTransport ?? false,
 				Image = item.Image,
 				Email = item.Email,
 				Phone = item.Phone,
 				CategoryId = item.CategoryId,
 				SiblingsIfAny = item.SiblingsIfAny,
 				SiblingClassId = item.SiblingClassId,
-				Gender = item.Gender,
+				Gender = item.Gender ?? Guid.Empty,
 				DisabilityAny = item.DisabilityAny,
 				MedicalAlleryAny = item.MedicalAlleryAny,
 				BirthCityId = item.BirthCityId,
@@ -961,12 +966,12 @@ namespace SchoolPortalApp.Controllers
 				RegistrationNumber = item.RegistrationNumber,
 				ClassId = item.ClassId,
 				SectionId = item.SectionId,
-				AvailTransport = item.AvailTransport,
+				AvailTransport = item.AvailTransport ?? false,
 				Image = item.Image,
 				Email = item.Email,
 				Phone = item.Phone, // was missing
 				CategoryId = item.CategoryId,
-				SiblingsIfAny = item.SiblingsIfAny,
+				SiblingsIfAny = item.SiblingsIfAny ?? false,
 				SiblingClassId = item.SiblingClassId,
 				Gender = item.Gender,
 				DisabilityAny = item.DisabilityAny,

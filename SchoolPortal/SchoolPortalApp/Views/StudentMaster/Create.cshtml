@@ -463,20 +463,78 @@
         </div>
 
         <!-- Additional Info Tab -->
-        <div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
-			<div class="form-group">
-				<label asp-for="CategoryId" class="control-label"></label>
-				<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
-					<option value="">-- Select Category --</option>
-				</select>
-				<span asp-validation-for="CategoryId" class="text-danger"></span>
+		<div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label asp-for="CategoryId" class="control-label"></label>
+						<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+							<option value="">-- Select Category --</option>
+						</select>
+						<span asp-validation-for="CategoryId" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Transport Section -->
+			<div class="card mt-3 mb-3">
+				<div class="card-header">
+					<h5>Transportation Details</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-check mb-3">
+								<input type="checkbox" asp-for="AvailTransport" class="form-check-input" id="availTransport" />
+								<label class="form-check-label" for="availTransport">Available for Transport</label>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="hidden" name="UseTransportFees" value="false" />
+								<input type="checkbox" name="UseTransportFees" value="true" id="useTransportFees" />
+								<label class="form-check-label" for="useTransportFees">Include Transport Fees</label>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row transport-fields" style="display: none;">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="RouteId"></label>
+								<select asp-for="RouteId" asp-items="Model.Routes" class="form-control" id="RouteId">
+									<option value="">-- Select Route --</option>
+								</select>
+								<span asp-validation-for="RouteId" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="RouteStopDetailsId"></label>
+								<select asp-for="RouteStopDetailsId" class="form-control" id="RouteStopDetailsId" disabled>
+									<option value="">-- Select Route First --</option>
+								</select>
+								<span asp-validation-for="RouteStopDetailsId" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label asp-for="RoutePickAndDrop"></label>
+								<select asp-for="RoutePickAndDrop" class="form-control">
+									<option value="true">Both Pickup & Drop</option>
+									<option value="false">One Way Only</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			
-            <div class="form-group">
-                <label asp-for="AdditionalNotes"></label>
-                <textarea asp-for="AdditionalNotes" class="form-control" rows="4"></textarea>
-            </div>
-        </div>
+			<div class="form-group">
+				<label asp-for="AdditionalNotes"></label>
+				<textarea asp-for="AdditionalNotes" class="form-control" rows="4"></textarea>
+			</div>
+		</div>
     </div>
 
     <!-- Form Buttons -->
@@ -567,6 +625,69 @@
             }
         }
 
+		// Transport fields toggle
+		function toggleTransportFields() {
+			if ($('#availTransport').is(':checked')) {
+				$('.transport-fields').show();
+				$('#RouteId').prop('disabled', false);
+				$('#RouteStopDetailsId').prop('disabled', false);
+			} else {
+				$('.transport-fields').hide();
+				$('#RouteId').prop('disabled', true);
+				$('#RouteStopDetailsId').prop('disabled', true);
+			}
+		}
+
+		// Initialize transport fields
+		toggleTransportFields();
+
+		// Bind change event
+		$('#availTransport').change(toggleTransportFields);
+
+		// Load route stops when route changes
+		$('#RouteId').change(function() {
+			var routeId = $(this).val();
+			var $stopSelect = $('#RouteStopDetailsId');
+			
+			$stopSelect.empty().prop('disabled', true);
+			
+			if (routeId) {
+				$stopSelect.append($('<option>', {
+					value: '',
+					text: 'Loading stops...'
+				}));
+
+				// Replace with your actual endpoint to get stops
+				$.getJSON(`/api/transport/getstops?routeId=${routeId}`, function(data) {
+					$stopSelect.empty().append($('<option>', {
+						value: '',
+						text: '-- Select Stop --'
+					}));
+					
+					if (data && data.length > 0) {
+						$.each(data, function(i, stop) {
+							$stopSelect.append($('<option>', {
+								value: stop.id,
+								text: stop.name
+							}));
+						});
+					}
+					
+					$stopSelect.prop('disabled', false);
+				}).fail(function() {
+					$stopSelect.empty().append($('<option>', {
+						value: '',
+						text: 'Error loading stops'
+					}));
+				});
+			} else {
+				$stopSelect.append($('<option>', {
+					value: '',
+					text: '-- Select Route First --'
+				}));
+			}
+		});
+		
         // Form validation
         (function () {
             'use strict';

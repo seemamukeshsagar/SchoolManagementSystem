@@ -85,7 +85,7 @@ namespace SchoolPortalApp.Models
         public string? SectionName { get; set; }
 
         [Display(Name = "Avail Transport")]
-        public bool? AvailTransport { get; set; }
+        public bool AvailTransport { get; set; } = false;
 
         public string? Image { get; set; }
         [Display(Name = "Upload Image")]
@@ -105,8 +105,9 @@ namespace SchoolPortalApp.Models
         public IEnumerable<SelectListItem> SiblingClasses { get; set; } = Array.Empty<SelectListItem>();
 
         [Display(Name = "Gender")]
+        [Required(ErrorMessage = "Gender is required")]
         public Guid? Gender { get; set; }
-        public IEnumerable<SelectListItem> Genders { get; set; } = Array.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> Genders { get; set; } = new List<SelectListItem>();
 
         [Display(Name = "Disability (If Any)")]
         public string? DisabilityAny { get; set; }
@@ -206,7 +207,7 @@ namespace SchoolPortalApp.Models
         public decimal? TransportFees { get; set; }
 
         [Display(Name = "Use Transport Fees")]
-        public bool? UseTransportFees { get; set; }
+        public bool UseTransportFees { get; set; } = false;
 
         [Display(Name = "Session")]
         public Guid? SessionId { get; set; }
