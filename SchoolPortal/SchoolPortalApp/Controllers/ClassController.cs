@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
+using System.Collections.Generic;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -29,37 +30,111 @@ namespace SchoolPortalApp.Controllers
 			vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
 		}
 
+		[HttpPost]
+        [Route("GetClassesData")]
+        public IActionResult GetClassesData()
+        {
+            try
+            {
+                var requestForm = Request.Form;
+                var draw = Convert.ToInt32(requestForm["draw"].FirstOrDefault() ?? "0");
+                var start = Convert.ToInt32(requestForm["start"].FirstOrDefault() ?? "0");
+                var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
+                var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
+                var searchValue = requestForm["search[value]"].FirstOrDefault();
+                int pageSize = length != -1 ? length : 0;
+                int skip = start != 0 ? start : 0;
+                int recordsTotal = 0;
+
+                // Filter classes by SchoolId from session
+                var schoolId = CurrentSchoolId;
+                if (!schoolId.HasValue)
+                {
+                    return Json(new 
+                    { 
+                        draw = draw,
+                        recordsFiltered = 0,
+                        recordsTotal = 0,
+                        data = new List<object>()
+                    });
+                }
+
+                // Get all classes for the current school
+                var list = _service.GetAll()
+                    .Where(c => c.SchoolId == schoolId.Value)
+                    .ToList();
+
+                var schools = _schoolService.GetAll();
+                var classes = list.Select(item =>
+                {
+                    var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
+                    return new 
+                    {
+                        id = item.Id,
+                        name = item.Name,
+                        examAssessment = item.ExamAssessment,
+                        isActive = item.IsActive,
+                        schoolName = school?.Name ?? string.Empty
+                    };
+                }).ToList();
+
+                // Apply search
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    classes = classes.Where(c => 
+                        (c.name != null && c.name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (c.examAssessment != null && c.examAssessment.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (c.schoolName != null && c.schoolName.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+                    ).ToList();
+                }
+
+                // Get total count
+                recordsTotal = classes.Count;
+
+                // Apply sorting
+                if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+                {
+                    var propertyInfo = typeof(ClassListItemViewModel).GetProperty(sortColumn, 
+                        System.Reflection.BindingFlags.IgnoreCase | 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (propertyInfo != null)
+                    {
+                        classes = sortColumnDirection.ToLower() == "asc"
+                            ? classes.OrderBy(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList()
+                            : classes.OrderByDescending(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList();
+                    }
+                }
+
+                // Apply pagination
+                var data = classes
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToList();
+
+                return Json(new 
+                {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = data
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading classes data");
+                return Json(new { error = "An error occurred while loading classes data." });
+            }
+        }
+
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			// Filter classes by SchoolId from session
-			var schoolId = CurrentSchoolId;
-			if (!schoolId.HasValue)
-			{
-				// No valid school in session: show empty list
-				return View(Enumerable.Empty<ClassListItemViewModel>());
-			}
-
-			var list = _service.GetAll()
-				.Where(c => c.SchoolId == schoolId.Value)
-				.ToList();
-
-			var schools = _schoolService.GetAll();
-			var result = list.Select(item =>
-			{
-				var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-				return new ClassListItemViewModel
-				{
-					Id = item.Id,
-					Name = item.Name,
-					ExamAssessment = item.ExamAssessment,
-					IsActive = item.IsActive,
-					SchoolName = school?.Name ?? string.Empty
-				};
-			}).ToList();
-			return View(result);
+			return View();
 		}
 
 		[HttpGet]
@@ -206,17 +281,38 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpPost]
-		[Route("Delete/{id}")]
 		[ActionName("Delete")]
+		[Route("Delete/{id}")]
 		[ValidateAntiForgeryToken]
-		public IActionResult ConfirmDelete(Guid id)
+		public IActionResult DeleteConfirmed(Guid id)
 		{
-			if (!_service.Delete(id))
+			try
 			{
-				TempData["ErrorMessage"] = "Failed to delete class.";
-				return RedirectToAction("Delete", new { id });
+				var result = _service.Delete(id);
+				if (result)
+				{
+					if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+					{
+						return Json(new { success = true, message = "Class deleted successfully" });
+					}
+					return RedirectToAction("Index");
+				}
+				
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "Failed to delete class" });
+				}
+				return View("Delete", _service.GetById(id));
 			}
-			return RedirectToAction("Index");
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error deleting class");
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "An error occurred while deleting the class" });
+				}
+				return View("Error");
+			}
 		}
 	}
 }

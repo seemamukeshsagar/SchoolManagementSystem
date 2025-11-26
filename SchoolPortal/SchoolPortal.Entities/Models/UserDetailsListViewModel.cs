@@ -18,7 +18,7 @@ namespace SchoolPortal.Entities.Models
         public Guid? SchoolId { get; set; }
         
         // Name fields (will be populated in the service)
-        public string FullName => $"{FirstName} {LastName}".Trim();
+        public string FullName { get; set; } = string.Empty;
         public string RoleName { get; set; } = string.Empty;
         public string DesignationName { get; set; } = string.Empty;
         public string CompanyName { get; set; } = string.Empty;

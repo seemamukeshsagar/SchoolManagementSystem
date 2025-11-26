@@ -26,14 +26,81 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
-			var result = list.Select(item => new CategoryMasterListItemViewModel
+			return View();
+		}
+
+		[HttpPost]
+		[Route("GetCategoriesData")]
+		public IActionResult GetCategoriesData()
+		{
+			try
 			{
-				Id = item.Id,
-				Name = item.Name,
-				IsActive = item.IsActive
-			}).ToList();
-			return View(result);
+				var requestForm = Request.Form;
+				var draw = Convert.ToInt32(requestForm["draw"].FirstOrDefault() ?? "0");
+				var start = Convert.ToInt32(requestForm["start"].FirstOrDefault() ?? "0");
+				var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
+				var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+				var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
+				var searchValue = requestForm["search[value]"].FirstOrDefault();
+				int pageSize = length != -1 ? length : 0;
+				int skip = start != 0 ? start : 0;
+				int recordsTotal = 0;
+
+				// Get all categories
+				var categories = _service.GetAll().Select(item => new CategoryMasterListItemViewModel
+				{
+					Id = item.Id,
+					Name = item.Name,
+					IsActive = item.IsActive
+				}).ToList();
+
+				// Apply search
+				if (!string.IsNullOrEmpty(searchValue))
+				{
+					categories = categories.Where(c => 
+						(!string.IsNullOrEmpty(c.Name) && c.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+						(c.IsActive.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+					).ToList();
+				}
+
+				// Get total count
+				recordsTotal = categories.Count;
+
+				// Apply sorting
+				if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+				{
+					var propertyInfo = typeof(CategoryMasterListItemViewModel).GetProperty(sortColumn, 
+						System.Reflection.BindingFlags.IgnoreCase | 
+						System.Reflection.BindingFlags.Public | 
+						System.Reflection.BindingFlags.Instance);
+
+					if (propertyInfo != null)
+					{
+						categories = sortColumnDirection.ToLower() == "asc"
+							? categories.OrderBy(x => propertyInfo.GetValue(x, null)).ToList()
+							: categories.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+					}
+				}
+
+				// Apply pagination
+				var data = categories
+					.Skip(skip)
+					.Take(pageSize)
+					.ToList();
+
+				return Json(new 
+				{
+					draw = draw,
+					recordsFiltered = recordsTotal,
+					recordsTotal = recordsTotal,
+					data = data
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading categories data");
+				return Json(new { error = "An error occurred while loading categories data." });
+			}
 		}
 
 		[HttpGet]

@@ -1,62 +1,16 @@
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor Accessor;
 
-@{
-    var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
-    var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
-    
-    // Get current controller and action for active state detection
-    var currentController = ViewContext.RouteData.Values["controller"]?.ToString()?.ToLower();
-    var currentAction = ViewContext.RouteData.Values["action"]?.ToString()?.ToLower();
-    var currentArea = ViewContext.RouteData.Values["area"]?.ToString()?.ToLower() ?? "";
-    
-    // Helper function to determine if a navigation item should be active
-    Func<string, string, bool> IsActive = (controller, action) => 
-    {
-        var controllerMatch = controller.ToLower() == currentController;
-        var actionMatch = string.IsNullOrEmpty(action) || action.ToLower() == currentAction;
-        return controllerMatch && actionMatch;
-    };
-    
-    // Determine which accordion sections should be expanded
-    var expandAdmin = IsActive("company", "") || IsActive("school", "") || IsActive("userdetails", "") || 
-                     IsActive("rolemaster", "") || IsActive("deptmaster", "") || IsActive("desigmater", "") || 
-                     IsActive("emp", "") || IsActive("emptypemaster", "") || IsActive("privileges", "") || 
-                     IsActive("roleprivileges", "") || IsActive("systemparameters", "") || IsActive("taskschedules", "") || 
-                     IsActive("holidaymaster", "") || IsActive("categorymaster", "") || IsActive("class", "") || 
-                     IsActive("section", "") || IsActive("classroom", "") || IsActive("subject", "") || 
-                     IsActive("subjectcategory", "") || IsActive("professionmaster", "") || IsActive("qualificationmaster", "") || 
-                     IsActive("feescategorymaster", "") || IsActive("assessment", "") || IsActive("attendencereasonmaster", "") || 
-                     IsActive("visitor", "") || IsActive("emp", "") || IsActive("teachermaster", "") || IsActive("nonteaching", "") || 
-                     IsActive("drivermaster", "") || IsActive("cleanermaster", "");
-    
-    var expandAcademics = IsActive("studentmaster", "") || IsActive("attendance", "") || IsActive("examination", "") || 
-                         IsActive("timetable", "");
-    
-    var expandFinance = IsActive("fees", "") || IsActive("expensecategory", "") || IsActive("vendor", "") || 
-                       IsActive("bill", "") || IsActive("voucher", "");
-    
-    var expandOperations = IsActive("transport", "") || IsActive("vehicletype", "") || IsActive("vehicleexpensedetails", "") || 
-                          IsActive("itemtype", "") || IsActive("inventory", "") || IsActive("inventorymaster", "");
-    
-    var expandLibrary = IsActive("library", "");
-}
-
 <link rel="stylesheet" href="~/css/navigationbar.css" />
-<script src="~/js/navigationbar.js"></script>
+<!-- <script src="~/js/navigationbar.js"></script> -->
 
-@* @{
+@{
 	var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
 	var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
 }
- *@
-<!-- Sidebar Toggle and Container -->
-<button class="btn btn-sm btn-outline-secondary mb-2 ms-2" id="sidebarToggle" style="width: 40px;">
-    <i class="bi bi-chevron-left"></i>
-</button>
 
 <!-- Sidebar -->
-<div class="d-flex flex-column nav-sidebar" id="sidebar">
+<div class="d-flex flex-column">
 	<div class="accordion" id="sidebarAccordion">
 
 		<ul class="nav nav-pills flex-column mb-2">
@@ -74,19 +28,18 @@
 		<!-- ADMINISTRATION -->
 		<div class="accordion-item">
 			<h2 class="accordion-header" id="heading-admin">
-				<button class="accordion-button @(expandAdmin ? "" : "collapsed")" type="button"
+				<button class="accordion-button collapsed" type="button"
 						data-bs-toggle="collapse"
 						data-bs-target="#collapse-admin"
-						aria-expanded="@expandAdmin.ToString().ToLower()"
+						aria-expanded="false"
 						aria-controls="collapse-admin"
-						@(expandAdmin ? "data-bs-toggle=collapse" : "")
 						data-tooltip="Administration">
 					<i class="bi bi-gear me-2"></i>
 					<span>Administration</span>
 				</button>
 			</h2>
 			<div id="collapse-admin"
-				 class="accordion-collapse @(expandAdmin ? "show" : "collapse")"
+				 class="accordion-collapse collapse"
 				 aria-labelledby="heading-admin"
 				 data-bs-parent="#sidebarAccordion">
 				<div class="accordion-body p-0">
@@ -94,11 +47,11 @@
 
 						<!-- General -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>General</b>
+							General
 						</li>
 						@if (lstPrivileges.Contains("Manage Companies"))
 						{
-							<li><a href="@Url.Action("Index", "Company")" class="nav-link @(IsActive("company", "") ? "active" : "")">Companies</a></li>
+							<li><a href="@Url.Action("Index", "Company")" class="nav-link">Companies</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Schools"))
 						{
@@ -151,7 +104,7 @@
 
 						<!-- Masters -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Masters</b>
+							Masters
 						</li>
 						<li><a href="@Url.Action("Index", "CategoryMaster")" class="nav-link">Categories</a></li>
 						<li><a href="@Url.Action("Index", "Class", new { area = "" })" class="nav-link">Classes</a></li>
@@ -168,13 +121,13 @@
 
 						<!-- Staff -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Staff</b>
+							Staff
 						</li>
-						<li><a href="@Url.Action("Index", "Emp")" class="nav-link">All Employees</a></li>
-						<li><a href="@Url.Action("Index", "TeacherMaster")" class="nav-link">Teaching</a></li>
-						<li><a href="@Url.Action("Index", "NonTeaching")" class="nav-link">Non Teaching</a></li>
+						<li><a href="@Url.Action("Index", "Emp")" class="nav-link">Employee</a></li>
+						<li><a href="@Url.Action("Index", "TeacherMaster")" class="nav-link">Teacher</a></li>
 						<li><a href="@Url.Action("Index", "DriverMaster")" class="nav-link">Driver</a></li>
 						<li><a href="@Url.Action("Index", "CleanerMaster")" class="nav-link">Cleaner</a></li>
+
 					</ul>
 				</div>
 			</div>
@@ -202,7 +155,7 @@
 
 						<!-- Students -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Students</b>
+							Students
 						</li>
 						<li><a href="@Url.Action("Index", "StudentMaster")" class="nav-link">Students</a></li>
 						<li><a href="@Url.Action("Index", "StudentMaster", new { type = "Admission" })" class="nav-link">Admissions</a></li>
@@ -211,7 +164,7 @@
 
 						<!-- Attendance -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Attendance</b>
+							Attendance
 						</li>
 						<li><a href="@Url.Action("StudentAttendance", "Attendance")" class="nav-link">Student Attendance</a></li>
 						<li><a href="@Url.Action("StaffAttendance", "Attendance")" class="nav-link">Staff Attendance</a></li>
@@ -219,7 +172,7 @@
 
 						<!-- Examinations -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Examinations</b>
+							Examinations
 						</li>
 						<li><a href="@Url.Action("Index", "Examination")" class="nav-link">Exam Schedule</a></li>
 						<li><a href="@Url.Action("MarksEntry", "Examination")" class="nav-link">Marks Entry</a></li>
@@ -228,7 +181,7 @@
 
 						<!-- Timetable -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Timetable</b>
+							Timetable
 						</li>
 						<li><a href="@Url.Action("Index", "TimeTable")" class="nav-link">TimeTable Setup</a></li>
 						<li><a href="@Url.Action("TimeTablePeriods", "TimeTable")" class="nav-link">TimeTable Periods</a></li>
@@ -269,7 +222,7 @@
 						<!-- Fees -->
 						@* <li class="nav-item text-uppercase text-white-50 small px-3 pt-2"> *@
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Fees</b>
+							Fees
 						</li>
 						<li><a href="@Url.Action("CollectFees", "Fees")" class="nav-link">Collect Fees</a></li>
 						<li><a href="@Url.Action("ViewTransactions", "Fees")" class="nav-link">Transactions</a></li>
@@ -278,7 +231,7 @@
 
 						<!-- Fees Management -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Fees Management</b>
+							Fees Management
 						</li>
 						<li><a href="@Url.Action("Index", "Fees")" class="nav-link">Fees Categories Classes</a></li>
 						<li><a href="@Url.Action("GenerateData", "Fees")" class="nav-link">Generate Fees Data</a></li>
@@ -291,7 +244,7 @@
 
 						<!-- Bills -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Bills & Expenses</b>
+							Bills & Expenses
 						</li>
 						<li><a href="@Url.Action("Index", "ExpenseCategory")" class="nav-link">Expense Categories</a></li>
 						<li><a href="@Url.Action("Index", "Vendor")" class="nav-link">Vendors</a></li>
@@ -339,7 +292,7 @@
 
 						<!-- Inventory -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
-							<b>Inventory</b>
+							Inventory
 						</li>
 						<li><a href="@Url.Action("ItemTypes", "ItemType")" class="nav-link">Item Types</a></li>
 						<li><a href="@Url.Action("ItemLocation", "Inventory")" class="nav-link">Item Locations</a></li>

@@ -29,25 +29,86 @@ namespace SchoolPortalApp.Controllers
 			vm.Schools = schools.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SchoolId }).ToList();
 		}
 
+		[HttpPost]
+		[Route("GetClassRoomsData")]
+		public IActionResult GetClassRoomsData()
+		{
+			try
+			{
+				var requestForm = Request.Form;
+				var draw = Convert.ToInt32(requestForm["draw"].FirstOrDefault() ?? "0");
+				var start = Convert.ToInt32(requestForm["start"].FirstOrDefault() ?? "0");
+				var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
+				var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+				var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
+				var searchValue = requestForm["search[value]"].FirstOrDefault();
+				int pageSize = length != -1 ? length : 0;
+				int skip = start != 0 ? start : 0;
+				int recordsTotal = 0;
+
+				// Get all class rooms
+				var classRooms = _service.GetAll().Select(item => new 
+				{
+					id = item.Id,
+					name = item.Name,
+					isActive = item.IsActive
+				}).ToList();
+
+				// Apply search
+				if (!string.IsNullOrEmpty(searchValue))
+				{
+					classRooms = classRooms.Where(c => 
+						(c.name != null && c.name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+						(c.isActive.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+					).ToList();
+				}
+
+				// Get total count
+				recordsTotal = classRooms.Count;
+
+				// Apply sorting
+				if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+				{
+					var propertyInfo = typeof(ClassRoomListItemViewModel).GetProperty(sortColumn, 
+						System.Reflection.BindingFlags.IgnoreCase | 
+						System.Reflection.BindingFlags.Public | 
+						System.Reflection.BindingFlags.Instance);
+
+					if (propertyInfo != null)
+					{
+						classRooms = sortColumnDirection.ToLower() == "asc"
+							? classRooms.OrderBy(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList()
+							: classRooms.OrderByDescending(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList();
+					}
+				}
+
+				// Apply pagination
+				var data = classRooms
+					.Skip(skip)
+					.Take(pageSize)
+					.ToList();
+
+				return Json(new 
+				{
+					draw = draw,
+					recordsFiltered = recordsTotal,
+					recordsTotal = recordsTotal,
+					data = data
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading class rooms data");
+				return Json(new { error = "An error occurred while loading class rooms data." });
+			}
+		}
+
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
-			var schools = _schoolService.GetAll();
-			var result = list.Select(item =>
-			{
-				var school = schools.FirstOrDefault(s => s.Id == item.SchoolId);
-				return new ClassRoomListItemViewModel
-				{
-					Id = item.Id,
-					Name = item.Name,
-					IsActive = item.IsActive,
-					SchoolName = school?.Name ?? string.Empty
-				};
-			}).ToList();
-			return View(result);
+			return View());
 		}
 
 		[HttpGet]
@@ -195,6 +256,41 @@ namespace SchoolPortalApp.Controllers
 				return RedirectToAction("Delete", new { id });
 			}
 			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		[ActionName("Delete")]
+		[Route("Delete/{id}")]
+		[ValidateAntiForgeryToken]
+		public IActionResult DeleteConfirmed(Guid id)
+		{
+			try
+			{
+				var result = _service.Delete(id);
+				if (result)
+				{
+					if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+					{
+						return Json(new { success = true, message = "Class room deleted successfully" });
+					}
+					return RedirectToAction("Index");
+				}
+				
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "Failed to delete class room" });
+				}
+				return View("Delete", _service.GetById(id));
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error deleting class room");
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "An error occurred while deleting the class room" });
+				}
+				return View("Error");
+			}
 		}
 	}
 }

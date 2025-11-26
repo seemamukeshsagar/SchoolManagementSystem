@@ -1,90 +1,210 @@
-@model IEnumerable<ClassSectionDetailListItemViewModel>
-
+@model IEnumerable<SchoolPortalApp.Models.ClassSectionDetailListItemViewModel>
 @{
-	ViewData["Title"] = "Class Section Details";
+    ViewData["Title"] = "Class Section Details";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Class Section Details</h4>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Create New
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="classSectionsTable" class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be loaded via AJAX -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<p>
-	<a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<!-- Status Toggle Confirmation Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Confirm Status Change</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to <span id="statusActionText"></span> this class section?
+                <input type="hidden" id="classSectionIdToToggle" />
+                <input type="hidden" id="currentStatus" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmToggleStatus">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Class</th>
-			<th>Section</th>
-			<th>Location</th>
-			<th>Status</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@item.ClassName</td>
-				<td>@item.SectionName</td>
-				<td>@item.LocationName</td>
-				<td>
-					@if (item.IsActive)
-					{
-						<span class="badge bg-success">Active</span>
-					}
-					else
-					{
-						<span class="badge bg-danger">Inactive</span>
-					}
-				</td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
-					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-					<button class="btn btn-sm @(item.IsActive ? "btn-danger" : "btn-success")" 
-							onclick="toggleStatus('@item.Id', this, @item.IsActive.ToString().ToLower())">
-						@(item.IsActive ? "Deactivate" : "Activate")
-					</button>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+@section Styles {
+    <style>
+        .action-buttons {
+            white-space: nowrap;
+        }
+    </style>
+}
 
 @section Scripts {
-	<script>
-		function toggleStatus(id, button, isActive) {
-			if (confirm('Are you sure you want to ' + (isActive ? 'deactivate' : 'activate') + ' this class section?')) {
-				fetch(`/ClassSectionDetail/ToggleStatus/${id}`, {
-					method: 'POST',
-					headers: {
-						'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-					}
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.success) {
-						// Toggle button text and class
-						const newIsActive = !isActive;
-						button.textContent = newIsActive ? 'Deactivate' : 'Activate';
-						button.classList.toggle('btn-danger', newIsActive);
-						button.classList.toggle('btn-success', !newIsActive);
-						
-						// Update status badge
-						const statusBadge = button.closest('tr').querySelector('.badge');
-						statusBadge.textContent = newIsActive ? 'Active' : 'Inactive';
-						statusBadge.className = 'badge ' + (newIsActive ? 'bg-success' : 'bg-danger');
-						
-						// Update the onclick handler with the new state
-						button.setAttribute('onclick', `toggleStatus('${id}', this, ${!isActive})`);
-					} else {
-						alert('Failed to update status: ' + (data.message || 'Unknown error'));
-					}
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('An error occurred while updating the status.');
-				});
-			}
-		}
-	</script>
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable with AJAX
+            var table = $('#classSectionsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '@Url.Action("GetClassSectionsData")',
+                    type: 'POST',
+                    dataType: 'json'
+                },
+                columns: [
+                    { data: 'className' },
+                    { data: 'sectionName' },
+                    { data: 'locationName' },
+                    { 
+                        data: 'isActive',
+                        render: function(data, type, row) {
+                            return data ? 
+                                '<span class="badge bg-success">Active</span>' : 
+                                '<span class="badge bg-danger">Inactive</span>';
+                        }
+                    },
+                    {
+                        data: 'id',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            var viewBtn = `
+                                <a href="/ClassSectionDetail/Details/${data}" 
+                                   class="btn btn-sm btn-outline-info me-1" 
+                                   data-bs-toggle="tooltip" 
+                                   title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>`;
+                            
+                            var editBtn = `
+                                <a href="/ClassSectionDetail/Edit/${data}" 
+                                   class="btn btn-sm btn-outline-primary me-1" 
+                                   data-bs-toggle="tooltip" 
+                                   title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>`;
+                            
+                            var toggleBtn = `
+                                <button type="button" 
+                                        class="btn btn-sm btn-outline-${row.isActive ? 'danger' : 'success'} toggle-status-btn" 
+                                        data-id="${data}" 
+                                        data-status="${row.isActive}"
+                                        data-bs-toggle="tooltip" 
+                                        title="${row.isActive ? 'Deactivate' : 'Activate'}">
+                                    <i class="bi ${row.isActive ? 'bi-x-circle' : 'bi-check-circle'}"></i>
+                                </button>`;
+                            
+                            return `
+                                <div class="d-flex justify-content-end action-buttons">
+                                    ${viewBtn}
+                                    ${editBtn}
+                                    ${toggleBtn}
+                                </div>`;
+                        }
+                    }
+                ],
+                order: [[0, 'asc'], [1, 'asc']],
+                language: {
+                    processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading data...'
+                }
+            });
+
+            // Initialize tooltips for dynamically loaded content
+            table.on('draw', function () {
+                $('[data-bs-toggle="tooltip"]').tooltip();
+            });
+
+            // Status toggle button click handler
+            $(document).on('click', '.toggle-status-btn', function () {
+                var id = $(this).data('id');
+                var currentStatus = $(this).data('status');
+                var actionText = currentStatus ? 'deactivate' : 'activate';
+                
+                $('#classSectionIdToToggle').val(id);
+                $('#currentStatus').val(currentStatus);
+                $('#statusActionText').text(actionText);
+                $('#statusModal').modal('show');
+            });
+
+            // Confirm status toggle
+            $('#confirmToggleStatus').on('click', function () {
+                var id = $('#classSectionIdToToggle').val();
+                var currentStatus = $('#currentStatus').val() === 'true';
+                
+                $.ajax({
+                    url: '/ClassSectionDetail/ToggleStatus/' + id,
+                    type: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            table.ajax.reload();
+                            showToast(`Class section ${currentStatus ? 'deactivated' : 'activated'} successfully`, 'success');
+                        } else {
+                            showToast('Error: ' + response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        showToast('An error occurred while updating the class section status.', 'error');
+                    },
+                    complete: function () {
+                        $('#statusModal').modal('hide');
+                    }
+                });
+            });
+
+            // Toast notification function
+            function showToast(message, type) {
+                const toast = document.createElement('div');
+                toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+                toast.setAttribute('role', 'alert');
+                toast.setAttribute('aria-live', 'assertive');
+                toast.setAttribute('aria-atomic', 'true');
+                
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>`;
+                
+                const toastContainer = document.createElement('div');
+                toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+                toastContainer.style.zIndex = '11';
+                toastContainer.appendChild(toast);
+                
+                document.body.appendChild(toastContainer);
+                
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                // Remove toast after it's hidden
+                toast.addEventListener('hidden.bs.toast', function () {
+                    document.body.removeChild(toastContainer);
+                });
+            }
+        });
+    </script>
 }

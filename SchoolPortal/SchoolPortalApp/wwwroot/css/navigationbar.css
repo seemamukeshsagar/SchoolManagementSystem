@@ -1,74 +1,50 @@
-/* Collapsed state - only show icons */
-.nav-sidebar.collapsed .nav-link span,
-.nav-sidebar.collapsed .accordion-button span {
-    display: none !important;
+/* Navigation links and buttons */
+.nav-sidebar .nav-link,
+.nav-sidebar .accordion-button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem !important;
+    text-align: left;
 }
 
-/* Ensure icons are centered when collapsed */
-.nav-sidebar.collapsed .nav-link,
-.nav-sidebar.collapsed .accordion-button {
-    justify-content: center !important;
-    padding: 10px 0 !important;
-    text-align: center;
-}
-
-/* Hide section headers when collapsed */
-.nav-sidebar.collapsed .text-uppercase {
-    display: none !important;
-}
-
-/* Adjust icon size and spacing */
-.nav-sidebar.collapsed .bi {
-    font-size: 1.25rem;
-    margin: 0 !important;
-    display: inline-block;
-}
-
-/* Ensure the sidebar has a fixed width when collapsed */
-.nav-sidebar.collapsed {
-    width: 60px !important;
-    min-width: 60px !important;
-    max-width: 60px !important;
-}
-
-/* Hide the accordion arrow when collapsed */
-.nav-sidebar.collapsed .accordion-button::after {
-    display: none !important;
-}
-
-/* Adjust padding for collapsed state */
-.nav-sidebar.collapsed .nav-item {
-    padding: 0 5px !important;
+/* Text next to icons */
+.nav-sidebar .nav-link span,
+.nav-sidebar .accordion-button span {
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Ensure proper hover states */
-.nav-sidebar.collapsed .nav-link:hover,
-.nav-sidebar.collapsed .accordion-button:hover {
+.nav-link:hover,
+.accordion-button:hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Tooltip styles for collapsed state */
-.nav-sidebar.collapsed .nav-link[data-tooltip] {
-    position: relative;
+/* Adjust icon size and spacing */
+.nav-sidebar .bi {
+    font-size: 1.25rem;
+    min-width: 1.5rem;
+    text-align: center;
 }
 
-.nav-sidebar.collapsed .nav-link[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #343a40;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    margin-left: 10px;
-    z-index: 1000;
-    font-size: 0.875rem;
+/* Section headers */
+.nav-sidebar .text-uppercase {
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0 0.25rem 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #6c757d;
 }
 
-/* Ensure accordion content is hidden when collapsed */
-.nav-sidebar.collapsed .accordion-collapse {
-    display: none !important;
+/* Accordion button styling */
+.accordion-button::after {
+    margin-left: auto;
+}
+
+/* Ensure accordion content is properly displayed */
+.accordion-collapse {
+    transition: all 0.3s ease;
 }

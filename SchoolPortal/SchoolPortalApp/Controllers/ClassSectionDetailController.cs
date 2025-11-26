@@ -56,27 +56,91 @@ namespace SchoolPortalApp.Controllers
 			}).ToList();
 		}
 
+		[HttpPost]
+		[Route("GetClassSectionsData")]
+		public IActionResult GetClassSectionsData()
+		{
+			try
+			{
+				var requestForm = Request.Form;
+				var draw = Convert.ToInt32(requestForm["draw"].FirstOrDefault() ?? "0");
+				var start = Convert.ToInt32(requestForm["start"].FirstOrDefault() ?? "0");
+				var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
+				var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+				var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
+				var searchValue = requestForm["search[value]"].FirstOrDefault();
+				int pageSize = length != -1 ? length : 0;
+				int skip = start != 0 ? start : 0;
+				int recordsTotal = 0;
+
+				// Get all class sections with related data
+				var classSections = _service.GetAll()
+					.Select(item => new 
+					{
+						id = item.Id,
+						className = item.Class?.Name ?? string.Empty,
+						sectionName = item.Section?.Name ?? string.Empty,
+						locationName = item.Location?.Name ?? string.Empty,
+						isActive = item.IsActive
+					}).ToList();
+
+				// Apply search
+				if (!string.IsNullOrEmpty(searchValue))
+				{
+					classSections = classSections.Where(c => 
+						(c.className != null && c.className.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+						(c.sectionName != null && c.sectionName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+						(c.locationName != null && c.locationName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+						(c.isActive.ToString().Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+					).ToList();
+				}
+
+				// Get total count
+				recordsTotal = classSections.Count;
+
+				// Apply sorting
+				if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+				{
+					var propertyInfo = typeof(ClassSectionDetailListItemViewModel).GetProperty(sortColumn, 
+						System.Reflection.BindingFlags.IgnoreCase | 
+						System.Reflection.BindingFlags.Public | 
+						System.Reflection.BindingFlags.Instance);
+
+					if (propertyInfo != null)
+					{
+						classSections = sortColumnDirection.ToLower() == "asc"
+							? classSections.OrderBy(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList()
+							: classSections.OrderByDescending(x => x.GetType().GetProperty(sortColumn.ToLower())?.GetValue(x, null)).ToList();
+					}
+				}
+
+				// Apply pagination
+				var data = classSections
+					.Skip(skip)
+					.Take(pageSize)
+					.ToList();
+
+				return Json(new 
+				{
+					draw = draw,
+					recordsFiltered = recordsTotal,
+					recordsTotal = recordsTotal,
+					data = data
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading class sections data");
+				return Json(new { error = "An error occurred while loading class sections data." });
+			}
+		}
+
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
-			var classes = _lookup.GetClasses().ToDictionary(c => c.Id, c => c.Name);
-			var sections = _lookup.GetSections().ToDictionary(s => s.Id, s => s.Name);
-			var locations = _lookup.GetLocations().ToDictionary(l => l.Id, l => l.Name);
-
-			var result = list.Select(item => new ClassSectionDetailListItemViewModel
-			{
-				Id = item.Id,
-				ClassName = classes.TryGetValue(item.ClassMasterId, out var className) ? className : "N/A",
-				SectionName = sections.TryGetValue(item.SectionMasterId, out var sectionName) ? sectionName : "N/A",
-				LocationName = locations.TryGetValue(item.LocationId, out var locationName) ? locationName : "N/A",
-				IsActive = item.IsActive,
-				Status = item.Status
-			}).ToList();
-
-			return View(result);
+			return View();
 		}
 
 		[HttpGet]
@@ -226,19 +290,36 @@ namespace SchoolPortalApp.Controllers
 			return RedirectToAction("Details", new { id });
 		}
 
-		[HttpPost]
-		[Route("ToggleStatus/{id}")]
-		[ValidateAntiForgeryToken]
+		[HttpPost("ToggleStatus/{id}")]
 		public IActionResult ToggleStatus(Guid id)
 		{
-			var userId = CurrentUserId;
-			if (!userId.HasValue)
+			try
 			{
-				return Json(new { success = false, message = "Please login to perform this action." });
+				var result = _service.ToggleStatus(id);
+				if (result)
+				{
+					if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+					{
+						return Json(new { success = true, message = "Status updated successfully" });
+					}
+					return RedirectToAction("Index");
+				}
+				
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "Failed to update status" });
+				}
+				return RedirectToAction("Index");
 			}
-
-			var success = _service.ToggleStatus(id, userId.Value);
-			return Json(new { success });
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error toggling class section status");
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					return Json(new { success = false, message = "An error occurred while updating the status" });
+				}
+				return View("Error");
+			}
 		}
 	}
 }

@@ -73,6 +73,92 @@ namespace SchoolPortalApp.Controllers
             return View(users);
         }
 
+        [HttpPost]
+        [Route("GetUsersData")]
+        public IActionResult GetUsersData()
+        {
+            try
+            {
+                var requestForm = Request.Form;
+                var draw = Convert.ToInt32(requestForm["draw"].FirstOrDefault() ?? "0");
+                var start = Convert.ToInt32(requestForm["start"].FirstOrDefault() ?? "0");
+                var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
+                var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
+                var searchValue = requestForm["search[value]"].FirstOrDefault();
+                int pageSize = length != -1 ? length : 0;
+                int skip = start != 0 ? start : 0;
+                int recordsTotal = 0;
+
+                // Get all users
+                var users = _service.GetAll().ToList();
+                
+                // Apply search
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    users = users.Where(u => 
+                        (u.UserName != null && u.UserName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (u.FullName != null && u.FullName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (u.EmailAddress != null && u.EmailAddress.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (u.RoleName != null && u.RoleName.Contains(searchValue, StringComparison.OrdinalIgnoreCase)) ||
+                        (u.DesignationName != null && u.DesignationName.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+                    ).ToList();
+                }
+
+                // Get total count
+                recordsTotal = users.Count;
+
+                // Apply sorting
+                if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+                {
+                    var propertyInfo = typeof(SchoolPortal.Entities.Models.UserDetailsListViewModel).GetProperty(sortColumn, 
+                        System.Reflection.BindingFlags.IgnoreCase | 
+                        System.Reflection.BindingFlags.Public | 
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (propertyInfo != null)
+                    {
+                        if (sortColumnDirection.ToLower() == "asc")
+                        {
+                            users = users.OrderBy(x => propertyInfo.GetValue(x, null)).ToList();
+                        }
+                        else
+                        {
+                            users = users.OrderByDescending(x => propertyInfo.GetValue(x, null)).ToList();
+                        }
+                    }
+                }
+
+                // Apply pagination
+                var data = users
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .Select(u => new
+                    {
+                        id = u.Id,
+                        userName = u.UserName ?? string.Empty,
+                        fullName = u.FullName ?? string.Empty,
+                        emailAddress = u.EmailAddress ?? string.Empty,
+                        roleName = u.RoleName ?? string.Empty,
+                        designationName = u.DesignationName ?? string.Empty,
+                        isActive = u.IsActive
+                    })
+                    .ToList();
+
+                return Json(new { 
+                    draw = draw, 
+                    recordsFiltered = recordsTotal, 
+                    recordsTotal = recordsTotal, 
+                    data = data 
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading users data");
+                return Json(new { error = "An error occurred while loading users data." });
+            }
+        }
+
         [HttpGet]
         [Route("Details/{id}")]
         public IActionResult Details(Guid id)

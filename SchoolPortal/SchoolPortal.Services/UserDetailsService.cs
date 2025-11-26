@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using Microsoft.Extensions.Logging;
 
 namespace SchoolPortal.Services
 {
@@ -13,69 +14,96 @@ namespace SchoolPortal.Services
 		private readonly ILookupService _lookupService;
 		private readonly IRoleMasterService _roleService;
 
+		private readonly ILogger<UserDetailsService> _logger;
+
+		public UserDetailsService(
+			ILookupService lookupService, 
+			IRoleMasterService roleService,
+			ILogger<UserDetailsService> logger)
+		{
+			_lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+			_roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
 		public UserDetailsService(ILookupService lookupService, IRoleMasterService roleService)
 		{
 			_lookupService = lookupService;
 			_roleService = roleService;
 		}
 
-		public List<UserDetailsListViewModel> GetAll()
-		{
-			var list = new List<UserDetailsListViewModel>();
-			Proc p = new Proc("UserDetails_GetAll");
-			var dt = new DataTable();
-			p.Exec(dt);
+        public List<UserDetailsListViewModel> GetAll()
+        {
+            var list = new List<UserDetailsListViewModel>();
 
-			// Get all lookup data first
-			var designations = _lookupService.GetDesignations()?.ToDictionary(d => d.Id, d => d.Name) ?? new Dictionary<Guid, string>();
-			var roles = _roleService.GetAll()?.ToDictionary(r => r.Id, r => r.Name) ?? new Dictionary<Guid, string>();
-			var companies = _lookupService.GetCompanies()?.ToDictionary(c => c.Id, c => c.Name) ?? new Dictionary<Guid, string>();
-			var schools = _lookupService.GetSchools()?.ToDictionary(s => s.Id, s => s.Name) ?? new Dictionary<Guid, string>();
+            try
+            {
+                _logger.LogInformation("Starting to fetch all user details");
 
-			foreach (DataRow row in dt.Rows)
-			{
-				var user = new UserDetailsListViewModel
-				{
-					Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty,
-					UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() ?? string.Empty : string.Empty,
-					FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() ?? string.Empty : string.Empty,
-					LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() ?? string.Empty : string.Empty,
-					EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() ?? string.Empty : string.Empty,
-					IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
-					DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
-					UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
-					CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
-					SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
-				};
+                // Load lookup dictionaries
+                var designations = _lookupService.GetDesignations()
+                    ?.ToDictionary(d => d.Id, d => d.Name)
+                    ?? new Dictionary<Guid, string>();
 
-				// Set name fields from lookups
-				if (user.UserRoleId.HasValue && roles.TryGetValue(user.UserRoleId.Value, out var roleName))
-				{
-					user.RoleName = roleName;
-				}
+                var roles = _roleService.GetAll()
+                    ?.ToDictionary(r => r.Id, r => r.Name)
+                    ?? new Dictionary<Guid, string>();
 
-				if (designations.TryGetValue(user.DesignationId, out var designationName))
-				{
-					user.DesignationName = designationName;
-				}
+                var companies = _lookupService.GetCompanies()
+                    ?.ToDictionary(c => c.Id, c => c.Name)
+                    ?? new Dictionary<Guid, string>();
 
-				if (user.CompanyId.HasValue && companies.TryGetValue(user.CompanyId.Value, out var companyName))
-				{
-					user.CompanyName = companyName;
-				}
+                var schools = _lookupService.GetSchools()
+                    ?.ToDictionary(s => s.Id, s => s.Name)
+                    ?? new Dictionary<Guid, string>();
 
-				if (user.SchoolId.HasValue && schools.TryGetValue(user.SchoolId.Value, out var schoolName))
-				{
-					user.SchoolName = schoolName;
-				}
+                Proc p = new Proc("UserDetails_GetAll");
+                var dt = new DataTable();
+                p.Exec(dt);
 
-				list.Add(user);
-			}
+                _logger.LogInformation($"Retrieved {dt.Rows.Count} users from database");
 
-			return list;
-		}
+				// Log column names for debugging
+				var columnNames = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName);
+				_logger.LogInformation($"Retrieved columns: {string.Join(", ", columnNames)}");
+				_logger.LogInformation($"Retrieved {dt.Rows.Count} users from database");
 
-		public UserDetails? GetById(Guid id)
+                foreach (DataRow row in dt.Rows)
+                {
+                    try
+                    {
+                        var user = new UserDetailsListViewModel
+                        {
+                            Id = Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty,
+                            UserName = row["UserName"]?.ToString() ?? string.Empty,
+                            FirstName = row["FirstName"]?.ToString() ?? string.Empty,
+                            LastName = row["LastName"]?.ToString() ?? string.Empty,
+							FullName = row["FullName"]?.ToString() ?? string.Empty,
+                            EmailAddress = row["EmailAddress"]?.ToString() ?? string.Empty,
+
+                            IsActive = bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
+							DesignationName = row["DesignationName"]?.ToString() ?? string.Empty,
+							RoleName = row["RoleName"]?.ToString() ?? string.Empty
+                        };
+
+                        list.Add(user);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, $"Error processing user row: {ex.Message}");
+                    }
+                }
+				return list;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in UserDetailsService.GetAll: " + ex.Message);
+                throw;
+            }
+        }
+
+
+        public UserDetails? GetById(Guid id)
 		{
 			Proc p = new Proc("UserDetails_GetById");
 			p["@Id"] = id;
