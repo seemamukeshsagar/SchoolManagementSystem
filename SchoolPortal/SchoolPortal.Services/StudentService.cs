@@ -9,6 +9,13 @@ namespace SchoolPortal.Services
 {
 	public class StudentService : IStudentService
 	{
+		private readonly ILookupService _lookupService;
+
+		public StudentService(ILookupService lookupService)
+		{
+			_lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+		}
+
 		private static StudentMaster Map(DataRow r)
 		{
 			var s = new StudentMaster();
@@ -132,8 +139,36 @@ namespace SchoolPortal.Services
 			return Map(dt.Rows[0]);
 		}
 
+		public bool CategoryExists(Guid categoryId)
+		{
+			if (categoryId == Guid.Empty) return false;
+			
+			try
+			{
+				var categories = _lookupService.GetCategories();
+				return categories.Any(c => c.Id == categoryId);
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		public Guid Create(StudentMaster s)
 		{
+			// Input validation
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (s.CompanyId == Guid.Empty || s.SchoolId == Guid.Empty || s.CreatedBy == Guid.Empty)
+				throw new ArgumentException("Required fields (CompanyId, SchoolId, or CreatedBy) are missing");
+
+			// Validate category exists
+			if (s.CategoryId != Guid.Empty && !CategoryExists(s.CategoryId))
+			{
+				throw new ArgumentException("Invalid CategoryId. The specified category does not exist.");
+			}
+
 			Proc p = new Proc("Student_Create");
 			// Optional identifiers
 			p["@RollNumber"] = s.RollNumber;

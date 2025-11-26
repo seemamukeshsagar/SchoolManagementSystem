@@ -241,6 +241,14 @@ namespace SchoolPortalApp.Controllers
 				vm.ParentStates = new List<SelectListItem>();
 				vm.ParentCities = new List<SelectListItem>();
 			}
+
+			 ViewBag.Categories = _lookupService.GetCategories()
+				.OrderBy(c => c.Name)
+				.Select(c => new SelectListItem
+				{
+					Value = c.Id.ToString(),
+					Text = c.Name
+				}).ToList();
 		}
 
 		[HttpGet]
@@ -568,7 +576,7 @@ namespace SchoolPortalApp.Controllers
 		[HttpPost]
 		[Route("Create")]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(StudentViewModel model)
+		public async Task<IActionResult> Create(StudentViewModel model)
 		{
 			var schoolId = CurrentSchoolId;
 			if (schoolId.HasValue)
@@ -578,6 +586,31 @@ namespace SchoolPortalApp.Controllers
 			}
 
 			// Server-side required validations for location fields
+			ValidateLocationFields(model);
+
+			var userId = CurrentUserId;
+			var companyId = CurrentCompanyId;
+			
+			// Common validation for both AJAX and form posts
+			if (!ValidateUserAndCompany(userId, companyId, model.SchoolId, out var validationResult))
+			{
+				return validationResult;
+			}
+
+			// Handle AJAX request
+			if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+			{
+				return await HandleAjaxRequest(model, companyId.Value, userId.Value);
+			}
+
+			// Handle traditional form post
+			return await HandleFormPost(model, companyId.Value, userId.Value);
+		}
+
+		#region Private Methods
+
+		private void ValidateLocationFields(StudentViewModel model)
+		{
 			if (model.CountryId == Guid.Empty)
 			{
 				ModelState.AddModelError(nameof(StudentViewModel.CountryId), "Country is required.");
@@ -590,32 +623,166 @@ namespace SchoolPortalApp.Controllers
 			{
 				ModelState.AddModelError(nameof(StudentViewModel.CityId), "City is required.");
 			}
+		}
 
-			var userId = CurrentUserId;
-			var companyId = CurrentCompanyId;
-			if (!userId.HasValue || !companyId.HasValue || model.SchoolId == Guid.Empty)
+		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult errorResult)
+		{
+			errorResult = null;
+			
+			if (!userId.HasValue || !companyId.HasValue || schoolId == Guid.Empty)
 			{
-				ModelState.AddModelError(string.Empty, "Please login and select company to create student.");
-				PopulateDropdowns(model);
-				return View(model);
+				var errorMessage = "Please login and select company to create student.";
+				ModelState.AddModelError(string.Empty, errorMessage);
+				
+				if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+				{
+					errorResult = Json(new { 
+						success = false, 
+						message = errorMessage,
+						errors = new Dictionary<string, string[]> { 
+							{ string.Empty, new[] { errorMessage } } 
+						}
+					});
+					return false;
+				}
+				
+				PopulateDropdowns(new StudentViewModel());
+				errorResult = View(new StudentViewModel());
+				return false;
+			}
+			
+			return true;
+		}
+
+		private async Task<IActionResult> HandleAjaxRequest(StudentViewModel model, Guid companyId, Guid userId)
+		{
+			if (!ModelState.IsValid)
+			{
+				var errors = ModelState.ToDictionary(
+					kvp => kvp.Key,
+					kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+				);
+				
+				return Json(new { 
+					success = false, 
+					message = "Please correct the validation errors.",
+					errors 
+				});
 			}
 
-			// Handle image upload if provided
-			if (model.ImageFile != null && model.ImageFile.Length > 0)
+			var result = await ProcessAndSaveStudent(model, companyId, userId);
+			
+			if (!result.Success)
 			{
+				return Json(new { 
+					success = false, 
+					message = result.Message 
+				});
+			}
+
+			return Json(new { 
+				success = true, 
+				message = "Student created successfully.",
+				redirectUrl = Url.Action("Details", new { id = result.StudentId })
+			});
+		}
+
+		private async Task<StudentCreationResult> ProcessAndSaveStudent(StudentViewModel model, Guid companyId, Guid userId)
+		{
+			try
+			{
+				// Handle image upload if provided
+				string imagePath = null;
+				if (model.ImageFile != null && model.ImageFile.Length > 0)
+				{
+					imagePath = await SaveStudentImage(model.ImageFile);
+					if (imagePath == null)
+					{
+						return new StudentCreationResult
+						{
+							Success = false,
+							Message = "Failed to save student image. Please try again."
+						};
+					}
+					model.Image = imagePath;
+				}
+
+				var entity = MapToStudentEntity(model, companyId, userId);
+				var newId = _service.Create(entity);
+				
+				if (newId == Guid.Empty)
+				{
+					return new StudentCreationResult
+					{
+						Success = false,
+						Message = "Failed to create student."
+					};
+				}
+
+				// Save parent information in background
+				_ = Task.Run(() => SaveParentInformation(newId, model, companyId, userId))
+						.ContinueWith(t => 
+							_logger.LogError(t.Exception, "Error saving parent information"),
+							TaskContinuationOptions.OnlyOnFaulted
+						);
+
+				return new StudentCreationResult
+				{
+					Success = true,
+					StudentId = newId
+				};
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error processing student creation");
+				return new StudentCreationResult
+				{
+					Success = false,
+					Message = "An unexpected error occurred while creating the student."
+				};
+			}
+		}
+
+		private async Task<string> SaveStudentImage(IFormFile imageFile)
+		{
+			try
+			{
+				// Validate file type and size
+				var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+				var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+				
+				if (!allowedExtensions.Contains(extension))
+				{
+					throw new InvalidOperationException("Invalid file type. Only image files are allowed.");
+				}
+
+				if (imageFile.Length > 5 * 1024 * 1024) // 5MB limit
+				{
+					throw new InvalidOperationException("File size cannot exceed 5MB.");
+				}
+
 				var uploadsRoot = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "students");
 				Directory.CreateDirectory(uploadsRoot);
-				var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.ImageFile.FileName)}";
+				var fileName = $"{Guid.NewGuid()}{extension}";
 				var fullPath = Path.Combine(uploadsRoot, fileName);
-				using (var stream = System.IO.File.Create(fullPath))
+				
+				using (var stream = new FileStream(fullPath, FileMode.Create))
 				{
-					model.ImageFile.CopyTo(stream);
+					await imageFile.CopyToAsync(stream);
 				}
-				// store web-relative path
-				model.Image = $"/uploads/students/{fileName}";
+				
+				return $"/uploads/students/{fileName}";
 			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error saving student image");
+				return null;
+			}
+		}
 
-			var entity = new StudentMaster
+		private StudentMaster MapToStudentEntity(StudentViewModel model, Guid companyId, Guid userId)
+		{
+			return new StudentMaster
 			{
 				Id = Guid.Empty,
 				RollNumber = model.RollNumber,
@@ -669,33 +836,28 @@ namespace SchoolPortalApp.Controllers
 				TransportFees = model.TransportFees,
 				UseTransportFees = model.UseTransportFees,
 				SessionId = model.SessionId,
-				CompanyId = companyId.Value,
+				CompanyId = companyId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
 				IsDeleted = model.IsDeleted,
-				CreatedBy = userId.Value,
+				CreatedBy = userId,
 				CreatedDate = DateTime.UtcNow,
 				Status = model.Status ?? string.Empty,
 				StatusMessage = model.StatusMessage ?? string.Empty,
-				HouseAllotted = model.HouseAllotted
+				HouseAllotted = model.HouseAllotted,
+				AdditionalNotes = model.AdditionalNotes
 			};
+		}
 
-			var newId = _service.Create(entity);
-			if (newId == Guid.Empty)
-			{
-				ModelState.AddModelError(string.Empty, "Failed to create student.");
-				PopulateDropdowns(model);
-				return View(model);
-			}
-
-			// Save Parent information (non-blocking on error)
+		private void SaveParentInformation(Guid studentId, StudentViewModel model, Guid companyId, Guid userId)
+		{
 			try
 			{
 				_parentService.CreateForStudent(
-					newId,
+					studentId,
 					model.SchoolId,
-					companyId.Value,
-					userId.Value,
+					companyId,
+					userId,
 					model.ParentFirstName,
 					model.ParentLastName,
 					model.ParentDOB,
@@ -717,10 +879,62 @@ namespace SchoolPortalApp.Controllers
 			}
 			catch (Exception ex)
 			{
-				_logger.LogWarning(ex, "Student created {StudentId} but failed to save Parent information.", newId);
+				_logger.LogWarning(ex, "Failed to save parent information for student {StudentId}", studentId);
+				throw;
 			}
-			return RedirectToAction("Details", new { id = newId });
 		}
+
+		private async Task<IActionResult> HandleFormPost(StudentViewModel model, Guid companyId, Guid userId)
+		{
+			try
+			{
+				if (model.ImageFile != null && model.ImageFile.Length > 0)
+				{
+					var imagePath = await SaveStudentImage(model.ImageFile);
+					if (imagePath != null)
+					{
+						model.Image = imagePath;
+					}
+				}
+
+				var student = MapToStudentEntity(model, companyId, userId);
+				var studentId = _service.Create(student);
+				
+				if (studentId != Guid.Empty)
+				{
+					// Handle parent info and image in background
+					_ = Task.Run(async () => 
+					{
+						try 
+						{
+							SaveParentInformation(studentId, model, companyId, userId);
+						}
+						catch (Exception ex)
+						{
+							_logger.LogError(ex, "Error saving parent info or image");
+						}
+					});
+
+					TempData["SuccessMessage"] = "Student created successfully";
+					return RedirectToAction("Index");
+				}
+			}
+			catch (ArgumentException ex) when (ex.Message.Contains("CategoryId", StringComparison.OrdinalIgnoreCase))
+			{
+				ModelState.AddModelError(nameof(StudentViewModel.CategoryId), "Please select a valid category");
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error creating student");
+				ModelState.AddModelError(string.Empty, "An error occurred while creating the student. Please try again.");
+			}
+
+			// If we got this far, something failed; redisplay form
+			PopulateDropdowns(model);
+			return View(model);
+		}
+
+		#endregion
 
 		[HttpGet]
 		[Route("Edit/{id}")]
@@ -964,4 +1178,15 @@ namespace SchoolPortalApp.Controllers
 			return RedirectToAction("Index");
 		}
 	}
+
+	#region Helper Classes
+
+	internal class StudentCreationResult
+	{
+		public bool Success { get; set; }
+		public string Message { get; set; }
+		public Guid StudentId { get; set; }
+	}
+
+    #endregion    
 }

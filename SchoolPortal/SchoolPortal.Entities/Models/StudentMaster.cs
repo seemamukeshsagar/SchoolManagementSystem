@@ -131,4 +131,6 @@ public partial class StudentMaster
     public string StatusMessage { get; set; } = "In Process....";
 
     public Guid? HouseAllotted { get; set; }
+
+    public string AdditionalNotes { get; set; }
 }

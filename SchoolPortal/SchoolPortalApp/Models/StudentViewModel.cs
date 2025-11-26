@@ -297,6 +297,10 @@ namespace SchoolPortalApp.Models
 
         [Display(Name = "Is Active (Parent)")]
         public bool ParentIsActive { get; set; } = true;
+
+        [Display(Name = "Additional Notes")]
+        [DataType(DataType.MultilineText)]
+        public string AdditionalNotes { get; set; }
     }
 }
 
