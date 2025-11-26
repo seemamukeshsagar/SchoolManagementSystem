@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -26,25 +28,26 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			try
-			{
-				var roles = _service.GetAll()
-					.Select(r => new RoleMasterListItemViewModel
-					{
-						Id = r.Id,
-						RoleName = r.Name,
-						Description = r.Description,
-						IsActive = r.IsActive
-					})
-					.ToList();
+			return View();
+			// try
+			// {
+			// 	var roles = _service.GetAll()
+			// 		.Select(r => new RoleMasterListItemViewModel
+			// 		{
+			// 			Id = r.Id,
+			// 			RoleName = r.Name,
+			// 			Description = r.Description,
+			// 			IsActive = r.IsActive
+			// 		})
+			// 		.ToList();
 
-				return View(roles);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Error occurred while getting roles list");
-				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			}
+			// 	return View(roles);
+			// }
+			// catch (Exception ex)
+			// {
+			// 	_logger.LogError(ex, "Error occurred while getting roles list");
+			// 	return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
+			// }
 		}
 
 		[HttpGet]
@@ -281,6 +284,78 @@ namespace SchoolPortalApp.Controllers
 			{
 				_logger.LogError(ex, $"Error occurred while deleting role, ID: {id}");
 				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
+			}
+		}
+
+		[HttpPost]
+		public IActionResult GetRoles()
+		{
+			try
+			{
+				var draw = Request.Form["draw"].FirstOrDefault();
+				var start = Request.Form["start"].FirstOrDefault();
+				var length = Request.Form["length"].FirstOrDefault();
+				var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+				var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+				var searchValue = Request.Form["search[value]"].FirstOrDefault()?.ToLower();
+				int pageSize = length != null ? Convert.ToInt32(length) : 0;
+				int skip = start != null ? Convert.ToInt32(start) : 0;
+				
+				// Get all roles
+				var roles = _service.GetAll().AsQueryable();
+				
+				// Apply search
+				if (!string.IsNullOrEmpty(searchValue))
+				{
+					roles = roles.Where(r => 
+						(r.Name != null && r.Name.ToLower().Contains(searchValue)) ||
+						(r.Description != null && r.Description.ToLower().Contains(searchValue))
+					);
+				}
+				
+				// Get total records count
+				int recordsTotal = roles.Count();
+				
+				// Apply sorting
+				if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+				{
+					if (sortColumn == "Name")
+					{
+						roles = sortColumnDirection == "asc" 
+							? roles.OrderBy(r => r.Name)
+							: roles.OrderByDescending(r => r.Name);
+					}
+					else if (sortColumn == "Description")
+					{
+						roles = sortColumnDirection == "asc"
+							? roles.OrderBy(r => r.Description)
+							: roles.OrderByDescending(r => r.Description);
+					}
+				}
+				
+				// Apply paging
+				var data = roles
+					.Skip(skip)
+					.Take(pageSize)
+					.Select(r => new {
+						id = r.Id,
+						name = r.Name,
+						description = r.Description,
+						isActive = r.IsActive
+					})
+					.ToList();
+					
+				return Json(new {
+					draw = draw,
+					recordsFiltered = recordsTotal,
+					recordsTotal = recordsTotal,
+					data = data
+				});
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error getting roles for DataTable");
+				return Json(new { error = "An error occurred while processing your request." });
 			}
 		}
 	}

@@ -9,7 +9,7 @@ namespace SchoolPortal.Services.Common
 {
     public static class DataRowExtensions
     {
-        public static string GetString(this DataRow row, string col) =>
+        public static string? GetString(this DataRow row, string col) =>
             row.Table.Columns.Contains(col) && row[col] != DBNull.Value
                 ? row[col].ToString()
                 : null;
@@ -19,10 +19,12 @@ namespace SchoolPortal.Services.Common
                 ? Guid.Parse(row[col].ToString())
                 : Guid.Empty;
 
-        public static Guid? GetNullableGuid(this DataRow row, string col) =>
-            row.Table.Columns.Contains(col) && row[col] != DBNull.Value
+        public static Guid? GetNullableGuid(this DataRow row, string col)
+        {
+            return row.Table.Columns.Contains(col) && row[col] != DBNull.Value
                 ? Guid.Parse(row[col].ToString())
                 : (Guid?)null;
+        }
 
         public static DateTime? GetDateTime(this DataRow row, string col) =>
             row.Table.Columns.Contains(col) && row[col] != DBNull.Value
@@ -39,7 +41,7 @@ namespace SchoolPortal.Services.Common
                 ? Convert.ToBoolean(row[col])
                 : false;
 
-        public static byte[] GetBytes(this DataRow row, string col) =>
+        public static byte[]? GetBytes(this DataRow row, string col) =>
             row.Table.Columns.Contains(col) && row[col] != DBNull.Value
                 ? (byte[])row[col]
                 : null;

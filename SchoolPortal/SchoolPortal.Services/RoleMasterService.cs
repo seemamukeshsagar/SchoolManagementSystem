@@ -153,5 +153,47 @@ namespace SchoolPortal.Services
                 p.Dispose();
             }
         }
+
+        public (IEnumerable<RoleMaster> items, int totalCount) GetRoles(
+    int pageNumber, 
+    int pageSize, 
+    string sortColumn = null, 
+    string sortDirection = "asc", 
+    string searchTerm = null)
+{
+    var p = new Proc("RoleMaster_GetPaged");
+    try
+    {
+        p["@PageNumber"] = pageNumber;
+        p["@PageSize"] = pageSize;
+        p["@SortColumn"] = sortColumn;
+        p["@SortOrder"] = sortDirection;
+        p["@SearchTerm"] = string.IsNullOrEmpty(searchTerm) ? DBNull.Value : searchTerm;
+        
+        var ds = new DataSet();
+        p.Exec(ds);
+        
+        var roles = new List<RoleMaster>();
+        if (ds.Tables.Count > 0)
+        {
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                roles.Add(MapRole(r));
+            }
+        }
+        
+        int totalCount = 0;
+        if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+        {
+            totalCount = Convert.ToInt32(ds.Tables[1].Rows[0][0]);
+        }
+        
+        return (roles, totalCount);
+    }
+    finally
+    {
+        p.Dispose();
+    }
+}
     }
 }
