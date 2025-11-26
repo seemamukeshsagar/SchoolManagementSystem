@@ -32,4 +32,8 @@ public partial class ClassSectionDetail
     public string Status { get; set; } = "INC";
 
     public string StatusMessage { get; set; } = "In Process....";
+
+    public virtual ClassMaster Class { get; set; }
+    public virtual SectionMaster Section { get; set; }
+    public virtual LocationMaster Location { get; set; }
 }

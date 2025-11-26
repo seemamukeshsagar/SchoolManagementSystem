@@ -149,6 +149,7 @@
             $('#confirmToggleStatus').on('click', function () {
                 var id = $('#classSectionIdToToggle').val();
                 var currentStatus = $('#currentStatus').val() === 'true';
+                var userId = '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value';
                 
                 $.ajax({
                     url: '/ClassSectionDetail/ToggleStatus/' + id,
@@ -156,6 +157,10 @@
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    data: { 
+                        id: id,
+                        userId: userId  // Add the userId parameter
                     },
                     success: function (response) {
                         if (response.success) {

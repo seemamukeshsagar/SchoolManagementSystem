@@ -111,7 +111,7 @@ namespace SchoolPortal.Services
 			return code == 1;
 		}
 
-		public bool ToggleStatus(Guid id, Guid userId)
+		public bool ToggleStatus(Guid id, Guid? userId)
 		{
 			Proc p = new Proc("ClassSectionDetail_ToggleStatus");
 			p["@Id"] = id;

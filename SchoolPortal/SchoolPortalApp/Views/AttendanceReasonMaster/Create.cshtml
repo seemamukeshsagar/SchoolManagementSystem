@@ -21,12 +21,16 @@
 		<input asp-for="Description" class="form-control" />
 		<span asp-validation-for="Description" class="text-danger"></span>
 	</div>
-	<div class="form-check mb-3">
-		<input asp-for="IsActive" class="form-check-input" />
-		<label asp-for="IsActive" class="form-check-label"></label>
+	<div class="mb-3">
+    <div class="form-check">
+        <input asp-for="IsActive" class="form-check-input" checked="@(Model?.IsActive ?? true)" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+</div>
+	<div>
+		<button type="submit" class="btn btn-primary">Create</button>
+		<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 	</div>
-	<button type="submit" class="btn btn-primary">Create</button>
-	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />

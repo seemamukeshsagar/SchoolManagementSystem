@@ -291,11 +291,12 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpPost("ToggleStatus/{id}")]
-		public IActionResult ToggleStatus(Guid id)
+		public IActionResult ToggleStatus(Guid id )
 		{
 			try
 			{
-				var result = _service.ToggleStatus(id);
+				var userId = CurrentUserId;
+                var result = _service.ToggleStatus(id, userId);
 				if (result)
 				{
 					if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

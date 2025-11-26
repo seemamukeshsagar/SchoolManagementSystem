@@ -8,7 +8,7 @@ using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
 {
-	[Route("AttendanceReasonMaster")]
+	[Route("AttendenceReasonMaster")]
 	public class AttendanceReasonMasterController : BaseController
 	{
 		private readonly IAttendanceReasonMasterService _service;

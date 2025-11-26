@@ -12,7 +12,7 @@ namespace SchoolPortal.Services.IServices
 		Guid Create(ClassSectionDetail entity);
 		bool Update(ClassSectionDetail entity);
 		bool Delete(Guid id);
-		bool ToggleStatus(Guid id, Guid userId);
+		bool ToggleStatus(Guid id, Guid? userId);
 		IEnumerable<ClassSectionDetail> GetByClassId(Guid classId);
 		IEnumerable<ClassSectionDetail> GetBySectionId(Guid sectionId);
 	}
