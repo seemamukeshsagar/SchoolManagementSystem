@@ -76,7 +76,19 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label asp-for="ImageFile"></label>
-						<input asp-for="ImageFile" type="file" class="form-control-file" />
+						<input asp-for="ImageFile" type="file" class="form-control-file"
+							   accept="image/*"
+							   data-max-size="5242880"
+							   onchange="previewImage(this);" />
+						<small class="form-text text-muted">Max file size: 5MB. Allowed types: jpg, jpeg, png</small>
+
+						@{
+							var imageUrl = Model?.Image != null ? Url.Content(Model.Image) : "";
+							var displayStyle = string.IsNullOrEmpty(imageUrl) ? "none" : "block";
+						}
+						<div id="imagePreview" class="mt-2" style="max-width:200px; display:@displayStyle;">
+							<img id="preview" class="img-thumbnail" src="@imageUrl" alt="Image preview" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -472,6 +484,38 @@
 @section Scripts{
 	<partial name="_ValidationScriptsPartial" />
 	<script>
+		function previewImage(input) {
+			var preview = document.getElementById('preview');
+			var previewContainer = document.getElementById('imagePreview');
+			if (!preview || !previewContainer) return;
+			if (input.files && input.files[0]) {
+				var file = input.files[0];
+				var fileSizeMB = file.size / 1024 / 1024;
+				var validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+				if (validTypes.indexOf(file.type) === -1) {
+					alert('Please select a valid image file (JPEG, PNG, GIF).');
+					input.value = '';
+					return;
+				}
+				if (fileSizeMB > 5) {
+					alert('File size exceeds 5MB.');
+					input.value = '';
+					return;
+				}
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					preview.src = e.target.result;
+					previewContainer.style.display = 'block';
+				};
+				reader.readAsDataURL(file);
+			} else {
+				// if no file selected, hide preview only if there is no existing src
+				if (!preview.src) {
+					previewContainer.style.display = 'none';
+				}
+			}
+		}
+
 		// Tab remember
 		document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function (el) {
 			el.addEventListener('shown.bs.tab', function (e) {
