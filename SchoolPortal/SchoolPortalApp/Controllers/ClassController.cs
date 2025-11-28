@@ -184,8 +184,8 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = Guid.Empty,
 				Name = model.Name,
-				ExamAssessment = (model.ExamAssessment ?? false) ? "Yes" : "No",
-				IsGradePointApplicable = model.IsGradePointApplicable ?? false,
+				ExamAssessment = model.ExamAssessment ? "Yes" : "No",
+                IsGradePointApplicable = model.IsGradePointApplicable == true,
 				IsActive = model.IsActive,
 				CompanyId = companyId.Value,
 				SchoolId = model.SchoolId,
@@ -213,13 +213,11 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = item.Id,
 				Name = item.Name,
-				ExamAssessment = string.Equals(item.ExamAssessment, "Yes", StringComparison.OrdinalIgnoreCase)
-								   || string.Equals(item.ExamAssessment, "True", StringComparison.OrdinalIgnoreCase)
-								   || item.ExamAssessment == "1",
-				IsGradePointApplicable = item.IsGradePointApplicable,
-				IsActive = item.IsActive,
-				SchoolId = item.SchoolId
-			};
+				ExamAssessment = item.ExamAssessment == "Yes",  // Convert "Yes"/"No" to bool
+                IsGradePointApplicable = item.IsGradePointApplicable.GetValueOrDefault(),  // Handle null case
+                IsActive = item.IsActive,
+                SchoolId = item.SchoolId
+            };
 			PopulateDropdowns(vm);
 			return View(vm);
 		}
@@ -255,8 +253,8 @@ namespace SchoolPortalApp.Controllers
 			{
 				Id = id,
 				Name = model.Name,
-				ExamAssessment = (model.ExamAssessment ?? false) ? "Yes" : "No",
-				IsGradePointApplicable = model.IsGradePointApplicable ?? false,
+				ExamAssessment = model.ExamAssessment ? "Yes" : "No",  // Convert bool to "Yes"/"No" string
+				IsGradePointApplicable = model.IsGradePointApplicable,
 				IsActive = model.IsActive,
 				SchoolId = model.SchoolId,
 				ModifiedBy = userId,

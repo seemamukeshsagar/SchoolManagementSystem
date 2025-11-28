@@ -7,6 +7,9 @@ using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
 using SchoolPortalApp.Models;
 
+/// <summary>
+/// 
+/// </summary>
 namespace SchoolPortalApp.Controllers
 {
     [Route("UserDetails")]

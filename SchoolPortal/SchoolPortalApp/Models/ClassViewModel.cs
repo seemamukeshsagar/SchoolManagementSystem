@@ -13,10 +13,10 @@ namespace SchoolPortalApp.Models
         public string Name { get; set; } = string.Empty;
 
         [Display(Name = "Exam Assessment")]
-        public bool? ExamAssessment { get; set; }
+        public bool ExamAssessment { get; set; }
 
         [Display(Name = "Is Grade Point Applicable")]
-        public bool? IsGradePointApplicable { get; set; }
+        public bool IsGradePointApplicable { get; set; }
 
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; } = true;
