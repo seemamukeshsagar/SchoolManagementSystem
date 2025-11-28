@@ -50,138 +50,107 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Initialize DataTable with AJAX
+            // Initialize DataTable
             var table = $('#classRoomsTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '@Url.Action("GetClassRoomsData")',
-                    type: 'POST',
-                    dataType: 'json'
+                    url: '@Url.Action("GetClassRoomsData", "ClassRoom")',
+                    type: 'POST'
                 },
                 columns: [
                     { data: 'name' },
                     { 
                         data: 'isActive',
-                        render: function(data, type, row) {
-                            return data ? 
-                                '<span class="badge bg-success">Active</span>' : 
-                                '<span class="badge bg-secondary">Inactive</span>';
+                        render: function (data) {
+                            return data 
+                                ? '<span class="badge bg-success">Active</span>' 
+                                : '<span class="badge bg-secondary">Inactive</span>';
                         }
                     },
                     {
                         data: 'id',
                         orderable: false,
-                        render: function(data, type, row) {
-                            var viewBtn = `
-                                <a href="/ClassRoom/Details/${data}" 
+                        render: function (id) {
+                            return `
+                                <a href="/ClassRoom/Details/${id}" 
                                    class="btn btn-sm btn-outline-info me-1" 
                                    data-bs-toggle="tooltip" 
-                                   title="View Details">
+                                   title="View">
                                     <i class="bi bi-eye"></i>
-                                </a>`;
-                            
-                            var editBtn = `
-                                <a href="/ClassRoom/Edit/${data}" 
+                                </a>
+                                <a href="/ClassRoom/Edit/${id}" 
                                    class="btn btn-sm btn-outline-primary me-1" 
                                    data-bs-toggle="tooltip" 
                                    title="Edit">
                                     <i class="bi bi-pencil"></i>
-                                </a>`;
-                            
-                            var deleteBtn = `
+                                </a>
                                 <button type="button" 
-                                        class="btn btn-sm btn-outline-danger delete-btn" 
-                                        data-id="${data}" 
-                                        data-bs-toggle="tooltip" 
-                                        title="Delete">
+                                    class="btn btn-sm btn-outline-danger delete-btn" 
+                                    data-id="${id}" 
+                                    data-bs-toggle="tooltip" 
+                                    title="Delete">
                                     <i class="bi bi-trash"></i>
-                                </button>`;
-                            
-                            return `
-                                <div class="d-flex justify-content-end">
-                                    ${viewBtn}
-                                    ${editBtn}
-                                    ${deleteBtn}
-                                </div>`;
+                                </button>
+                            `;
                         }
                     }
                 ],
-                order: [[0, 'asc']],
-                language: {
-                    processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading data...'
+                drawCallback: function () {
+                    // Re-init Bootstrap tooltips on every table redraw
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
                 }
             });
 
-            // Initialize tooltips for dynamically loaded content
-            table.on('draw', function () {
-                $('[data-bs-toggle="tooltip"]').tooltip();
-            });
-
-            // Delete button click handler
+            // Delete Button Click
             $(document).on('click', '.delete-btn', function () {
-                var id = $(this).data('id');
-                $('#classRoomIdToDelete').val(id);
+                $('#classRoomIdToDelete').val($(this).data('id'));
                 $('#deleteModal').modal('show');
             });
 
-            // Confirm delete
-            $('#confirmDelete').on('click', function () {
+            // Confirm Delete
+            $('#confirmDelete').click(function () {
                 var id = $('#classRoomIdToDelete').val();
+
                 $.ajax({
                     url: '/ClassRoom/Delete/' + id,
                     type: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            table.ajax.reload();
-                            showToast('Class room deleted successfully', 'success');
-                        } else {
-                            showToast('Error: ' + response.message, 'error');
-                        }
+                    success: function () {
+                        $('#deleteModal').modal('hide');
+                        table.ajax.reload(null, false);
+                        showToast('Class room deleted successfully', 'success');
                     },
                     error: function () {
-                        showToast('An error occurred while deleting the class room.', 'error');
-                    },
-                    complete: function () {
-                        $('#deleteModal').modal('hide');
+                        showToast('Error deleting class room', 'danger');
                     }
                 });
             });
 
-            // Toast notification function
+            // Toast Notification
             function showToast(message, type) {
-                const toast = document.createElement('div');
-                toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
-                toast.setAttribute('role', 'alert');
-                toast.setAttribute('aria-live', 'assertive');
-                toast.setAttribute('aria-atomic', 'true');
-                
+                let toast = document.createElement('div');
+                toast.className = `toast align-items-center text-white bg-${type} border-0`;
+                toast.style.position = 'fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+
                 toast.innerHTML = `
                     <div class="d-flex">
-                        <div class="toast-body">
-                            ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>`;
-                
-                const toastContainer = document.createElement('div');
-                toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
-                toastContainer.style.zIndex = '11';
-                toastContainer.appendChild(toast);
-                
-                document.body.appendChild(toastContainer);
-                
-                const bsToast = new bootstrap.Toast(toast);
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                            data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+
+                document.body.appendChild(toast);
+                var bsToast = new bootstrap.Toast(toast);
                 bsToast.show();
-                
-                // Remove toast after it's hidden
-                toast.addEventListener('hidden.bs.toast', function () {
-                    document.body.removeChild(toastContainer);
-                });
+
+                toast.addEventListener('hidden.bs.toast', () => toast.remove());
             }
         });
     </script>

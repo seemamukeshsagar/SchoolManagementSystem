@@ -18,21 +18,37 @@
 
 /* Ensure proper hover states */
 .nav-link:hover,
-.accordion-button:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+.accordion-button:hover,
+.nav-link:hover span,
+.accordion-button:hover span {
+    background-color: #6c757d !important; /* Light gray background */
+    color: #ffffff !important; /* White text on hover */
+    font-weight: bold !important; /* Bold text on hover */
 }
 
 /* Active/Selected menu item */
 .nav-link.active {
+    background-color: #495057 !important; /* Slightly darker gray for active state */
+    color: #ffffff !important; /* White text for active state */
     font-weight: bold !important;
-    color: #000000 !important;
-    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Ensure text color for active state */
+.nav-link.active span {
+    color: #ffffff !important;
 }
 
 /* Ensure text remains black when active */
-.nav-link.active span {
+.nav-link.active,
+.nav-link:hover span,
+.accordion-button:hover span {
     color: #000000 !important;
 }
+
+/* Ensure text remains black when active */
+/* .nav-link.active span {
+    color: #000000 !important;
+} */
 
 /* Adjust icon size and spacing */
 .nav-sidebar .bi {

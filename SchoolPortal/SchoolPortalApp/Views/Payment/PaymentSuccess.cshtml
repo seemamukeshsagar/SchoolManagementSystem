@@ -1,0 +1,41 @@
+// File: c:\SchoolManagementSystem\SchoolPortal\SchoolPortalApp\Views\Payment\PaymentSuccess.cshtml
+@{
+    ViewBag.Title = "Payment Successful";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Payment Successful</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
+                        <h3>Thank You!</h3>
+                        <p class="lead">Your payment was processed successfully.</p>
+                    </div>
+                    
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Payment Details</h4>
+                        <p>Your payment has been received and your transaction is complete.</p>
+                        <hr>
+                        <p class="mb-0">Transaction ID: @(ViewBag.TransactionId ?? "N/A")</p>
+                        <p class="mb-0">Amount: @(ViewBag.Amount != null ? "₹" + (Convert.ToDecimal(ViewBag.Amount) / 100).ToString("0.00") : "N/A")</p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Return to Home
+                        </a>
+                        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
