@@ -116,10 +116,14 @@ namespace SchoolPortal.Services
 			return s;
 		}
 
-		public List<StudentMaster> GetAll()
+		public List<StudentMaster> GetAll(Guid? schoolId = null)
 		{
 			var list = new List<StudentMaster>();
 			Proc p = new Proc("Student_GetAll");
+			if (schoolId.HasValue)
+			{
+				p["@SchoolId"] = schoolId.Value;
+			}
 			var dt = new DataTable();
 			p.Exec(dt);
 			foreach (DataRow r in dt.Rows)
@@ -128,7 +132,7 @@ namespace SchoolPortal.Services
 			}
 			return list;
 		}
-
+		
 		public StudentMaster? GetById(Guid id)
 		{
 			Proc p = new Proc("Student_GetById");

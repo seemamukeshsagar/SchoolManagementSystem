@@ -6,7 +6,7 @@ namespace SchoolPortal.Services.IServices
 {
 	public interface IStudentService
 	{
-		List<StudentMaster> GetAll();
+		List<StudentMaster> GetAll(Guid? schoolId = null);
 		StudentMaster? GetById(Guid id);
 		Guid Create(StudentMaster student);
 		bool Update(StudentMaster student);

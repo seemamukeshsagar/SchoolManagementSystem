@@ -7,7 +7,8 @@ namespace SchoolPortal.Services.IServices
 	public interface IClassService
 	{
 		List<ClassMaster> GetAll();
-		ClassMaster? GetById(Guid id);
+        List<ClassMaster> GetAll(Guid? schoolId);
+        ClassMaster? GetById(Guid id);
 		Guid Create(ClassMaster cls);
 		bool Update(ClassMaster cls);
 		bool Delete(Guid id);

@@ -41,15 +41,39 @@ namespace SchoolPortalApp.Controllers
 
 		private void PopulateDropdowns(TeacherClassDetailsViewModel vm)
 		{
-			var teachers = _teacherService.GetAll();
-			var classes = _classService.GetAll();
-			var sections = _sectionService.GetAll();
-			var subjects = _subjectService.GetAll();
+			if (!CurrentSchoolId.HasValue || CurrentSchoolId == Guid.Empty)
+				throw new InvalidOperationException("School ID is required");
 
-			vm.Teachers = teachers.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))), Selected = t.Id == vm.TeacherId }).ToList();
-			vm.Classes = classes.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.ClassId }).ToList();
-			vm.Sections = sections.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name, Selected = s.Id == vm.SectionId }).ToList();
-			vm.Subjects = subjects.Select(su => new SelectListItem { Value = su.Id.ToString(), Text = su.SubjectName, Selected = su.Id == vm.SubjectId }).ToList();
+			var schoolId = CurrentSchoolId.Value; // Get the non-nullable Guid
+
+			var teachers = _teacherService.GetAll(schoolId);
+			var classes = _classService.GetAll(schoolId);
+			var sections = _sectionService.GetAll(schoolId);
+			var subjects = _subjectService.GetAll(schoolId);
+
+			vm.Teachers = teachers.Select(t => new SelectListItem { 
+				Value = t.Id.ToString(), 
+				Text = string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))), 
+				Selected = t.Id == (vm.TeacherId)
+			}).ToList();
+
+			vm.Classes = classes.Select(c => new SelectListItem { 
+				Value = c.Id.ToString(), 
+				Text = c.Name, 
+				Selected = c.Id == (vm.ClassId)
+			}).ToList();
+
+			vm.Sections = sections.Select(s => new SelectListItem { 
+				Value = s.Id.ToString(), 
+				Text = s.Name, 
+				Selected = s.Id == (vm.SectionId)
+			}).ToList();
+
+			vm.Subjects = subjects.Select(su => new SelectListItem { 
+				Value = su.Id.ToString(), 
+				Text = su.SubjectName, 
+				Selected = su.Id == (vm.SubjectId)
+			}).ToList();
 		}
 
 		[HttpGet]
@@ -57,22 +81,27 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			var list = _service.GetAll();
+			if (CurrentSchoolId == Guid.Empty)
+				throw new InvalidOperationException("School ID is required");
 
-			var teachers = _teacherService.GetAll();
-			var classes = _classService.GetAll();
-			var sections = _sectionService.GetAll();
-			var subjects = _subjectService.GetAll();
+			var list = _service.GetAll();
+			var teachers = _teacherService.GetAll(CurrentSchoolId);
+			var classes = _classService.GetAll(CurrentSchoolId);
+			var sections = _sectionService.GetAll(CurrentSchoolId!);
+			var subjects = _subjectService.GetAll(CurrentSchoolId!);
 
 			var result = list.Select(item => new TeacherClassDetailsListItemViewModel
 			{
 				Id = item.Id,
-				TeacherName = teachers.FirstOrDefault(t => t.Id == item.TeacherId) is { } t ? string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))) : string.Empty,
+				TeacherName = teachers.FirstOrDefault(t => t.Id == item.TeacherId) is { } t 
+					? string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))) 
+					: string.Empty,
 				ClassName = classes.FirstOrDefault(c => c.Id == item.ClassId)?.Name ?? string.Empty,
 				SectionName = sections.FirstOrDefault(s => s.Id == item.SectionId)?.Name ?? string.Empty,
 				SubjectName = subjects.FirstOrDefault(su => su.Id == item.SubjectId)?.SubjectName ?? string.Empty,
 				IsActive = item.IsActive
 			}).ToList();
+			
 			return View(result);
 		}
 
@@ -120,6 +149,8 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
+			// Since all these properties are non-nullable Guids, we can assign them directly
+			// Model validation ensures required fields are provided
 			var entity = new TeacherClassDetails
 			{
 				Id = Guid.Empty,
@@ -128,9 +159,9 @@ namespace SchoolPortalApp.Controllers
 				SectionId = model.SectionId,
 				SubjectId = model.SubjectId,
 				IsActive = model.IsActive,
-				CompanyId = companyId.Value,
+				CompanyId = companyId ?? throw new InvalidOperationException("Company ID is required"),
 				SchoolId = model.SchoolId,
-				CreatedBy = userId.Value,
+				CreatedBy = userId ?? throw new InvalidOperationException("User ID is required"),
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -217,9 +248,21 @@ namespace SchoolPortalApp.Controllers
 		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
-			var item = _service.GetById(id);
-			if (item == null) return NotFound();
-			return View(item);
+			try
+			{
+				var item = _service.GetById(id);
+				if (item == null)
+				{
+					_logger.LogWarning("Delete: Teacher class details with ID {Id} not found", id);
+					return NotFound();
+				}
+				return View(item);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error in Delete action for ID {Id}", id);
+				return StatusCode(StatusCodes.Status500InternalServerError);
+			}
 		}
 
 		[HttpPost]
@@ -228,12 +271,23 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ConfirmDelete(Guid id)
 		{
-			if (!_service.Delete(id))
+			try
 			{
-				TempData["ErrorMessage"] = "Failed to delete.";
+				if (!_service.Delete(id))
+				{
+					_logger.LogWarning("Failed to delete teacher class details with ID {Id}", id);
+					TempData["ErrorMessage"] = "Failed to delete the record. Please try again.";
+					return RedirectToAction("Delete", new { id });
+				}
+				_logger.LogInformation("Successfully deleted teacher class details with ID {Id}", id);
+				return RedirectToAction("Index");
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error in ConfirmDelete for ID {Id}", id);
+				TempData["ErrorMessage"] = "An error occurred while deleting the record.";
 				return RedirectToAction("Delete", new { id });
 			}
-			return RedirectToAction("Index");
 		}
 	}
 }
