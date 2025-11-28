@@ -557,7 +557,8 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				// Class teacher (Academic tab)
-				var teachers = _teacherService.GetAll();
+				var schoolId = CurrentSchoolId ?? throw new InvalidOperationException("School ID is required");
+				var teachers = _teacherService.GetAll(schoolId);
 				var t = teachers.FirstOrDefault(x => x.Id == item.ClassTeacherId);
 				ViewBag.ClassTeacherName = t == null ? string.Empty : string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
 			}

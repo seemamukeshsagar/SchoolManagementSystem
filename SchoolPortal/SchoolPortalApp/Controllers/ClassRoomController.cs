@@ -235,7 +235,7 @@ namespace SchoolPortalApp.Controllers
 			return RedirectToAction("Details", new { id });
 		}
 
-		[HttpGet]
+		[HttpGet("Delete/{id}")]
 		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
@@ -258,7 +258,7 @@ namespace SchoolPortalApp.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[HttpPost]
+		[HttpPost("Delete/{id}")]
 		[ActionName("Delete")]
 		[Route("Delete/{id}")]
 		[ValidateAntiForgeryToken]

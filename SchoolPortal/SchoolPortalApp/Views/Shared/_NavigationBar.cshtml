@@ -5,8 +5,19 @@
 <!-- <script src="~/js/navigationbar.js"></script> -->
 
 @{
-	var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
-	var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+    // Get current controller and action
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+    
+    // Helper function to check if a menu item is active
+    bool IsActive(string menuController, string menuAction = "Index")
+    {
+        return string.Equals(controller, menuController, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(action, menuAction, StringComparison.OrdinalIgnoreCase);
+    }
+
+    var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
+    var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
 }
 
 <!-- Sidebar -->
@@ -51,82 +62,83 @@
 						</li>
 						@if (lstPrivileges.Contains("Manage Companies"))
 						{
-							<li><a href="@Url.Action("Index", "Company")" class="nav-link">Companies</a></li>
+							<li><a href="@Url.Action("Index", "Company")" class="nav-link @(IsActive("Company") ? "active" : "")">Companies</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Schools"))
 						{
-							<li><a href="@Url.Action("Index", "School")" class="nav-link">School</a></li>
+							<li><a href="@Url.Action("Index", "School")" class="nav-link @(IsActive("School") ? "active" : "")">School</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Users"))
 						{
-							<li><a href="@Url.Action("Index", "UserDetails")" class="nav-link">Users</a></li>
+							<li><a href="@Url.Action("Index", "UserDetails")" class="nav-link @(IsActive("UserDetails") ? "active" : "")">Users</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Roles"))
 						{
-							<li><a href="@Url.Action("Index", "RoleMaster")" class="nav-link">Roles</a></li>
+							<li><a href="@Url.Action("Index", "RoleMaster")" class="nav-link @(IsActive("RoleMaster") ? "active" : "")">Roles</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Departments"))
 						{
-							<li><a href="@Url.Action("Index", "DeptMaster")" class="nav-link">Departments</a></li>
+							<li><a href="@Url.Action("Index", "DeptMaster")" class="nav-link @(IsActive("DeptMaster") ? "active" : "")">Departments</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Designations"))
 						{
-							<li><a href="@Url.Action("Index", "DesigMaster")" class="nav-link">Designations</a></li>
+							<li><a href="@Url.Action("Index", "DesigMaster")" class="nav-link @(IsActive("DesigMaster") ? "active" : "")">Designations</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Employees"))
 						{
-							<li><a href="@Url.Action("Index", "Emp")" class="nav-link">Employees</a></li>
+							<li><a href="@Url.Action("Index", "Emp")" class="nav-link @(IsActive("Emp") ? "active" : "")">Employees</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Employee Type Master"))
 						{
-							<li><a href="@Url.Action("Index", "EmpTypeMaster")" class="nav-link">Employee Type Master</a></li>
+							<li><a href="@Url.Action("Index", "EmpTypeMaster")" class="nav-link @(IsActive("EmpTypeMaster") ? "active" : "")">Employee Type Master</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Privileges"))
 						{
-							<li><a href="@Url.Action("Index", "Privileges")" class="nav-link">Privileges</a></li>
+							<li><a href="@Url.Action("Index", "Privileges")" class="nav-link @(IsActive("Privileges") ? "active" : "")">Privileges</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Role Privileges"))
 						{
-							<li><a href="@Url.Action("Index", "RolePrivileges")" class="nav-link">Role Privileges</a></li>
+							<li><a href="@Url.Action("Index", "RolePrivileges")" class="nav-link @(IsActive("RolePrivileges") ? "active" : "")">Role Privileges</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage System Parameters"))
 						{
-							<li><a href="@Url.Action("Index", "SystemParameters")" class="nav-link">System Parameters</a></li>
+							<li><a href="@Url.Action("Index", "SystemParameters")" class="nav-link @(IsActive("SystemParameters") ? "active" : "")">System Parameters</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Schedules"))
 						{
-							<li><a href="@Url.Action("Index", "TaskSchedules")" class="nav-link">Schedules</a></li>
+							<li><a href="@Url.Action("Index", "TaskSchedules")" class="nav-link @(IsActive("TaskSchedules") ? "active" : "")">Schedules</a></li>
 						}
 						@if (lstPrivileges.Contains("Manage Holiday"))
 						{
-							<li><a href="@Url.Action("Index", "HolidayMaster")" class="nav-link">Holiday</a></li>
+							<li><a href="@Url.Action("Index", "HolidayMaster")" class="nav-link @(IsActive("HolidayMaster") ? "active" : "")">Holiday</a></li>
 						}
 
 						<!-- Masters -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
 							Masters
 						</li>
-						<li><a href="@Url.Action("Index", "CategoryMaster")" class="nav-link">Categories</a></li>
-						<li><a href="@Url.Action("Index", "Class", new { area = "" })" class="nav-link">Classes</a></li>
-						<li><a href="@Url.Action("Index", "Section")" class="nav-link">Sections</a></li>
-						<li><a href="@Url.Action("Index", "ClassRoom")" class="nav-link">Class Rooms</a></li>
-						<li><a href="@Url.Action("Index", "Subject")" class="nav-link">Subjects</a></li>
-						@* <li><a href="@Url.Action("Index", "SubjectCategory")" class="nav-link">Subjects - Sub Categories</a></li> *@
-						<li><a href="@Url.Action("Index", "ProfessionMaster")" class="nav-link">Professions</a></li>
-						<li><a href="@Url.Action("Index", "QualificationMaster")" class="nav-link">Qualifications</a></li>
-						<li><a href="@Url.Action("Index", "FeesCategoryMaster")" class="nav-link">Fees Categories</a></li>
-						<li><a href="@Url.Action("Index", "Assessment")" class="nav-link">Assessments</a></li>
-						<li><a href="@Url.Action("Index", "AttendenceReasonMaster")" class="nav-link">Attendance Reasons</a></li>
-						<li><a href="@Url.Action("Index", "Visitor")" class="nav-link">Visitors</a></li>
+						<li><a href="@Url.Action("Index", "CategoryMaster")" class="nav-link @(IsActive("CategoryMaster") ? "active" : "")">Categories</a></li>
+						<li><a href="@Url.Action("Index", "Class", new { area = "" })" class="nav-link @(IsActive("Class") ? "active" : "")">Classes</a></li>
+						<li><a href="@Url.Action("Index", "Section")" class="nav-link @(IsActive("Section") ? "active" : "")">Sections</a></li>
+						<li><a href="@Url.Action("Index", "ClassRoom")" class="nav-link @(IsActive("ClassRoom") ? "active" : "")">Class Rooms</a></li>
+						<li><a href="@Url.Action("Index", "Subject")" class="nav-link @(IsActive("Subject") ? "active" : "")">Subjects</a></li>
+						<li><a href="@Url.Action("Index", "TeacherSectionDetails")" class="nav-link @(IsActive("TeacherSectionDetails") ? "active" : "")">Class-Teacher</a></li>
+						@* <li><a href="@Url.Action("Index", "SubjectCategory")" class="nav-link @(IsActive("SubjectCategory") ? "active" : "")">Subjects - Sub Categories</a></li> *@
+						<li><a href="@Url.Action("Index", "ProfessionMaster")" class="nav-link @(IsActive("ProfessionMaster") ? "active" : "")">Professions</a></li>
+						<li><a href="@Url.Action("Index", "QualificationMaster")" class="nav-link @(IsActive("QualificationMaster") ? "active" : "")">Qualifications</a></li>
+						<li><a href="@Url.Action("Index", "FeesCategoryMaster")" class="nav-link @(IsActive("FeesCategoryMaster") ? "active" : "")">Fees Categories</a></li>
+						<li><a href="@Url.Action("Index", "Assessment")" class="nav-link @(IsActive("Assessment") ? "active" : "")">Assessments</a></li>
+						<li><a href="@Url.Action("Index", "AttendenceReasonMaster")" class="nav-link @(IsActive("AttendenceReasonMaster") ? "active" : "")">Attendance Reasons</a></li>
+						<li><a href="@Url.Action("Index", "Visitor")" class="nav-link @(IsActive("Visitor") ? "active" : "")">Visitors</a></li>
 
 						<!-- Staff -->
 						<li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">
 							Staff
 						</li>
-						<li><a href="@Url.Action("Index", "Emp")" class="nav-link">Employee</a></li>
-						<li><a href="@Url.Action("Index", "TeacherMaster")" class="nav-link">Teacher</a></li>
-						<li><a href="@Url.Action("Index", "DriverMaster")" class="nav-link">Driver</a></li>
-						<li><a href="@Url.Action("Index", "CleanerMaster")" class="nav-link">Cleaner</a></li>
+						<li><a href="@Url.Action("Index", "Emp")" class="nav-link @(IsActive("Emp") ? "active" : "")">Employee</a></li>
+						<li><a href="@Url.Action("Index", "TeacherMaster")" class="nav-link @(IsActive("TeacherMaster") ? "active" : "")">Teacher</a></li>
+						<li><a href="@Url.Action("Index", "DriverMaster")" class="nav-link @(IsActive("DriverMaster") ? "active" : "")">Driver</a></li>
+						<li><a href="@Url.Action("Index", "CleanerMaster")" class="nav-link @(IsActive("CleanerMaster") ? "active" : "")">Cleaner</a></li>
 
 					</ul>
 				</div>

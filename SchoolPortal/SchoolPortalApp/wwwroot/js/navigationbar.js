@@ -5,22 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the sidebar state
     function initializeSidebar() {
-        // Check if we have a saved state in localStorage
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         
-        // Apply the saved state
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
-            // Close all accordion items when initializing in collapsed state
-            if (sidebarAccordion) {
-                const openPanels = sidebarAccordion.querySelectorAll('.accordion-collapse.show');
-                openPanels.forEach(panel => {
-                    const bsCollapse = bootstrap.Collapse.getInstance(panel);
-                    if (bsCollapse) {
-                        bsCollapse.hide();
-                    }
-                });
-            }
         }
         
         updateToggleIcon(isCollapsed);
@@ -31,36 +19,20 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebarToggle.addEventListener('click', function() {
             const isCollapsed = !sidebar.classList.contains('collapsed');
             
-            // Toggle the collapsed class
             if (isCollapsed) {
                 sidebar.classList.add('collapsed');
-                // Close all accordion items when collapsing
-                if (sidebarAccordion) {
-                    const openPanels = sidebarAccordion.querySelectorAll('.accordion-collapse.show');
-                    openPanels.forEach(panel => {
-                        const bsCollapse = bootstrap.Collapse.getInstance(panel);
-                        if (bsCollapse) {
-                            bsCollapse.hide();
-                        }
-                    });
-                }
             } else {
                 sidebar.classList.remove('collapsed');
             }
             
-            // Save the state to localStorage
             localStorage.setItem('sidebarCollapsed', isCollapsed);
-            
-            // Update the toggle icon
             updateToggleIcon(isCollapsed);
         });
     }
 
     // Update the toggle icon based on sidebar state
     function updateToggleIcon(isCollapsed) {
-        if (!sidebarToggle) return;
-        
-        const icon = sidebarToggle.querySelector('i');
+        const icon = document.getElementById('toggleIcon');
         if (!icon) return;
         
         if (isCollapsed) {
@@ -77,6 +49,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle accordion behavior
     if (sidebarAccordion) {
+        // When a child link is clicked, ensure its parent accordion stays open
+        const navLinks = sidebarAccordion.querySelectorAll('.nav-link:not(.accordion-button)');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // Find the parent accordion item
+                const parentItem = this.closest('.accordion-item');
+                if (parentItem) {
+                    const button = parentItem.querySelector('.accordion-button');
+                    if (button && button.getAttribute('aria-expanded') === 'false') {
+                        // If the parent is collapsed, expand it
+                        const bsCollapse = new bootstrap.Collapse(button.nextElementSibling, {
+                            toggle: true
+                        });
+                    }
+                }
+            });
+        });
+
         // Close other panels when one is opened in collapsed mode
         sidebarAccordion.addEventListener('show.bs.collapse', function(e) {
             if (sidebar.classList.contains('collapsed')) {

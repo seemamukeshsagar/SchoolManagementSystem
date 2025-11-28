@@ -67,7 +67,7 @@ namespace SchoolPortal.Services
 			return list;
 		}
 
-		public List<TeacherMaster> GetAll(Guid schoolId)
+		public List<TeacherMaster> GetAll(Guid? schoolId)
 		{
 			var list = new List<TeacherMaster>();
 			Proc p = new Proc("Teacher_GetAll_SchoolId");

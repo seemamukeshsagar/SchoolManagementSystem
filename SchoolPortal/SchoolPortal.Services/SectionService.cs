@@ -65,6 +65,22 @@ namespace SchoolPortal.Services
             return list;
         }
 
+        public List<SectionMaster> GetAll(Guid? schoolId)
+        {
+            Proc p = new Proc("Section_GetAll");
+            p["@SchoolId"] = schoolId;
+
+            var dt = new DataTable();
+            p.Exec(dt);
+
+            if (dt.Rows.Count == 0)
+                return new List<SectionMaster>();
+
+            return dt.AsEnumerable()
+                     .Select(Map)   // Map(DataRow)
+                     .ToList();
+        }
+
         public SectionMaster? GetById(Guid id)
         {
             Proc p = new Proc("Section_GetById");
@@ -151,6 +167,34 @@ namespace SchoolPortal.Services
             if (dt.Rows.Count == 0) return string.Empty;
             var nameObj = dt.Rows[0]["Name"];
             return nameObj?.ToString() ?? string.Empty;
+        }
+
+        public List<SectionMaster> GetSectionsByClassId(Guid? classId)
+        {
+             try
+            {
+                if (!classId.HasValue || classId == Guid.Empty)
+                    return new List<SectionMaster>();
+
+                var list = new List<SectionMaster>();
+                using (Proc p = new Proc("Section_GetByClassId"))
+                {
+                    p["@ClassId"] = classId.Value;
+                    var dt = new DataTable();
+                    p.Exec(dt);
+                    
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        list.Add(Map(r));
+                    }
+                }
+                return list;
+            }
+            catch
+            {
+                // Fallback: avoid throwing to prevent 500 in controller
+                return new List<SectionMaster>();
+            }
         }
     }
 }

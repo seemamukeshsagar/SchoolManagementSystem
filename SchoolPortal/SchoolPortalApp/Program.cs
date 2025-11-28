@@ -30,6 +30,10 @@ builder.Configuration
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
+// Add configuration
+var configuration = builder.Configuration;
+builder.Services.AddSingleton<IConfiguration>(configuration);
+
 builder.Services.AddMemoryCache(); 
 
 // Authentication & Authorization
@@ -60,6 +64,8 @@ builder.Services.AddAntiforgery(o =>
 		: Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
 	o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
 	o.Cookie.HttpOnly = true;
+	o.HeaderName = "X-CSRF-TOKEN";
+	o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 // Register IHttpContextAccessor (singleton)

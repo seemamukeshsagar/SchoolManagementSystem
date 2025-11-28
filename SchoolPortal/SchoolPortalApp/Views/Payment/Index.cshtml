@@ -1,0 +1,32 @@
+// File: c:\SchoolManagementSystem\SchoolPortal\SchoolPortalApp\Views\Payment\Index.cshtml
+@{
+    ViewBag.Title = "Make Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Select Payment Method</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="@Url.Action("Payment", "Payment")" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Pay with RazorPay</h5>
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <p class="mb-1">Secure payment via credit/debit card, UPI, net banking</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+}

@@ -91,3 +91,34 @@ body.overflow-hidden {
     background-position: right calc(0.375em + 0.1875rem) center;
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
+
+/* Loading state */
+.body-scroll {
+    transition: opacity 0.3s ease;
+    min-height: 300px; /* Adjust as needed */
+}
+
+.body-scroll.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.body-scroll.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,1 @@
+Requesting _NavigationBar.cshtml content. This file likely contains RenderSectionAsync or sets Layout. Please provide its path or allow me to read it.

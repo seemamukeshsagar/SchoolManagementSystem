@@ -35,5 +35,25 @@ namespace SchoolPortalApp.Controllers
 				return Guid.TryParse(value, out var id) ? id : (Guid?)null;
 			}
 		}
+		
+		protected bool IsAjaxRequest()
+        {
+            return Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        }
+
+        protected IActionResult AjaxView(string viewName, object model = null)
+        {
+            if (IsAjaxRequest())
+            {
+                return PartialView(viewName, model);
+            }
+            return View(viewName, model);
+        }
+
+        protected IActionResult AjaxView(object model = null)
+        {
+            string actionName = ControllerContext.RouteData.Values["action"].ToString();
+            return AjaxView(actionName, model);
+        }
 	}
 }

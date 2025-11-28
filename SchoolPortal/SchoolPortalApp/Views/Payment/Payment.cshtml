@@ -1,0 +1,66 @@
+// File: c:\SchoolManagementSystem\SchoolPortal\SchoolPortalApp\Views\Payment\Payment.cshtml
+@{
+    ViewBag.Title = "Complete Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Complete Payment</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-credit-card fa-4x text-primary mb-3"></i>
+                        <h5>Amount to Pay: ₹@((ViewBag.amount / 100).ToString("0.00"))</h5>
+                        <p class="text-muted">@ViewBag.description</p>
+                    </div>
+                    
+                    <form action="/Payment/Complete" method="POST">
+                        <script src="https://checkout.razorpay.com/v1/checkout.js"
+                                data-key="@ViewBag.key"
+                                data-amount="@ViewBag.amount"
+                                data-currency="@ViewBag.currency"
+                                data-order_id="@ViewBag.orderId"
+                                data-buttontext="Pay Now"
+                                data-name="@ViewBag.name"
+                                data-description="@ViewBag.description"
+                                data-image="@ViewBag.image"
+                                data-prefill.name="@ViewBag.prefill.name"
+                                data-prefill.email="@ViewBag.prefill.email"
+                                data-prefill.contact="@ViewBag.prefill.contact"
+                                data-theme.color="#4e73df">
+                        </script>
+                        <input type="hidden" name="hidden">
+                    </form>
+                    
+                    <div class="mt-4">
+                        <p class="text-muted small">
+                            <i class="fas fa-lock me-2"></i>Your payment is secure and encrypted
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .razorpay-payment-button {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .razorpay-payment-button:hover {
+            background-color: #2e59d9;
+        }
+    </style>
+}
