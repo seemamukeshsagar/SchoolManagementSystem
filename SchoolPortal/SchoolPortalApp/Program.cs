@@ -41,9 +41,9 @@ builder.Services
 	.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>
 	{
-		options.LoginPath = "/Account/Login";
-		options.LogoutPath = "/Account/Logout";
-		options.AccessDeniedPath = "/Account/Login";
+		options.LoginPath = "/Authentication/Login";
+		options.LogoutPath = "/Authentication/Logout";
+		options.AccessDeniedPath = "/Authentication/Login";
 		options.SlidingExpiration = true;
 	});
 builder.Services.AddAuthorization();
@@ -172,8 +172,8 @@ app.MapStaticAssets();
 // Map MVC controller routes
 app.MapControllerRoute(
 	name: "account",
-	pattern: "Account/{action=Login}/{id?}",
-	defaults: new { controller = "Account" });
+	pattern: "Authentication/{action=Login}/{id?}",
+	defaults: new { controller = "Authentication" });
 
 app.MapControllerRoute(
 	name: "home",
@@ -183,7 +183,7 @@ app.MapControllerRoute(
 // Default MVC route
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Account}/{action=Login}/{id?}");
+	pattern: "{controller=Authentication}/{action=Login}/{id?}");
 
 // Map Razor Pages (must be after controller routes to avoid conflicts)
 app.MapRazorPages()

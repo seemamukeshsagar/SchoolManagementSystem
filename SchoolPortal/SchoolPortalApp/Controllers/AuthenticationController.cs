@@ -10,13 +10,13 @@ using SchoolPortal.Services.IServices;
 
 namespace SchoolPortalApp.Controllers
 {
-	[Route("Account")]
-	public class AccountController : BaseController
+	[Route("Authentication")]
+	public class AuthenticationController : BaseController
 	{
 		private readonly ILoginService _loginService;
-		private readonly ILogger<AccountController> _logger;
+		private readonly ILogger<AuthenticationController> _logger;
 
-		public AccountController(ILoginService loginService, ILogger<AccountController> logger)
+		public AuthenticationController(ILoginService loginService, ILogger<AuthenticationController> logger)
 		{
 			_loginService = loginService;
 			_logger = logger;

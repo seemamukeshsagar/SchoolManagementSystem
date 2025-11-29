@@ -12,7 +12,7 @@
 				<div class="card-body p-4">
 					<h4 class="card-title mb-4 text-center">Sign in</h4>
 
-					<form method="post" action="/Account/Login" novalidate>
+					<form method="post" action="/Authentication/Login" novalidate>
 						@Html.AntiForgeryToken()
 
 						<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
