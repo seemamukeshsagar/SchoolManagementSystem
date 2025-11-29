@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor Accessor;
+
+@{
+    // Get current controller and action
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+    
+    // Make the function available to child partials
+    bool IsActive(string menuController, string menuAction = "Index")
+    {
+        return string.Equals(controller, menuController, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(action, menuAction, StringComparison.OrdinalIgnoreCase);
+    }
+
+    var privilegesString = Accessor.HttpContext?.Session?.GetString("Privileges") ?? string.Empty;
+    var lstPrivileges = privilegesString.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+}
+
+<!-- Sidebar -->
+<div class="d-flex flex-column">
+    <div class="accordion" id="sidebarAccordion">
+        @RenderBody()
+    </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
