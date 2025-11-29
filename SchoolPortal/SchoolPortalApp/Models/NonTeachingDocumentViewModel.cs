@@ -4,27 +4,27 @@ namespace SchoolPortal.Web.Models
 {
     public class NonTeachingDocumentViewModel
     {
-        public Guid Id { get; set; }
-        public Guid NonTeachingId { get; set; }
-        public string DocumentType { get; set; }
-        public Guid DocumentTypeId { get; set; }
-        public string DocumentNumber { get; set; }
-        public string DocumentPath { get; set; }
+        public Guid Id { get; set; } = Guid.Empty;
+        public Guid NonTeachingId { get; set; } = Guid.Empty;
+        public string DocumentType { get; set; } = string.Empty;
+        public Guid DocumentTypeId { get; set; } = Guid.Empty;
+        public string DocumentNumber { get; set; } = string.Empty;
+        public string DocumentPath { get; set; } = string.Empty;
         public DateTime? IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
-        public string Remarks { get; set; }
-        public bool IsVerified { get; set; }
-        public Guid VerifiedBy { get; set; }
+        public string Remarks { get; set; } = string.Empty;
+        public bool IsVerified { get; set; } = false;
+        public Guid VerifiedBy { get; set; } = Guid.Empty;
         public DateTime? VerifiedOn { get; set; }
-        public byte[] FileContent { get; set; }
-        public string FileType { get; set; }
-        public string FileName { get; set; }
-        public string Description { get; set; }
+        public byte[] FileContent { get; set; } = Array.Empty<byte>();
+        public string FileType { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-        public Guid CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public Guid ModifiedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public Guid CreatedBy { get; set; } = Guid.Empty;
+        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
+        public Guid ModifiedBy { get; set; } = Guid.Empty;
+        public DateTime? ModifiedDate { get; set; } = DateTime.UtcNow;
 
         // Helper property to display file size
         public string FileSize

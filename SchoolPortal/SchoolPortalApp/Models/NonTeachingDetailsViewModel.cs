@@ -3,30 +3,30 @@ namespace SchoolPortalApp.Models
 {
     public class NonTeachingDetailsViewModel
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string MobilePhone { get; set; }
-        public string EmployeeCode { get; set; }
-        public string Designation { get; set; }
-        public string Department { get; set; }
-        public string DOB { get; set; }
-        public string DOJ { get; set; }
-        public string DateOfLeaving { get; set; }
-        public string Address { get; set; }
-        public string Gender { get; set; }
-        public string MaritalStatus { get; set; }
-        public string Qualification { get; set; }
+        public Guid Id { get; set; } = Guid.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string MobilePhone { get; set; } = string.Empty;
+        public string EmployeeCode { get; set; } = string.Empty;
+        public string Designation { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+        public string DOB { get; set; } = string.Empty;
+        public string DOJ { get; set; } = string.Empty;
+        public string DateOfLeaving { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string Gender { get; set; } = string.Empty;
+        public string MaritalStatus { get; set; } = string.Empty;
+        public string Qualification { get; set; } = string.Empty;
         public decimal? Salary { get; set; }
-        public string BankName { get; set; }
-        public string BankAccountNumber { get; set; }
-        public string IFSCCode { get; set; }
-        public string PAN { get; set; }
-        public string AadharNumber { get; set; }
-        public string EmergencyContactName { get; set; }
-        public string EmergencyContactNumber { get; set; }
-        public string EmergencyContactRelation { get; set; }
-        public bool IsActive { get; set; }
+        public string BankName { get; set; } = string.Empty;
+        public string BankAccountNumber { get; set; } = string.Empty;
+        public string IFSCCode { get; set; } = string.Empty;
+        public string PAN { get; set; } = string.Empty;
+        public string AadharNumber { get; set; } = string.Empty;
+        public string EmergencyContactName { get; set; } = string.Empty;
+        public string EmergencyContactNumber { get; set; } = string.Empty;
+        public string EmergencyContactRelation { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
 }

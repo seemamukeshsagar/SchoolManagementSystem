@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Razorpay.Api;
 using SchoolPortalApp.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 //https://code2night.com/Blog/MyBlog/Implement-RazorPay-Payment-Gateway-in-Asp.net-MVC
 namespace SchoolPortalApp.Controllers
@@ -12,14 +13,16 @@ namespace SchoolPortalApp.Controllers
     public class PaymentController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<PaymentController> _logger;
         private readonly string _key;
         private readonly string _secret;
 
-        public PaymentController(IConfiguration configuration)
+        public PaymentController(IConfiguration configuration, ILogger<PaymentController> logger)
         {
-            _configuration = configuration;
-            _key = _configuration["RazorPay:Key"];
-            _secret = _configuration["RazorPay:Secret"];
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _key = _configuration["RazorPay:Key"] ?? throw new ArgumentNullException("RazorPay:Key configuration is missing");
+            _secret = _configuration["RazorPay:Secret"] ?? throw new ArgumentNullException("RazorPay:Secret configuration is missing");
 
             if (string.IsNullOrEmpty(_key) || string.IsNullOrEmpty(_secret))
             {
@@ -69,9 +72,8 @@ namespace SchoolPortalApp.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error
-                // TODO: Implement error logging
-                return RedirectToAction("PaymentFailed", new { message = "Error creating payment order." });
+                _logger.LogError(ex, "Error creating payment order");
+                return RedirectToAction("PaymentFailed", new { message = "Error creating payment order: " + ex.Message });
             }
         }
 
@@ -80,9 +82,9 @@ namespace SchoolPortalApp.Controllers
         {
             try
             {
-                string paymentId = Request.Form["razorpay_payment_id"];
-                string orderId = Request.Form["razorpay_order_id"];
-                string signature = Request.Form["razorpay_signature"];
+                string? paymentId = Request.Form["razorpay_payment_id"].FirstOrDefault();
+                string? orderId = Request.Form["razorpay_order_id"].FirstOrDefault();
+                string? signature = Request.Form["razorpay_signature"].FirstOrDefault();
 
                 if (string.IsNullOrEmpty(paymentId) || string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(signature))
                 {
@@ -123,8 +125,7 @@ namespace SchoolPortalApp.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error
-                // TODO: Implement error logging
+                _logger.LogError(ex, "Error processing payment completion");
                 return RedirectToAction("PaymentFailed", new { message = ex.Message });
             }
         }

@@ -1209,8 +1209,8 @@ namespace SchoolPortalApp.Controllers
 	internal class StudentCreationResult
 	{
 		public bool Success { get; set; }
-		public string Message { get; set; }
-		public Guid StudentId { get; set; }
+		public string Message { get; set; } = string.Empty;
+		public Guid StudentId { get; set; } = Guid.Empty;
 	}
 
     #endregion    

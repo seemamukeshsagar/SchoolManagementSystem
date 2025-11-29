@@ -85,8 +85,8 @@ namespace SchoolPortal.Web.Models.NonTeaching
     public  Guid? MaritalStatusId { get; set; }
     
     [Display(Name = "Profile Image")]
-    public IFormFile ImageFile { get; set; }
-    public byte[] Image { get; set; }
+    public IFormFile? ImageFile { get; set; }
+    public byte[]? Image { get; set; } = Array.Empty<byte>();
     
     
     [DataType(DataType.Currency)]
