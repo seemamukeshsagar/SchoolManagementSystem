@@ -14,17 +14,17 @@ var serverName = Regex.Replace(serverNameRaw, "[^A-Za-z0-9_.-]", "_");
 
 if (serverName == "DESKTOP-L9I46P8")
 {
-	serverName = "Office";
+    serverName = "Office";
 }
 else
 {
-	serverName = "Home";
+    serverName = "Home";
 }
 
 builder.Configuration
-		.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-		.AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
-		.AddEnvironmentVariables();
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -34,38 +34,38 @@ builder.Services.AddControllersWithViews();
 var configuration = builder.Configuration;
 builder.Services.AddSingleton<IConfiguration>(configuration);
 
-builder.Services.AddMemoryCache(); 
+builder.Services.AddMemoryCache();
 
 // Authentication & Authorization
 builder.Services
-	.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-	.AddCookie(options =>
-	{
-		options.LoginPath = "/Authentication/Login";
-		options.LogoutPath = "/Authentication/Logout";
-		options.AccessDeniedPath = "/Authentication/Login";
-		options.SlidingExpiration = true;
-	});
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Index";
+        options.LogoutPath = "/Authentication/Logout";
+        options.AccessDeniedPath = "/Home/Index";
+        options.SlidingExpiration = true;
+    });
 builder.Services.AddAuthorization();
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-	options.IdleTimeout = TimeSpan.FromMinutes(30);
-	options.Cookie.HttpOnly = true;
-	options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddAntiforgery(o =>
 {
-	o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-		? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
-		: Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-	o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
-	o.Cookie.HttpOnly = true;
-	o.HeaderName = "X-CSRF-TOKEN";
-	o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
+        : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+    o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+    o.Cookie.HttpOnly = true;
+    o.HeaderName = "X-CSRF-TOKEN";
+    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 // Register IHttpContextAccessor (singleton)
@@ -79,12 +79,12 @@ builder.Services.AddLogging(loggingBuilder =>
 });
 
 // DI registrations
-builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ => 
-	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
+builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ =>
+    SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 
- builder.Services.AddScoped<System.Data.IDbConnection>(sp => 
-  	sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());	
-	
+builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
+     sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
+
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ICategoryMasterService, SchoolPortal.Services.CategoryMasterService>();
 builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
@@ -152,9 +152,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -170,20 +170,20 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 // Map MVC controller routes
-app.MapControllerRoute(
-	name: "account",
-	pattern: "Authentication/{action=Login}/{id?}",
-	defaults: new { controller = "Authentication" });
+// app.MapControllerRoute(
+// 	name: "account",
+// 	pattern: "Authentication/{action=Login}/{id?}",
+// 	defaults: new { controller = "Authentication" });
 
 app.MapControllerRoute(
-	name: "home",
-	pattern: "Home/{action=Index}/{id?}",
-	defaults: new { controller = "Home" });
+    name: "home",
+    pattern: "Home/{action=Index}/{id?}",
+    defaults: new { controller = "Home" });
 
 // Default MVC route
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Authentication}/{action=Login}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Map Razor Pages (must be after controller routes to avoid conflicts)
 app.MapRazorPages()
@@ -192,9 +192,9 @@ app.MapRazorPages()
 // Add this before app.Run()
 app.Use(async (context, next) =>
 {
-	// This ensures the AuthorizedManager is configured per-request
-	AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
-	await next();
+    // This ensures the AuthorizedManager is configured per-request
+    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
+    await next();
 });
 
 app.Run();
