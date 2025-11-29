@@ -235,8 +235,8 @@ namespace SchoolPortalApp.Controllers
 			return RedirectToAction("Details", new { id });
 		}
 
+		// GET: ClassRoom/Delete/5
 		[HttpGet("Delete/{id}")]
-		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
 			var item = _service.GetById(id);
@@ -244,23 +244,9 @@ namespace SchoolPortalApp.Controllers
 			return View(item);
 		}
 
-		[HttpPost]
-		[Route("Delete/{id}")]
-		[ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public IActionResult ConfirmDelete(Guid id)
-		{
-			if (!_service.Delete(id))
-			{
-				TempData["ErrorMessage"] = "Failed to delete class room.";
-				return RedirectToAction("Delete", new { id });
-			}
-			return RedirectToAction("Index");
-		}
-
+		// POST: ClassRoom/Delete/5
 		[HttpPost("Delete/{id}")]
 		[ActionName("Delete")]
-		[Route("Delete/{id}")]
 		[ValidateAntiForgeryToken]
 		public IActionResult DeleteConfirmed(Guid id)
 		{
