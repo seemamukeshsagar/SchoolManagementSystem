@@ -1,0 +1,193 @@
+@model SchoolPortalApp.Models.TimeTable.TimeTableViewModel
+
+@{
+    ViewData["Title"] = "Generate Timetable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Generate Timetable - @Model.ClassName @Model.SectionName</h4>
+        <div>
+            <a href="#" class="btn btn-sm btn-light" onclick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-light">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="Save" method="post" id="timetableForm">
+            <input type="hidden" asp-for="ClassId" />
+            <input type="hidden" asp-for="SectionId" />
+            <input type="hidden" asp-for="AcademicYearId" />
+            <input type="hidden" asp-for="ClassName" />
+            <input type="hidden" asp-for="SectionName" />
+            <input type="hidden" asp-for="AcademicYearName" />
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="EffectiveFrom" class="control-label">Effective From</label>
+                        <input asp-for="EffectiveFrom" class="form-control" type="date" required />
+                        <span asp-validation-for="EffectiveFrom" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="EffectiveTo" class="control-label">Effective To (Optional)</label>
+                        <input asp-for="EffectiveTo" class="form-control" type="date" />
+                        <span asp-validation-for="EffectiveTo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-check mt-4 pt-2">
+                        <input class="form-check-input" asp-for="IsActive" />
+                        <label class="form-check-label" asp-for="IsActive">
+                            Is Active
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Time</th>
+                            @foreach (var day in Model.Days)
+                            {
+                                <th>@day.DayName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Days.First().Periods.Count; i++)
+                        {
+                            var period = Model.Days[0].Periods[i];
+                            <tr>
+                                <td class="text-nowrap">
+                                    @period.StartTime.ToString("hh\:mm") - @period.EndTime.ToString("hh\:mm")
+                                </td>
+                                @for (int j = 0; j < Model.Days.Count; j++)
+                                {
+                                    var dayPeriod = Model.Days[j].Periods[i];
+                                    <td>
+                                        @if (dayPeriod.IsBreak)
+                                        {
+                                            <div class="text-center text-muted">
+                                                <strong>@dayPeriod.BreakName</strong>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group mb-0">
+                                                <select name="Days[@j].Periods[@i].SubjectId" class="form-control form-control-sm" required>
+                                                    <option value="">-- Select Subject --</option>
+                                                    @foreach (var subject in ViewBag.Subjects as List<SelectListItem>)
+                                                    {
+                                                        <option value="@subject.Value" selected='@(dayPeriod.SubjectId?.ToString() == subject.Value)'>
+                                                            @subject.Text
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group mt-1 mb-0">
+                                                <select name="Days[@j].Periods[@i].TeacherId" class="form-control form-control-sm" required>
+                                                    <option value="">-- Select Teacher --</option>
+                                                    @foreach (var teacher in ViewBag.Teachers as List<SelectListItem>)
+                                                    {
+                                                        <option value="@teacher.Value" selected='@(dayPeriod.TeacherId?.ToString() == teacher.Value)'>
+                                                            @teacher.Text
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group text-right mt-4">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Timetable
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .table thead th {
+            white-space: nowrap;
+        }
+        
+        .form-control-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .card {
+                border: none !important;
+            }
+            
+            .table-bordered th,
+            .table-bordered td {
+                border: 1px solid #dee2e6 !important;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize select2 for better dropdown experience
+            $('select').select2({
+                theme: 'bootstrap4',
+                width: '100%'
+            });
+            
+            // Form submission handling
+            $('#timetableForm').on('submit', function(e) {
+                var isValid = true;
+                
+                // Validate all required fields
+                $(this).find('select[required]').each(function() {
+                    if (!$(this).val()) {
+                        isValid = false;
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    toastr.error('Please fill in all required fields.');
+                }
+            });
+        });
+    </script>
+}

@@ -55,14 +55,14 @@
 <body>
     <!-- HEADER -->
     <header>
-        @if (isAuthenticated)
+        @if (User.Identity.IsAuthenticated)
         {
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container-fluid">
                     <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
                         <i class="bi bi-list"></i>
                     </button>
-                    <a class="navbar-brand ms-2" asp-area="" asp-page="/Index">
+                    <a class="navbar-brand ms-2" asp-area="" asp-controller="Home" asp-action="Index">
                         @if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
                         {
                             @companyName
@@ -77,176 +77,16 @@
                             <text>School Portal</text>
                         }
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item d-flex align-items-center">
-                                @{
-                                    var userName = Context.Session.GetString("UserName") ?? "Guest";
-                                    var role = Context.Session.GetString("UserRole") ?? "Guest";
-                                    var designation = Context.Session.GetString("Designation") ?? "Not Specified";
-                                    var fullName = Context.Session.GetString("FullName") ?? userName;
-                                    var preSchools = Enumerable.Empty<SchoolPortal.Entities.Models.SchoolMaster>();
-                                    
-                                    if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var preCompanyId))
-                                    {
-                                        preSchools = SchoolService.GetByCompany(preCompanyId) ?? new List<SchoolPortal.Entities.Models.SchoolMaster>();
-                                    }
-                                }
-
-                                <div id="companySchoolSelectors" class="me-3 d-flex align-items-center" style="gap:8px;">
-                                    <select id="companySelect" class="form-select form-select-sm" style="min-width: 200px;" data-current-company-id="@companyIdStr1">
-                                        <option value="">Select Company</option>
-                                    </select>
-                                    <select id="schoolSelect"
-                                            class="form-select form-select-sm"
-                                            style="min-width: 200px;"
-                                            data-current-school-id="@schoolIdStr1"
-                                            @(preSchools.Any() ? "" : "disabled")>
-                                        <option value="">Select School</option>
-                                        @foreach (var school in preSchools)
-                                        {
-                                            <option value="@school.Id" selected="@(schoolIdStr1 == school.Id.ToString() ? true : (bool?)null)">@school.Name</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        const companySelect = document.getElementById('companySelect');
-                                        const schoolSelect = document.getElementById('schoolSelect');
-
-                                        async function loadCompanies(preselectId) {
-                                            try {
-                                                const response = await fetch('/api/company');
-                                                if (!response.ok) throw new Error('Failed to load companies');
-                                                const companies = await response.json();
-
-                                                companySelect.innerHTML = '<option value="">Select Company</option>';
-                                                companies.forEach(company => {
-                                                    const option = document.createElement('option');
-                                                    option.value = company.id;
-                                                    option.textContent = company.name;
-                                                    if (company.id === preselectId) {
-                                                        option.selected = true;
-                                                    }
-                                                    companySelect.appendChild(option);
-                                                });
-
-                                                if (preselectId) {
-                                                    await loadSchools(preselectId, schoolSelect.getAttribute('data-current-school-id'));
-                                                }
-                                            } catch (error) {
-                                                console.error('Error loading companies:', error);
-                                            }
-                                        }
-
-                                        async function loadSchools(companyId, preselectId) {
-                                            try {
-                                                if (!companyId) {
-                                                    schoolSelect.innerHTML = '<option value="">Select School</option>';
-                                                    schoolSelect.disabled = true;
-                                                    return;
-                                                }
-
-                                                const response = await fetch(`/api/school/company/${companyId}`);
-                                                if (!response.ok) throw new Error('Failed to load schools');
-                                                const schools = await response.json();
-
-                                                schoolSelect.innerHTML = '<option value="">Select School</option>';
-                                                schools.forEach(school => {
-                                                    const option = document.createElement('option');
-                                                    option.value = school.id;
-                                                    option.textContent = school.name;
-                                                    if (school.id === preselectId) {
-                                                        option.selected = true;
-                                                    }
-                                                    schoolSelect.appendChild(option);
-                                                });
-                                                schoolSelect.disabled = false;
-
-                                                if (preselectId && schoolSelect.value === preselectId) {
-                                                    schoolSelect.dispatchEvent(new Event('change'));
-                                                }
-                                            } catch (error) {
-                                                console.error('Error loading schools:', error);
-                                                schoolSelect.disabled = true;
-                                            }
-                                        }
-
-                                        if (companySelect && schoolSelect) {
-                                            const currentCompanyId = companySelect.getAttribute('data-current-company-id') || '';
-                                            const currentSchoolId = schoolSelect.getAttribute('data-current-school-id') || '';
-                                            if (currentCompanyId) {
-                                                loadCompanies(currentCompanyId).then(async () => {
-                                                    if (currentCompanyId) {
-                                                        try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(currentCompanyId)}`); } catch {}
-                                                    }
-                                                    if (currentSchoolId) {
-                                                        try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(currentSchoolId)}`); } catch {}
-                                                    }
-                                                });
-                                            } else {
-                                                loadCompanies('');
-                                            }
-
-                                            companySelect.addEventListener('change', async (event) => {
-                                                const val = companySelect.value;
-                                                try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
-                                                await loadSchools(val, currentSchoolId); // Pass the session school ID
-
-                                                // OPTIONAL: If you want to refresh immediately on company change (even before school is picked),
-                                                // only do it for user-triggered changes to avoid loops.
-                                                // if (event.isTrusted) {
-                                                //  window.location.reload();
-                                                // }
-                                            });
-                                            schoolSelect.addEventListener('change', async (event) => {
-                                                const val = schoolSelect.value;
-                                                try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(val)}`); } catch {}
-
-                                                // Determine the previously known school (from initial render / last change)
-                                                const previous = (schoolSelect.getAttribute('data-current-school-id') || '').toLowerCase();
-                                                const current = (val || '').toLowerCase();
-
-                                                // Update the attribute to the new value so we don't reload again for the same school
-                                                schoolSelect.setAttribute('data-current-school-id', val || '');
-
-                                                // Reload if either:
-                                                // 1) The user changed the dropdown (event.isTrusted), OR
-                                                // 2) Code selected a *different* school than before (e.g. after changing company)
-                                                if (event.isTrusted || previous !== current) {
-                                                    window.location.reload();
-                                                }
-                                            });
-                                        }
-
-                                        const sidebar = document.getElementById('sidebar');
-                                    </script>
-                                    <span class="user-info me-3">
-                                        <span id="userFullName"></span>
-                                        <span id="userRole"></span>
-                                        <span id="userDepartment"></span>
-                                        <span id="userEmail"></span>
-                                    </span>
-                                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-                                    </form>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Authentication/Login">Login</a>
-                                </li>
-                            }
-                        </ul>
+                    <div class="d-flex align-items-center ms-auto">
+                        <div class="me-3">
+                            <span class="text-light me-2">
+                                @(Context.Session.GetString("FullName") ?? "User")
+                            </span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -254,12 +94,11 @@
         else
         {
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container-fluid justify-content-end">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Authentication/Login">Login</a>
-                        </li>
-                    </ul>
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">School Portal</a>
+                    <div class="ms-auto">
+                        <a class="btn btn-outline-light" href="/Authentication/Login">Login</a>
+                    </div>
                 </div>
             </nav>
         }

@@ -6,6 +6,7 @@ using SchoolPortal.Services.Common;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,9 +45,31 @@ builder.Services
         options.LoginPath = "/Home/Index";
         options.LogoutPath = "/Authentication/Logout";
         options.AccessDeniedPath = "/Home/Index";
+        options.ReturnUrlParameter = "returnUrl";
         options.SlidingExpiration = true;
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                // Don't redirect to login page for unauthorized requests
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+        };
     });
-builder.Services.AddAuthorization();
+
+// Configure default authorization policy
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    
+    // Add a fallback policy that allows anonymous access
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAssertion(_ => true) // This allows all requests by default
+        .Build();
+});
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -169,18 +192,13 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-// Map MVC controller routes
-// app.MapControllerRoute(
-// 	name: "account",
-// 	pattern: "Authentication/{action=Login}/{id?}",
-// 	defaults: new { controller = "Authentication" });
-
+// Map specific controller routes (if needed)
 app.MapControllerRoute(
-    name: "home",
-    pattern: "Home/{action=Index}/{id?}",
-    defaults: new { controller = "Home" });
+    name: "account",
+    pattern: "Authentication/{action=Login}",
+    defaults: new { controller = "Authentication" });
 
-// Default MVC route
+// The default route handles all controller/action patterns
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -189,10 +207,9 @@ app.MapControllerRoute(
 app.MapRazorPages()
    .WithStaticAssets();
 
-// Add this before app.Run()
+// Configure AuthorizedManager for each request
 app.Use(async (context, next) =>
 {
-    // This ensures the AuthorizedManager is configured per-request
     AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
     await next();
 });

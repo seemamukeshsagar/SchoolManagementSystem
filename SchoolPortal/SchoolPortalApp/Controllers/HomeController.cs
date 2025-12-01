@@ -22,6 +22,7 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpGet]
+		[Route("")]
 		[Route("Index")]
 		[Microsoft.AspNetCore.Authorization.AllowAnonymous]
 		public IActionResult Index()

@@ -1,0 +1,139 @@
+@model SchoolPortalApp.Models.TimeTable.TimeTableViewModel
+
+@{
+    ViewData["Title"] = "View Timetable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">
+            @Model.ClassName @Model.SectionName - @Model.AcademicYearName
+            @if (Model.IsActive)
+            {
+                <span class="badge badge-success ml-2">Active</span>
+            }
+        </h4>
+        <div>
+            <a href="#" class="btn btn-sm btn-light" onclick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-sm btn-light">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        @if (Model.EffectiveFrom.HasValue)
+        {
+            <div class="alert alert-info mb-4">
+                <strong>Effective Period:</strong> 
+                @Model.EffectiveFrom.Value.ToString("dd MMM yyyy")
+                @if (Model.EffectiveTo.HasValue)
+                {
+                    <text> to @Model.EffectiveTo.Value.ToString("dd MMM yyyy")</text>
+                }
+                else
+                {
+                    <text> onwards</text>
+                }
+            </div>
+        }
+
+        @if (Model.Days != null && Model.Days.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Time</th>
+                            @foreach (var day in Model.Days)
+                            {
+                                <th>@day.DayName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Days.First().Periods.Count; i++)
+                        {
+                            var period = Model.Days[0].Periods[i];
+                            <tr>
+                                <td class="text-nowrap" style="width: 120px;">
+                                    @period.StartTime.ToString("hh\:mm") - @period.EndTime.ToString("hh\:mm")
+                                </td>
+                                @for (int j = 0; j < Model.Days.Count; j++)
+                                {
+                                    var dayPeriod = Model.Days[j].Periods[i];
+                                    <td>
+                                        @if (dayPeriod.IsBreak)
+                                        {
+                                            <div class="text-center text-muted">
+                                                <strong>@dayPeriod.BreakName</strong>
+                                            </div>
+                                        }
+                                        else if (!string.IsNullOrEmpty(dayPeriod.SubjectName) || !string.IsNullOrEmpty(dayPeriod.TeacherName))
+                                        {
+                                            <div class="text-center">
+                                                <div class="font-weight-bold">@dayPeriod.SubjectName</div>
+                                                <div class="small text-muted">@dayPeriod.TeacherName</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-center text-muted">
+                                                <em>Free Period</em>
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                No timetable data available for the selected criteria.
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .table thead th {
+            white-space: nowrap;
+        }
+        
+        .badge {
+            font-size: 0.8em;
+            padding: 0.35em 0.65em;
+        }
+        
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .card {
+                border: none !important;
+            }
+            
+            .table-bordered th,
+            .table-bordered td {
+                border: 1px solid #dee2e6 !important;
+            }
+            
+            .alert {
+                border: 1px solid #000 !important;
+            }
+        }
+    </style>
+}
