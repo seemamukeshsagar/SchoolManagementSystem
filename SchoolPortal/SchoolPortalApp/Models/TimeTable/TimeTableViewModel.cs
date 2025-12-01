@@ -3,26 +3,28 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SchoolPortalApp.Models
+namespace SchoolPortalApp.Models.TimeTable
 {
     public class TimeTableViewModel
     {
-        public Guid Id { get; set; }
-
+        // Filter properties
         [Required]
         [Display(Name = "Class")]
         public Guid ClassId { get; set; }
-        public string ClassName { get; set; } = string.Empty;
+        public string ClassName { get; set; }
+        public List<SelectListItem> Classes { get; set; } = new List<SelectListItem>();
 
         [Required]
         [Display(Name = "Section")]
         public Guid SectionId { get; set; }
-        public string SectionName { get; set; } = string.Empty;
+        public string SectionName { get; set; }
+        public List<SelectListItem> Sections { get; set; } = new List<SelectListItem>();
 
         [Required]
         [Display(Name = "Academic Year")]
         public Guid AcademicYearId { get; set; }
-        public string AcademicYearName { get; set; } = string.Empty;
+        public string AcademicYearName { get; set; }
+        public List<SelectListItem> AcademicYears { get; set; } = new List<SelectListItem>();
 
         [Display(Name = "Effective From")]
         [DataType(DataType.Date)]
@@ -34,17 +36,12 @@ namespace SchoolPortalApp.Models
 
         public bool IsActive { get; set; }
         public List<TimeTableDayViewModel> Days { get; set; } = new List<TimeTableDayViewModel>();
-
-        // Add these properties for dropdowns
-        public IEnumerable<SelectListItem> Classes { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> Sections { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> AcademicYears { get; set; } = new List<SelectListItem>();
     }
 
     public class TimeTableDayViewModel
     {
         public int DayId { get; set; }
-        public string DayName { get; set; } = string.Empty;
+        public string DayName { get; set; }
         public List<TimeTablePeriodViewModel> Periods { get; set; } = new List<TimeTablePeriodViewModel>();
     }
 
@@ -55,19 +52,10 @@ namespace SchoolPortalApp.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public Guid? SubjectId { get; set; }
-        public string? SubjectName { get; set; }
+        public string SubjectName { get; set; }
         public Guid? TeacherId { get; set; }
-        public string? TeacherName { get; set; }
+        public string TeacherName { get; set; }
         public bool IsBreak { get; set; }
-        public string? BreakName { get; set; }
-    }
-
-    public class TimeTableFilterViewModel
-    {
-        public Guid? ClassId { get; set; }
-        public Guid? SectionId { get; set; }
-        public Guid? AcademicYearId { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
+        public string BreakName { get; set; }
     }
 }

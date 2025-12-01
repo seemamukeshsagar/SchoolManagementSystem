@@ -13,10 +13,10 @@
     var lstPrivileges = Context.Session.GetString("Privileges")?.Split(',').ToList() ?? new List<string>();
 
     // Helper function to check active menu item
-    bool IsActive(string controllerName, string actionName = null)
+    bool IsActive(string controllerName, string? actionName = null)
     {
         return string.Equals(controller, controllerName, StringComparison.OrdinalIgnoreCase) &&
-               (actionName == null || string.Equals(action, actionName, StringComparison.OrdinalIgnoreCase));
+               (string.IsNullOrEmpty(actionName) || string.Equals(action, actionName, StringComparison.OrdinalIgnoreCase));
     }
 }
 
