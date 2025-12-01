@@ -13,5 +13,6 @@ namespace SchoolPortal.Services.IServices
 		bool Update(ClassMaster cls);
 		bool Delete(Guid id);
 		string ClassNameById(Guid id);
+		IEnumerable<ClassMaster> GetAllActive();
 	}
 }

@@ -9,6 +9,36 @@ namespace SchoolPortal.Services
 {
     public class ClassService : IClassService
     {
+        public IEnumerable<ClassMaster> GetAllActive()
+        {
+            try
+            {
+                var list = new List<ClassMaster>();
+                var dt = new DataTable();
+                
+                // Get all classes
+                var p = new Proc("ClassMaster_GetAll");
+                p.Exec(dt);
+                
+                // Map and filter in memory
+                foreach (DataRow row in dt.Rows)
+                {
+                    var item = Map(row);
+                    if (item.IsActive)
+                    {
+                        list.Add(item);
+                    }
+                }
+                
+                return list;
+            }
+            catch (Exception ex)
+            {
+                // _logger.LogError(ex, "Error getting active classes");
+                return new List<ClassMaster>();
+            }
+        }
+
         private static ClassMaster Map(DataRow r)
         {
             var c = new ClassMaster();

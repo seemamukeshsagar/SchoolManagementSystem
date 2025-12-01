@@ -12,5 +12,7 @@ namespace SchoolPortal.Services.IServices
 		Guid Create(SubjectMaster subject);
 		bool Update(SubjectMaster subject);
 		bool Delete(Guid id);
-	}
+		public List<SubjectMaster> GetByClassId(Guid id);
+
+    }
 }

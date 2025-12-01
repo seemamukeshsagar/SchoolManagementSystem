@@ -37,4 +37,7 @@ public partial class TimeTablePeriodMaster
     public string StatusMessage { get; set; } = "In Process....";
 
     public string PeriodNumber { get; set; }
+
+    public bool IsBreak { get; set; }
+    public string BreakName { get; set; }
 }

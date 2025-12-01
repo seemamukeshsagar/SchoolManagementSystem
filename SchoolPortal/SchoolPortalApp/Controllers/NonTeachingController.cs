@@ -6,6 +6,7 @@ using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
 using SchoolPortal.Web.Models;
 using SchoolPortal.Web.Models.NonTeaching;
+using SchoolPortalApp.Controllers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace SchoolPortal.Web.Controllers
 {
     [Authorize]
-    public class NonTeachingController : Controller
+    public class NonTeachingController : BaseController
     {
         private readonly ILogger<NonTeachingController> _logger;
         private readonly INonTeachingService _nonTeachingService;
@@ -27,6 +28,7 @@ namespace SchoolPortal.Web.Controllers
             INonTeachingService nonTeachingService,
             INonTeachingDocumentDetailsService documentService,
             INonTeachingQualificationDetailsService qualificationService)
+            : base(logger)
         {
             _logger = logger;
             _nonTeachingService = nonTeachingService;
@@ -284,15 +286,24 @@ namespace SchoolPortal.Web.Controllers
                     return NotFound();
                 }
 
-                _nonTeachingService.Delete(id);
+                // Get the current user ID from the session
+                if (!CurrentUserId.HasValue)
+                {
+                    TempData["ErrorMessage"] = "User session expired. Please log in again.";
+                    return RedirectToAction("Login", "Account");
+                }
+
+                // Pass the current user ID to the service layer
+                _nonTeachingService.Delete(id, CurrentUserId.Value);
+                
                 TempData["SuccessMessage"] = "Non-teaching staff deleted successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error deleting non-teaching staff with ID: {id}");
-                TempData["ErrorMessage"] = "An error occurred while deleting the staff member.";
-                return RedirectToAction(nameof(Delete), new { id });
+                TempData["ErrorMessage"] = "An error occurred while deleting the staff member. Please try again.";
+                return RedirectToAction(nameof(Index));
             }
         }
 

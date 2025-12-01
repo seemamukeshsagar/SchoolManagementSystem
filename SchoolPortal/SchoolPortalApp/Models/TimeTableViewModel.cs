@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SchoolPortalApp.Models.TimeTable
+namespace SchoolPortalApp.Models
 {
     public class TimeTableViewModel
     {
@@ -33,6 +34,11 @@ namespace SchoolPortalApp.Models.TimeTable
 
         public bool IsActive { get; set; }
         public List<TimeTableDayViewModel> Days { get; set; } = new List<TimeTableDayViewModel>();
+
+        // Add these properties for dropdowns
+        public IEnumerable<SelectListItem> Classes { get; set; }
+        public IEnumerable<SelectListItem> Sections { get; set; }
+        public IEnumerable<SelectListItem> AcademicYears { get; set; }
     }
 
     public class TimeTableDayViewModel

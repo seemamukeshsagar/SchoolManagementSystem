@@ -4,11 +4,16 @@ using System.Data;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using Microsoft.AspNetCore.Http;
 
 namespace SchoolPortal.Services
 {
-    public class TimeTablePeriodMasterService : ITimeTablePeriodMasterService
+    public class TimeTablePeriodMasterService : BaseService, ITimeTablePeriodMasterService
     {
+        public TimeTablePeriodMasterService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
+
         private static TimeTablePeriodMaster Map(DataRow r)
         {
             var e = new TimeTablePeriodMaster();
@@ -110,6 +115,95 @@ namespace SchoolPortal.Services
             var ret = p.Parameters["@RETURN_VALUE"].Value;
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
             return code == 1;
+        }
+
+        public async Task<bool> SaveAsync(TimeTablePeriodMaster period)
+        {
+            if (period == null)
+                throw new ArgumentNullException(nameof(period));
+
+            try
+            {
+                if (period.Id == Guid.Empty)
+                {
+                    // Create new period
+                    var newId = Create(period);
+                    return newId != Guid.Empty;
+                }
+                else
+                {
+                    // Update existing period
+                    return Update(period);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<TimeTablePeriodMaster>> GetByClassSectionAndAcademicYearAsync(Guid classId, Guid sectionId, Guid academicYearId)
+        {
+            var periods = new List<TimeTablePeriodMaster>();
+            Proc p = new Proc("TimeTablePeriodMaster_GetByClassSectionAndAcademicYear");
+            p["@ClassId"] = classId;
+            p["@SectionId"] = sectionId;
+            p["@AcademicYearId"] = academicYearId;
+            
+            var dt = new DataTable();
+            p.Exec(dt);
+            
+            foreach (DataRow row in dt.Rows)
+            {
+                periods.Add(Map(row));
+            }
+            
+            return periods;
+        }
+
+        public async Task<bool> DeleteByClassSectionAndAcademicYearAsync(Guid classId, Guid sectionId, Guid academicYearId, Guid userId)
+        {
+            try
+            {
+                Proc p = new Proc("TimeTablePeriodMaster_DeleteByClassSectionAndAcademicYear");
+                p["@ClassId"] = classId;
+                p["@SectionId"] = sectionId;
+                p["@AcademicYearId"] = academicYearId;
+                p["@ModifiedBy"] = userId;
+                
+                p.Exec();
+                var ret = p.Parameters["@RETURN_VALUE"].Value;
+                int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
+                return code == 1;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<TimeTablePeriodMaster> GetBySetupId(Guid setupId)
+        {
+            var list = new List<TimeTablePeriodMaster>();
+            try
+            {
+                Proc p = new Proc("TimeTablePeriodMaster_GetBySetupId");
+                p["@SetupId"] = setupId;
+                
+                var dt = new DataTable();
+                p.Exec(dt);
+                
+                foreach (DataRow r in dt.Rows)
+                {
+                    list.Add(Map(r));
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                // _logger.LogError(ex, "Error getting timetable periods by setup ID");
+            }
+            return list;
         }
     }
 }

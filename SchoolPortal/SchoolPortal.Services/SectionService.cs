@@ -8,7 +8,8 @@ using SchoolPortal.Services.IServices;
 namespace SchoolPortal.Services
 {
     public class SectionService : ISectionService
-    {
+    {       
+
         private static SectionMaster Map(DataRow r)
         {
             var s = new SectionMaster();
@@ -187,6 +188,28 @@ namespace SchoolPortal.Services
                     {
                         list.Add(Map(r));
                     }
+                }
+                return list;
+            }
+            catch
+            {
+                // Fallback: avoid throwing to prevent 500 in controller
+                return new List<SectionMaster>();
+            }
+        }
+
+        public IEnumerable<SectionMaster> GetByClassId(Guid classId)
+        {
+            try
+            {
+                var list = new List<SectionMaster>();
+                Proc p = new Proc("Section_GetByClassId");
+                p["@ClassId"] = classId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                foreach (DataRow r in dt.Rows)
+                {
+                    list.Add(Map(r));
                 }
                 return list;
             }

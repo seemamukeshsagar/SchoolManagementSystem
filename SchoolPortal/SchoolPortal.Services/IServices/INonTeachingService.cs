@@ -10,6 +10,6 @@ namespace SchoolPortal.Services.IServices
         NonTeachingMaster? GetById(Guid id);
         int Add(NonTeachingMaster entity);
         bool Update(NonTeachingMaster entity);
-        bool Delete(Guid id);
+        bool Delete(Guid id, Guid? currentUserId);
     }
 }

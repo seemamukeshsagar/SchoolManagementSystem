@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SchoolPortalApp.Models.TimeTable;
+using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
 using SchoolPortal.Entities.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,7 +14,8 @@ namespace SchoolPortalApp.Controllers
     public class TimeTableController : BaseController
     {
         private readonly ITimeTableSetupDetailsService _timeTableSetupService;
-        private readonly ITimeTablePeriodMasterService _timeTablePeriodService;
+        private readonly ITimeTablePeriodService _timeTablePeriodService;
+        private readonly ITimeTablePeriodMasterService _timeTablePeriodMasterService;
         private readonly IClassService _classService;
         private readonly ISubjectService _subjectService;
         private readonly IAcademicYearService _academicYearService;
@@ -23,8 +24,9 @@ namespace SchoolPortalApp.Controllers
         private readonly ILogger<TimeTableController> _logger;
 
         public TimeTableController(
+            ITimeTablePeriodService timeTablePeriodService,
             ITimeTableSetupDetailsService timeTableSetupService,
-            ITimeTablePeriodMasterService timeTablePeriodService,
+            ITimeTablePeriodMasterService timeTablePeriodMasterService,
             IClassService classService,
             ISubjectService subjectService,
             IAcademicYearService academicYearService,
@@ -34,6 +36,7 @@ namespace SchoolPortalApp.Controllers
         {
             _timeTableSetupService = timeTableSetupService;
             _timeTablePeriodService = timeTablePeriodService;
+            _timeTablePeriodMasterService = timeTablePeriodMasterService;
             _classService = classService;
             _subjectService = subjectService;
             _academicYearService = academicYearService;
@@ -50,17 +53,21 @@ namespace SchoolPortalApp.Controllers
             var model = new TimeTableViewModel
             {
                 Classes = _classService.GetAllActive()
-                    .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.ClassName })
-                    .ToList(),
+                    .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }),
+                    
+                Sections = filter.ClassId.HasValue 
+                    ? _sectionService.GetByClassId(filter.ClassId.Value)
+                        .Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name })
+                    : Enumerable.Empty<SelectListItem>(),
+                    
                 AcademicYears = _academicYearService.GetAllActive()
                     .Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.AcademicYearName })
-                    .ToList()
             };
 
             if (filter.ClassId.HasValue)
             {
                 model.Sections = _sectionService.GetByClassId(filter.ClassId.Value)
-                    .Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.SectionName })
+                    .Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name })
                     .ToList();
             }
 
@@ -71,31 +78,38 @@ namespace SchoolPortalApp.Controllers
         [Route("GetSectionsByClass")]
         public IActionResult GetSectionsByClass(Guid classId)
         {
-            var sections = _sectionService.GetByClassId(classId)
-                .Select(s => new { Value = s.Id.ToString(), Text = s.SectionName })
-                .ToList();
-            return Json(sections);
+            try
+            {
+                var sections = _sectionService.GetByClassId(classId)
+                    .Select(s => new { value = s.Id.ToString(), text = s.Name });
+                return Json(sections);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting sections for class {ClassId}", classId);
+                return Json(Enumerable.Empty<object>());
+            }
         }
 
         [HttpGet]
         [Route("Generate")]
-        public IActionResult Generate(Guid classId, Guid sectionId, Guid academicYearId)
+        public async Task<IActionResult> Generate(Guid classId, Guid sectionId, Guid academicYearId)
         {
             var timeTable = new TimeTableViewModel
             {
                 ClassId = classId,
                 SectionId = sectionId,
                 AcademicYearId = academicYearId,
-                ClassName = _classService.GetById(classId)?.ClassName,
-                SectionName = _sectionService.GetById(sectionId)?.SectionName,
-                AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName,
+                ClassName = _classService.GetById(classId)?.Name ?? string.Empty,
+                SectionName = _sectionService.GetById(sectionId)?.Name ?? string.Empty,
+                AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName ?? string.Empty,
                 EffectiveFrom = DateTime.Today,
                 IsActive = true
             };
 
             // Get the latest timetable setup
             var setup = _timeTableSetupService.GetAll()
-                .OrderByDescending(s => s.CreatedOn)
+                .OrderByDescending(s => s.CreatedDate)
                 .FirstOrDefault();
 
             if (setup == null)
@@ -105,30 +119,30 @@ namespace SchoolPortalApp.Controllers
             }
 
             // Get all periods for the setup
-            var periods = _timeTablePeriodService.GetBySetupId(setup.Id)
-                .OrderBy(p => p.PeriodNumber)
-                .ToList();
+            var periods = await _timeTablePeriodService.GetBySetupIdAsync(setup.Id);
 
-            if (!periods.Any())
+            if (periods == null)
             {
                 TempData["ErrorMessage"] = "No periods found for the timetable setup. Please configure periods first.";
                 return RedirectToAction("Index");
             }
 
-            // Initialize days (Monday to Friday)
-            var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+            // Ensure periods is a collection (e.g., List<TimeTableClassPeriodDetails>)
+            var periodList = (periods as IEnumerable<TimeTableClassPeriodDetails>)?.ToList() ?? new List<TimeTableClassPeriodDetails>();
+
+            var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
             for (int i = 0; i < days.Length; i++)
             {
                 var day = new TimeTableDayViewModel
                 {
                     DayId = i + 1,
                     DayName = days[i],
-                    Periods = periods.Select(p => new TimeTablePeriodViewModel
+                    Periods = periodList.Select(p => new TimeTablePeriodViewModel
                     {
                         Id = p.Id,
                         PeriodNumber = p.PeriodNumber,
-                        StartTime = p.StartTime,
-                        EndTime = p.EndTime,
+                        //StartTime = p.StartTime,
+                        //EndTime = p.EndTime,
                         IsBreak = p.IsBreak,
                         BreakName = p.BreakName
                     }).ToList()
@@ -164,7 +178,7 @@ namespace SchoolPortalApp.Controllers
             try
             {
                 // Get current user ID (you'll need to implement this based on your authentication)
-                var currentUserId = GetCurrentUserId();
+                //var currentUserId = GetCurrentUserId();
                 var currentDate = DateTime.UtcNow;
 
                 // Get the current session ID
@@ -176,12 +190,13 @@ namespace SchoolPortalApp.Controllers
                 }
 
                 // Get company and school IDs (you'll need to implement these based on your setup)
-                var companyId = GetCurrentCompanyId();
-                var schoolId = GetCurrentSchoolId();
+                var currentUserId = CurrentUserId ?? throw new UnauthorizedAccessException("User not authenticated");
+                var companyId = CurrentCompanyId ?? throw new InvalidOperationException("Company ID not found");
+                var schoolId = CurrentSchoolId ?? throw new InvalidOperationException("School ID not found");
 
                 // Delete existing timetable for this class, section and academic year
                 await _timeTablePeriodService.DeleteByClassSectionAndAcademicYearAsync(
-                    model.ClassId, model.SectionId, model.AcademicYearId);
+                    model.ClassId, model.SectionId, model.AcademicYearId, currentUserId);
 
                 // Save the timetable periods
                 foreach (var day in model.Days)
@@ -241,15 +256,15 @@ namespace SchoolPortalApp.Controllers
                     ClassId = classId,
                     SectionId = sectionId,
                     AcademicYearId = academicYearId,
-                    ClassName = _classService.GetById(classId)?.ClassName,
-                    SectionName = _sectionService.GetById(sectionId)?.SectionName,
-                    AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName,
+                    ClassName = _classService.GetById(classId)?.Name ?? string.Empty,
+                    SectionName = _sectionService.GetById(sectionId)?.Name ?? string.Empty,
+                    AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName ?? string.Empty,
                     Days = new List<TimeTableDayViewModel>()
                 };
 
                 // Get the latest timetable setup
                 var setup = _timeTableSetupService.GetAll()
-                    .OrderByDescending(s => s.CreatedOn)
+                    .OrderByDescending(s => s.CreatedDate)
                     .FirstOrDefault();
 
                 if (setup == null)
@@ -259,12 +274,10 @@ namespace SchoolPortalApp.Controllers
                 }
 
                 // Get all periods for the setup
-                var periods = _timeTablePeriodService.GetBySetupId(setup.Id)
-                    .OrderBy(p => p.PeriodNumber)
-                    .ToList();
+                var periods = await _timeTablePeriodService.GetBySetupIdAsync(setup.Id);
 
-                if (!periods.Any())
-                {
+                if (periods == null)
+                {       
                     TempData["ErrorMessage"] = "No periods found for the timetable setup.";
                     return RedirectToAction("Index");
                 }
@@ -274,7 +287,7 @@ namespace SchoolPortalApp.Controllers
                     classId, sectionId, academicYearId);
 
                 // Initialize days (Monday to Friday)
-                var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+                var days = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
                 
                 for (int i = 0; i < days.Length; i++)
                 {
@@ -285,7 +298,8 @@ namespace SchoolPortalApp.Controllers
                         Periods = new List<TimeTablePeriodViewModel>()
                     };
 
-                    foreach (var period in periods)
+                    var allPeriods = await _timeTablePeriodService.GetAllAsync();
+                    foreach (var period in allPeriods)
                     {
                         var savedPeriod = savedPeriods.FirstOrDefault(p => 
                             p.PeriodId == period.Id && p.DayOfWeek == day.DayId);
@@ -293,15 +307,15 @@ namespace SchoolPortalApp.Controllers
                         day.Periods.Add(new TimeTablePeriodViewModel
                         {
                             Id = period.Id,
-                            PeriodNumber = int.Parse(period.PeriodNumber),
-                            StartTime = period.StartTime,
-                            EndTime = period.EndTime,
+                            PeriodNumber = period.PeriodNumber,
+                            //StartTime = period.StartTime,
+                            //EndTime = period.EndTime,
                             SubjectId = savedPeriod?.SubjectId,
-                            SubjectName = savedPeriod?.Subject?.SubjectName,
+                            SubjectName = savedPeriod?.Subject?.SubjectName ?? string.Empty,
                             TeacherId = savedPeriod?.TeacherId,
-                            TeacherName = savedPeriod?.Teacher != null 
-                                ? $"{savedPeriod.Teacher.FirstName} {savedPeriod.Teacher.LastName}" 
-                                : null,
+                            TeacherName = savedPeriod?.Teacher != null
+                                ? $"{savedPeriod.Teacher.FirstName} {savedPeriod.Teacher.LastName}"
+                                : string.Empty,
                             IsBreak = period.IsBreak,
                             BreakName = period.BreakName
                         });
@@ -317,9 +331,21 @@ namespace SchoolPortalApp.Controllers
                 _logger.LogError(ex, "Error viewing timetable");
                 TempData["ErrorMessage"] = "An error occurred while loading the timetable. Please try again.";
                 return RedirectToAction("Index");
-            }
-                SectionName = _sectionService.GetById(sectionId)?.SectionName,
-                AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName
+            }                
+        }
+
+        [HttpGet]
+        [Route("ViewTimetablePrint")]
+        public IActionResult ViewTimetablePrint(Guid classId, Guid sectionId, Guid academicYearId)
+        {
+            var model = new TimeTableViewModel
+            {
+                ClassId = classId,
+                SectionId = sectionId,
+                AcademicYearId = academicYearId,
+                ClassName = _classService.GetById(classId)?.Name ?? string.Empty,
+                SectionName = _sectionService.GetById(sectionId)?.Name ?? string.Empty,
+                AcademicYearName = _academicYearService.GetById(academicYearId)?.AcademicYearName ?? string.Empty
             };
 
             return View(model);

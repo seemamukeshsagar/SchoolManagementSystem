@@ -114,5 +114,19 @@ namespace SchoolPortal.Services
             int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
             return code == 1;
         }
+
+        public List<SubjectMaster> GetByClassId(Guid id)
+        {             
+            var list = new List<SubjectMaster>();
+            Proc p = new Proc("Subject_GetByClassId");
+            p["@ClassId"] = id;
+            var dt = new DataTable();
+            p.Exec(dt);
+            foreach (DataRow r in dt.Rows)
+            {
+                list.Add(Map(r));
+            }
+            return list;
+        }
     }
 }

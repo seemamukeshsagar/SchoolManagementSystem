@@ -1,0 +1,77 @@
+@model SchoolPortal.Entities.Models.TimeTableClassPeriodDetails
+
+@{
+    ViewData["Title"] = "Edit Timetable Period";
+}
+
+<h2>Edit Timetable Period</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="ClassId" class="control-label">Class</label>
+                <select asp-for="ClassId" class="form-control" asp-items="ViewBag.Classes">
+                    <option value="">-- Select Class --</option>
+                </select>
+                <span asp-validation-for="ClassId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="SectionId" class="control-label">Section</label>
+                <select asp-for="SectionId" class="form-control" asp-items="ViewBag.Sections">
+                    <option value="">-- Select Section --</option>
+                </select>
+                <span asp-validation-for="SectionId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="SubjectId" class="control-label">Subject</label>
+                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects">
+                    <option value="">-- Select Subject --</option>
+                </select>
+                <span asp-validation-for="SubjectId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="PeriodId" class="control-label">Period</label>
+                <select asp-for="PeriodId" class="form-control" asp-items="ViewBag.Periods">
+                    <option value="">-- Select Period --</option>
+                </select>
+                <span asp-validation-for="PeriodId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DayOfWeek" class="control-label">Day of Week</label>
+                <select asp-for="DayOfWeek" class="form-control">
+                    <option value="0">Sunday</option>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                </select>
+                <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-3">
+                <input class="form-check-input" asp-for="IsActive" />
+                <label class="form-check-label" asp-for="IsActive"></label>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

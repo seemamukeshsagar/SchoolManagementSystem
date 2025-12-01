@@ -1,0 +1,85 @@
+@model SchoolPortalApp.Models.AcademicYear.AcademicYearViewModel
+
+@{
+    ViewData["Title"] = "Create Academic Year";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Create New Academic Year</h3>
+                <div class="card-tools">
+                    <a asp-action="Index" class="btn btn-default btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="form-group row">
+                        <label asp-for="AcademicYearName" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="AcademicYearName" class="form-control" />
+                            <span asp-validation-for="AcademicYearName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="StartDate" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="date" asp-for="StartDate" class="form-control" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="EndDate" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="date" asp-for="EndDate" class="form-control" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsCurrent" />
+                                <label class="form-check-label" asp-for="IsCurrent"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <div class="form-check">
+                                <input class="form-check-input" asp-for="IsActive" />
+                                <label class="form-check-label" asp-for="IsActive"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create
+                            </button>
+                            <a asp-action="Index" class="btn btn-default">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Initialize datepickers or other plugins if needed
+        });
+    </script>
+}

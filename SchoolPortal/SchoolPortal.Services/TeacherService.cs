@@ -203,5 +203,22 @@ namespace SchoolPortal.Services
 			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
 			return code == 1;
 		}
+
+		public List<TeacherMaster> GetAllActive(Guid? schoolId = null)
+		{
+			var list = new List<TeacherMaster>();
+			Proc p = new Proc("Teacher_GetAllActive");
+			if (schoolId.HasValue)
+			{
+				p["@SchoolId"] = schoolId.Value;
+			}
+			var dt = new DataTable();
+			p.Exec(dt);
+			foreach (DataRow r in dt.Rows)
+			{
+				list.Add(Map(r));
+			}
+			return list;
+		}
 	}
 }

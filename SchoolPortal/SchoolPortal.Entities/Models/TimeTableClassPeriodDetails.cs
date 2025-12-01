@@ -39,4 +39,14 @@ public partial class TimeTableClassPeriodDetails
     public string Status { get; set; } = "INC";
 
     public string StatusMessage { get; set; } = "In Process....";
+
+    public bool IsBreak { get; set; }
+    public string BreakName { get; set; }   
+
+    public Guid? TeacherId { get; set; }
+    public virtual TeacherMaster Teacher { get; set; }
+    public virtual SubjectMaster Subject { get; set; }
+    public int PeriodNumber { get; set; }
+    public TimeSpan PeriodStartTime { get; set; }
+    public TimeSpan PeriodEndTime { get; set; }
 }

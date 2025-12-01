@@ -1,0 +1,47 @@
+@model IEnumerable<SchoolPortal.Entities.Models.TimeTableClassPeriodDetails>
+
+@{
+    ViewData["Title"] = "Timetable Periods";
+}
+
+<h2>Timetable Periods</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ClassId)</th>
+                <th>@Html.DisplayNameFor(model => model.SectionId)</th>
+                <th>@Html.DisplayNameFor(model => model.SubjectId)</th>
+                <th>@Html.DisplayNameFor(model => model.PeriodId)</th>
+                <th>@Html.DisplayNameFor(model => model.DayOfWeek)</th>
+                <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ClassId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SectionId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SubjectId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PeriodId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DayOfWeek)</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,4 @@
-@model SchoolPortalApp.Models.TimeTable.TimeTableViewModel
+@model SchoolPortalApp.Models.TimeTableViewModel
 
 @{
     ViewData["Title"] = "View Timetable";
@@ -59,7 +59,7 @@
                             var period = Model.Days[0].Periods[i];
                             <tr>
                                 <td class="text-nowrap" style="width: 120px;">
-                                    @period.StartTime.ToString("hh\:mm") - @period.EndTime.ToString("hh\:mm")
+                                    @period.StartTime.ToString("hh:mm") - @period.EndTime.ToString("hh:mm")
                                 </td>
                                 @for (int j = 0; j < Model.Days.Count; j++)
                                 {

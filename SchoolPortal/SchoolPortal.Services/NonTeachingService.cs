@@ -201,7 +201,7 @@ namespace SchoolPortal.Services.Services
             }
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(Guid id, Guid? currentUserId)
         {
             if (id == Guid.Empty)
                 throw new ArgumentException("ID cannot be empty", nameof(id));
@@ -213,7 +213,7 @@ namespace SchoolPortal.Services.Services
                     return false;
 
                 entity.IsDeleted = true;
-                entity.ModifiedBy = GetCurrentUserId();
+                entity.ModifiedBy = currentUserId ?? throw new UnauthorizedAccessException("User not authenticated");
                 entity.ModifiedDate = DateTime.UtcNow;
 
                 return Update(entity);

@@ -1,0 +1,148 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model SchoolPortalApp.Models.TimeTableViewModel
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="ClassId" class="control-label">Class</label>
+            <select asp-for="ClassId" class="form-control" asp-items="Model.Classes">
+                <option value="">-- Select Class --</option>
+            </select>
+            <span asp-validation-for="ClassId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="SectionId" class="control-label">Section</label>
+            <select asp-for="SectionId" class="form-control" disabled="disabled">
+                <option value="">-- Select Section --</option>
+            </select>
+            <span asp-validation-for="SectionId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="AcademicYearId" class="control-label">Academic Year</label>
+            <select asp-for="AcademicYearId" class="form-control" asp-items="Model.AcademicYears">
+                <option value="">-- Select Academic Year --</option>
+            </select>
+            <span asp-validation-for="AcademicYearId" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Generate TimeTable</button>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        select[disabled] {
+            background-color: #e9ecef;
+            opacity: 1;
+            cursor: not-allowed;
+        }
+
+        /* Loading indicator for dropdowns */
+        .loading {
+            position: relative;
+        }
+
+        .loading:after {
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #333;
+            border-radius: 50%;
+            border-top-color: transparent;
+            border-right-color: #333;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Handle Class dropdown change
+            $('#ClassId').change(function() {
+                var classId = $(this).val();
+                var $sectionDropdown = $('#SectionId');
+                
+                // Clear and disable section dropdown
+                $sectionDropdown.empty().prop('disabled', true);
+                $sectionDropdown.append($('<option>', {
+                    value: '',
+                    text: '-- Select Section --'
+                }));
+
+                if (classId) {
+                    // Add loading class to show spinner
+                    var $select2Container = $sectionDropdown.parent().find('.select2-container');
+                    if ($select2Container.length) {
+                        $select2Container.addClass('loading');
+                    } else {
+                        $sectionDropdown.addClass('loading');
+                    }
+                    
+                    // Fetch sections for the selected class
+                    $.getJSON('@Url.Action("GetSectionsByClass", "TimeTable")', { classId: classId })
+                        .done(function(data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function(index, item) {
+                                    $sectionDropdown.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            }
+                            $sectionDropdown.prop('disabled', false);
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.error('Error loading sections:', textStatus, errorThrown);
+                            alert('Failed to load sections. Please try again.');
+                        })
+                        .always(function() {
+                            // Remove loading class
+                            $sectionDropdown.removeClass('loading');
+                            $sectionDropdown.parent().find('.select2-container').removeClass('loading');
+                        });
+                }
+            });
+
+            // Form validation
+            $('form').submit(function(e) {
+                if ($('#ClassId').val() === '' || $('#SectionId').val() === '' || $('#AcademicYearId').val() === '') {
+                    e.preventDefault();
+                    alert('Please select all required fields.');
+                    return false;
+                }
+                return true;
+            });
+
+            // If editing and class is already selected, trigger change to load sections
+            @if (Model.ClassId != Guid.Empty)
+            {
+                <text>
+                $('#ClassId').trigger('change');
+                // Set the selected section after sections are loaded
+                setTimeout(function() {
+                    $('#SectionId').val('@Model.SectionId');
+                }, 500);
+                </text>
+            }
+        });
+    </script>
+}

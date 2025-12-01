@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Services.Services;
 using Microsoft.AspNetCore.Authorization;
+using SchoolPortal.Services;
+using SchoolPortal.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -169,6 +171,8 @@ builder.Services.AddScoped<ISessionMasterService, SchoolPortal.Services.SessionM
 builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
 builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
+builder.Services.AddScoped<ITimeTablePeriodService, TimeTablePeriodService>();
+builder.Services.AddScoped<IAcademicYearService, AcademicYearService>();
 
 var app = builder.Build();
 

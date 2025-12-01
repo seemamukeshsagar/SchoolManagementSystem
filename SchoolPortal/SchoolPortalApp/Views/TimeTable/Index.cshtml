@@ -1,95 +1,38 @@
-@model SchoolPortalApp.Models.TimeTable.TimeTableViewModel
+@model SchoolPortalApp.Models.TimeTableViewModel
 
-@{
-    ViewData["Title"] = "Timetable Generator";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Generate Timetable</h4>
-    </div>
-    <div class="card-body">
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["ErrorMessage"]
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        }
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["SuccessMessage"]
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        }
-
-        <form asp-action="Generate" method="get" id="timetableForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="ClassId" class="control-label">Class</label>
-                        <select asp-for="ClassId" class="form-control" required
-                                asp-items="Model.Classes">
-                            <option value="">-- Select Class --</option>
-                        </select>
-                        <span asp-validation-for="ClassId" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="SectionId" class="control-label">Section</label>
-                        <select asp-for="SectionId" class="form-control" required
-                                asp-items="Model.Sections">
-                            <option value="">-- Select Section --</option>
-                        </select>
-                        <span asp-validation-for="SectionId" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="AcademicYearId" class="control-label">Academic Year</label>
-                        <select asp-for="AcademicYearId" class="form-control" required
-                                asp-items="Model.AcademicYears">
-                            <option value="">-- Select Academic Year --</option>
-                        </select>
-                        <span asp-validation-for="AcademicYearId" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group text-right">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-calendar-plus"></i> Generate Timetable
-                </button>
-            </div>
-        </form>
+<div class="container mt-4">
+    <h2>TimeTable Management</h2>
+    
+    <div class="card">
+        <div class="card-header">
+            <h4>Generate TimeTable</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Generate" method="get">
+                @Html.AntiForgeryToken()
+                
+                @await Html.PartialAsync("_TimeTableForm", Model)
+            </form>
+        </div>
     </div>
 </div>
 
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+}
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Load sections when class changes
-            $('#ClassId').change(function() {
-                var classId = $(this).val();
-                if (classId) {
-                    $.getJSON('/TimeTable/GetSectionsByClass', { classId: classId }, function(data) {
-                        var items = '<option value="">-- Select Section --</option>';
-                        $.each(data, function(i, section) {
-                            items += '<option value="' + section.value + '">' + section.text + '</option>';
-                        });
-                        $('#SectionId').html(items);
-                    });
-                } else {
-                    $('#SectionId').html('<option value="">-- Select Section --</option>');
-                }
+            // Initialize Select2 for better dropdown UX
+            $('select').select2({
+                theme: 'bootstrap4'
             });
         });
     </script>
