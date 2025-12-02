@@ -32,7 +32,7 @@ namespace SchoolPortal.Services
                 
                 return list;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // _logger.LogError(ex, "Error getting active classes");
                 return new List<ClassMaster>();

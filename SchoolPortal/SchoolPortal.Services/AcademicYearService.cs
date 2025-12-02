@@ -40,7 +40,7 @@ namespace SchoolPortal.Services
             return list;
         }
 
-        public AcademicYear GetById(Guid id)
+        public AcademicYear? GetById(Guid id)
         {
             using (Proc p = new Proc("AcademicYear_GetById"))
             {

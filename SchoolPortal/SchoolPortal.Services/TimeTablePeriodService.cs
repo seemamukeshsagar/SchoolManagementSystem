@@ -23,24 +23,13 @@ namespace SchoolPortal.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private static TimeTableClassPeriodDetails MapTimeTablePeriod(DataRow r)
+        private static TimeTableClassPeriodDetails? MapTimeTablePeriod(DataRow? r)
         {
+            if (r == null) return null;
+            
             var period = new TimeTableClassPeriodDetails();
 
-            // Helper function to safely parse and set values
-            void SetValueIfExists<T>(string columnName, Action<T> setter, Func<string, (bool success, T value)> parser)
-            {
-                if (r.Table.Columns.Contains(columnName) && !Convert.IsDBNull(r[columnName]))
-                {
-                    var result = parser(r[columnName].ToString());
-                    if (result.success)
-                    {
-                        setter(result.value);
-                    }
-                }
-            }
-            
-            if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"].ToString(), out var id)) 
+            if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"]?.ToString(), out var id)) 
                 period.Id = id;
             if (r.Table.Columns.Contains("ClassId") && Guid.TryParse(r["ClassId"].ToString(), out var classId)) 
                 period.ClassId = classId;
@@ -90,8 +79,7 @@ namespace SchoolPortal.Services
                 period.Subject = new SubjectMaster
                 {
                     Id = period.SubjectId,
-                    SubjectName = r["SubjectName"]?.ToString() ?? string.Empty,
-                    
+                    SubjectName = r["SubjectName"]?.ToString() ?? string.Empty
                 };
             }
             
@@ -214,7 +202,7 @@ namespace SchoolPortal.Services
             return result;
         }
 
-        public TimeTableClassPeriodDetails GetById(Guid id)
+        public TimeTableClassPeriodDetails? GetById(Guid id)
         {
             try
             {
@@ -236,7 +224,7 @@ namespace SchoolPortal.Services
             }
         }
 
-        public async Task<TimeTableClassPeriodDetails> GetByIdAsync(Guid id)
+        public async Task<TimeTableClassPeriodDetails?> GetByIdAsync(Guid id)
         {
             try
             {
@@ -269,7 +257,11 @@ namespace SchoolPortal.Services
                 var result = new List<TimeTableClassPeriodDetails>();
                 foreach (DataRow row in dt.Rows)
                 {
-                    result.Add(MapTimeTablePeriod(row));
+                    var period = MapTimeTablePeriod(row);
+                    if (period != null)
+                    {
+                        result.Add(period);
+                    }
                 }
                 return result;
             }
@@ -330,7 +322,7 @@ namespace SchoolPortal.Services
             }
         }
 
-        public async Task<IEnumerable<TimeTableClassPeriodDetails>> GetByTeacherIdAsync(Guid teacherId)
+        public async Task<IEnumerable<TimeTableClassPeriodDetails>> GetByTeacherIdAsync(Guid teacherId) 
         {
             try
             {
@@ -342,7 +334,11 @@ namespace SchoolPortal.Services
                 var result = new List<TimeTableClassPeriodDetails>();
                 foreach (DataRow row in dt.Rows)
                 {
-                    result.Add(MapTimeTablePeriod(row));
+                    var period = MapTimeTablePeriod(row);
+                    if (period != null)
+                    {
+                        result.Add(period);
+                    }
                 }
                 return result;
             }
@@ -353,7 +349,7 @@ namespace SchoolPortal.Services
             }
         }
 
-        public async Task<IEnumerable<TimeTableClassPeriodDetails>> GetBySubjectIdAsync(Guid subjectId)
+        public async Task<IEnumerable<TimeTableClassPeriodDetails>> GetBySubjectIdAsync(Guid subjectId) 
         {
             try
             {
@@ -365,7 +361,11 @@ namespace SchoolPortal.Services
                 var result = new List<TimeTableClassPeriodDetails>();
                 foreach (DataRow row in dt.Rows)
                 {
-                    result.Add(MapTimeTablePeriod(row));
+                    var period = MapTimeTablePeriod(row);
+                    if (period != null)
+                    {
+                        result.Add(period);
+                    }
                 }
                 return result;
             }
@@ -433,9 +433,13 @@ namespace SchoolPortal.Services
                 await Task.Run(() => p.Exec(dt));
 
                 if (dt.Rows.Count == 0)
-                    return null;
+                    throw new InvalidOperationException($"No timetable period found for setup ID: {setupId}");
 
-                return MapTimeTablePeriod(dt.Rows[0]);
+                var result = MapTimeTablePeriod(dt.Rows[0]);
+                if (result == null)
+                    throw new InvalidOperationException($"Mapping failed for timetable period with setup ID: {setupId}");
+
+                return result;
             }
             catch (Exception ex)
             {

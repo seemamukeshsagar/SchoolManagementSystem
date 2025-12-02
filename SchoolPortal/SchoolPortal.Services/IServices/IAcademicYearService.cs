@@ -9,7 +9,7 @@ namespace SchoolPortal.Services.IServices
     {
         IEnumerable<AcademicYear> GetAll();
         IEnumerable<AcademicYear> GetAllActive();
-        AcademicYear GetById(Guid id);
+        AcademicYear? GetById(Guid id);
         Guid Create(AcademicYear academicYear);
         bool Update(AcademicYear academicYear);
         bool Delete(Guid id);

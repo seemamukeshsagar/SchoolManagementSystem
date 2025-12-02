@@ -18,7 +18,7 @@ namespace SchoolPortal.Services.IServices
         /// </summary>
         /// <param name="id">The period ID</param>
         /// <returns>The timetable period or null if not found</returns>
-        TimeTableClassPeriodDetails GetById(Guid id);
+        TimeTableClassPeriodDetails? GetById(Guid id);
 
         /// <summary>
         /// Creates a new timetable period
