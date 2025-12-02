@@ -1,15 +1,19 @@
 // File: SchoolPortal.Services/AcademicYearService.cs
-using System;
-using System.Collections.Generic;
-using System.Data;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.Extensions.Logging;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace SchoolPortal.Services
 {
     public class AcademicYearService : IAcademicYearService
     {
+        private readonly ILogger<AcademicYearService> _logger;
         public IEnumerable<AcademicYear> GetAll()
         {
             var list = new List<AcademicYear>();
@@ -147,6 +151,42 @@ namespace SchoolPortal.Services
                 academicYear.ModifiedDate = (DateTime)r["ModifiedDate"];
 
             return academicYear;
+        }
+
+        public AcademicYear? GetCurrentAcademicYear()
+        {
+            try
+            {
+                using (var p = new Proc("sp_AcademicYear_GetCurrent"))
+                {
+                    var dt = new DataTable();
+                    p.Exec(dt);
+                    
+                    if (dt.Rows.Count == 0)
+                        return null;
+                        
+                    var row = dt.Rows[0];
+                    return new AcademicYear
+                    {
+                        Id = row.Field<Guid>("Id"),
+                        AcademicYearName = row.Field<string>("AcademicYearName") ?? string.Empty,
+                        StartDate = row.Field<DateTime>("StartDate"),
+                        EndDate = row.Field<DateTime>("EndDate"),
+                        IsCurrent = row.Field<bool>("IsCurrent"),
+                        IsActive = row.Field<bool>("IsActive"),
+                        IsDeleted = row.Field<bool>("IsDeleted"),
+                        CreatedBy = row.Field<Guid>("CreatedBy"),
+                        CreatedDate = row.Field<DateTime>("CreatedDate"),
+                        ModifiedBy = row.Field<Guid?>("ModifiedBy"),
+                        ModifiedDate = row.Field<DateTime?>("ModifiedDate")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting current academic year");
+                return null;
+            }
         }
     }
 }

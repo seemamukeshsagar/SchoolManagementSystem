@@ -26,12 +26,6 @@ namespace SchoolPortal.Services
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public UserDetailsService(ILookupService lookupService, IRoleMasterService roleService)
-		{
-			_lookupService = lookupService;
-			_roleService = roleService;
-		}
-
         public List<UserDetailsListViewModel> GetAll()
         {
             var list = new List<UserDetailsListViewModel>();
@@ -41,20 +35,21 @@ namespace SchoolPortal.Services
                 _logger.LogInformation("Starting to fetch all user details");
 
                 // Load lookup dictionaries
-                var designations = _lookupService.GetDesignations()
-                    ?.ToDictionary(d => d.Id, d => d.Name)
+                var designations = _lookupService.GetDesignations()?
+                    .ToDictionary(d => d.Id, d => d.Name ?? string.Empty) 
                     ?? new Dictionary<Guid, string>();
 
-                var roles = _roleService.GetAll()
-                    ?.ToDictionary(r => r.Id, r => r.Name)
+                var roles = _roleService.GetAll()?
+                    .Where(r => r != null && r.Name != null)
+                    .ToDictionary(r => r.Id, r => r.Name ?? string.Empty)
                     ?? new Dictionary<Guid, string>();
 
-                var companies = _lookupService.GetCompanies()
-                    ?.ToDictionary(c => c.Id, c => c.Name)
+                var companies = _lookupService.GetCompanies()?
+                    .ToDictionary(c => c.Id, c => c.Name ?? string.Empty)
                     ?? new Dictionary<Guid, string>();
 
-                var schools = _lookupService.GetSchools()
-                    ?.ToDictionary(s => s.Id, s => s.Name)
+                var schools = _lookupService.GetSchools()?
+                    .ToDictionary(s => s.Id, s => s.Name ?? string.Empty)
                     ?? new Dictionary<Guid, string>();
 
                 Proc p = new Proc("UserDetails_GetAll");
@@ -66,7 +61,6 @@ namespace SchoolPortal.Services
 				// Log column names for debugging
 				var columnNames = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName);
 				_logger.LogInformation($"Retrieved columns: {string.Join(", ", columnNames)}");
-				_logger.LogInformation($"Retrieved {dt.Rows.Count} users from database");
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -102,29 +96,41 @@ namespace SchoolPortal.Services
             }
         }
 
-
         public UserDetails? GetById(Guid id)
 		{
-			Proc p = new Proc("UserDetails_GetById");
-			p["@Id"] = id;
-			var dt = new DataTable();
-			p.Exec(dt);
-			if (dt.Rows.Count == 0) return null;
-			
-			var row = dt.Rows[0];
-			return new UserDetails
-			{
-				Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var idVal) ? idVal : Guid.Empty,
-				UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() : string.Empty,
-				FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() : string.Empty,
-				LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() : string.Empty,
-				EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() : string.Empty,
-				IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
-				DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
-				UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
-				CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
-				SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
-			};
+			try
+            {
+                if (id == Guid.Empty)
+                {
+                    _logger?.LogWarning("Empty GUID provided to GetById");
+                    return null;
+                }
+				Proc p = new Proc("UserDetails_GetById");
+				p["@Id"] = id;
+				var dt = new DataTable();
+				p.Exec(dt);
+				if (dt.Rows.Count == 0) return null;
+				
+				var row = dt.Rows[0];
+				return new UserDetails
+				{
+					Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var idVal) ? idVal : Guid.Empty,
+					UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() : string.Empty,
+					FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() : string.Empty,
+					LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() : string.Empty,
+					EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() : string.Empty,
+					IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
+					DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
+					UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
+					CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
+					SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
+				};
+			}
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Error getting user details for ID: {UserId}", id);
+                return null;
+            }
 		}
 
 		public Guid Create(UserDetails entity)
@@ -154,24 +160,31 @@ namespace SchoolPortal.Services
 
 		public bool Update(UserDetails entity)
 		{
-			Proc p = new Proc("UserDetails_Update");
-			p["@Id"] = entity.Id;
-			p["@UserName"] = entity.UserName ?? string.Empty;
-			p["@UserPassword"] = entity.UserPassword ?? string.Empty;
-			p["@FirstName"] = entity.FirstName ?? string.Empty;
-			p["@LastName"] = entity.LastName ?? string.Empty;
-			p["@EmailAddress"] = entity.EmailAddress ?? string.Empty;
-			p["@DesignationId"] = entity.DesignationId;
-			p["@UserRoleId"] = entity.UserRoleId ?? Guid.Empty;
-			p["@IsSuperUser"] = entity.IsSuperUser ?? false;
-			p["@CompanyId"] = entity.CompanyId ?? Guid.Empty;
-			p["@SchoolId"] = entity.SchoolId ?? Guid.Empty;
-			p["@IsActive"] = entity.IsActive;
-			p["@ModifiedBy"] = entity.ModifiedBy ?? Guid.Empty;
-			p.Exec();
-			var ret = p.Parameters["@RETURN_VALUE"].Value;
-			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
-			return code == 1;
+			try
+			{
+				Proc p = new Proc("UserDetails_Update");
+				p["@Id"] = entity.Id;
+				p["@UserName"] = entity.UserName ?? string.Empty;
+				p["@UserPassword"] = entity.UserPassword ?? string.Empty;
+				p["@FirstName"] = entity.FirstName ?? string.Empty;
+				p["@LastName"] = entity.LastName ?? string.Empty;
+				p["@EmailAddress"] = entity.EmailAddress ?? string.Empty;
+				p["@DesignationId"] = entity.DesignationId;
+				p["@UserRoleId"] = entity.UserRoleId ?? Guid.Empty;
+				p["@IsSuperUser"] = entity.IsSuperUser ?? false;
+				p["@CompanyId"] = entity.CompanyId ?? Guid.Empty;
+				p["@SchoolId"] = entity.SchoolId ?? Guid.Empty;
+				p["@IsActive"] = entity.IsActive;
+				p["@ModifiedBy"] = entity.ModifiedBy ?? Guid.Empty;
+				p.Exec();
+				var ret = p.Parameters["@RETURN_VALUE"].Value;
+				int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
+				return code == 1;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 
 		public bool Delete(Guid id)

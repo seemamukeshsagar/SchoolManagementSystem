@@ -14,5 +14,6 @@ namespace SchoolPortal.Services.IServices
         bool Update(AcademicYear academicYear);
         bool Delete(Guid id);
         bool ToggleStatus(Guid id);
+        AcademicYear? GetCurrentAcademicYear();
     }
 }

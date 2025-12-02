@@ -78,7 +78,7 @@ namespace SchoolPortal.Services.IServices
         /// </summary>
         /// <param name="id">The period ID</param>
         /// <returns>The timetable period or null if not found</returns>
-        Task<TimeTableClassPeriodDetails> GetByIdAsync(Guid id);
+        Task<TimeTableClassPeriodDetails?> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Gets all timetable periods for a specific teacher

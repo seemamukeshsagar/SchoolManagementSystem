@@ -155,45 +155,88 @@ namespace SchoolPortal.Services
         }
 
         public (IEnumerable<RoleMaster> items, int totalCount) GetRoles(
-    int pageNumber, 
-    int pageSize, 
-    string sortColumn = null, 
-    string sortDirection = "asc", 
-    string searchTerm = null)
-{
-    var p = new Proc("RoleMaster_GetPaged");
-    try
-    {
-        p["@PageNumber"] = pageNumber;
-        p["@PageSize"] = pageSize;
-        p["@SortColumn"] = sortColumn;
-        p["@SortOrder"] = sortDirection;
-        p["@SearchTerm"] = string.IsNullOrEmpty(searchTerm) ? DBNull.Value : searchTerm;
-        
-        var ds = new DataSet();
-        p.Exec(ds);
-        
-        var roles = new List<RoleMaster>();
-        if (ds.Tables.Count > 0)
+            int pageNumber, 
+            int pageSize, 
+            string sortColumn = null, 
+            string sortDirection = "asc", 
+            string searchTerm = null)
         {
-            foreach (DataRow r in ds.Tables[0].Rows)
+            var p = new Proc("RoleMaster_GetPaged");
+            try
             {
-                roles.Add(MapRole(r));
+                p["@PageNumber"] = pageNumber;
+                p["@PageSize"] = pageSize;
+                p["@SortColumn"] = sortColumn;
+                p["@SortOrder"] = sortDirection;
+                p["@SearchTerm"] = string.IsNullOrEmpty(searchTerm) ? DBNull.Value : searchTerm;
+                
+                var ds = new DataSet();
+                p.Exec(ds);
+                
+                var roles = new List<RoleMaster>();
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow r in ds.Tables[0].Rows)
+                    {
+                        roles.Add(MapRole(r));
+                    }
+                }
+                
+                int totalCount = 0;
+                if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+                {
+                    totalCount = Convert.ToInt32(ds.Tables[1].Rows[0][0]);
+                }
+                
+                return (roles, totalCount);
+            }
+            finally
+            {
+                p.Dispose();
             }
         }
-        
-        int totalCount = 0;
-        if (ds.Tables.Count > 1 && ds.Tables[1].Rows.Count > 0)
+
+        public RoleMaster? GetByRoleName(string? roleName = null)
         {
-            totalCount = Convert.ToInt32(ds.Tables[1].Rows[0][0]);
+            if (string.IsNullOrEmpty(roleName))
+            {
+                //_logger?.LogWarning("Empty or null role name provided to GetByRoleName");
+                return null;
+            }
+
+            try
+            {
+                using (var p = new Proc("RoleMaster_GetByRoleName"))
+                {
+                    p["@RoleName"] = roleName;
+                    var dt = new DataTable();
+                    p.Exec(dt);
+
+                    if (dt.Rows.Count == 0)
+                    {
+                        //_logger?.LogInformation("No role found with name: {RoleName}", roleName);
+                        return null;
+                    }
+
+                    return new RoleMaster
+                    {
+                        Id = dt.Rows[0]["Id"] != DBNull.Value ? (Guid)dt.Rows[0]["Id"] : Guid.Empty,
+                        Name = dt.Rows[0]["Name"]?.ToString() ?? string.Empty,
+                        Description = dt.Rows[0]["Description"]?.ToString() ?? string.Empty,
+                        IsActive = dt.Rows[0]["IsActive"] != DBNull.Value && Convert.ToBoolean(dt.Rows[0]["IsActive"]),
+                        //IsSystemRole = dt.Rows[0]["IsSystemRole"] != DBNull.Value && Convert.ToBoolean(dt.Rows[0]["IsSystemRole"]),
+                        CreatedDate = dt.Rows[0]["CreatedDate"] != DBNull.Value ? Convert.ToDateTime(dt.Rows[0]["CreatedDate"]) : DateTime.UtcNow,
+                        CreatedBy = dt.Rows[0]["CreatedBy"] != DBNull.Value ? (Guid)dt.Rows[0]["CreatedBy"] : Guid.Empty,
+                        ModifiedDate = dt.Rows[0]["ModifiedDate"] != DBNull.Value ? (DateTime?)dt.Rows[0]["ModifiedDate"] : null,
+                        ModifiedBy = dt.Rows[0]["ModifiedBy"] != DBNull.Value ? (Guid?)dt.Rows[0]["ModifiedBy"] : null
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                //_logger?.LogError(ex, "Error retrieving role by name: {RoleName}", roleName);
+                throw; // Or return null if you prefer to handle errors gracefully
+            }
         }
-        
-        return (roles, totalCount);
-    }
-    finally
-    {
-        p.Dispose();
-    }
-}
     }
 }
