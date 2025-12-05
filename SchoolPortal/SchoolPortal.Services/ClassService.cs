@@ -126,6 +126,20 @@ namespace SchoolPortal.Services
             return Map(dt.Rows[0]);
         }
 
+        public async Task<ClassMaster?> GetByIdAsync(Guid id)
+        {
+            Proc p = new Proc("Class_GetById");
+            p["@Id"] = id;
+            var dt = new DataTable();
+            await Task.Run(() => p.Exec(dt));
+
+            if (dt.Rows.Count > 0)
+            {
+                return Map(dt.Rows[0]);
+            }
+            return null;
+        }
+
         public Guid Create(ClassMaster cls)
         {
             Proc p = new Proc("Class_Create");
@@ -184,6 +198,11 @@ namespace SchoolPortal.Services
             if (dt.Rows.Count == 0) return string.Empty;
             var nameObj = dt.Rows[0]["Name"];
             return nameObj?.ToString() ?? string.Empty;
+        }
+
+        Task<IEnumerable<ClassMaster>> IClassService.GetAllActiveAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

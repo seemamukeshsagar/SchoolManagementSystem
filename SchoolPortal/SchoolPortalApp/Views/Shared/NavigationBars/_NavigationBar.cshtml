@@ -60,7 +60,7 @@
                         </li>
                         @if (lstPrivileges.Contains("Manage Users"))
                         {
-                            <li><a href="@Url.Action("Index", "UserMaster")" class="nav-link @(IsActive("UserMaster") ? "active" : "")">Users</a></li>
+                            <li><a href="@Url.Action("Index", "UserDetails")" class="nav-link @(IsActive("UserDetails") ? "active" : "")">Users</a></li>
                         }
                         @if (lstPrivileges.Contains("Manage Roles"))
                         {
@@ -145,7 +145,7 @@
                             Academics
                         </li>
                         <li><a href="@Url.Action("Index", "Exam")" class="nav-link @(IsActive("Exam") ? "active" : "")">Exams</a></li>
-                        <li><a href="@Url.Action("Index", "Timetable")" class="nav-link @(IsActive("Timetable") ? "active" : "")">Timetable</a></li>
+                        <li><a href="@Url.Action("Index", "TimeTable")" class="nav-link @(IsActive("Timetable") ? "active" : "")">Timetable</a></li>
                         <li><a href="@Url.Action("Index", "Homework")" class="nav-link @(IsActive("Homework") ? "active" : "")">Homework</a></li>
                         <li><a href="@Url.Action("Index", "Library")" class="nav-link @(IsActive("Library") ? "active" : "")">Library</a></li>
                     </ul>
@@ -256,7 +256,7 @@
                     <ul class="nav flex-column ms-1 mb-2">
                         <li><a href="@Url.Action("Profile", "Account")" class="nav-link @(IsActive("Account", "Profile") ? "active" : "")">My Profile</a></li>
                         <li><a href="@Url.Action("ChangePassword", "Account")" class="nav-link @(IsActive("Account", "ChangePassword") ? "active" : "")">Change Password</a></li>
-                        <li><a href="@Url.Action("Logout", "Account")" class="nav-link">Logout</a></li>
+                        <li><a href="@Url.Action("Logout", "Authentication")" class="nav-link">Logout</a></li>
                     </ul>
                 </div>
             </div>

@@ -61,6 +61,20 @@ namespace SchoolPortal.Services
             return Map(dt.Rows[0]);
         }
 
+        public async Task<TimeTableSetupDetails?> GetLatestSetupAsync(Guid classId, Guid sectionId, Guid academicYearId)
+        {
+            Proc p = new Proc("TimeTableSetupDetails_GetLatest");
+            p["@ClassId"] = classId;
+            p["@SectionId"] = sectionId;
+            p["@AcademicYearId"] = academicYearId;
+            
+            var dt = new DataTable();
+            await Task.Run(() => p.Exec(dt));
+            
+            if (dt.Rows.Count == 0) return null;
+            return Map(dt.Rows[0]);
+        }
+
         public Guid Create(TimeTableSetupDetails e)
         {
             Proc p = new Proc("TimeTableSetupDetails_Create");

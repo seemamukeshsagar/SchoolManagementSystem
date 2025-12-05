@@ -14,7 +14,7 @@ namespace SchoolPortalApp.Controllers
 	public class AuthenticationController : BaseController
 	{
 		private readonly ILoginService _loginService;
-		private readonly ILogger<AuthenticationController> _logger;
+		private new readonly ILogger<AuthenticationController> _logger;
 
 		public AuthenticationController(ILoginService loginService, ILogger<AuthenticationController> logger)
 		{

@@ -82,7 +82,7 @@
                             <span class="text-light me-2">
                                 @(Context.Session.GetString("FullName") ?? "User")
                             </span>
-                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <form asp-controller="Authentication" asp-action="Logout" method="post" class="d-inline">
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
                             </form>

@@ -26,5 +26,25 @@ namespace SchoolPortalApp.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("Account/GetUserProfile")]
+        public async Task<IActionResult> GetUserProfile()
+        {
+            //var user = await _userManager.GetUserAsync(User);
+            //if (user == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //return Json(new 
+            //{
+            //    userId = user.Id,
+            //    userName = user.UserName,
+            //    email = user.Email
+            //    // Add other user properties as needed
+            //});
+            return Unauthorized();
+        }
     }
 }

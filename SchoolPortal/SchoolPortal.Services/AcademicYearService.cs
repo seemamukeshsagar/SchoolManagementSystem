@@ -56,6 +56,18 @@ namespace SchoolPortal.Services
             }
         }
 
+        public async Task<AcademicYear?> GetByIdAsync(Guid id)
+        {
+            using (Proc p = new Proc("AcademicYear_GetById"))
+            {
+                p["@Id"] = id;
+                var dt = new DataTable();
+                await Task.Run(() => p.Exec(dt));
+                if (dt.Rows.Count == 0) return null;
+                return MapAcademicYear(dt.Rows[0]);
+            }
+        }
+
         public Guid Create(AcademicYear academicYear)
         {
             using (Proc p = new Proc("AcademicYear_Create"))
@@ -187,6 +199,11 @@ namespace SchoolPortal.Services
                 _logger.LogError(ex, "Error getting current academic year");
                 return null;
             }
+        }
+
+        Task<IEnumerable<AcademicYear>> IAcademicYearService.GetAllActiveAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -96,8 +96,8 @@
          aria-labelledby="heading-users" data-bs-parent="#sidebarAccordion">
         <div class="accordion-body p-0">
             <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("Users", "SuperAdmin")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "SuperAdmin", "Users") ? "active" : "")">All Users</a></li>
+                <li><a href="@Url.Action("Index", "UserDetails")" 
+                      class="nav-link @(ViewHelper.IsActive(ViewContext, "UserDetails", "Index") ? "active" : "")">All Users</a></li>
                 <li><a href="@Url.Action("Roles", "SuperAdmin")" 
                       class="nav-link @(ViewHelper.IsActive(ViewContext, "SuperAdmin", "Roles") ? "active" : "")">Roles</a></li>
                 <li><a href="@Url.Action("Permissions", "SuperAdmin")" 

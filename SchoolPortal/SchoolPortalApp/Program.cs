@@ -170,6 +170,7 @@ builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
 builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
 builder.Services.AddScoped<ITimeTablePeriodService, SchoolPortal.Services.TimeTablePeriodService>();
+builder.Services.AddScoped<IAcademicYearService, SchoolPortal.Services.AcademicYearService>();
 
 var app = builder.Build();
 
