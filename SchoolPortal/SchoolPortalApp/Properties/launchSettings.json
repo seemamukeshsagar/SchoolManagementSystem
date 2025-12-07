@@ -9,7 +9,7 @@
       "applicationUrl": "http://localhost:5142",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APP_SERVER_NAME": "SAGAR\\SQL2025"
+        "APP_SERVER_NAME": "SAGAR\\SQL2026"
       }
     },
     "https": {
@@ -20,7 +20,7 @@
       "applicationUrl": "https://localhost:7221",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APP_SERVER_NAME": "SAGAR\\SQL2025"
+        "APP_SERVER_NAME": "SAGAR\\SQL2026"
       }
     }
   }

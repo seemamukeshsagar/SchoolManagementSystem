@@ -70,7 +70,7 @@ namespace SchoolPortal.Services
 		public List<TeacherMaster> GetAll(Guid? schoolId)
 		{
 			var list = new List<TeacherMaster>();
-			Proc p = new Proc("Teacher_GetAll_SchoolId");
+			Proc p = new Proc("Teacher_GetAll");
 			p["@SchoolId"] = schoolId;
 			var dt = new DataTable();
 			p.Exec(dt);

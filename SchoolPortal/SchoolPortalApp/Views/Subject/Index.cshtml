@@ -5,21 +5,33 @@
 }
 <h2>Subjects</h2>
 
-<form asp-action="Index" method="get" class="form-inline mb-3">
+<form id="filterForm" asp-action="Index" method="get" class="form-inline mb-3">
     <div class="form-group mr-2">
         <label for="classId" class="mr-2">Class</label>
-        <select id="classId" name="classId" class="form-control">
+        <select id="classId" name="classId" class="form-control" onchange="document.getElementById('filterForm').submit()">
             <option value="">All</option>
             @if (ViewBag.Classes != null)
             {
                 foreach (var cls in (IEnumerable<SelectListItem>)ViewBag.Classes)
-				{
-					<option value="@cls.Value" selected="@cls.Selected">@cls.Text</option>
-				}
+                {
+                    <option value="@cls.Value" selected="@(cls.Selected ? "selected" : null)">@cls.Text</option>
+                }
             }
         </select>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Make sure the select element has the correct selected value
+            var selectedClassId = '@(ViewBag.SelectedClassId?.ToString() ?? "")';
+            if (selectedClassId) {
+                $('#classId').val(selectedClassId);
+            }
+        });
+    </script>
+}
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
