@@ -1,3 +1,5 @@
+#nullable enable
+
 // SchoolPortalApp/Models/ClassSectionDetailViewModels.cs
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ namespace SchoolPortal.Services
 {
 	public class TeacherService : ITeacherService
 	{
-		private readonly ILogger<TeacherService> _logger;
+		private new readonly ILogger<TeacherService> _logger;
 		
 		public TeacherService(ILogger<TeacherService> logger)
 		{

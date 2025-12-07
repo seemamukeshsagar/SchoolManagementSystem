@@ -13,14 +13,14 @@ namespace SchoolPortalApp.Controllers
     public class SessionMasterController : BaseController
     {
         private readonly ISessionMasterService _service;
-        private readonly ILogger<SessionMasterController> _logger;
+        private new readonly ILogger<SessionMasterController> _logger;
 
         public SessionMasterController(
             ISessionMasterService service,
             ILogger<SessionMasterController> logger)
         {
             _service = service;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]

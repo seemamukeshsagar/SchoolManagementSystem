@@ -14,13 +14,13 @@ namespace SchoolPortalApp.Controllers
 	public class HolidayMasterController : BaseController
 	{
 		private readonly IHolidayMasterService _service;
-		private readonly ILogger<HolidayMasterController> _logger;
+		private new readonly ILogger<HolidayMasterController> _logger;
 		private readonly IHolidayTypeMasterService _holidayTypeService;
 
 		public HolidayMasterController(IHolidayMasterService service, ILogger<HolidayMasterController> logger, IHolidayTypeMasterService holidayTypeService)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_holidayTypeService = holidayTypeService;
 		}
 

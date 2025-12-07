@@ -15,7 +15,7 @@ namespace SchoolPortalApp.Controllers
 	public class RoleMasterController : BaseController
 	{
 		private readonly IRoleMasterService _service;
-		private readonly ILogger<RoleMasterController> _logger;
+		private new readonly ILogger<RoleMasterController> _logger;
 
 		public RoleMasterController(IRoleMasterService service, ILogger<RoleMasterController> logger)
 		{

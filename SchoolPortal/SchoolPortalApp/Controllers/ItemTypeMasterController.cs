@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
     public class ItemTypeMasterController : BaseController
     {
         private readonly IItemTypeService _service;
-        private readonly ILogger<ItemTypeMasterController> _logger;
+        private new readonly ILogger<ItemTypeMasterController> _logger;
 
         public ItemTypeMasterController(IItemTypeService service, ILogger<ItemTypeMasterController> logger)
         {
             _service = service;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]

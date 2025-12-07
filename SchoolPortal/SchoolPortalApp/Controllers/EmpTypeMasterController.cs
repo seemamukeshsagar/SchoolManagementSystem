@@ -16,7 +16,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ILookupService _lookup;
 		private readonly ISchoolService _schoolService;
 		private readonly ICompanyService _companyService;
-		private readonly ILogger<EmpTypeMasterController> _logger;
+		private new readonly ILogger<EmpTypeMasterController> _logger;
 
 		public EmpTypeMasterController(
 			IEmpTypeService service, 
@@ -29,7 +29,7 @@ namespace SchoolPortalApp.Controllers
 			_lookup = lookup;
 			_schoolService = schoolService;
 			_companyService = companyService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(EmpTypeViewModel vm)

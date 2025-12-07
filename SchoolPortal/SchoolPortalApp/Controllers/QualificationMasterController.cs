@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class QualificationMasterController : BaseController
 	{
 		private readonly IQualificationMasterService _service;
-		private readonly ILogger<QualificationMasterController> _logger;
+		private new readonly ILogger<QualificationMasterController> _logger;
 
 		public QualificationMasterController(IQualificationMasterService service, ILogger<QualificationMasterController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

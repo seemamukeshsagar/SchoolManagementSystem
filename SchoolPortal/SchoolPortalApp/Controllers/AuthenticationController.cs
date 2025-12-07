@@ -19,7 +19,7 @@ namespace SchoolPortalApp.Controllers
 		public AuthenticationController(ILoginService loginService, ILogger<AuthenticationController> logger)
 		{
 			_loginService = loginService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpPost]

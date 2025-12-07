@@ -15,13 +15,13 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly ISectionService _service;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<SectionController> _logger;
+		private new readonly ILogger<SectionController> _logger;
 
 		public SectionController(ISectionService service, ISchoolService schoolService, ILogger<SectionController> logger)
 		{
 			_service = service;
 			_schoolService = schoolService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(SectionViewModel vm)

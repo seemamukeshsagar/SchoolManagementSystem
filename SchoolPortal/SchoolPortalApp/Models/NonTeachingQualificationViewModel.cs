@@ -1,4 +1,6 @@
-﻿namespace SchoolPortalApp.Models
+#nullable enable
+
+namespace SchoolPortalApp.Models
 {
     public class NonTeachingQualificationViewModel
     {

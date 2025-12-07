@@ -16,7 +16,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ISubjectCategoryService _service;
 		private readonly ISubjectService _subjectService;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<SubjectCategoryController> _logger;
+		private new readonly ILogger<SubjectCategoryController> _logger;
 
 		public SubjectCategoryController(
 			ISubjectCategoryService service,
@@ -27,7 +27,7 @@ namespace SchoolPortalApp.Controllers
 			_service = service;
 			_subjectService = subjectService;
 			_schoolService = schoolService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(SubjectCategoryViewModel vm)

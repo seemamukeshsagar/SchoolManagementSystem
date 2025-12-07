@@ -1,3 +1,5 @@
+#nullable enable
+
 // SchoolPortal.Web/Models/NonTeaching/NonTeachingViewModel.cs
 using System;
 using System.Collections.Generic;

@@ -15,7 +15,7 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly IDeptDesigDetailsService _service;
 		private readonly ILookupService _lookup;
-		private readonly ILogger<DeptDesigDetailsController> _logger;
+		private new readonly ILogger<DeptDesigDetailsController> _logger;
 		private const string DefaultStatus = "Active";
 
 		public DeptDesigDetailsController(
@@ -25,7 +25,7 @@ namespace SchoolPortalApp.Controllers
 		{
 			_service = service;
 			_lookup = lookup;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(DeptDesigDetailsViewModel vm)

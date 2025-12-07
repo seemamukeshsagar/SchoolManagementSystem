@@ -12,7 +12,7 @@ namespace SchoolPortal.Services.Services
 {
     public class NonTeachingQualificationDetailsService : INonTeachingQualificationDetailsService
     {
-        private readonly ILogger<NonTeachingQualificationDetailsService> _logger;
+        private new readonly ILogger<NonTeachingQualificationDetailsService> _logger;
         private readonly IDbConnection _connection;
 
         public NonTeachingQualificationDetailsService(ILogger<NonTeachingQualificationDetailsService> logger, IDbConnection connection)

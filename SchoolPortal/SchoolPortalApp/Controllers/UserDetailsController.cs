@@ -18,7 +18,7 @@ namespace SchoolPortalApp.Controllers
         private readonly IUserDetailsService _service;
         private readonly ILookupService _lookup;
         private readonly IRoleMasterService _roles;
-        private readonly ILogger<UserDetailsController> _logger;
+        private new readonly ILogger<UserDetailsController> _logger;
 
         public UserDetailsController(
             IUserDetailsService service,
@@ -29,7 +29,7 @@ namespace SchoolPortalApp.Controllers
             _service = service;
             _lookup = lookup;
             _roles = roles;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private void PopulateDropdowns(UserDetailsViewModel vm)

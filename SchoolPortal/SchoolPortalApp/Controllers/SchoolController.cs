@@ -16,14 +16,14 @@ namespace SchoolPortalApp.Controllers
 		private readonly ISchoolService _service;
 		private readonly ILookupService _lookup;
 		private readonly ISchoolContactService _contactService;
-		private readonly ILogger<SchoolController> _logger;
+		private new readonly ILogger<SchoolController> _logger;
 
 		public SchoolController(ISchoolService service, ILookupService lookup, ISchoolContactService contactService, ILogger<SchoolController> logger)
 		{
 			_service = service;
 			_lookup = lookup;
 			_contactService = contactService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(SchoolViewModel vm)

@@ -22,7 +22,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ICleanerDocumentDetailsService _docService;
 		private readonly ICleanerQualificationDetailsService _qualService;
 		private readonly IWebHostEnvironment _env;
-		private readonly ILogger<CleanerMasterController> _logger;
+		private new readonly ILogger<CleanerMasterController> _logger;
 
 		public CleanerMasterController(ICleanerMasterService service, ISchoolService schoolService, ILookupService lookup, ICleanerDocumentDetailsService docService, ICleanerQualificationDetailsService qualService, IWebHostEnvironment env, ILogger<CleanerMasterController> logger)
 		{
@@ -32,7 +32,7 @@ namespace SchoolPortalApp.Controllers
 			_docService = docService;
 			_qualService = qualService;
 			_env = env;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

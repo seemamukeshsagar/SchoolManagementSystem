@@ -12,12 +12,12 @@ namespace SchoolPortalApp.Controllers
 	public class HolidayTypeMasterController : BaseController
 	{
 		private readonly IHolidayTypeMasterService _service;
-		private readonly ILogger<HolidayTypeMasterController> _logger;
+		private new readonly ILogger<HolidayTypeMasterController> _logger;
 
 		public HolidayTypeMasterController(IHolidayTypeMasterService service, ILogger<HolidayTypeMasterController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

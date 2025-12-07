@@ -8,9 +8,9 @@ namespace SchoolPortalApp.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected readonly ILogger<BaseController> _logger;
+        protected readonly ILogger<BaseController>? _logger;
 
-        protected BaseController(ILogger<BaseController> logger = null)
+        protected BaseController(ILogger<BaseController>? logger = null)
         {
             _logger = logger;
         }
@@ -109,7 +109,7 @@ namespace SchoolPortalApp.Controllers
             }
         }
 
-        protected IActionResult AjaxView(string viewName, object model = null)
+        protected IActionResult AjaxView(string viewName, object? model = null)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace SchoolPortalApp.Controllers
             }
         }
 
-        protected IActionResult AjaxView(object model = null)
+        protected IActionResult AjaxView(object? model = null)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace SchoolPortalApp.Controllers
             }
         }
 
-        protected string GetSessionValue(string key)
+        protected string? GetSessionValue(string key)
         {
             try
             {

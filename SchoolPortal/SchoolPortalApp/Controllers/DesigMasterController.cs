@@ -14,13 +14,13 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly IDesigMasterService _service;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<DesigMasterController> _logger;
+		private new readonly ILogger<DesigMasterController> _logger;
 
 		public DesigMasterController(IDesigMasterService service, ISchoolService schoolService, ILogger<DesigMasterController> logger)
 		{
 			_service = service;
 			_schoolService = schoolService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(DesigMasterViewModel vm)

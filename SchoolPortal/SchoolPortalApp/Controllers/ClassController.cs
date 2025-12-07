@@ -15,13 +15,13 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly IClassService _service;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<ClassController> _logger;
+		private new readonly ILogger<ClassController> _logger;
 
 		public ClassController(IClassService service, ISchoolService schoolService, ILogger<ClassController> logger)
 		{
 			_service = service;
 			_schoolService = schoolService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(ClassViewModel vm)

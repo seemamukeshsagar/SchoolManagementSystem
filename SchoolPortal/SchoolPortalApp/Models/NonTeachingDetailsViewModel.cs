@@ -1,4 +1,6 @@
-﻿// SchoolPortalApp/Models/NonTeachingDetailsViewModel.cs
+#nullable enable
+
+// SchoolPortalApp/Models/NonTeachingDetailsViewModel.cs
 namespace SchoolPortalApp.Models
 {
     public class NonTeachingDetailsViewModel

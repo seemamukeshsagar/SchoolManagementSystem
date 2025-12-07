@@ -21,7 +21,7 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly ITeacherService _service;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<TeacherMasterController> _logger;
+		private new readonly ILogger<TeacherMasterController> _logger;
 		private readonly ITeacherDocumentDetailsService _docService;
 		private readonly ITeacherQualificationDetailsService _qualService;
 		private readonly ILookupService _lookupService;
@@ -33,7 +33,7 @@ namespace SchoolPortalApp.Controllers
 			_service = service;
 			_schoolService = schoolService;
 			_lookupService = lookupService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_docService = docService;
 			_qualService = qualService;
 			_env = env;

@@ -18,7 +18,7 @@ namespace SchoolPortal.Web.Controllers
     [Authorize]
     public class NonTeachingController : BaseController
     {
-        private readonly ILogger<NonTeachingController> _logger;
+        private new readonly ILogger<NonTeachingController> _logger;
         private readonly INonTeachingService _nonTeachingService;
         private readonly INonTeachingDocumentDetailsService _documentService;
         private readonly INonTeachingQualificationDetailsService _qualificationService;
@@ -30,7 +30,7 @@ namespace SchoolPortal.Web.Controllers
             INonTeachingQualificationDetailsService qualificationService)
             : base(logger)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _nonTeachingService = nonTeachingService;
             _documentService = documentService;
             _qualificationService = qualificationService;
@@ -217,25 +217,41 @@ namespace SchoolPortal.Web.Controllers
                     }
 
                     var nonTeaching = MapToNonTeachingMaster(model);
-                    nonTeaching.ModifiedOn = DateTime.UtcNow;
+                    if (nonTeaching != null)
+                    {
+                        nonTeaching.ModifiedOn = DateTime.UtcNow;
+                    }
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
                         using (var memoryStream = new MemoryStream())
                         {
                             await model.ImageFile.CopyToAsync(memoryStream).ConfigureAwait(false);
-                            nonTeaching.Image = memoryStream.ToArray();
+                            if (nonTeaching != null)
+                            {
+                                nonTeaching.Image = memoryStream.ToArray();
+                            }
                         }
                     }
                     else
                     {
                         // Keep the existing image if no new image is uploaded
-                        nonTeaching.Image = existingStaff.Image;
+                        if (nonTeaching != null)
+                        {
+                            nonTeaching.Image = existingStaff.Image;
+                        }
                     }
 
-                    _nonTeachingService.Update(nonTeaching);
-                    TempData["SuccessMessage"] = "Non-teaching staff updated successfully!";
-                    return RedirectToAction(nameof(Details), new { id = nonTeaching.Id });
+                    if (nonTeaching != null)
+                    {
+                        _nonTeachingService.Update(nonTeaching);
+                        TempData["SuccessMessage"] = "Non-teaching staff updated successfully!";
+                        return RedirectToAction(nameof(Details), new { id = nonTeaching.Id });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid staff data.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -439,7 +455,7 @@ namespace SchoolPortal.Web.Controllers
                 // Basic Information
                 Id = model.Id,
                 FirstName = model.FirstName,
-                MiddleName = model.MiddleName,
+                MiddleName = model.MiddleName ?? string.Empty,
                 LastName = model.LastName,
                 Email = model.Email,
                 Phone = model.Phone,
@@ -473,9 +489,9 @@ namespace SchoolPortal.Web.Controllers
                 AadharNumber = model.AadharNumber,
         
                 // Emergency Contact
-                EmergencyContactName = model.EmergencyContactName,
-                EmergencyContactNumber = model.EmergencyContactNumber,
-                EmergencyContactRelation = model.EmergencyContactRelation,
+                EmergencyContactName = model.EmergencyContactName ?? string.Empty,
+                EmergencyContactNumber = model.EmergencyContactNumber ?? string.Empty,
+                EmergencyContactRelation = model.EmergencyContactRelation ?? string.Empty,
         
                 // System Fields
                 IsActive = model.IsActive,

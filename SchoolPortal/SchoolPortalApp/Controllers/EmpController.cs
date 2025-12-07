@@ -22,7 +22,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ICleanerMasterService _cleanerService;
 		private readonly IDriverMasterService _driverService;
 		private readonly ITeacherService _teacherService;
-		private readonly ILogger<EmpController> _logger;
+		private new readonly ILogger<EmpController> _logger;
 		private readonly IWebHostEnvironment _env;
 		private const string DefaultStatus = "Active";
 
@@ -32,7 +32,7 @@ namespace SchoolPortalApp.Controllers
 			_lookup = lookup;
 			_deptService = deptService;
 			_deptDesigService = deptDesigService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_env = env;
 			_cleanerService = cleanerService;
 			_driverService = driverService;

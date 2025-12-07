@@ -16,7 +16,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ILookupService _lookup;
 		private readonly ISchoolService _schoolService;
 		private readonly ICompanyService _companyService;
-		private readonly ILogger<SupplierController> _logger;
+		private new readonly ILogger<SupplierController> _logger;
 
 		public SupplierController(ISupplierService service, ILookupService lookup, ISchoolService schoolService, ICompanyService companyService, ILogger<SupplierController> logger)
 		{
@@ -24,7 +24,7 @@ namespace SchoolPortalApp.Controllers
 			_lookup = lookup;
 			_schoolService = schoolService;
 			_companyService = companyService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(SupplierViewModel vm)

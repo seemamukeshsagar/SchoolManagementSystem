@@ -22,7 +22,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly IDriverDocumentDetailsService _docService;
 		private readonly IDriverQualificationDetailsService _qualService;
 		private readonly IWebHostEnvironment _env;
-		private readonly ILogger<DriverMasterController> _logger;
+		private new readonly ILogger<DriverMasterController> _logger;
 
 		public DriverMasterController(IDriverMasterService service, ISchoolService schoolService, ILookupService lookup, IDriverDocumentDetailsService docService, IDriverQualificationDetailsService qualService, IWebHostEnvironment env, ILogger<DriverMasterController> logger)
 		{
@@ -32,7 +32,7 @@ namespace SchoolPortalApp.Controllers
 			_docService = docService;
 			_qualService = qualService;
 			_env = env;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateQualifications(Guid selectedId)

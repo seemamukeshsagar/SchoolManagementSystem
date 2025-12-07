@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class AssessmentController : BaseController
 	{
 		private readonly IAssesmentMasterService _service;
-		private readonly ILogger<AssessmentController> _logger;
+		private new readonly ILogger<AssessmentController> _logger;
 
 		public AssessmentController(IAssesmentMasterService service, ILogger<AssessmentController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

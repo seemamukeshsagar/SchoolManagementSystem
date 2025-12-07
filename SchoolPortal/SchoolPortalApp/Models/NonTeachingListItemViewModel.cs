@@ -1,3 +1,5 @@
+#nullable enable
+
 // SchoolPortalApp/Models/NonTeachingListItemViewModel.cs
 using System;
 

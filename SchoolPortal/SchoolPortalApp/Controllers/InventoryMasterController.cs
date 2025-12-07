@@ -16,7 +16,7 @@ namespace SchoolPortalApp.Controllers
         private readonly IInventoryService _service;
         private readonly IItemService _itemService;
         private readonly ILookupService _lookup;
-        private readonly ILogger<InventoryMasterController> _logger;
+        private new readonly ILogger<InventoryMasterController> _logger;
 
         public InventoryMasterController(
             IInventoryService service,
@@ -27,7 +27,7 @@ namespace SchoolPortalApp.Controllers
             _service = service;
             _itemService = itemService;
             _lookup = lookup;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private void PopulateDropdowns(InventoryMasterViewModel vm)

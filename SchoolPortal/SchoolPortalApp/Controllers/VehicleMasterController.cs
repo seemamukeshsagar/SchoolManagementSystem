@@ -17,7 +17,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ILookupService _lookup;
 		private readonly ISchoolService _schoolService;
 		private readonly ICompanyService _companyService;
-		private readonly ILogger<VehicleMasterController> _logger;
+		private new readonly ILogger<VehicleMasterController> _logger;
 
 		public VehicleMasterController(IVehicleMasterService service, IVehicleTypeMasterService vehicleTypeService, ILookupService lookup, ISchoolService schoolService, ICompanyService companyService, ILogger<VehicleMasterController> logger)
 		{
@@ -26,7 +26,7 @@ namespace SchoolPortalApp.Controllers
 			_lookup = lookup;
 			_schoolService = schoolService;
 			_companyService = companyService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(VehicleMasterViewModel vm)

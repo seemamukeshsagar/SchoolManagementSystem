@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class FeesCategoryMasterController : BaseController
 	{
 		private readonly IFeesCategoryMasterService _service;
-		private readonly ILogger<FeesCategoryMasterController> _logger;
+		private new readonly ILogger<FeesCategoryMasterController> _logger;
 
 		public FeesCategoryMasterController(IFeesCategoryMasterService service, ILogger<FeesCategoryMasterController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

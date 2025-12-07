@@ -13,7 +13,13 @@ namespace SchoolPortal.Services
 {
     public class AcademicYearService : IAcademicYearService
     {
-        private readonly ILogger<AcademicYearService> _logger;
+        private new readonly ILogger<AcademicYearService> _logger;
+
+        public AcademicYearService(ILogger<AcademicYearService> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public IEnumerable<AcademicYear> GetAll()
         {
             var list = new List<AcademicYear>();
@@ -82,10 +88,11 @@ namespace SchoolPortal.Services
                 var dt = new DataTable();
                 p.Exec(dt);
                 
-                if (dt.Rows.Count > 0)
+                if (dt.Rows.Count > 0 && dt.Rows[0]["Id"] != DBNull.Value)
                 {
                     return (Guid)dt.Rows[0]["Id"];
                 }
+                _logger?.LogWarning("Failed to create academic year");
                 return Guid.Empty;
             }
         }

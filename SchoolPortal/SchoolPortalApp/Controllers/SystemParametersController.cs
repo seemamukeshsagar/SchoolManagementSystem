@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -15,13 +15,13 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly ISystemParametersService _service;
 		private readonly ILookupService _lookup;
-		private readonly ILogger<SystemParametersController> _logger;
+		private new readonly ILogger<SystemParametersController> _logger;
 
 		public SystemParametersController(ISystemParametersService service, ILookupService lookup, ILogger<SystemParametersController> logger)
 		{
 			_service = service;
 			_lookup = lookup;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]
@@ -81,7 +81,7 @@ namespace SchoolPortalApp.Controllers
 				return View(model);
 			}
 
-			// Map ViewModel → Entity
+			// Map ViewModel ? Entity
 			var entity = new SystemParameters
 			{
 				Id = Guid.Empty,

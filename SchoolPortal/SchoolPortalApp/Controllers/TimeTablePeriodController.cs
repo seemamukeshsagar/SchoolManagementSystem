@@ -16,7 +16,7 @@ namespace SchoolPortalApp.Controllers
     public class TimeTablePeriodController : BaseController
     {
         private readonly ITimeTablePeriodService _service;
-        private readonly ILogger<TimeTablePeriodController> _logger;
+        private new readonly ILogger<TimeTablePeriodController> _logger;
 
         public TimeTablePeriodController(
             ITimeTablePeriodService service,

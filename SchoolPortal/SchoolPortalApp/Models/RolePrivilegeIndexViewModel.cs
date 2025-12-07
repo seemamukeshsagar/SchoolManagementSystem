@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolPortal.Services.IServices;

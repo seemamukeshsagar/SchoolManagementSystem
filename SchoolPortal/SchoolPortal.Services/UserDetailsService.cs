@@ -14,7 +14,7 @@ namespace SchoolPortal.Services
 		private readonly ILookupService _lookupService;
 		private readonly IRoleMasterService _roleService;
 
-		private readonly ILogger<UserDetailsService> _logger;
+		private new readonly ILogger<UserDetailsService> _logger;
 
 		public UserDetailsService(
 			ILookupService lookupService, 

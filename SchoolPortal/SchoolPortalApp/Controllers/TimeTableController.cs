@@ -24,7 +24,7 @@ namespace SchoolPortalApp.Controllers
         private readonly IAcademicYearService _academicYearService;
         private readonly ISectionService _sectionService;
         private readonly ITeacherService _teacherService;
-        private readonly ILogger<TimeTableController> _logger;
+        private new readonly ILogger<TimeTableController> _logger;
 
         private readonly IWebHostEnvironment _hostEnvironment; 
 

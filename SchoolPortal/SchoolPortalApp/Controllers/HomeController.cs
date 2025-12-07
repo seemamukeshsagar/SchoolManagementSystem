@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SchoolPortal.Services.IServices;
 using SchoolPortalApp.Models;
 using System;

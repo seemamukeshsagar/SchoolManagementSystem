@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class PrivilegesController : BaseController
 	{
 		private readonly IPrivilegeService _service;
-		private readonly ILogger<PrivilegesController> _logger;
+		private new readonly ILogger<PrivilegesController> _logger;
 
 		public PrivilegesController(IPrivilegeService service, ILogger<PrivilegesController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(PrivilegeViewModel vm)

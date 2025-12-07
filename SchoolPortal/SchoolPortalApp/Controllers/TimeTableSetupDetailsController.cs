@@ -13,14 +13,14 @@ namespace SchoolPortalApp.Controllers
     public class TimeTableSetupDetailsController : BaseController
     {
         private readonly ITimeTableSetupDetailsService _service;
-        private readonly ILogger<TimeTableSetupDetailsController> _logger;
+        private new readonly ILogger<TimeTableSetupDetailsController> _logger;
 
         public TimeTableSetupDetailsController(
             ITimeTableSetupDetailsService service,
             ILogger<TimeTableSetupDetailsController> logger)
         {
             _service = service;
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]

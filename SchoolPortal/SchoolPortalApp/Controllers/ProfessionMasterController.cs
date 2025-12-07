@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class ProfessionMasterController : BaseController
 	{
 		private readonly IProfessionMasterService _service;
-		private readonly ILogger<ProfessionMasterController> _logger;
+		private new readonly ILogger<ProfessionMasterController> _logger;
 
 		public ProfessionMasterController(IProfessionMasterService service, ILogger<ProfessionMasterController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

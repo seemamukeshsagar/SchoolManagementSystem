@@ -16,14 +16,14 @@ namespace SchoolPortalApp.Controllers
 		private readonly ISubjectService _service;
 		private readonly ISchoolService _schoolService;
 		private readonly IClassService _classService;
-		private readonly ILogger<SubjectController> _logger;
+		private new readonly ILogger<SubjectController> _logger;
 
 		public SubjectController(ISubjectService service, ISchoolService schoolService, IClassService classService, ILogger<SubjectController> logger)
 		{
 			_service = service;
 			_schoolService = schoolService;
 			_classService = classService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(SubjectViewModel vm)

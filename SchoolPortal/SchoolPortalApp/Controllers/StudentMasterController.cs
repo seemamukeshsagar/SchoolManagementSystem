@@ -22,7 +22,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ITeacherService _teacherService;
 		private readonly ILookupService _lookupService;
 		private readonly ICompanyService _companyService;
-		private readonly ILogger<StudentMasterController> _logger;
+		private new readonly ILogger<StudentMasterController> _logger;
 		private readonly IWebHostEnvironment _env;
 		private readonly IParentService _parentService;
 
@@ -45,7 +45,7 @@ namespace SchoolPortalApp.Controllers
 			_teacherService = teacherService;
 			_lookupService = lookupService;
 			_companyService = companyService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_env = env;
 			_parentService = parentService;
 		}

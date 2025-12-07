@@ -13,12 +13,12 @@ namespace SchoolPortalApp.Controllers
 	public class BookTypeController : BaseController
 	{
 		private readonly IBookTypeService _service;
-		private readonly ILogger<BookTypeController> _logger;
+		private new readonly ILogger<BookTypeController> _logger;
 
 		public BookTypeController(IBookTypeService service, ILogger<BookTypeController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

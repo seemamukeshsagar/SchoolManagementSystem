@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace SchoolPortalApp.Models
 {
     public class DeptMasterListItemViewModel

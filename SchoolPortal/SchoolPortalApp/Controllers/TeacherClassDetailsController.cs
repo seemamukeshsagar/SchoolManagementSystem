@@ -19,7 +19,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly ISectionService _sectionService;
 		private readonly ISubjectService _subjectService;
 		private readonly ISchoolService _schoolService;
-		private readonly ILogger<TeacherClassDetailsController> _logger;
+		private new readonly ILogger<TeacherClassDetailsController> _logger;
 
 		public TeacherClassDetailsController(
 			ITeacherClassDetailsService service,
@@ -36,7 +36,7 @@ namespace SchoolPortalApp.Controllers
 			_sectionService = sectionService;
 			_subjectService = subjectService;
 			_schoolService = schoolService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		private void PopulateDropdowns(TeacherClassDetailsViewModel vm)

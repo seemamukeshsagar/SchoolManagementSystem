@@ -17,7 +17,7 @@ namespace SchoolPortalApp.Controllers
 	{
 		private readonly IRolePrivilegeService _rolePrivilegeService;
 		private readonly IRoleMasterService _roleService;
-		private readonly ILogger<RolePrivilegesController> _logger;
+		private new readonly ILogger<RolePrivilegesController> _logger;
 
 		public RolePrivilegesController(
 			IRolePrivilegeService rolePrivilegeService,
@@ -26,7 +26,7 @@ namespace SchoolPortalApp.Controllers
 		{
 			_rolePrivilegeService = rolePrivilegeService;
 			_roleService = roleService;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

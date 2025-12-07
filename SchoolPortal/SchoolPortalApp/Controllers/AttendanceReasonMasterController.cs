@@ -12,12 +12,12 @@ namespace SchoolPortalApp.Controllers
 	public class AttendanceReasonMasterController : BaseController
 	{
 		private readonly IAttendanceReasonMasterService _service;
-		private readonly ILogger<AttendanceReasonMasterController> _logger;
+		private new readonly ILogger<AttendanceReasonMasterController> _logger;
 
 		public AttendanceReasonMasterController(IAttendanceReasonMasterService service, ILogger<AttendanceReasonMasterController> logger)
 		{
 			_service = service;
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]
