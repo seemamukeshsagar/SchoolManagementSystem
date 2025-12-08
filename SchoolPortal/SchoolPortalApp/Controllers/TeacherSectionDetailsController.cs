@@ -300,5 +300,36 @@ namespace SchoolPortalApp.Controllers
 			}
 			return RedirectToAction("Index");
 		}
-	}
+
+        [HttpGet]
+        public IActionResult GetSubjectsByClass(Guid classId)
+        {
+            try
+            {
+                _logger.LogInformation($"Getting subjects for class ID: {classId}");
+                
+                if (classId == Guid.Empty)
+                {
+                    _logger.LogWarning("Empty class ID provided");
+                    return Json(new List<SelectListItem>());
+                }
+
+                var subjects = _subjectService.GetByClassId(classId);
+                _logger.LogInformation($"Found {subjects.Count()} subjects for class ID: {classId}");
+                
+                var subjectList = subjects.Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.SubjectName
+                }).ToList();
+
+                return Json(subjectList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting subjects for class ID: {classId}");
+                return StatusCode(500, new { error = "An error occurred while loading subjects." });
+            }
+        }
+    }
 }

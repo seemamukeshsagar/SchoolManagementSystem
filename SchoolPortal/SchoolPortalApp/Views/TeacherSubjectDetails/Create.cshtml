@@ -37,4 +37,92 @@
 </form>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
+	<script>
+		$(document).ready(function () {
+			// Handle Class dropdown change event
+			$('#ClassId').change(function () {
+				var classId = $(this).val();
+				var subjectDropdown = $('#SubjectId');
+				
+				// Clear and disable the Subject dropdown while loading
+				subjectDropdown.empty().prop('disabled', true);
+				
+				if (classId) {
+					console.log('Class selected, loading subjects for class ID:', classId);
+					
+					// Show loading state
+					subjectDropdown.append($('<option/>', {
+						value: '',
+						text: 'Loading subjects...'
+					}));
+					
+					// Make AJAX call to get subjects for the selected class
+					$.ajax({
+						url: '/TeacherSectionDetails/GetSubjectsByClass',
+						type: 'GET',
+						data: { classId: classId },
+						dataType: 'json',
+						success: function(data) {
+							console.log('Subjects loaded successfully:', data);
+							
+							// Clear the loading message
+							subjectDropdown.empty();
+							
+							// Add default option
+							subjectDropdown.append($('<option/>', {
+								value: '',
+								text: '-- Select Subject --'
+							}));
+							
+							if (data && data.length > 0) {
+								// Add subjects to the dropdown
+								$.each(data, function (i, item) {
+									subjectDropdown.append($('<option/>', {
+										value: item.value,
+										text: item.text
+									}));
+								});
+								console.log('Added ' + data.length + ' subjects to the dropdown');
+							} else {
+								console.warn('No subjects found for the selected class');
+								subjectDropdown.append($('<option/>', {
+									value: '',
+									text: 'No subjects available',
+									disabled: true
+								}));
+							}
+							
+							// Enable the dropdown
+							subjectDropdown.prop('disabled', false);
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							console.error('AJAX Error:', {
+								status: jqXHR.status,
+								statusText: jqXHR.statusText,
+								responseText: jqXHR.responseText,
+								textStatus: textStatus,
+								errorThrown: errorThrown
+							});
+							
+							subjectDropdown.empty().append($('<option/>', {
+								value: '',
+								text: 'Error loading subjects',
+								disabled: true
+							}));
+							
+							alert('Error loading subjects. Please check the console for more details.');
+						}
+					});
+				} else {
+					// If no class is selected, disable the subject dropdown
+					subjectDropdown.empty().prop('disabled', true);
+				}
+			});
+			
+			// Trigger change event on page load if a class is already selected
+			if ($('#ClassId').val()) {
+				$('#ClassId').trigger('change');
+			}
+		});
+	</script>
 }
