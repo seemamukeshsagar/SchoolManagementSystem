@@ -128,5 +128,32 @@ namespace SchoolPortal.Services
             }
             return list;
         }
+
+        public List<SubjectMaster> GetSubjectsByClassId(Guid classId)
+        {
+            var subjects = new List<SubjectMaster>();
+            try
+            {
+                Proc p = new Proc("Subject_GetByClassId");
+                p["@ClassId"] = classId;
+                var dt = new DataTable();
+                p.Exec(dt);
+                
+                foreach (DataRow r in dt.Rows)
+                {
+                    subjects.Add(new SubjectMaster
+                    {
+                        Id = Guid.Parse(r["Id"].ToString()),
+                        SubjectName = r["SubjectName"]?.ToString() ?? string.Empty,
+                        // Map other properties as needed
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return subjects;
+        }
     }
 }

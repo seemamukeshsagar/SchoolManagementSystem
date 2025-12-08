@@ -13,6 +13,6 @@ namespace SchoolPortal.Services.IServices
 		bool Update(SubjectMaster subject);
 		bool Delete(Guid id);
 		public List<SubjectMaster> GetByClassId(Guid id);
-
+		List<SubjectMaster> GetSubjectsByClassId(Guid classId);
     }
 }

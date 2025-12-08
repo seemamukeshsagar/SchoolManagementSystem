@@ -38,13 +38,55 @@ namespace SchoolPortalApp.Controllers
 
 		private void PopulateDropdowns(TeacherSubjectDetailsViewModel vm)
 		{
-			var teachers = _teacherService.GetAll();
-			var classes = _classService.GetAll();
-			var subjects = _subjectService.GetAll();
+			try
+			{
+				// Get current school ID
+				var schoolId = CurrentSchoolId ?? throw new InvalidOperationException("School ID is required");
 
-			vm.Teachers = teachers.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = string.Join(" ", new[] { t.FirstName, t.LastName }.Where(x => !string.IsNullOrWhiteSpace(x))), Selected = t.Id == vm.TeacherId }).ToList();
-			vm.Classes = classes.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name, Selected = c.Id == vm.ClassId }).ToList();
-			vm.Subjects = subjects.Select(su => new SelectListItem { Value = su.Id.ToString(), Text = su.SubjectName, Selected = su.Id == vm.SubjectId }).ToList();
+				// Get active teachers for the current school
+				var teachers = _teacherService.GetAll(schoolId)
+					.OrderBy(t => $"{t.FirstName} {t.LastName}")
+					.Select(t => new SelectListItem 
+					{ 
+						Value = t.Id.ToString(), 
+						Text = $"{t.FirstName} {t.LastName}".Trim(),
+						Selected = t.Id == vm.TeacherId 
+					})
+					.ToList();
+
+				// Rest of the method remains the same
+				var classes = _classService.GetAll()
+					.OrderBy(c => c.Name)
+					.Select(c => new SelectListItem 
+					{ 
+						Value = c.Id.ToString(), 
+						Text = c.Name,
+						Selected = c.Id == vm.ClassId 
+					})
+					.ToList();
+
+				var subjects = _subjectService.GetAll()
+					.OrderBy(s => s.SubjectName)
+					.Select(s => new SelectListItem 
+					{ 
+						Value = s.Id.ToString(), 
+						Text = s.SubjectName,
+						Selected = s.Id == vm.SubjectId 
+					})
+					.ToList();
+
+				vm.Teachers = teachers;
+				vm.Classes = classes;
+				vm.Subjects = subjects;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error populating dropdowns");
+				// Initialize empty lists to prevent null reference exceptions
+				vm.Teachers = new List<SelectListItem>();
+				vm.Classes = new List<SelectListItem>();
+				vm.Subjects = new List<SelectListItem>();
+			}
 		}
 
 		[HttpGet]
@@ -224,6 +266,29 @@ namespace SchoolPortalApp.Controllers
 				return RedirectToAction("Delete", new { id });
 			}
 			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		[Route("GetSubjectsByClass/{classId}")]
+		public IActionResult GetSubjectsByClass(Guid classId)
+		{
+			try
+			{
+				var subjects = _subjectService.GetSubjectsByClassId(classId)
+					.OrderBy(s => s.SubjectName)
+					.Select(s => new { 
+						id = s.Id, 
+						text = s.SubjectName 
+					})
+					.ToList();
+					
+				return Json(subjects);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error getting subjects for class {ClassId}", classId);
+				return StatusCode(500, "Error loading subjects");
+			}
 		}
 	}
 }
