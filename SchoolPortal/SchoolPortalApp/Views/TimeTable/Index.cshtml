@@ -1,101 +1,101 @@
 @model SchoolPortalApp.Models.TimeTableViewModel
 
 <div class="container mt-4">
-    <h2>TimeTable Management</h2>
-    
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
-    
-    <div class="card">
-        <div class="card-header">
-            <h4>Generate TimeTable</h4>
-        </div>
-        <div class="card-body">
-            <form id="timeTableForm" asp-action="Generate" method="get">
-                @Html.AntiForgeryToken()
-                @await Html.PartialAsync("_TimeTableForm", Model)
-            </form>
-        </div>
-    </div>
+	<h2>TimeTable Management</h2>
+	
+	@if (TempData["ErrorMessage"] != null)
+	{
+		<div class="alert alert-danger">
+			@TempData["ErrorMessage"]
+		</div>
+	}
+	
+	<div class="card">
+		<div class="card-header">
+			<h4>Generate TimeTable</h4>
+		</div>
+		<div class="card-body">
+			<form id="timeTableForm" asp-action="Generate" method="get">
+				@Html.AntiForgeryToken()
+				@await Html.PartialAsync("_TimeTableForm", Model)
+			</form>
+		</div>
+	</div>
 </div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 <style>
-    .select2-container {
-        width: 100% !important;
-    }
-    .loading-spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(0,0,0,.1);
-        border-radius: 50%;
-        border-top-color: #3498db;
-        animation: spin 1s ease-in-out infinite;
-        margin-left: 10px;
-    }
-    
-    @@keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+	.select2-container {
+		width: 100% !important;
+	}
+	.loading-spinner {
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: 3px solid rgba(0,0,0,.1);
+		border-radius: 50%;
+		border-top-color: #3498db;
+		animation: spin 1s ease-in-out infinite;
+		margin-left: 10px;
+	}
+	
+	@@keyframes spin {
+		to { transform: rotate(360deg); }
+	}
 </style>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Initialize Select2 for better dropdown UX
-            $('select').select2({
-                theme: 'bootstrap4',
-                width: '100%'
-            });
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Initialize Select2 for better dropdown UX
+			$('select').select2({
+				theme: 'bootstrap4',
+				width: '100%'
+			});
 
-            // Handle class change to load sections
-            $('#ClassId').on('change', function() {
-                var classId = $(this).val();
-                var $sectionDropdown = $('#SectionId');
-                
-                if (!classId) {
-                    $sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
-                    return;
-                }
-                
-                // Show loading
-                $sectionDropdown.prop('disabled', true);
-                var $spinner = $('<span class="loading-spinner"></span>');
-                $sectionDropdown.after($spinner);
-                
-                // Get sections for selected class
-                $.get('/TimeTable/GetSectionsByClass/' + classId, function(data) {
-                    $sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
-                    
-                    if (data && data.length > 0) {
-                        $.each(data, function(i, section) {
-                            $sectionDropdown.append($('<option></option>').attr('value', section.value).text(section.text));
-                        });
-                    }
-                })
-                .fail(function() {
-                    alert('Error loading sections. Please try again.');
-                })
-                .always(function() {
-                    $sectionDropdown.prop('disabled', false);
-                    $spinner.remove();
-                });
-            });
-            
-            // Form submission handler
-            $('#timeTableForm').on('submit', function(e) {
-                if (!$(this).valid()) {
-                    e.preventDefault();
-                    return false;
-                }
-                return true;
-            });
-        });
-    </script>
+			// Handle class change to load sections
+			$('#ClassId').on('change', function() {
+				var classId = $(this).val();
+				var $sectionDropdown = $('#SectionId');
+				
+				if (!classId) {
+					$sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
+					return;
+				}
+				
+				// Show loading
+				$sectionDropdown.prop('disabled', true);
+				var $spinner = $('<span class="loading-spinner"></span>');
+				$sectionDropdown.after($spinner);
+				
+				// Get sections for selected class
+				$.get('/TimeTable/GetSectionsByClass/' + classId, function(data) {
+					$sectionDropdown.empty().append('<option value="">-- Select Section --</option>');
+					
+					if (data && data.length > 0) {
+						$.each(data, function(i, section) {
+							$sectionDropdown.append($('<option></option>').attr('value', section.value).text(section.text));
+						});
+					}
+				})
+				.fail(function() {
+					alert('Error loading sections. Please try again.');
+				})
+				.always(function() {
+					$sectionDropdown.prop('disabled', false);
+					$spinner.remove();
+				});
+			});
+			
+			// Form submission handler
+			$('#timeTableForm').on('submit', function(e) {
+				if (!$(this).valid()) {
+					e.preventDefault();
+					return false;
+				}
+				return true;
+			});
+		});
+	</script>
 }
