@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
+using SchoolPortalApp.Utilities;
 using SchoolPortal.Services.IServices;
+using OfficeOpenXml;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -778,30 +783,35 @@ namespace SchoolPortalApp.Controllers
 				
 				if (!allowedExtensions.Contains(extension))
 				{
-					throw new InvalidOperationException("Invalid file type. Only image files are allowed.");
+					throw new ArgumentException("Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
 				}
 
-				if (imageFile.Length > 5 * 1024 * 1024) // 5MB limit
+				// Validate file size (e.g., 5MB max)
+				if (imageFile.Length > 5 * 1024 * 1024)
 				{
-					throw new InvalidOperationException("File size cannot exceed 5MB.");
+					throw new ArgumentException("File size cannot exceed 5MB.");
 				}
 
-				var uploadsRoot = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "students");
-				Directory.CreateDirectory(uploadsRoot);
-				var fileName = $"{Guid.NewGuid()}{extension}";
-				var fullPath = Path.Combine(uploadsRoot, fileName);
-				
-				using (var stream = new FileStream(fullPath, FileMode.Create))
+				var uploadsFolder = Path.Combine(_env.WebRootPath ?? string.Empty, "uploads", "students");
+				if (!Directory.Exists(uploadsFolder))
+				{
+					Directory.CreateDirectory(uploadsFolder);
+				}
+
+				var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(imageFile.FileName)}";
+				var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
 				{
 					await imageFile.CopyToAsync(stream);
 				}
-				
-				return $"/uploads/students/{fileName}";
+
+				return $"/uploads/students/{uniqueFileName}";
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, "Error saving student image");
-				return null;
+				throw;
 			}
 		}
 

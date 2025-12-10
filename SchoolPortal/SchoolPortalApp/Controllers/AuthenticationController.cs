@@ -93,11 +93,11 @@ namespace SchoolPortalApp.Controllers
 					HttpContext.Session.SetString("Privileges", string.Join(",", userDetails.Privileges ?? Enumerable.Empty<string>()));
 					HttpContext.Session.SetString("SchoolId", userDetails.SchoolId?.ToString() ?? string.Empty);
 					HttpContext.Session.SetString("CompanyId", userDetails.CompanyId?.ToString() ?? string.Empty);
-                    HttpContext.Session.SetString("RoleName", userDetails.RoleName.ToString());
+					HttpContext.Session.SetString("RoleName", userDetails.RoleName.ToString());
 
 
-                    // Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
-                    var claims = new List<Claim>
+					// Sign-in with cookie authentication so User.Identity.IsAuthenticated is true
+					var claims = new List<Claim>
 					{
 						new Claim(ClaimTypes.NameIdentifier, userDetails.Id.ToString()),
 						new Claim(ClaimTypes.Name, userDetails.FullName ?? userDetails.UserName ?? string.Empty),
@@ -150,7 +150,7 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ChangePassword(ChangePasswordViewModel model)
 		{
-            _logger.LogInformation("POST ChangePassword method called");
+			_logger.LogInformation("POST ChangePassword method called");
 			try
 			{
 				if (!ModelState.IsValid)

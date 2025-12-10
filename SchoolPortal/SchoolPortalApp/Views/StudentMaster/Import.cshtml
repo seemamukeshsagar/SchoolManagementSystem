@@ -1,0 +1,105 @@
+@model SchoolPortalApp.Models.StudentImportModel
+
+@{
+    ViewData["Title"] = "Import Students";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Import Students</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="alert alert-info">
+                    <h5><i class="icon fas fa-info"></i> Instructions</h5>
+                    <ol>
+                        <li>Download the template file by clicking the button below</li>
+                        <li>Fill in the student and parent information</li>
+                        <li>Save the file and upload it using the form below</li>
+                    </ol>
+                    <a asp-action="DownloadTemplate" class="btn btn-primary mt-2">
+                        <i class="fas fa-file-excel"></i> Download Template
+                    </a>
+                </div>
+
+                @if (ViewBag.ImportResult != null)
+                {
+                    var result = ViewBag.ImportResult as SchoolPortalApp.Models.StudentImportResult;
+                    if (result.Success)
+                    {
+                        <div class="alert alert-success">
+                            <h5><i class="icon fas fa-check"></i> Import Completed</h5>
+                            <p>@result.Message</p>
+                            @if (result.ErrorCount > 0)
+                            {
+                                <p>Please review the following errors:</p>
+                                <ul>
+                                    @foreach (var error in result.Errors)
+                                    {
+                                        <li>@error</li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <h5><i class="icon fas fa-ban"></i> Import Failed</h5>
+                            <p>@result.Message</p>
+                            @if (result.Errors != null && result.Errors.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var error in result.Errors)
+                                    {
+                                        <li>@error</li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
+                }
+
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload Excel File</h3>
+                    </div>
+                    <form asp-action="Import" method="post" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <div class="form-group">
+                                <label asp-for="ExcelFile" class="control-label"></label>
+                                <div class="custom-file">
+                                    <input asp-for="ExcelFile" class="custom-file-input" accept=".xlsx,.xls" />
+                                    <label class="custom-file-label" for="ExcelFile">Choose file</label>
+                                    <span asp-validation-for="ExcelFile" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload and Import
+                            </button>
+                            <a asp-action="Index" class="btn btn-default">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Update the file input label with the selected file name
+        $(document).ready(function() {
+            $(".custom-file-input").on("change", function() {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            });
+        });
+    </script>
+}
