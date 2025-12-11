@@ -3,9 +3,14 @@
 	ViewData["Title"] = "Students";
 }
 <h2>Students</h2>
-<p>
-	<a class="btn btn-primary" asp-controller="StudentMaster" asp-action="Create">Create New</a>
-</p>
+<div class="mb-3">
+    <a class="btn btn-primary" asp-controller="StudentMaster" asp-action="Create">
+        <i class="fas fa-plus"></i> Create New
+    </a>
+    <a class="btn btn-success" asp-controller="StudentMaster" asp-action="Import">
+        <i class="fas fa-file-import"></i> Import from Excel
+    </a>
+</div>
 <table class="table table-striped">
 	<thead>
 		<tr>

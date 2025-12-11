@@ -1,172 +1,128 @@
 @model SchoolPortalApp.Models.TeacherSubjectDetailsViewModel
 @{
-    ViewData["Title"] = "Create Teacher Subject Details";
+	ViewData["Title"] = "Create Teacher Subject Details";
 }
+<h2>Create Teacher Subject Details</h2>
+<form asp-action="Create" method="post">
+	@Html.AntiForgeryToken()
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<div class="card">
-    <div class="card-header">
-        <h2>Create Teacher Subject Details</h2>
-    </div>
-    <div class="card-body">
-        <form asp-action="Create" method="post" id="teacherSubjectForm">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+	<div class="mb-3">
+		<label asp-for="TeacherId" class="form-label"></label>
+		<select asp-for="TeacherId" class="form-select" asp-items="Model.Teachers"></select>
+		<span asp-validation-for="TeacherId" class="text-danger"></span>
+	</div>
 
-            <!-- Teacher Dropdown -->
-            <div class="mb-4">
-                <label asp-for="TeacherId" class="form-label fw-bold">Teacher *</label>
-                @if (Model.Teachers?.Any() == true)
-                {
-                    <select asp-for="TeacherId" class="form-select" asp-items="Model.Teachers" required>
-                        <option value="">-- Select Teacher --</option>
-                    </select>
-                }
-                else
-                {
-                    <div class="alert alert-warning mb-3">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>No teachers available. Please add teachers first.
-                    </div>
-                    <a asp-controller="Teachers" asp-action="Create" class="btn btn-outline-primary mb-3">
-                        <i class="bi bi-plus-circle"></i> Add New Teacher
-                    </a>
-                    <input type="hidden" asp-for="TeacherId" />
-                }
-                <span asp-validation-for="TeacherId" class="text-danger"></span>
-            </div>
+	<div class="mb-3">
+		<label asp-for="ClassId" class="form-label"></label>
+		<select asp-for="ClassId" class="form-select" asp-items="Model.Classes"></select>
+		<span asp-validation-for="ClassId" class="text-danger"></span>
+	</div>
 
-            <!-- Class Dropdown -->
-            <div class="mb-4">
-                <label asp-for="ClassId" class="form-label fw-bold">Class *</label>
-                <select asp-for="ClassId" class="form-select" asp-items="Model.Classes" required>
-                    <option value="">-- Select Class --</option>
-                </select>
-                <span asp-validation-for="ClassId" class="text-danger"></span>
-            </div>
+	<div class="mb-3">
+		<label asp-for="SubjectId" class="form-label"></label>
+		<select asp-for="SubjectId" class="form-select" asp-items="Model.Subjects"></select>
+		<span asp-validation-for="SubjectId" class="text-danger"></span>
+	</div>
 
-            <!-- Subject Dropdown -->
-            <div class="mb-4">
-                <label asp-for="SubjectId" class="form-label fw-bold">Subject *</label>
-                <select asp-for="SubjectId" class="form-select" asp-items="Model.Subjects" required>
-                    <option value="">-- Select Subject --</option>
-                </select>
-                <span asp-validation-for="SubjectId" class="text-danger"></span>
-            </div>
+	<div class="mb-3">
+		<div class="form-check">
+			<input asp-for="IsActive" class="form-check-input" />
+			<label asp-for="IsActive" class="form-check-label"></label>
+		</div>
+	</div>
 
-            <!-- Is Active Toggle -->
-            <div class="mb-4">
-                <div class="form-check form-switch">
-                    <input asp-for="IsActive" class="form-check-input" role="switch" id="isActiveSwitch" checked>
-                    <label class="form-check-label fw-bold" for="isActiveSwitch">Active</label>
-                </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary px-4">
-                    <i class="bi bi-save me-2"></i>Save
-                </button>
-                <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-x-circle me-2"></i>Cancel
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Styles {
-    <style>
-        .form-select {
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            border: 1px solid #ced4da;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-
-        .form-select:focus {
-            border-color: #86b7fe;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
-
-        .alert-warning {
-            background-color: #fff3cd;
-            border-color: #ffeeba;
-            color: #856404;
-        }
-
-        .card {
-            border: none;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
-        .card-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-    </style>
-}
-
+	<button type="submit" class="btn btn-primary">Create</button>
+	<a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function() {
-            // Initialize form validation
-            $('form').validate({
-                errorClass: 'is-invalid',
-                validClass: 'is-valid',
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.mb-4').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass(errorClass).removeClass(validClass);
-                    $(element).closest('.mb-4').find('.select2-container').addClass(errorClass);
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass(errorClass).addClass(validClass);
-                    $(element).closest('.mb-4').find('.select2-container').removeClass(errorClass);
-                }
-            });
-
-            // Add required attribute to select elements
-            $('select[required]').on('change', function() {
-                $(this).valid();
-            });
-
-			// Handle class change event
-            $('#ClassId').change(function() {
-                var classId = $(this).val();
-                var subjectDropdown = $('#SubjectId');
-                
-                if (classId) {
-                    // Show loading state
-                    subjectDropdown.prop('disabled', true)
-                                 .html('<option value="">Loading subjects...</option>');
-                    
-                    // Fetch subjects for the selected class
-                    $.getJSON('@Url.Action("GetSubjectsByClass", "TeacherSubjectDetails")/' + classId, function(data) {
-                        var options = '<option value="">-- Select Subject --</option>';
-                        $.each(data, function() {
-                            options += '<option value="' + this.id + '">' + this.text + '</option>';
-                        });
-                        
-                        subjectDropdown.html(options)
-                                     .prop('disabled', false);
-                    }).fail(function() {
-                        alert('Error loading subjects');
-                        subjectDropdown.html('<option value="">-- Error loading subjects --</option>')
-                                     .prop('disabled', false);
-                    });
-                } else {
-                    subjectDropdown.html('<option value="">-- Select Class First --</option>')
-                                 .prop('disabled', true);
-                }
-            });
-
-            // Trigger change event on page load if class is already selected
-            if ($('#ClassId').val()) {
-                $('#ClassId').trigger('change');
-            }
-        });
-    </script>
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		$(document).ready(function () {
+			// Handle Class dropdown change event
+			$('#ClassId').change(function () {
+				var classId = $(this).val();
+				var subjectDropdown = $('#SubjectId');
+				
+				// Clear and disable the Subject dropdown while loading
+				subjectDropdown.empty().prop('disabled', true);
+				
+				if (classId) {
+					console.log('Class selected, loading subjects for class ID:', classId);
+					
+					// Show loading state
+					subjectDropdown.append($('<option/>', {
+						value: '',
+						text: 'Loading subjects...'
+					}));
+					
+					// Make AJAX call to get subjects for the selected class
+					$.ajax({
+						url: '/TeacherSectionDetails/GetSubjectsByClass',
+						type: 'GET',
+						data: { classId: classId },
+						dataType: 'json',
+						success: function(data) {
+							console.log('Subjects loaded successfully:', data);
+							
+							// Clear the loading message
+							subjectDropdown.empty();
+							
+							// Add default option
+							subjectDropdown.append($('<option/>', {
+								value: '',
+								text: '-- Select Subject --'
+							}));
+							
+							if (data && data.length > 0) {
+								// Add subjects to the dropdown
+								$.each(data, function (i, item) {
+									subjectDropdown.append($('<option/>', {
+										value: item.value,
+										text: item.text
+									}));
+								});
+								console.log('Added ' + data.length + ' subjects to the dropdown');
+							} else {
+								console.warn('No subjects found for the selected class');
+								subjectDropdown.append($('<option/>', {
+									value: '',
+									text: 'No subjects available',
+									disabled: true
+								}));
+							}
+							
+							// Enable the dropdown
+							subjectDropdown.prop('disabled', false);
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							console.error('AJAX Error:', {
+								status: jqXHR.status,
+								statusText: jqXHR.statusText,
+								responseText: jqXHR.responseText,
+								textStatus: textStatus,
+								errorThrown: errorThrown
+							});
+							
+							subjectDropdown.empty().append($('<option/>', {
+								value: '',
+								text: 'Error loading subjects',
+								disabled: true
+							}));
+							
+							alert('Error loading subjects. Please check the console for more details.');
+						}
+					});
+				} else {
+					// If no class is selected, disable the subject dropdown
+					subjectDropdown.empty().prop('disabled', true);
+				}
+			});
+			
+			// Trigger change event on page load if a class is already selected
+			if ($('#ClassId').val()) {
+				$('#ClassId').trigger('change');
+			}
+		});
+	</script>
 }

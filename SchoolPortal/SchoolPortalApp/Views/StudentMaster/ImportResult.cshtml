@@ -1,0 +1,95 @@
+@model SchoolPortalApp.Models.StudentImportResult
+
+@{
+    ViewData["Title"] = "Import Results";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Import Results</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                @if (Model.Success)
+                {
+                    <div class="alert alert-success">
+                        <h4><i class="icon fas fa-check"></i> Import Completed Successfully!</h4>
+                        <p>@Model.Message</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <h4><i class="icon fas fa-exclamation-triangle"></i> Import Completed with Errors</h4>
+                        <p>@Model.Message</p>
+                    </div>
+                }
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Import Summary</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Total Records</th>
+                                <td>@Model.TotalRecords</td>
+                            </tr>
+                            <tr class="table-success">
+                                <th>Successfully Imported</th>
+                                <td>@Model.SuccessCount</td>
+                            </tr>
+                            @if (Model.ErrorCount > 0)
+                            {
+                                <tr class="table-danger">
+                                    <th>Errors</th>
+                                    <td>@Model.ErrorCount</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+                @if (Model.Errors != null && Model.Errors.Count > 0)
+                {
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Error Details</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Error Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Errors.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@(i + 1)</td>
+                                                <td>@Model.Errors[i]</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="mt-4 text-center">
+                    <a asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-list"></i> Back to Student List
+                    </a>
+                    <a asp-action="Import" class="btn btn-success">
+                        <i class="fas fa-file-import"></i> Import Another File
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
