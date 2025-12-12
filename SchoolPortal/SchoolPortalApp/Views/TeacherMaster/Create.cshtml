@@ -171,6 +171,7 @@
 			const citySel = document.getElementById('Master_CityId');
 
 			function clearSelect(sel, placeholder) {
+				if (!sel) return;
 				sel.innerHTML = '';
 				const opt = document.createElement('option');
 				opt.value = '';
@@ -183,13 +184,93 @@
 				sel.disabled = !!disabled;
 			}
 
+			function loadStates(countryId, selectedStateId) {
+				if (!countryId) {
+					clearSelect(stateSel, '-- Select State --');
+					clearSelect(citySel, '-- Select City --');
+					setDisabled(stateSel, true);
+					setDisabled(citySel, true);
+					return Promise.resolve();
+				}
+
+				return fetch(`/TeacherMaster/GetStatesByCountry/${countryId}`)
+					.then(r => r.ok ? r.json() : Promise.reject(r))
+					.then(items => {
+						clearSelect(stateSel, '-- Select State --');
+						items.forEach(x => {
+							const opt = document.createElement('option');
+							opt.value = x.value;
+							opt.textContent = x.text;
+							if (selectedStateId && x.value === selectedStateId) {
+								opt.selected = true;
+							}
+							stateSel.appendChild(opt);
+						});
+						setDisabled(stateSel, false);
+						return items;
+					})
+					.catch(() => {
+						clearSelect(stateSel, '-- Select State --');
+						setDisabled(stateSel, true);
+						return [];
+					});
+			}
+
+			function loadCities(stateId, selectedCityId) {
+				if (!stateId) {
+					clearSelect(citySel, '-- Select City --');
+					setDisabled(citySel, true);
+					return Promise.resolve();
+				}
+
+				return fetch(`/TeacherMaster/GetCitiesByState/${stateId}`)
+					.then(r => r.ok ? r.json() : Promise.reject(r))
+					.then(items => {
+						clearSelect(citySel, '-- Select City --');
+						items.forEach(x => {
+							const opt = document.createElement('option');
+							opt.value = x.value;
+							opt.textContent = x.text;
+							if (selectedCityId && x.value === selectedCityId) {
+								opt.selected = true;
+							}
+							citySel.appendChild(opt);
+						});
+						setDisabled(citySel, false);
+						return items;
+					})
+					.catch(() => {
+						clearSelect(citySel, '-- Select City --');
+						setDisabled(citySel, true);
+						return [];
+					});
+			}
+
+			// Initialize the form
 			(function init() {
-				const hasCountry = !!(countrySel && countrySel.value);
-				const hasState = !!(stateSel && stateSel.value);
-				setDisabled(stateSel, !hasCountry);
-				setDisabled(citySel, !hasState);
+				const countryId = countrySel ? countrySel.value : null;
+				const stateId = stateSel ? stateSel.value : null;
+				const cityId = citySel ? citySel.value : null;
+
+				if (countryId) {
+					// If we have a country selected, load its states
+					loadStates(countryId, stateId)
+						.then(() => {
+							if (stateId) {
+								// If we have a state selected, load its cities
+								return loadCities(stateId, cityId);
+							}
+							return null;
+						})
+						.catch(console.error);
+				} else {
+					// No country selected, disable state and city dropdowns
+					setDisabled(stateSel, true);
+					setDisabled(citySel, true);
+				}
 			})();
 
+			// Country change handler
 			countrySel && countrySel.addEventListener('change', function () {
 				const cid = this.value;
 				clearSelect(stateSel, '-- Select State --');
@@ -197,35 +278,16 @@
 				setDisabled(stateSel, !cid);
 				setDisabled(citySel, true);
 				if (!cid) return;
-				fetch(`/TeacherMaster/GetStatesByCountry/${cid}`)
-					.then(r => r.ok ? r.json() : Promise.reject(r))
-					.then(items => {
-						items.forEach(x => {
-							const opt = document.createElement('option');
-							opt.value = x.value; opt.textContent = x.text;
-							stateSel.appendChild(opt);
-						});
-						setDisabled(stateSel, false);
-					})
-					.catch(() => { setDisabled(stateSel, true); });
+				loadStates(cid);
 			});
 
+			// State change handler
 			stateSel && stateSel.addEventListener('change', function () {
 				const sid = this.value;
 				clearSelect(citySel, '-- Select City --');
 				setDisabled(citySel, !sid);
 				if (!sid) return;
-				fetch(`/TeacherMaster/GetCitiesByState/${sid}`)
-					.then(r => r.ok ? r.json() : Promise.reject(r))
-					.then(items => {
-						items.forEach(x => {
-							const opt = document.createElement('option');
-							opt.value = x.value; opt.textContent = x.text;
-							citySel.appendChild(opt);
-						});
-						setDisabled(citySel, false);
-					})
-					.catch(() => { setDisabled(citySel, true); });
+				loadCities(sid);
 			});
 
 			// Dynamic rows for documents
