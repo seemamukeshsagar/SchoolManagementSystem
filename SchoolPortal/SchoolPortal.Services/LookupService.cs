@@ -398,7 +398,7 @@ namespace SchoolPortal.Services
 			}
 		}
 
-		public IEnumerable<ClassMaster> GetClasses()
+		public List<ClassMaster> GetClasses()
 		{
 			try
 			{
@@ -407,14 +407,14 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToClassMasterList(dt);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				// Log the exception if needed
 				return new List<ClassMaster>();
 			}
 		}
 
-		public IEnumerable<SectionMaster> GetSections()
+		public List<SectionMaster> GetSections()
 		{
 			try
 			{
@@ -423,28 +423,28 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToSectionMasterList(dt);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				// Log the exception if needed
 				return new List<SectionMaster>();
 			}
 		}
 
-		public IEnumerable<LocationMaster> GetLocations()
+		public List<LocationMaster> GetLocations()
 		{
 			try
 			{
 				Proc p = new Proc("LocationMaster_GetAll");
 				var dt = new DataTable();
 				p.Exec(dt);
-				return MapToLocationList(dt);
+				return MapToLocationMasterList(dt);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				// Log the exception if needed
 				return new List<LocationMaster>();
 			}
-		}
+		}	
 
 		private List<ClassMaster> MapToClassMasterList(DataTable dt)
 		{
@@ -452,7 +452,8 @@ namespace SchoolPortal.Services
 			foreach (DataRow row in dt.Rows)
 			{
 				var item = new ClassMaster();
-				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
+				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) 
+					item.Id = id;
 				item.Name = row["Name"]?.ToString() ?? string.Empty;
 				// Map other properties as needed
 				list.Add(item);
@@ -466,7 +467,24 @@ namespace SchoolPortal.Services
 			foreach (DataRow row in dt.Rows)
 			{
 				var item = new SectionMaster();
-				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
+				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) 
+					item.Id = id;
+				item.Name = row["Name"]?.ToString() ?? string.Empty;
+				// ClassId is not a property of SectionMaster - relationship is managed through ClassSectionDetail
+				// Map other properties as needed
+				list.Add(item);
+			}
+			return list;
+		}
+
+		private List<LocationMaster> MapToLocationMasterList(DataTable dt)
+		{
+			var list = new List<LocationMaster>();
+			foreach (DataRow row in dt.Rows)
+			{
+				var item = new LocationMaster();
+				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) 
+					item.Id = id;
 				item.Name = row["Name"]?.ToString() ?? string.Empty;
 				// Map other properties as needed
 				list.Add(item);
@@ -474,29 +492,91 @@ namespace SchoolPortal.Services
 			return list;
 		}
 
-		private List<LocationMaster> MapToLocationList(DataTable dt)
+        public List<StudentMaster> GetStudents(Guid schoolId)
 		{
-			var list = new List<LocationMaster>();
+			try
+			{
+				Proc p = new Proc("StudentMaster_GetBySchool");
+				p["@SchoolId"] = schoolId;
+				var dt = new DataTable();
+				p.Exec(dt);
+				return MapToStudentMasterList(dt);
+			}
+			catch (Exception ex)
+			{
+				// Log the exception if needed
+				return new List<StudentMaster>();
+			}
+		}
+
+		public List<AttendanceReasonMaster> GetAttendanceReasons(Guid schoolId)
+		{
+			try
+			{
+				Proc p = new Proc("AttendanceReason_GetBySchool");
+				p["@SchoolId"] = schoolId;
+				var dt = new DataTable();
+				p.Exec(dt);
+				return MapToAttendanceReasonList(dt);
+			}
+			catch (Exception ex)
+			{
+				// Log the exception if needed
+				return new List<AttendanceReasonMaster>();
+			}
+		}
+
+		// Add these new mapping methods
+		private List<StudentMaster> MapToStudentMasterList(DataTable dt)
+		{
+			var list = new List<StudentMaster>();
 			foreach (DataRow row in dt.Rows)
 			{
-				var item = new LocationMaster();
-				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) item.Id = id;
-				item.Name = row["Name"]?.ToString() ?? string.Empty;
-				item.Code = row["Code"]?.ToString() ?? string.Empty;
-				if (Guid.TryParse(row["CityId"]?.ToString(), out var cityId)) item.CityId = cityId;
-				if (Guid.TryParse(row["CompanyId"]?.ToString(), out var companyId)) item.CompanyId = companyId;
-				if (Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId)) item.SchoolId = schoolId;
-				if (bool.TryParse(row["IsActive"]?.ToString(), out var isActive)) item.IsActive = isActive;
-				if (bool.TryParse(row["IsDeleted"]?.ToString(), out var isDeleted)) item.IsDeleted = isDeleted;
-				if (Guid.TryParse(row["CreatedBy"]?.ToString(), out var createdBy)) item.CreatedBy = createdBy;
-				if (DateTime.TryParse(row["CreatedDate"]?.ToString(), out var createdDate)) item.CreatedDate = createdDate;
-				if (row["ModifiedBy"] != DBNull.Value && Guid.TryParse(row["ModifiedBy"]?.ToString(), out var modifiedBy)) item.ModifiedBy = modifiedBy;
-				if (row["ModifiedDate"] != DBNull.Value && DateTime.TryParse(row["ModifiedDate"]?.ToString(), out var modifiedDate)) item.ModifiedDate = modifiedDate;
-				item.Status = row["Status"]?.ToString();
-				item.StatusMessage = row["StatusMessage"]?.ToString();
+				var item = new StudentMaster();
+				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) 
+					item.Id = id;
+				item.FirstName = row["FirstName"]?.ToString() ?? string.Empty;
+				item.LastName = row["LastName"]?.ToString() ?? string.Empty;
+				// Map other properties as needed
 				list.Add(item);
 			}
 			return list;
 		}
-	}
+
+		private List<AttendanceReasonMaster> MapToAttendanceReasonList(DataTable dt)
+		{
+			var list = new List<AttendanceReasonMaster>();
+			foreach (DataRow row in dt.Rows)
+			{
+				var item = new AttendanceReasonMaster();
+				if (Guid.TryParse(row["Id"]?.ToString(), out var id)) 
+					item.Id = id;
+				item.Name = row["Name"]?.ToString() ?? string.Empty;
+				item.Description = row["Description"]?.ToString() ?? string.Empty;
+				// Map other properties as needed
+				list.Add(item);
+			}
+			return list;
+		}
+
+		public async Task<List<StudentMaster>> GetStudentsAsync(Guid schoolId)
+		{
+			return await Task.Run(() => GetStudents(schoolId));
+		}
+
+		public async Task<List<ClassMaster>> GetClassesAsync()
+		{
+			return await Task.Run(() => GetClasses());
+		}
+
+		public async Task<List<SectionMaster>> GetSectionsAsync()
+		{
+			return await Task.Run(() => GetSections());
+		}
+		
+		public async Task<List<AttendanceReasonMaster>> GetAttendanceReasonsAsync(Guid schoolId)
+		{
+			return await Task.Run(() => GetAttendanceReasons(schoolId));
+		}
+    }
 }

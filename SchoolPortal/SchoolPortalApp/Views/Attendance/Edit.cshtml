@@ -1,0 +1,182 @@
+@model SchoolPortalApp.Models.Attendance.AttendanceViewModel
+
+@{
+    ViewData["Title"] = "Edit Attendance Record";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">Attendance Records</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Attendance Details</h3>
+                    </div>
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="EmployeeId" class="control-label"></label>
+                                        <select asp-for="EmployeeId" class="form-control select2" style="width: 100%;">
+                                            @foreach (var employee in Model.Employees)
+                                            {
+                                                <option value="@employee.Value" selected="@(employee.Value == Model.EmployeeId.ToString())">@employee.Text</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AttendanceDate" class="control-label"></label>
+                                        <div class="input-group date" id="attendanceDate" data-target-input="nearest">
+                                            <input type="text" asp-for="AttendanceDate" class="form-control datetimepicker-input" data-target="#attendanceDate" value="@Model.AttendanceDate.ToString("dd/MM/yyyy")" />
+                                            <div class="input-group-append" data-target="#attendanceDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="AttendanceDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" asp-for="AttendanceMarked" />
+                                            <label class="custom-control-label" asp-for="AttendanceMarked"></label>
+                                        </div>
+                                        <span asp-validation-for="AttendanceMarked" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AttendanceTime" class="control-label"></label>
+                                        <div class="input-group date" id="attendanceTime" data-target-input="nearest">
+                                            <input type="text" asp-for="AttendanceTime" class="form-control datetimepicker-input" data-target="#attendanceTime" />
+                                            <div class="input-group-append" data-target="#attendanceTime" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="AttendanceTime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="LeaveTypeId" class="control-label"></label>
+                                        <select asp-for="LeaveTypeId" class="form-control select2" style="width: 100%;">
+                                            @foreach (var leaveType in Model.LeaveTypes)
+                                            {
+                                                <option value="@leaveType.Value" selected="@(leaveType.Value == Model.LeaveTypeId?.ToString())">@leaveType.Text</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IsHalfDay" class="control-label"></label>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" asp-for="IsHalfDay" />
+                                            <label class="form-check-label" asp-for="IsHalfDay">Is Half Day?</label>
+                                        </div>
+                                        <span asp-validation-for="IsHalfDay" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-default">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(function () {
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+
+            // Initialize date picker
+            $('#attendanceDate').datetimepicker({
+                format: 'DD/MM/YYYY',
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'far fa-calendar-check',
+                    clear: 'far fa-trash-alt',
+                    close: 'fas fa-times'
+                }
+            });
+
+            // Initialize time picker
+            $('#attendanceTime').datetimepicker({
+                format: 'HH:mm',
+                stepping: 15,
+                icons: {
+                    time: 'far fa-clock',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'far fa-calendar-check',
+                    clear: 'far fa-trash-alt',
+                    close: 'fas fa-times'
+                }
+            });
+
+            // Toggle leave type field based on attendance marked
+            $('#AttendanceMarked').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#LeaveTypeId').val('').trigger('change');
+                    $('#LeaveTypeId').prop('disabled', true);
+                } else {
+                    $('#LeaveTypeId').prop('disabled', false);
+                }
+            }).trigger('change');
+        });
+    </script>
+}

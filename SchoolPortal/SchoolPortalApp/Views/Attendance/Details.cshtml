@@ -1,0 +1,154 @@
+@model SchoolPortalApp.Models.Attendance.AttendanceDetailsViewModel
+
+@{
+    ViewData["Title"] = "Attendance Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">Attendance Records</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Attendance Information</h3>
+                        <div class="card-tools">
+                            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EmployeeName)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.EmployeeName)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AttendanceDate)</dt>
+                            <dd class="col-sm-8">@Model.AttendanceDate.ToString("dd/MM/yyyy")</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AttendanceMarked)</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.AttendanceMarked)
+                                {
+                                    <span class="badge bg-success">Present</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Absent</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.LeaveType)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.LeaveType)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.IsHalfDay)</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.IsHalfDay.HasValue)
+                                {
+                                    if (Model.IsHalfDay.Value)
+                                    {
+                                        <span class="badge bg-warning">Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">No</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AttendanceTime)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.AttendanceTime)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.Status == "ACT")
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else if (Model.Status == "INA")
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@Model.Status</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Audit Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CreatedByName)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedByName)</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+                            <dd class="col-sm-8">@Model.CreatedDate.ToString("g")</dd>
+
+                            @if (Model.ModifiedBy.HasValue)
+                            {
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ModifiedByName)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.ModifiedByName)</dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ModifiedDate)</dt>
+                                <dd class="col-sm-8">@(Model.ModifiedDate?.ToString("g") ?? "-")</dd>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+                            {
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.StatusMessage)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.StatusMessage)</dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card-footer">
+                    <a href="@Url.Action("Index")" class="btn btn-default">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Any additional JavaScript for the details view can go here
+        });
+    </script>
+}

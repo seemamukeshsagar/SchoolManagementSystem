@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using Microsoft.Extensions.Logging;
 
 namespace SchoolPortal.Services
 {
@@ -141,9 +143,9 @@ namespace SchoolPortal.Services
 			p.Exec(dt);
 			if (dt.Rows.Count == 0) return null;
 			return Map(dt.Rows[0]);
-		}
+		}        
 
-		public bool CategoryExists(Guid categoryId)
+        public bool CategoryExists(Guid categoryId)
 		{
 			if (categoryId == Guid.Empty) return false;
 			
@@ -390,6 +392,102 @@ namespace SchoolPortal.Services
 			var ret = p.Parameters["@RETURN_VALUE"].Value;
 			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
 			return code == 1;
+		}
+
+        public async Task<StudentAttendanceDetails?> GetByIdAsync(Guid id)
+        {
+            using (var p = new Proc("Student_GetById"))
+            {
+                p["@Id"] = id;
+                var dt = new DataTable();
+                p.Exec(dt);   // If ExecAsync exists, use: await p.ExecAsync(dt);
+
+                if (dt.Rows.Count == 0)
+                    return null;
+
+                DataRow row = dt.Rows[0];
+
+                return new StudentAttendanceDetails
+                {
+                    Id = row.Field<Guid>("Id"),
+                    StudentGUID = row.Field<Guid>("StudentId"),
+                    AttendenceDate = row.Field<DateTime>("AttendanceDate"),
+                    AttendenceStatus = row.Field<bool>("IsPresent"),
+                    AttendanceReasonId = row.Field<Guid>("ReasonId"),
+                    //Comments = row.Field<string?>("Comments")
+                };
+            }
+        }
+
+        public async Task<Guid> CreateAsync(StudentAttendanceDetails attendance)
+		{
+			if (attendance == null)
+				throw new ArgumentNullException(nameof(attendance));
+
+			return await Task.Run(() =>
+			{
+				using (Proc p = new Proc("StudentAttendance_Create"))
+				{
+					var id = Guid.NewGuid();
+					p["@Id"] = id;
+					p["@StudentId"] = attendance.StudentGUID;
+					p["@AttendanceDate"] = attendance.AttendenceDate;
+					p["@IsPresent"] = attendance.AttendenceStatus;
+					p["@ReasonId"] = attendance.AttendanceReasonId;
+					p["@Comments"] = string.Empty;
+
+					p.Exec();
+					return id;
+				}
+			});
+		}
+
+		public async Task<bool> UpdateAsync(StudentAttendanceDetails attendance)
+		{
+			if (attendance == null)
+				throw new ArgumentNullException(nameof(attendance));
+
+			return await Task.Run(() =>
+			{
+				using (Proc p = new Proc("StudentAttendance_Update"))
+				{
+					p["@Id"] = attendance.Id;
+					p["@IsPresent"] = attendance.AttendenceStatus;
+					p["@ReasonId"] = attendance.AttendanceReasonId;
+					p["@Comments"] = attendance.Status ?? string.Empty;
+
+					DataTable dt = new DataTable();
+					p.e
+                    return p.Exec() > 0;
+				}
+			});
+		}
+
+		public async Task<bool> DeleteAsync(Guid id)
+		{
+			return await Task.Run(() =>
+			{
+				using (Proc p = new Proc("StudentAttendance_Delete"))
+				{
+					p["@Id"] = id;
+					return p.ExecWithReturnValue() > 0;
+				}
+			});
+		}
+
+		private StudentAttendanceDetails MapToStudentAttendanceDetails(DataRow row)
+		{
+			if (row == null) return null;
+			return new StudentAttendanceDetails
+			{
+				Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+				StudentGUID = row["StudentId"] != DBNull.Value ? (Guid)row["StudentId"] : Guid.Empty,
+				AttendenceDate = row["AttendanceDate"] != DBNull.Value ? Convert.ToDateTime(row["AttendanceDate"]) : DateTime.MinValue,
+				Status = row["IsPresent"] != DBNull.Value && Convert.ToBoolean(row["IsPresent"]),
+				ReasonId = row["ReasonId"] != DBNull.Value ? (Guid?)row["ReasonId"] : null,
+				Comments = row["Comments"]?.ToString(),
+				// Add other properties as needed
+			};
 		}
 	}
 }

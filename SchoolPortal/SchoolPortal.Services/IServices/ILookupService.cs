@@ -35,8 +35,14 @@ namespace SchoolPortal.Services.IServices
 		List<LookupItem> GetReligions();
 		List<LookupItem> GetMaritalStatuses();
 		List<LookupItem> GetSchoolBoards();
-		IEnumerable<ClassMaster> GetClasses();
-		IEnumerable<SectionMaster> GetSections();
-		IEnumerable<LocationMaster> GetLocations();
+		List<ClassMaster> GetClasses();
+		List<SectionMaster> GetSections();
+		List<LocationMaster> GetLocations();
+		List<StudentMaster> GetStudents(Guid schoolId);
+		List<AttendanceReasonMaster> GetAttendanceReasons(Guid schoolId);
+		Task<List<StudentMaster>> GetStudentsAsync(Guid schoolId);
+		Task<List<ClassMaster>> GetClassesAsync();
+		Task<List<SectionMaster>> GetSectionsAsync();
+		Task<List<AttendanceReasonMaster>> GetAttendanceReasonsAsync(Guid schoolId);
 	}
 }

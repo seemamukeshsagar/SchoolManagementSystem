@@ -7,10 +7,10 @@ namespace SchoolPortal.Services.IServices
 	public interface IStudentService
 	{
 		List<StudentMaster> GetAll(Guid? schoolId = null);
-		StudentMaster? GetById(Guid id);
-		Guid Create(StudentMaster student);
-		bool Update(StudentMaster student);
-		bool Delete(Guid id);
+		Task<StudentAttendanceDetails> GetByIdAsync(Guid id);
+		Task<Guid> CreateAsync(StudentAttendanceDetails attendance);
+		Task<bool> UpdateAsync(StudentAttendanceDetails attendance);
+		Task<bool> DeleteAsync(Guid id);
 		bool CategoryExists(Guid categoryId);
 	}
 }
