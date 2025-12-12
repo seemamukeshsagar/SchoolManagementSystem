@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.IServices
 {
-	public interface IStudentService
-	{
-		List<StudentMaster> GetAll(Guid? schoolId = null);
-		Task<StudentAttendanceDetails> GetByIdAsync(Guid id);
-		Task<Guid> CreateAsync(StudentAttendanceDetails attendance);
-		Task<bool> UpdateAsync(StudentAttendanceDetails attendance);
-		Task<bool> DeleteAsync(Guid id);
-		bool CategoryExists(Guid categoryId);
-	}
+    public interface IStudentService
+    {
+        // Standard async methods
+        Task<List<StudentMaster>> GetAllAsync(Guid? schoolId = null);
+        Task<StudentMaster> GetByIdAsync(Guid id);
+        Task<Guid> CreateAsync(StudentMaster student);
+        Task<bool> UpdateAsync(StudentMaster student);
+        Task<bool> DeleteAsync(Guid id);
+        Task<bool> CategoryExistsAsync(Guid categoryId);
+    }
 }
