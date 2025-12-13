@@ -1,667 +1,1068 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
-using Microsoft.Extensions.Logging;
-using System.Linq;
+using System.Security.Claims;
+using SchoolPortal.Entities.ViewModels;
+using SchoolPortal.Entities;
 
 namespace SchoolPortal.Services
 {
-    public class StudentService : IStudentService
-    {
-        private readonly ILookupService _lookupService;
-
-        public StudentService(ILookupService lookupService)
-        {
-            _lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
-        }
-
-        private static StudentMaster Map(DataRow r)
-        {
-            var s = new StudentMaster();
-
-            // Identifiers
-            if (r.Table.Columns.Contains("Id") && Guid.TryParse(r["Id"]?.ToString(), out var id)) s.Id = id;
-            if (r.Table.Columns.Contains("RollNumber") && Guid.TryParse(r["RollNumber"]?.ToString(), out var roll)) s.RollNumber = roll;
-
-            // Core info
-            s.FirstName = r.Table.Columns.Contains("FirstName") ? r["FirstName"]?.ToString() ?? string.Empty : string.Empty;
-            s.LastName = r.Table.Columns.Contains("LastName") ? r["LastName"]?.ToString() ?? string.Empty : string.Empty;
-            s.Email = r.Table.Columns.Contains("Email") ? r["Email"]?.ToString() ?? string.Empty : string.Empty;
-            s.Phone = r.Table.Columns.Contains("Phone") ? r["Phone"]?.ToString() ?? string.Empty : string.Empty;
-
-            // Address & contact
-            s.Address = r.Table.Columns.Contains("Address") ? r["Address"]?.ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("CityId") && Guid.TryParse(r["CityId"]?.ToString(), out var cityId)) s.CityId = cityId;
-            if (r.Table.Columns.Contains("StateId") && Guid.TryParse(r["StateId"]?.ToString(), out var stateId)) s.StateId = stateId;
-            if (r.Table.Columns.Contains("CountryId") && Guid.TryParse(r["CountryId"]?.ToString(), out var countryId)) s.CountryId = countryId;
-            s.ZipCode = r.Table.Columns.Contains("ZipCode") ? r["ZipCode"]?.ToString() ?? string.Empty : string.Empty;
-            s.ContactNumber = r.Table.Columns.Contains("ContactNumber") ? r["ContactNumber"]?.ToString() ?? string.Empty : string.Empty;
-            s.EmergencyContactNumber = r.Table.Columns.Contains("EmergencyContactNumber") ? r["EmergencyContactNumber"]?.ToString() ?? string.Empty : string.Empty;
-
-            // Dates & registration
-            if (r.Table.Columns.Contains("DOB") && DateTime.TryParse(r["DOB"]?.ToString(), out var dob)) s.DOB = dob;
-            if (r.Table.Columns.Contains("DOJ") && DateTime.TryParse(r["DOJ"]?.ToString(), out var doj)) s.DOJ = doj;
-            s.RegistrationNumber = r.Table.Columns.Contains("RegistrationNumber") ? r["RegistrationNumber"]?.ToString() ?? string.Empty : string.Empty;
-
-            // Academic
-            if (r.Table.Columns.Contains("ClassId") && Guid.TryParse(r["ClassId"]?.ToString(), out var classId)) s.ClassId = classId;
-            if (r.Table.Columns.Contains("SectionId") && Guid.TryParse(r["SectionId"]?.ToString(), out var sectionId)) s.SectionId = sectionId;
-
-            // Transport & image
-            if (r.Table.Columns.Contains("AvailTransport") && bool.TryParse(r["AvailTransport"]?.ToString(), out var availTransport)) s.AvailTransport = availTransport;
-            s.Image = r.Table.Columns.Contains("Image") ? r["Image"]?.ToString() ?? string.Empty : string.Empty;
-
-            // Category & flags
-            if (r.Table.Columns.Contains("CategoryId") && Guid.TryParse(r["CategoryId"]?.ToString(), out var categoryId)) s.CategoryId = categoryId;
-            if (r.Table.Columns.Contains("SiblingsIfAny") && bool.TryParse(r["SiblingsIfAny"]?.ToString(), out var siblingsIfAny)) s.SiblingsIfAny = siblingsIfAny;
-            if (r.Table.Columns.Contains("SiblingClassId") && Guid.TryParse(r["SiblingClassId"]?.ToString(), out var siblingClassId)) s.SiblingClassId = siblingClassId;
-            if (r.Table.Columns.Contains("Gender") && Guid.TryParse(r["Gender"]?.ToString(), out var gender)) s.Gender = gender;
-
-            // Medical & birth
-            s.DisabilityAny = r.Table.Columns.Contains("DisabilityAny") ? r["DisabilityAny"]?.ToString() ?? string.Empty : string.Empty;
-            s.MedicalAlleryAny = r.Table.Columns.Contains("MedicalAlleryAny") ? r["MedicalAlleryAny"]?.ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("BirthCityId") && Guid.TryParse(r["BirthCityId"]?.ToString(), out var birthCityId)) s.BirthCityId = birthCityId;
-            if (r.Table.Columns.Contains("BirthStateId") && Guid.TryParse(r["BirthStateId"]?.ToString(), out var birthStateId)) s.BirthStateId = birthStateId;
-            if (r.Table.Columns.Contains("BirthCountryId") && Guid.TryParse(r["BirthCountryId"]?.ToString(), out var birthCountryId)) s.BirthCountryId = birthCountryId;
-
-            // Previous school
-            s.PreviousSchoolAttended = r.Table.Columns.Contains("PreviousSchoolAttended") ? r["PreviousSchoolAttended"]?.ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("PreviousSchoolClassId") && Guid.TryParse(r["PreviousSchoolClassId"]?.ToString(), out var prevSchoolClassId)) s.PreviousSchoolClassId = prevSchoolClassId;
-            if (r.Table.Columns.Contains("PreviousSchoolPercentage") && decimal.TryParse(r["PreviousSchoolPercentage"]?.ToString(), out var prevPct)) s.PreviousSchoolPercentage = prevPct;
-            s.PreviousSchoolRank = r.Table.Columns.Contains("PreviousSchoolRank") ? r["PreviousSchoolRank"]?.ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("PreviousSchoolBoardId") && Guid.TryParse(r["PreviousSchoolBoardId"]?.ToString(), out var prevBoardId)) s.PreviousSchoolBoardId = prevBoardId;
-            if (r.Table.Columns.Contains("PreviousSchoolFromDate") && DateTime.TryParse(r["PreviousSchoolFromDate"]?.ToString(), out var prevFrom)) s.PreviousSchoolFromDate = prevFrom;
-            if (r.Table.Columns.Contains("PreviousSchoolToDate") && DateTime.TryParse(r["PreviousSchoolToDate"]?.ToString(), out var prevTo)) s.PreviousSchoolToDate = prevTo;
-            if (r.Table.Columns.Contains("WithdrawnDate") && DateTime.TryParse(r["WithdrawnDate"]?.ToString(), out var withdrawnDate)) s.WithdrawnDate = withdrawnDate;
-            s.WithdrawnReason = r.Table.Columns.Contains("WithdrawnReason") ? r["WithdrawnReason"]?.ToString() ?? string.Empty : string.Empty;
-
-            // Other info
-            if (r.Table.Columns.Contains("BloodGroupId") && Guid.TryParse(r["BloodGroupId"]?.ToString(), out var bloodGroupId)) s.BloodGroupId = bloodGroupId;
-            if (r.Table.Columns.Contains("Nationality") && Guid.TryParse(r["Nationality"]?.ToString(), out var nationality)) s.Nationality = nationality;
-            s.Hobbies = r.Table.Columns.Contains("Hobbies") ? r["Hobbies"]?.ToString() ?? string.Empty : string.Empty;
-            if (r.Table.Columns.Contains("ReligionId") && Guid.TryParse(r["ReligionId"]?.ToString(), out var religionId)) s.ReligionId = religionId;
-
-            // Transport route details
-            if (r.Table.Columns.Contains("RouteId") && Guid.TryParse(r["RouteId"]?.ToString(), out var routeId)) s.RouteId = routeId;
-            if (r.Table.Columns.Contains("RouteStopDetailsId") && Guid.TryParse(r["RouteStopDetailsId"]?.ToString(), out var routeStopDetailsId)) s.RouteStopDetailsId = routeStopDetailsId;
-            if (r.Table.Columns.Contains("ClassTeacherId") && Guid.TryParse(r["ClassTeacherId"]?.ToString(), out var classTeacherId)) s.ClassTeacherId = classTeacherId;
-            if (r.Table.Columns.Contains("RoutePickAndDrop") && bool.TryParse(r["RoutePickAndDrop"]?.ToString(), out var routePickAndDrop)) s.RoutePickAndDrop = routePickAndDrop;
-
-            // Fees
-            if (r.Table.Columns.Contains("FeesDiscountCategoryMasterId") && Guid.TryParse(r["FeesDiscountCategoryMasterId"]?.ToString(), out var feesDiscCatId)) s.FeesDiscountCategoryMasterId = feesDiscCatId;
-            if (r.Table.Columns.Contains("TutionFees") && decimal.TryParse(r["TutionFees"]?.ToString(), out var tutionFees)) s.TutionFees = tutionFees;
-            if (r.Table.Columns.Contains("AnnualFees") && decimal.TryParse(r["AnnualFees"]?.ToString(), out var annualFees)) s.AnnualFees = annualFees;
-            if (r.Table.Columns.Contains("TransportFees") && decimal.TryParse(r["TransportFees"]?.ToString(), out var transportFees)) s.TransportFees = transportFees;
-            if (r.Table.Columns.Contains("UseTransportFees") && bool.TryParse(r["UseTransportFees"]?.ToString(), out var useTransportFees)) s.UseTransportFees = useTransportFees;
-
-            // Session & ownership
-            if (r.Table.Columns.Contains("SessionId") && Guid.TryParse(r["SessionId"]?.ToString(), out var sessionId)) s.SessionId = sessionId;
-            if (r.Table.Columns.Contains("CompanyId") && Guid.TryParse(r["CompanyId"]?.ToString(), out var companyId)) s.CompanyId = companyId;
-            if (r.Table.Columns.Contains("SchoolId") && Guid.TryParse(r["SchoolId"]?.ToString(), out var schoolId)) s.SchoolId = schoolId;
-
-            // Status & audit
-            if (r.Table.Columns.Contains("IsActive") && bool.TryParse(r["IsActive"]?.ToString(), out var isActive)) s.IsActive = isActive;
-            if (r.Table.Columns.Contains("IsDeleted") && bool.TryParse(r["IsDeleted"]?.ToString(), out var isDeleted)) s.IsDeleted = isDeleted;
-            if (r.Table.Columns.Contains("CreatedBy") && Guid.TryParse(r["CreatedBy"]?.ToString(), out var createdBy)) s.CreatedBy = createdBy;
-            if (r.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(r["CreatedDate"]?.ToString(), out var createdDate)) s.CreatedDate = createdDate;
-            if (r.Table.Columns.Contains("ModifiedBy") && Guid.TryParse(r["ModifiedBy"]?.ToString(), out var modifiedBy)) s.ModifiedBy = modifiedBy;
-            if (r.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(r["ModifiedDate"]?.ToString(), out var modifiedDate)) s.ModifiedDate = modifiedDate;
-            s.Status = r.Table.Columns.Contains("Status") ? r["Status"]?.ToString() ?? string.Empty : string.Empty;
-            s.StatusMessage = r.Table.Columns.Contains("StatusMessage") ? r["StatusMessage"]?.ToString() ?? string.Empty : string.Empty;
-
-            // House
-            if (r.Table.Columns.Contains("HouseAllotted") && Guid.TryParse(r["HouseAllotted"]?.ToString(), out var houseAllotted)) s.HouseAllotted = houseAllotted;
-
-            return s;
-        }
-
-        public async Task<List<StudentMaster>> GetAllAsync(Guid? schoolId = null)
-        {
-            return await Task.Run(() => 
-            {
-                var p = new Proc("Student_GetAll");
-                if (schoolId.HasValue)
-                {
-                    p["@SchoolId"] = schoolId.Value;
-                }
-
-                DataTable dt = new DataTable();
-                p.Exec(dt);
-                return dt.Rows.Cast<DataRow>().Select(Map).ToList();
-            });
-        }
-
-        public async Task<StudentMaster> GetByIdAsync(Guid id)
-        {
-            return await Task.Run(() =>
-            {
-                var p = new Proc("Student_GetById");
-                p["@Id"] = id;
-                DataTable dt = new DataTable();
-                p.Exec(dt);
-                if (dt.Rows.Count == 0) return null;
-                return Map(dt.Rows[0]);
-            });
-        }
-
-        public async Task<bool> CategoryExistsAsync(Guid categoryId)
-        {
-            if (categoryId == Guid.Empty) return false;
-
-            try
-            {
-                var categories = await Task.Run(() => _lookupService.GetCategories());
-                return categories.Any(c => c.Id == categoryId);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<Guid> CreateAsync(StudentMaster s)
-        {
-            if (s == null)
-                throw new ArgumentNullException(nameof(s));
-
-            if (s.CompanyId == Guid.Empty || s.SchoolId == Guid.Empty || s.CreatedBy == Guid.Empty)
-                throw new ArgumentException("Required fields (CompanyId, SchoolId, or CreatedBy) are missing");
-
-            // Validate category exists asynchronously
-            if (s.CategoryId != Guid.Empty && !await CategoryExistsAsync(s.CategoryId))
-            {
-                throw new ArgumentException("Invalid CategoryId. The specified category does not exist.");
-            }
-
-            Proc p = new Proc("Student_Create");
-            // Optional identifiers
-            p["@RollNumber"] = s.RollNumber;
-
-            // Core info
-            p["@FirstName"] = s.FirstName;
-            p["@LastName"] = s.LastName ?? string.Empty;
-            p["@Email"] = s.Email ?? string.Empty;
-            p["@Phone"] = s.Phone ?? string.Empty;
-
-            // Address & contact
-            p["@Address"] = s.Address ?? string.Empty;
-            p["@CityId"] = s.CityId;
-            p["@StateId"] = s.StateId;
-            p["@CountryId"] = s.CountryId;
-            p["@ZipCode"] = s.ZipCode ?? string.Empty;
-            p["@ContactNumber"] = s.ContactNumber ?? string.Empty;
-            p["@EmergencyContactNumber"] = s.EmergencyContactNumber ?? string.Empty;
-
-            // Dates & registration
-            p["@DOB"] = s.DOB;
-            p["@DOJ"] = s.DOJ;
-            p["@RegistrationNumber"] = s.RegistrationNumber ?? string.Empty;
-
-            // Academic
-            p["@ClassId"] = s.ClassId;
-            p["@SectionId"] = s.SectionId;
-
-            // Transport & image
-            p["@AvailTransport"] = s.AvailTransport;
-            p["@Image"] = s.Image ?? string.Empty;
-
-            // Category & flags
-            p["@CategoryId"] = s.CategoryId;
-            p["@SiblingsIfAny"] = s.SiblingsIfAny;
-            p["@SiblingClassId"] = s.SiblingClassId;
-            p["@Gender"] = s.Gender;
-
-            // Medical & birth
-            p["@DisabilityAny"] = s.DisabilityAny ?? string.Empty;
-            p["@MedicalAlleryAny"] = s.MedicalAlleryAny ?? string.Empty;
-            p["@BirthCityId"] = s.BirthCityId;
-            p["@BirthStateId"] = s.BirthStateId;
-            p["@BirthCountryId"] = s.BirthCountryId;
-
-            // Previous school
-            p["@PreviousSchoolAttended"] = s.PreviousSchoolAttended ?? string.Empty;
-            p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId;
-            p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage;
-            p["@PreviousSchoolRank"] = s.PreviousSchoolRank ?? string.Empty;
-            if (s.PreviousSchoolBoardId != Guid.Empty)
-            {
-                p["@PreviousSchoolBoardId"] = s.PreviousSchoolBoardId;
-            }
-            else
-            {
-                p["@PreviousSchoolBoardId"] = new Guid("9C6B72D5-EE6D-48FA-AF3D-05BFF3198617");
-            }
-            p["@PreviousSchoolFromDate"] = s.PreviousSchoolFromDate;
-            p["@PreviousSchoolToDate"] = s.PreviousSchoolToDate;
-            p["@WithdrawnDate"] = s.WithdrawnDate;
-            p["@WithdrawnReason"] = s.WithdrawnReason ?? string.Empty;
-
-            // Other info
-            p["@BloodGroupId"] = s.BloodGroupId;
-            p["@Nationality"] = s.Nationality;
-            p["@Hobbies"] = s.Hobbies ?? string.Empty;
-            p["@ReligionId"] = s.ReligionId;
-
-            // Transport route details
-            p["@RouteId"] = s.RouteId;
-            p["@RouteStopDetailsId"] = s.RouteStopDetailsId;
-            p["@ClassTeacherId"] = s.ClassTeacherId;
-            p["@RoutePickAndDrop"] = s.RoutePickAndDrop;
-
-            // Fees
-            p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId;
-            p["@TutionFees"] = s.TutionFees;
-            p["@AnnualFees"] = s.AnnualFees;
-            p["@TransportFees"] = s.TransportFees;
-            p["@UseTransportFees"] = s.UseTransportFees;
-
-            // Session & ownership
-            p["@SessionId"] = s.SessionId;
-            p["@CompanyId"] = s.CompanyId;
-            p["@SchoolId"] = s.SchoolId;
-
-            // Status & audit
-            p["@IsActive"] = s.IsActive;
-            p["@IsDeleted"] = s.IsDeleted;
-            p["@CreatedBy"] = s.CreatedBy;
-            p["@CreatedDate"] = s.CreatedDate;
-            p["@Status"] = s.Status ?? string.Empty;
-            p["@StatusMessage"] = s.StatusMessage ?? string.Empty;
-
-            // House
-            p["@HouseAllotted"] = s.HouseAllotted;
-            var dt = new DataTable();
-            p.Exec(dt);
-            if (dt.Rows.Count > 0)
-            {
-                var idObj = dt.Rows[0]["Id"];
-                if (idObj != null && Guid.TryParse(idObj.ToString(), out var newId))
-                {
-                    return newId;
-                }
-            }
-            return Guid.Empty;
-        }
-
-        public async Task<bool> UpdateAsync(StudentMaster s)
-        {
-            if (s == null || s.Id == Guid.Empty)
-                throw new ArgumentException("Student or Student ID cannot be null");
-
-            // Validate category exists asynchronously if provided
-            if (s.CategoryId != Guid.Empty && !await CategoryExistsAsync(s.CategoryId))
-            {
-                throw new ArgumentException("Invalid CategoryId. The specified category does not exist.");
-            }
-
-            using (var p = new Proc("Student_Update"))
-            {
-                p["@Id"] = s.Id;
-
-                // Optional identifiers
-                p["@RollNumber"] = s.RollNumber;
-
-                // Core info
-                p["@FirstName"] = s.FirstName;
-                p["@LastName"] = s.LastName ?? string.Empty;
-                p["@Email"] = s.Email ?? string.Empty;
-                p["@Phone"] = s.Phone ?? string.Empty;
-
-                // Address & contact
-                p["@Address"] = s.Address ?? string.Empty;
-                p["@CityId"] = s.CityId;
-                p["@StateId"] = s.StateId;
-                p["@CountryId"] = s.CountryId;
-                p["@ZipCode"] = s.ZipCode ?? string.Empty;
-                p["@ContactNumber"] = s.ContactNumber ?? string.Empty;
-                p["@EmergencyContactNumber"] = s.EmergencyContactNumber ?? string.Empty;
-
-                // Dates & registration
-                p["@DOB"] = s.DOB;
-                p["@DOJ"] = s.DOJ;
-                p["@RegistrationNumber"] = s.RegistrationNumber ?? string.Empty;
-
-                // Academic
-                p["@ClassId"] = s.ClassId;
-                p["@SectionId"] = s.SectionId;
-
-                // Transport & image
-                p["@AvailTransport"] = s.AvailTransport;
-                p["@Image"] = s.Image ?? string.Empty;
-
-                // Category & flags
-                p["@CategoryId"] = s.CategoryId;
-                p["@SiblingsIfAny"] = s.SiblingsIfAny;
-                p["@SiblingClassId"] = s.SiblingClassId;
-                p["@Gender"] = s.Gender;
-
-                // Medical & birth
-                p["@DisabilityAny"] = s.DisabilityAny ?? string.Empty;
-                p["@MedicalAlleryAny"] = s.MedicalAlleryAny ?? string.Empty;
-                p["@BirthCityId"] = s.BirthCityId;
-                p["@BirthStateId"] = s.BirthStateId;
-                p["@BirthCountryId"] = s.BirthCountryId;
-
-                // Previous school
-                p["@PreviousSchoolAttended"] = s.PreviousSchoolAttended ?? string.Empty;
-                p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId;
-                p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage;
-                p["@PreviousSchoolRank"] = s.PreviousSchoolRank ?? string.Empty;
-                p["@PreviousSchoolBoardId"] = s.PreviousSchoolBoardId;
-                p["@PreviousSchoolFromDate"] = s.PreviousSchoolFromDate;
-                p["@PreviousSchoolToDate"] = s.PreviousSchoolToDate;
-                p["@WithdrawnDate"] = s.WithdrawnDate;
-                p["@WithdrawnReason"] = s.WithdrawnReason ?? string.Empty;
-
-                // Other info
-                p["@BloodGroupId"] = s.BloodGroupId;
-                p["@Nationality"] = s.Nationality;
-                p["@Hobbies"] = s.Hobbies ?? string.Empty;
-                p["@ReligionId"] = s.ReligionId;
-
-                // Transport route details
-                p["@RouteId"] = s.RouteId;
-                p["@RouteStopDetailsId"] = s.RouteStopDetailsId;
-                p["@ClassTeacherId"] = s.ClassTeacherId;
-                p["@RoutePickAndDrop"] = s.RoutePickAndDrop;
-
-                // Fees
-                p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId;
-                p["@TutionFees"] = s.TutionFees;
-                p["@AnnualFees"] = s.AnnualFees;
-                p["@TransportFees"] = s.TransportFees;
-                p["@UseTransportFees"] = s.UseTransportFees;
-
-                // Session & ownership
-                p["@SessionId"] = s.SessionId;
-                p["@CompanyId"] = s.CompanyId; // included based on proc signature
-                p["@SchoolId"] = s.SchoolId;
-
-                // Status & audit
-                p["@IsActive"] = s.IsActive;
-                p["@IsDeleted"] = s.IsDeleted;
-                p["@ModifiedBy"] = s.ModifiedBy ?? Guid.Empty;
-                p["@Status"] = s.Status ?? string.Empty;
-                p["@StatusMessage"] = s.StatusMessage ?? string.Empty;
-
-                // House
-                p["@HouseAllotted"] = s.HouseAllotted;
-                DataTable dt = new DataTable();
-                p.Exec(dt);
-                if (dt != null)
-                {
-                    var ret = p.Parameters["@RETURN_VALUE"].Value;
-                    int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);
-                    return code == 1;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        public async Task<bool> DeleteAsync(Guid id)
-        {
-            if (id == Guid.Empty)
-                throw new ArgumentException("Student ID cannot be empty");
-
-            using (var p = new Proc("Student_Delete"))
-            {
-                p["@Id"] = id;
-                var result = await Task.Run(() => p.ExecuteNonQuery());
-                return result > 0;
-            }
-        }
-
-        public async Task<StudentAttendanceDetails?> GetStudentAttendanceByIdAsync(Guid id)
-        {
-            using (var p = new Proc("Student_GetById"))
-            {
-                p["@Id"] = id;
-                var dt = new DataTable();
-                p.Exec(dt);   // If ExecAsync exists, use: await p.ExecAsync(dt);
-
-                if (dt.Rows.Count == 0)
-                    return null;
-
-                DataRow row = dt.Rows[0];
-
-                return new StudentAttendanceDetails
-                {
-                    Id = row.Field<Guid>("Id"),
-                    StudentGUID = row.Field<Guid>("StudentId"),
-                    AttendenceDate = row.Field<DateTime>("AttendanceDate"),
-                    AttendenceStatus = row.Field<bool>("IsPresent"),
-                    AttendanceReasonId = row.Field<Guid>("ReasonId"),
-                    //Comments = row.Field<string?>("Comments")
-                };
-            }
-        }
-
-        public async Task<Guid> CreateAsync(StudentAttendanceDetails attendance)
-        {
-            if (attendance == null)
-                throw new ArgumentNullException(nameof(attendance));
-
-            return await Task.Run(() =>
-            {
-                using (Proc p = new Proc("StudentAttendance_Create"))
-                {
-                    var id = Guid.NewGuid();
-                    p["@Id"] = id;
-                    p["@StudentId"] = attendance.StudentGUID;
-                    p["@AttendanceDate"] = attendance.AttendenceDate;
-                    p["@IsPresent"] = attendance.AttendenceStatus;
-                    p["@ReasonId"] = attendance.AttendanceReasonId;
-                    p["@Comments"] = string.Empty;
-
-                    p.Exec();
-                    return id;
-                }
-            });
-        }
-
-        public async Task<bool> UpdateAsync(StudentAttendanceDetails attendance)
-        {
-            if (attendance == null)
-                throw new ArgumentNullException(nameof(attendance));
-
-            return await Task.Run(() =>
-            {
-                using (Proc p = new Proc("StudentAttendance_Update"))
-                {
-                    p["@Id"] = attendance.Id;
-                    p["@IsPresent"] = attendance.AttendenceStatus;
-                    p["@ReasonId"] = attendance.AttendanceReasonId;
-                    p["@Comments"] = attendance.Status ?? string.Empty;
-
-                    DataTable dt = new DataTable();
-                    p.Exec(dt);
-
-                    if (dt.Rows.Count == 0)
-                        return false;
-
-                    return true;
-                }
-            });
-        }
-
-        private StudentAttendanceDetails MapToStudentAttendanceDetails(DataRow row)
-        {
-            if (row == null)
-                return null;
-
-            return new StudentAttendanceDetails
-            {
-                Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
-
-                StudentGUID = row["StudentGUID"] != DBNull.Value ? (Guid)row["StudentGUID"] : Guid.Empty,
-
-                ClassId = row["ClassId"] != DBNull.Value ? (Guid)row["ClassId"] : Guid.Empty,
-
-                SectionId = row["SectionId"] != DBNull.Value ? (Guid)row["SectionId"] : Guid.Empty,
-
-                Month = row["Month"] != DBNull.Value ? Convert.ToInt32(row["Month"]) : (int?)null,
-
-                Year = row["Year"] != DBNull.Value ? Convert.ToInt32(row["Year"]) : (int?)null,
-
-                AttendenceDate = row["AttendenceDate"] != DBNull.Value
-                    ? Convert.ToDateTime(row["AttendenceDate"])
-                    : DateTime.MinValue,
-
-                AttendenceStatus = row["AttendenceStatus"] != DBNull.Value
-                    && Convert.ToBoolean(row["AttendenceStatus"]),
-
-                AttendanceReasonId = row["AttendanceReasonId"] != DBNull.Value
-                    ? (Guid)row["AttendanceReasonId"]
-                    : Guid.Empty,
-
-                AttendenceTime = row["AttendenceTime"] != DBNull.Value
-                    ? row["AttendenceTime"].ToString()
-                    : string.Empty,
-
-                CompanyId = row["CompanyId"] != DBNull.Value ? (Guid)row["CompanyId"] : Guid.Empty,
-
-                SchoolId = row["SchoolId"] != DBNull.Value ? (Guid)row["SchoolId"] : Guid.Empty,
-
-                IsActive = row["IsActive"] != DBNull.Value && Convert.ToBoolean(row["IsActive"]),
-
-                IsDeleted = row["IsDeleted"] != DBNull.Value && Convert.ToBoolean(row["IsDeleted"]),
-
-                CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
-
-                CreatedDate = row["CreatedDate"] != DBNull.Value
-                    ? Convert.ToDateTime(row["CreatedDate"])
-                    : DateTime.MinValue,
-
-                ModifiedBy = row["ModifiedBy"] != DBNull.Value ? (Guid?)row["ModifiedBy"] : null,
-
-                ModifiedDate = row["ModifiedDate"] != DBNull.Value
-                    ? Convert.ToDateTime(row["ModifiedDate"])
-                    : (DateTime?)null,
-
-                // Status fields provided by model defaults � override only if returned from DB
-                Status = row.Table.Columns.Contains("Status") && row["Status"] != DBNull.Value
-                    ? row["Status"].ToString()
-                    : "INC",
-
-                StatusMessage = row.Table.Columns.Contains("StatusMessage") && row["StatusMessage"] != DBNull.Value
-                    ? row["StatusMessage"].ToString()
-                    : "In Process...."
-            };
-        }
-
-        // This method is now implemented as GetByIdAsync
-
-        public async Task<StudentMaster> Create(StudentMaster student)
-        {
-            try
-            {
-                if (student == null)
-                    throw new ArgumentNullException(nameof(student));
-                // Generate new ID if not provided
-                if (student.Id == Guid.Empty)
-                    student.Id = Guid.NewGuid();
-                using (var p = new Proc("Student_Create"))
-                {
-                    // Map StudentMaster properties to stored procedure parameters
-                    p["@Id"] = student.Id;
-                    p["@RollNumber"] = student.RollNumber;
-                    p["@FirstName"] = student.FirstName;
-                    p["@LastName"] = student.LastName;
-                    p["@Address"] = student.Address;
-                    p["@CityId"] = student.CityId;
-                    p["@StateId"] = student.StateId;
-                    p["@CountryId"] = student.CountryId;
-                    p["@ZipCode"] = student.ZipCode;
-                    p["@ContactNumber"] = student.ContactNumber;
-                    p["@EmergencyContactNumber"] = student.EmergencyContactNumber;
-                    p["@DOB"] = student.DOB;
-                    p["@DOJ"] = student.DOJ;
-                    p["@RegistrationNumber"] = student.RegistrationNumber;
-                    p["@ClassId"] = student.ClassId;
-                    p["@SectionId"] = student.SectionId;
-                    p["@AvailTransport"] = student.AvailTransport;
-                    p["@Image"] = student.Image;
-                    p["@Email"] = student.Email;
-                    p["@CategoryId"] = student.CategoryId;
-                    p["@SiblingsIfAny"] = student.SiblingsIfAny;
-
-                    var dt = new DataTable();
-                    p.Exec(dt);
-
-                    if (dt.Rows.Count > 0 && dt.Rows[0]["Id"] != DBNull.Value)
-                    {
-                        return student;
-                    }
-                    throw new Exception("Failed to create student.");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error creating student: {ex.Message}", ex);
-            }
-        }
-
-        public async Task<bool> Update(StudentMaster student)
-        {
-            try
-            {
-                using (var p = new Proc("Student_Update"))
-                {
-                    // Map StudentMaster properties to stored procedure parameters
-                    p["@Id"] = student.Id;
-                    p["@RollNumber"] = student.RollNumber;
-                    p["@FirstName"] = student.FirstName;
-                    p["@LastName"] = student.LastName;
-                    p["@Address"] = student.Address;
-                    p["@CityId"] = student.CityId;
-                    p["@StateId"] = student.StateId;
-                    p["@CountryId"] = student.CountryId;
-                    p["@ZipCode"] = student.ZipCode;
-                    p["@ContactNumber"] = student.ContactNumber;
-                    p["@EmergencyContactNumber"] = student.EmergencyContactNumber;
-                    p["@DOB"] = student.DOB;
-                    p["@DOJ"] = student.DOJ;
-                    p["@RegistrationNumber"] = student.RegistrationNumber;
-                    p["@ClassId"] = student.ClassId;
-                    p["@SectionId"] = student.SectionId;
-                    p["@AvailTransport"] = student.AvailTransport;
-                    p["@Image"] = student.Image;
-                    p["@Email"] = student.Email;
-                    p["@CategoryId"] = student.CategoryId;
-                    p["@SiblingsIfAny"] = student.SiblingsIfAny;
-
-                    DataTable dt = new DataTable();
-                    p.Exec(dt);
-                    var result = dt.Rows.Count;
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error updating student: {ex.Message}", ex);
-            }
-        }
-
-        public async Task<bool> Delete(Guid id)
-        {
-            using (var p = new Proc("Student_Delete"))
-            {
-                p["@Id"] = id;
-                DataTable dt = new DataTable();
-                await Task.Run(() => p.Exec(dt));
-                return dt.Rows.Count > 0;
-            }
-        }
-    }
+	public class StudentService : IStudentService, IDisposable
+	{
+		private bool _disposed = false;
+		private readonly ILookupService _lookupService;
+		private readonly IMemoryCache _cache;
+		private readonly ILogger<StudentService> _logger;
+		private const string StudentCacheKey = "Students_All";
+		private static readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30);
+		private static readonly SemaphoreSlim _cacheLock = new SemaphoreSlim(1, 1);
+
+		public StudentService(
+			ILookupService lookupService, 
+			IMemoryCache cache, 
+			ILogger<StudentService> logger)
+		{
+			_lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+			_cache = cache ?? throw new ArgumentNullException(nameof(cache));
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		private Guid GetCurrentUserId()
+		{
+			// TODO: Implement actual user ID retrieval
+			// Example for ASP.NET Core:
+			// var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+			// return Guid.TryParse(userId, out var id) ? id : Guid.Empty;
+			return Guid.NewGuid(); // Temporary implementation
+		}
+
+		#region Core CRUD Operations
+
+		public Task<List<StudentMaster>> GetAllAsync(Guid? schoolId = null)
+		{
+			return GetAllAsync(schoolId, CancellationToken.None);
+		}
+
+		private async Task<List<StudentMaster>> GetAllAsync(Guid? schoolId, CancellationToken cancellationToken)
+		{
+			try
+			{
+				var cacheKey = schoolId.HasValue ? $"{StudentCacheKey}_{schoolId}" : StudentCacheKey;
+				
+				// Use semaphore to prevent cache stampede
+				await _cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+				try
+				{
+					return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+					{
+						entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+						
+						using (var p = new Proc("Student_GetAll"))
+						{
+							if (schoolId.HasValue)
+								p["@SchoolId"] = schoolId.Value;
+
+							var dt = new DataTable();
+							await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+							
+							return dt.Rows.Cast<DataRow>()
+								.Select(row => Map(row, _logger))
+								.Where(student => student != null)
+								.ToList()!;
+						}
+					}).ConfigureAwait(false) ?? new List<StudentMaster>();
+				}
+				finally
+				{
+					_cacheLock.Release();
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error retrieving students for school {SchoolId}", schoolId);
+				throw new StudentServiceException("An error occurred while retrieving students", ex);
+			}
+		}
+
+		public List<StudentMaster> GetAll(Guid? schoolId = null)
+		{
+			try
+			{
+				// For sync-over-async, use Task.Run to avoid deadlocks
+				return Task.Run(() => GetAllAsync(schoolId)).GetAwaiter().GetResult();
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error in sync GetAll for school {SchoolId}", schoolId);
+				throw new StudentServiceException("Error retrieving students", ex);
+			}
+		}
+
+		public async Task<StudentMaster> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		{
+			if (id == Guid.Empty)
+				throw new ArgumentException("Student ID cannot be empty", nameof(id));
+
+			try
+			{
+				var cacheKey = $"Student_{id}";
+				
+				await _cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+				try
+				{
+					return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+					{
+						entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+						
+						using (var p = new Proc("Student_GetById"))
+						{
+							p["@Id"] = id;
+							var dt = new DataTable();
+							await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+							
+							if (dt.Rows.Count == 0)
+								throw new KeyNotFoundException($"Student with ID {id} not found");
+								
+							return Map(dt.Rows[0], _logger);
+						}
+					}).ConfigureAwait(false);
+				}
+				finally
+				{
+					_cacheLock.Release();
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error retrieving student with ID {StudentGUID}", id);
+				throw new StudentServiceException($"An error occurred while retrieving student with ID {id}", ex);
+			}
+		}
+
+		public async Task<Guid> CreateAsync(StudentMaster student, CancellationToken cancellationToken = default)
+		{
+			if (student == null)
+				throw new ArgumentNullException(nameof(student));
+
+			try
+			{
+				// Validate required fields
+				if (student.CompanyId == Guid.Empty)
+					throw new ArgumentException("CompanyId is required", nameof(student.CompanyId));
+
+				if (student.SchoolId == Guid.Empty)
+					throw new ArgumentException("SchoolId is required", nameof(student.SchoolId));
+
+				if (student.CreatedBy == Guid.Empty)
+					throw new ArgumentException("CreatedBy is required", nameof(student.CreatedBy));
+
+				// Validate category exists if provided
+				if (student.CategoryId != Guid.Empty && !await CategoryExistsAsync(student.CategoryId, cancellationToken).ConfigureAwait(false))
+					throw new ArgumentException("Invalid CategoryId. The specified category does not exist.", nameof(student.CategoryId));
+
+				// Set default values
+				student.CreatedDate = DateTime.UtcNow;
+				student.IsActive = true;
+				student.IsDeleted = false;
+
+				using (var p = new Proc("Student_Create"))
+				{
+					MapStudentToParameters(p, student);
+
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+					if (dt.Rows.Count == 0 || dt.Rows[0]["Id"] == DBNull.Value)
+						throw new StudentServiceException("Failed to create student. No ID returned from database.");
+
+					var newId = new Guid(dt.Rows[0]["Id"]!.ToString()!);
+
+					// Invalidate cache in a background task
+					_ = Task.Run(() =>
+					{
+						_cache.Remove(StudentCacheKey);
+						_cache.Remove($"{StudentCacheKey}_{student.SchoolId}");
+					}, cancellationToken);
+
+					_logger.LogInformation("Created student with ID: {StudentGUID}", newId);
+					return newId;
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error creating student");
+				throw new StudentServiceException("An error occurred while creating the student", ex);
+			}
+		}
+
+		public async Task<bool> UpdateAsync(StudentMaster student, CancellationToken cancellationToken = default)
+		{
+			if (student == null)
+				throw new ArgumentNullException(nameof(student));
+
+			if (student.Id == Guid.Empty)
+				throw new ArgumentException("Student ID cannot be empty", nameof(student.Id));
+
+			try
+			{
+				// Validate category exists if provided
+				if (student.CategoryId != Guid.Empty &&
+					!await CategoryExistsAsync(student.CategoryId, cancellationToken).ConfigureAwait(false))
+				{
+					throw new ArgumentException(
+						"Invalid CategoryId. The specified category does not exist.",
+						nameof(student.CategoryId));
+				}
+
+				// Set modified date
+				student.ModifiedDate = DateTime.UtcNow;
+
+				if (student.ModifiedBy == Guid.Empty)
+				{
+					student.ModifiedBy = GetCurrentUserId();
+				}
+
+				using (var p = new Proc("Student_Update"))
+				{
+					// Map student to stored procedure parameters
+					MapStudentToParameters(p, student);
+
+					// Update specific parameters
+					p["@Id"] = student.Id;
+					p["@ModifiedBy"] = student.ModifiedBy;
+					p["@ModifiedDate"] = student.ModifiedDate;
+
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+					if (dt.Rows.Count == 0)
+					{
+						_logger.LogWarning("No rows affected when updating student with ID: {StudentGUID}", student.Id);
+						return false;
+					}
+
+					// Invalidate relevant caches in background
+					_ = Task.Run(() =>
+					{
+						_cache.Remove(StudentCacheKey);
+						_cache.Remove($"{StudentCacheKey}_{student.SchoolId}");
+						_cache.Remove($"Student_{student.Id}");
+					}, cancellationToken);
+
+					_logger.LogInformation("Updated student with ID: {StudentGUID}", student.Id);
+					return true;
+				}
+			}
+			catch (ArgumentException ex)
+			{
+				_logger.LogWarning(ex, $"Validation error updating student with ID: {student.Id}");
+				throw;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, $"Error updating student with ID: {student.Id}");
+				throw new StudentUpdateException("An error occurred while updating the student", ex);
+			}
+		}
+
+		public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+		{
+			if (id == Guid.Empty)
+				throw new ArgumentException("Student ID cannot be empty", nameof(id));
+
+			try
+			{
+				// Get student first to get school ID for cache invalidation
+				var student = await GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+				if (student == null)
+				{
+					_logger.LogWarning("Delete operation failed: Student {StudentGUID} not found", id);
+					return false;
+				}
+
+				using (var p = new Proc("Student_Delete"))
+				{
+					var currentUserId = GetCurrentUserId();
+					if (currentUserId == Guid.Empty)
+					{
+						_logger.LogWarning("Delete operation failed: Current user ID is not available");
+						return false;
+					}
+
+					p["@Id"] = id;
+					p["@ModifiedBy"] = currentUserId;
+					p["@ModifiedDate"] = DateTime.UtcNow;
+
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+					bool success = dt.Rows.Count > 0;
+
+					if (success)
+					{
+						// Invalidate relevant caches in background
+						_ = Task.Run(() =>
+						{
+							_cache.Remove(StudentCacheKey);
+							_cache.Remove($"{StudentCacheKey}_{student.SchoolId}");
+							_cache.Remove($"Student_{id}");
+						}, cancellationToken);
+
+						_logger.LogInformation("Soft-deleted student with ID: {StudentGUID}", id);
+					}
+					else
+					{
+						_logger.LogWarning("Student with ID {StudentGUID} not found or already deleted", id);
+					}
+
+					return success;
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, $"Error deleting student with ID: {id}");
+				throw new StudentDeleteException($"An error occurred while deleting student with ID: {id}", ex);
+			}
+		}
+
+		#endregion
+
+		#region Student Attendance
+
+		public async Task<StudentAttendanceDetails?> GetStudentAttendanceByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		{
+			if (id == Guid.Empty)
+				throw new ArgumentException("Attendance ID cannot be empty", nameof(id));
+
+			try
+			{
+				var cacheKey = $"StudentAttendance_{id}";
+
+				await _cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+				try
+				{
+					return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+					{
+						entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+
+						using (var p = new Proc("StudentAttendance_GetById"))
+						{
+							p["@Id"] = id;
+							var dt = new DataTable();
+							await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+							if (dt.Rows.Count == 0)
+								return null;
+
+							return MapToStudentAttendanceDetails(dt.Rows[0]);
+						}
+					}).ConfigureAwait(false);
+				}
+				finally
+				{
+					_cacheLock.Release();
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("GetStudentAttendanceByIdAsync was canceled for ID: {AttendanceId}", id);
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error retrieving attendance with ID: {AttendanceId}", id);
+				throw new StudentServiceException($"An error occurred while retrieving attendance with ID: {id}", ex);
+			}
+		}
+
+		public async Task<Guid> CreateStudentAttendanceAsync(StudentAttendanceDetails attendance, CancellationToken cancellationToken = default)
+		{
+			if (attendance == null)
+				throw new ArgumentNullException(nameof(attendance));
+
+			if (attendance.StudentGUID == Guid.Empty)
+				throw new ArgumentException("Student ID cannot be empty", nameof(attendance.StudentGUID));
+
+			try
+			{
+				using (var p = new Proc("StudentAttendance_Create"))
+				{
+					p["@Id"] = Guid.NewGuid();
+					p["@StudentGUID"] = attendance.StudentGUID;
+					p["@AttendenceDate"] = attendance.AttendenceDate;
+					p["@IsPresent"] = attendance.AttendenceStatus;
+					p["@CreatedBy"] = GetCurrentUserId();
+					p["@CreatedDate"] = DateTime.UtcNow;
+
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+					if (dt.Rows.Count == 0 || dt.Rows[0]["Id"] == DBNull.Value)
+						throw new StudentServiceException("Failed to create student attendance. No ID returned from database.");
+
+					var newId = new Guid(dt.Rows[0]["Id"]!.ToString()!);
+
+					// Invalidate cache in a background task
+					_ = Task.Run(() =>
+					{
+						_cache.Remove($"StudentAttendance_{attendance.StudentGUID}");
+					}, cancellationToken);
+
+					_logger.LogInformation($"Created attendance record {newId} for student {attendance.StudentGUID}");
+					return newId;
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error creating attendance for student with ID {StudentGUID}", attendance.StudentGUID);
+				throw new StudentServiceException($"An error occurred while creating attendance for student with ID {attendance.StudentGUID}", ex);
+			}
+		}
+
+		public async Task<bool> UpdateStudentAttendanceAsync(StudentAttendanceDetails attendance)
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(StudentService));
+
+			if (attendance == null)
+				throw new ArgumentNullException(nameof(attendance));
+
+			try
+			{
+				using (var p = new Proc("StudentAttendance_Update"))
+				{
+					p["@Id"] = attendance.Id;
+					p["@StudentGUID"] = attendance.StudentGUID;
+					p["@ClassId"] = attendance.ClassId;
+					p["@SectionId"] = attendance.SectionId;
+					p["@Month"] = attendance.Month;
+					p["@Year"] = attendance.Year;
+					p["@AttendenceDate"] = attendance.AttendenceDate;
+					p["@AttendenceStatus"] = attendance.AttendenceStatus;
+					p["@AttendanceReasonId"] = attendance.AttendanceReasonId;
+					p["@AttendenceTime"] = attendance.AttendenceTime;
+					p["@ModifiedBy"] = GetCurrentUserId();
+					p["@Status"] = attendance.Status;
+					p["@StatusMessage"] = attendance.StatusMessage;
+
+					var result = (int)await Task.Run(() => p.ExecScalar()).ConfigureAwait(false);
+					return result > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error updating student attendance with ID {AttendanceId}", attendance.Id);
+				throw new StudentServiceException($"Error updating student attendance with ID {attendance.Id}", ex);
+			}
+		}
+
+		#endregion
+
+		#region Search and Statistics
+
+		public async Task<IEnumerable<StudentMaster>> SearchStudentsAsync(StudentSearchCriteria criteria, CancellationToken cancellationToken = default)
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(StudentService));
+
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
+			try
+			{
+				var cacheKey = $"StudentSearch_{criteria.SearchTerm}_{criteria.SchoolId}_{criteria.ClassId}_{criteria.IsActive}_{criteria.PageNumber}_{criteria.PageSize}";
+				
+				return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+				{
+					entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5); // Shorter cache duration for search results
+					
+					using (var p = new Proc("Student_Search"))
+					{
+						p["@SearchTerm"] = string.IsNullOrEmpty(criteria.SearchTerm) ? (object)DBNull.Value : criteria.SearchTerm;
+						p["@SchoolId"] = criteria.SchoolId ?? (object)DBNull.Value;
+						p["@ClassId"] = criteria.ClassId ?? (object)DBNull.Value;
+						p["@IsActive"] = criteria.IsActive ?? (object)DBNull.Value;
+						p["@PageNumber"] = criteria.PageNumber;
+						p["@PageSize"] = criteria.PageSize;
+
+						var dt = new DataTable();
+						await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+
+						return dt.Rows.Cast<DataRow>()
+							.Select(row => Map(row, _logger))
+							.Where(student => student != null)
+							.ToList()!;
+					}
+				}).ConfigureAwait(false) ?? new List<StudentMaster>();
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error searching students with criteria: {SearchTerm}, SchoolId: {SchoolId}, ClassId: {ClassId}", 
+					criteria.SearchTerm, criteria.SchoolId, criteria.ClassId);
+				throw new StudentServiceException("An error occurred while searching students", ex);
+			}
+		}
+
+		public async Task<StudentStats> GetStudentStatisticsAsync(Guid? schoolId = null, CancellationToken cancellationToken = default)
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(StudentService));
+
+			try
+			{
+				var cacheKey = $"StudentStats_{schoolId ?? Guid.Empty}";
+				
+				return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+				{
+					entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
+					
+					using (var p = new Proc("Student_GetStatistics"))
+					{
+						if (schoolId.HasValue)
+							p["@SchoolId"] = schoolId.Value;
+
+						var stats = new StudentStats();
+						
+						using (var reader = await Task.Run(() => p.ExecReader(), cancellationToken).ConfigureAwait(false))
+						{
+							if (reader.Read())
+							{
+								stats.TotalStudents = reader.GetInt32(reader.GetOrdinal("TotalStudents"));
+								stats.ActiveStudents = reader.GetInt32(reader.GetOrdinal("ActiveStudents"));
+								stats.NewThisMonth = reader.GetInt32(reader.GetOrdinal("NewThisMonth"));
+								stats.InactiveStudents = reader.GetInt32(reader.GetOrdinal("InactiveStudents"));
+								stats.GraduatedThisYear = reader.GetInt32(reader.GetOrdinal("GraduatedThisYear"));
+							}
+						}
+						
+						return stats;
+					}
+				}).ConfigureAwait(false) ?? new StudentStats();
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error retrieving student statistics for school {SchoolId}", schoolId);
+				throw new StudentServiceException("An error occurred while retrieving student statistics", ex);
+			}
+		}
+
+		public async Task<bool> BulkUpdateStatusAsync(IEnumerable<Guid> StudentGUIDs, bool isActive)
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(StudentService));
+
+			if (StudentGUIDs == null || !StudentGUIDs.Any())
+				throw new ArgumentException("Student IDs cannot be empty", nameof(StudentGUIDs));
+
+			try
+			{
+				using (var p = new Proc("Student_BulkUpdateStatus"))
+				{
+					var dt = new DataTable();
+					dt.Columns.Add("Id", typeof(Guid));
+					foreach (var id in StudentGUIDs.Distinct())
+					{
+						dt.Rows.Add(id);
+					}
+
+					p["@StudentGUIDs"] = dt;
+					p["@IsActive"] = isActive;
+					p["@ModifiedBy"] = GetCurrentUserId();
+
+					var result = (int)await Task.Run(() => p.ExecScalar()).ConfigureAwait(false);
+					return result > 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error updating status for {Count} students", StudentGUIDs.Count());
+				throw new StudentServiceException("Error updating student statuses", ex);
+			}
+		}
+
+		#endregion
+
+		#region Helper Methods
+
+		private static StudentMaster Map(DataRow row, ILogger<StudentService> logger)
+		{
+			try
+			{
+				if (row == null) return null;
+
+				var student = new StudentMaster
+				{
+					Id = row.Field<Guid>("Id"),
+					RollNumber = row.Field<Guid>("RollNumber"),
+					FirstName = row.Field<string>("FirstName"),
+					LastName = row.Field<string>("LastName"),
+					Address = row.Field<string>("Address"),
+					CityId = row.Field<Guid>("CityId"),
+					StateId = row.Field<Guid>("StateId"),
+					CountryId = row.Field<Guid>("CountryId"),
+					ZipCode = row.Field<string>("ZipCode"),
+					ContactNumber = row.Field<string>("ContactNumber"),
+					EmergencyContactNumber = row.Field<string>("EmergencyContactNumber"),
+					DOB = row.Field<DateTime>("DOB"),
+					DOJ = row.Field<DateTime>("DOJ"),
+					RegistrationNumber = row.Field<string>("RegistrationNumber"),
+					ClassId = row.Field<Guid>("ClassId"),
+					SectionId = row.Field<Guid>("SectionId"),
+					AvailTransport = row.Field<bool?>("AvailTransport"),
+					Image = row.Field<string>("Image"),
+					Email = row.Field<string>("Email"),
+					CategoryId = row.Field<Guid>("CategoryId"),
+					SiblingsIfAny = row.Field<bool?>("SiblingsIfAny"),
+					SiblingClassId = row.Field<Guid?>("SiblingClassId"),
+					Gender = row.Field<Guid?>("Gender"),
+					DisabilityAny = row.Field<string>("DisabilityAny"),
+					MedicalAlleryAny = row.Field<string>("MedicalAlleryAny"),
+					BirthCityId = row.Field<Guid>("BirthCityId"),
+					BirthStateId = row.Field<Guid>("BirthStateId"),
+					BirthCountryId = row.Field<Guid>("BirthCountryId"),
+					PreviousSchoolAttended = row.Field<string>("PreviousSchoolAttended"),
+					PreviousSchoolClassId = row.Field<Guid?>("PreviousSchoolClassId"),
+					PreviousSchoolPercentage = row.Field<decimal?>("PreviousSchoolPercentage"),
+					PreviousSchoolRank = row.Field<string>("PreviousSchoolRank"),
+					PreviousSchoolBoardId = row.Field<Guid>("PreviousSchoolBoardId"),
+					PreviousSchoolFromDate = row.Field<DateTime?>("PreviousSchoolFromDate"),
+					PreviousSchoolToDate = row.Field<DateTime?>("PreviousSchoolToDate"),
+					WithdrawnDate = row.Field<DateTime?>("WithdrawnDate"),
+					WithdrawnReason = row.Field<string>("WithdrawnReason"),
+					BloodGroupId = row.Field<Guid>("BloodGroupId"),
+					Nationality = row.Field<Guid>("Nationality"),
+					Hobbies = row.Field<string>("Hobbies"),
+					ReligionId = row.Field<Guid>("ReligionId"),
+					Phone = row.Field<string>("Phone"),
+					RouteId = row.Field<Guid?>("RouteId"),
+					RouteStopDetailsId = row.Field<Guid?>("RouteStopDetailsId"),
+					ClassTeacherId = row.Field<Guid?>("ClassTeacherId"),
+					RoutePickAndDrop = row.Field<bool?>("RoutePickAndDrop"),
+					FeesDiscountCategoryMasterId = row.Field<Guid?>("FeesDiscountCategoryMasterId"),
+					TutionFees = row.Field<decimal?>("TutionFees"),
+					AnnualFees = row.Field<decimal?>("AnnualFees"),
+					TransportFees = row.Field<decimal?>("TransportFees"),
+					UseTransportFees = row.Field<bool?>("UseTransportFees"),
+					SessionId = row.Field<Guid?>("SessionId"),
+					CompanyId = row.Field<Guid>("CompanyId"),
+					SchoolId = row.Field<Guid>("SchoolId"),
+					IsActive = row.Field<bool>("IsActive"),
+					IsDeleted = row.Field<bool>("IsDeleted"),
+					CreatedBy = row.Field<Guid>("CreatedBy"),
+					CreatedDate = row.Field<DateTime>("CreatedDate"),
+					ModifiedBy = row.Field<Guid?>("ModifiedBy"),
+					ModifiedDate = row.Field<DateTime?>("ModifiedDate"),
+					Status = row.Field<string>("Status") ?? "INC",
+					StatusMessage = row.Field<string>("StatusMessage") ?? "In Process....",
+					HouseAllotted = row.Field<Guid?>("HouseAllotted"),
+					AdditionalNotes = row.Field<string>("AdditionalNotes")
+				};
+
+				return student;
+			}
+			catch (Exception ex)
+			{
+				logger?.LogError(ex, "Error mapping student data");
+				throw new StudentServiceException("Error mapping student data", ex);
+			}
+		}
+
+		private void MapStudentToParameters(Proc p, StudentMaster student)
+		{
+			p["@Id"] = student.Id != Guid.Empty ? student.Id : (object)DBNull.Value;
+			p["@RollNumber"] = student.RollNumber;
+			p["@FirstName"] = student.FirstName;
+			p["@LastName"] = student.LastName;
+			p["@Address"] = student.Address ?? (object)DBNull.Value;
+			p["@CityId"] = student.CityId;
+			p["@StateId"] = student.StateId;
+			p["@CountryId"] = student.CountryId;
+			p["@ZipCode"] = student.ZipCode ?? (object)DBNull.Value;
+			p["@ContactNumber"] = student.ContactNumber ?? (object)DBNull.Value;
+			p["@EmergencyContactNumber"] = student.EmergencyContactNumber ?? (object)DBNull.Value;
+			p["@DOB"] = student.DOB;
+			p["@DOJ"] = student.DOJ;
+			p["@RegistrationNumber"] = student.RegistrationNumber ?? (object)DBNull.Value;
+			p["@ClassId"] = student.ClassId;
+			p["@SectionId"] = student.SectionId;
+			p["@AvailTransport"] = student.AvailTransport ?? (object)DBNull.Value;
+			p["@Image"] = student.Image ?? (object)DBNull.Value;
+			p["@Email"] = student.Email ?? (object)DBNull.Value;
+			p["@CategoryId"] = student.CategoryId;
+			p["@SiblingsIfAny"] = student.SiblingsIfAny ?? (object)DBNull.Value;
+			p["@SiblingClassId"] = student.SiblingClassId ?? (object)DBNull.Value;
+			p["@Gender"] = student.Gender ?? (object)DBNull.Value;
+			p["@DisabilityAny"] = student.DisabilityAny ?? (object)DBNull.Value;
+			p["@MedicalAlleryAny"] = student.MedicalAlleryAny ?? (object)DBNull.Value;
+			p["@BirthCityId"] = student.BirthCityId;
+			p["@BirthStateId"] = student.BirthStateId;
+			p["@BirthCountryId"] = student.BirthCountryId;
+			p["@PreviousSchoolAttended"] = student.PreviousSchoolAttended ?? (object)DBNull.Value;
+			p["@PreviousSchoolClassId"] = student.PreviousSchoolClassId ?? (object)DBNull.Value;
+			p["@PreviousSchoolPercentage"] = student.PreviousSchoolPercentage ?? (object)DBNull.Value;
+			p["@PreviousSchoolRank"] = student.PreviousSchoolRank ?? (object)DBNull.Value;
+			p["@PreviousSchoolBoardId"] = student.PreviousSchoolBoardId;
+			p["@PreviousSchoolFromDate"] = student.PreviousSchoolFromDate ?? (object)DBNull.Value;
+			p["@PreviousSchoolToDate"] = student.PreviousSchoolToDate ?? (object)DBNull.Value;
+			p["@WithdrawnDate"] = student.WithdrawnDate ?? (object)DBNull.Value;
+			p["@WithdrawnReason"] = student.WithdrawnReason ?? (object)DBNull.Value;
+			p["@BloodGroupId"] = student.BloodGroupId;
+			p["@Nationality"] = student.Nationality;
+			p["@Hobbies"] = student.Hobbies ?? (object)DBNull.Value;
+			p["@ReligionId"] = student.ReligionId;
+			p["@Phone"] = student.Phone ?? (object)DBNull.Value;
+			p["@RouteId"] = student.RouteId ?? (object)DBNull.Value;
+			p["@RouteStopDetailsId"] = student.RouteStopDetailsId ?? (object)DBNull.Value;
+			p["@ClassTeacherId"] = student.ClassTeacherId ?? (object)DBNull.Value;
+			p["@RoutePickAndDrop"] = student.RoutePickAndDrop ?? (object)DBNull.Value;
+			p["@FeesDiscountCategoryMasterId"] = student.FeesDiscountCategoryMasterId ?? (object)DBNull.Value;
+			p["@TutionFees"] = student.TutionFees ?? (object)DBNull.Value;
+			p["@AnnualFees"] = student.AnnualFees ?? (object)DBNull.Value;
+			p["@TransportFees"] = student.TransportFees ?? (object)DBNull.Value;
+			p["@UseTransportFees"] = student.UseTransportFees ?? (object)DBNull.Value;
+			p["@SessionId"] = student.SessionId ?? (object)DBNull.Value;
+			p["@CompanyId"] = student.CompanyId;
+			p["@SchoolId"] = student.SchoolId;
+			p["@IsActive"] = student.IsActive;
+			p["@IsDeleted"] = student.IsDeleted;
+			p["@CreatedBy"] = student.CreatedBy;
+			p["@CreatedDate"] = student.CreatedDate;
+			p["@ModifiedBy"] = student.ModifiedBy ?? (object)DBNull.Value;
+			p["@ModifiedDate"] = student.ModifiedDate ?? (object)DBNull.Value;
+			p["@Status"] = student.Status ?? "INC";
+			p["@StatusMessage"] = student.StatusMessage ?? "In Process....";
+			p["@HouseAllotted"] = student.HouseAllotted ?? (object)DBNull.Value;
+			p["@AdditionalNotes"] = student.AdditionalNotes ?? (object)DBNull.Value;
+		}
+
+		public async Task<bool> CategoryExistsAsync(Guid categoryId, CancellationToken cancellationToken = default)
+		{
+			if (categoryId == Guid.Empty)
+				return false;
+
+			try
+			{
+				using (var p = new Proc("Category_Exists"))
+				{
+					p["@Id"] = categoryId;
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+					return dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value && Convert.ToInt32(dt.Rows[0][0]) > 0;
+				}
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogInformation("Operation was canceled");
+				throw;
+			}
+			catch (Exception ex) when (ex is not StudentServiceException)
+			{
+				_logger.LogError(ex, "Error checking if category with ID {CategoryId} exists", categoryId);
+				throw new StudentServiceException($"An error occurred while checking if category with ID {categoryId} exists", ex);
+			}
+		}
+
+		#endregion
+
+		#region IDisposable Implementation
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if (disposing)
+				{
+					_cacheLock?.Dispose();
+				}
+				_disposed = true;
+			}
+		}
+		#endregion
+
+		#region IStudentService Implementation
+
+		public async Task<StudentMaster> GetByIdAsync(Guid id)
+		{
+			using (var p = new Proc("Student_GetById"))
+			{
+				p["@Id"] = id;
+				
+				var dt = new DataTable();
+				await Task.Run(() => p.Exec(dt));
+				
+				return dt.Rows.Count > 0 ? Map(dt.Rows[0], _logger) : null;
+			}
+		}
+
+		public async Task<Guid> CreateAsync(StudentMaster student)
+		{
+			using (var p = new Proc("Student_Create"))
+			{
+				p["@Id"] = student.Id;
+				p["@FirstName"] = student.FirstName;
+				p["@LastName"] = student.LastName;
+				// Add other properties as needed...
+				
+				var result = await Task.Run(() => p.ExecScalar());
+				return (Guid)result;
+			}
+		}
+
+		public async Task<bool> UpdateAsync(StudentMaster student)
+		{
+			using (var p = new Proc("Student_Update"))
+			{
+				p["@Id"] = student.Id;
+				p["@FirstName"] = student.FirstName;
+				p["@LastName"] = student.LastName;
+				// Add other properties as needed...
+				
+				var result = await Task.Run(() => p.ExecNonQuery());
+				return result > 0;
+			}
+		}
+
+		public async Task<bool> DeleteAsync(Guid id)
+		{
+			using (var p = new Proc("Student_Delete"))
+			{
+				p["@Id"] = id;
+				var result = await Task.Run(() => p.ExecNonQuery());
+				return result > 0;
+			}
+		}
+
+		public async Task<bool> CategoryExistsAsync(Guid categoryId)
+		{
+			using (var p = new Proc("Category_Exists"))
+			{
+				p["@Id"] = categoryId;
+				var result = await Task.Run(() => p.ExecScalar());
+				return Convert.ToBoolean(result);
+			}
+		}
+
+		public async Task<StudentAttendanceDetails> GetStudentAttendanceByIdAsync(Guid id)
+		{
+			if (_disposed)
+				throw new ObjectDisposedException(nameof(StudentService));
+
+			if (id == Guid.Empty)
+				throw new ArgumentException("ID cannot be empty", nameof(id));
+
+			try
+			{
+				using (var p = new Proc("StudentAttendance_GetById"))
+				{
+					p["@Id"] = id;
+					
+					var dt = new DataTable();
+					await Task.Run(() => p.Exec(dt)).ConfigureAwait(false);
+					
+					if (dt.Rows.Count == 0)
+						return null;
+
+					return MapToStudentAttendanceDetails(dt.Rows[0]);
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error retrieving student attendance with ID {AttendanceId}", id);
+				throw new StudentServiceException($"Error retrieving student attendance with ID {id}", ex);
+			}
+		}
+
+		public async Task<Guid> CreateStudentAttendanceAsync(StudentAttendanceDetails attendance)
+		{
+			using (var p = new Proc("StudentAttendance_Create"))
+			{
+				p["@Id"] = attendance.Id;
+				p["@StudentGUID"] = attendance.StudentGUID;
+				p["@ClassId"] = attendance.ClassId;
+				p["@SectionId"] = attendance.SectionId;
+				p["@AttendenceDate"] = attendance.AttendenceDate;
+				p["@AttendenceStatus"] = attendance.AttendenceStatus;
+				p["@AttendanceReasonId"] = attendance.AttendanceReasonId;
+				
+				// Optional parameters
+				p["@Month"] = attendance.Month;
+				p["@Year"] = attendance.Year;
+				p["@AttendenceTime"] = attendance.AttendenceTime;
+				p["@CompanyId"] = attendance.CompanyId;
+				p["@SchoolId"] = attendance.SchoolId;
+				p["@IsActive"] = attendance.IsActive;
+				p["@IsDeleted"] = attendance.IsDeleted;
+				p["@CreatedBy"] = attendance.CreatedBy;
+				p["@CreatedDate"] = attendance.CreatedDate;
+				p["@Status"] = attendance.Status;
+				p["@StatusMessage"] = attendance.StatusMessage;
+				
+				// Execute the stored procedure
+				var result = await Task.Run(() => p.ExecScalar());
+				return (Guid)result;
+			}
+		}
+
+		public StudentMaster GetById(Guid id)
+		{
+			return GetByIdAsync(id).GetAwaiter().GetResult();
+		}
+
+		public Guid Create(StudentMaster student)
+		{
+			return CreateAsync(student).GetAwaiter().GetResult();
+		}
+
+		public bool Update(StudentMaster student)
+		{
+			return UpdateAsync(student).GetAwaiter().GetResult();
+		}
+
+		public bool Delete(Guid id)
+		{
+			return DeleteAsync(id).GetAwaiter().GetResult();
+		}
+
+		public async Task<IEnumerable<StudentMaster>> SearchStudentsAsync(StudentSearchCriteria criteria)
+		{
+			using (var p = new Proc("Student_Search"))
+			{
+				p["@SearchTerm"] = criteria.SearchTerm ?? (object)DBNull.Value;
+				p["@SchoolId"] = criteria.SchoolId ?? (object)DBNull.Value;
+				p["@ClassId"] = criteria.ClassId ?? (object)DBNull.Value;
+				p["@IsActive"] = criteria.IsActive ?? (object)DBNull.Value;
+				p["@PageNumber"] = criteria.PageNumber;
+				p["@PageSize"] = criteria.PageSize;
+				
+				var dt = new DataTable();
+				await Task.Run(() => p.Exec(dt));
+				
+				return dt.Rows.Cast<DataRow>()
+					.Select(row => Map(row, _logger))
+					.Where(student => student != null);
+			}
+		}
+
+		public async Task<StudentStats> GetStudentStatisticsAsync(Guid? schoolId = null)
+		{
+			using (var p = new Proc("Student_GetStatistics"))
+			{
+				p["@SchoolId"] = schoolId ?? (object)DBNull.Value;
+				
+				var dt = new DataTable();
+				await Task.Run(() => p.Exec(dt));
+				
+				if (dt.Rows.Count == 0)
+					return new StudentStats();
+					
+				var row = dt.Rows[0];
+				return new StudentStats
+				{
+					TotalStudents = Convert.ToInt32(row["TotalStudents"]),
+					ActiveStudents = Convert.ToInt32(row["ActiveStudents"]),
+					NewThisMonth = Convert.ToInt32(row["NewThisMonth"]),
+					InactiveStudents = Convert.ToInt32(row["InactiveStudents"] ?? 0),
+					GraduatedThisYear = Convert.ToInt32(row["GraduatedThisYear"] ?? 0)
+				};
+			}
+		}
+
+		private StudentAttendanceDetails MapToStudentAttendanceDetails(DataRow row)
+		{
+			return new StudentAttendanceDetails
+			{
+				Id = row.Field<Guid>("Id"),
+				StudentGUID = row.Field<Guid>("StudentGUID"),
+				ClassId = row.Field<Guid>("ClassId"),
+				SectionId = row.Field<Guid>("SectionId"),
+				Month = row.Field<int?>("Month"),
+				Year = row.Field<int?>("Year"),
+				AttendenceDate = row.Field<DateTime>("AttendenceDate"),
+				AttendenceStatus = row.Field<bool>("IsPresent"),
+				AttendanceReasonId = row.Field<Guid>("AttendanceReasonId"),
+				AttendenceTime = row.Field<string>("AttendanceTime"),
+				CompanyId = row.Field<Guid>("CompanyId"),
+				SchoolId = row.Field<Guid>("SchoolId"),
+				IsActive = row.Field<bool>("IsActive"),
+				IsDeleted = row.Field<bool>("IsDeleted"),
+				CreatedBy = row.Field<Guid>("CreatedBy"),
+				CreatedDate = row.Field<DateTime>("CreatedDate"),
+				ModifiedBy = row.Field<Guid?>("ModifiedBy"),
+				ModifiedDate = row.Field<DateTime?>("ModifiedDate"),
+				Status = row.Field<string>("Status") ?? "INC",
+				StatusMessage = row.Field<string>("StatusMessage") ?? "In Process...."
+			};
+		}
+
+		#endregion
+	}
+
+	public class StudentServiceException : Exception
+	{
+		public StudentServiceException() { }
+		public StudentServiceException(string message) : base(message) { }
+		public StudentServiceException(string message, Exception inner) : base(message, inner) { }
+	}
+
+	public class StudentNotFoundException : StudentServiceException
+	{
+		public StudentNotFoundException(Guid StudentGUID) 
+			: base($"Student with ID {StudentGUID} was not found.") { }
+	}
+
+	public class StudentUpdateException : StudentServiceException
+	{
+		public StudentUpdateException(string message, Exception inner = null) 
+			: base(message, inner) { }
+	}
+
+	public class StudentDeleteException : StudentServiceException
+	{
+		public StudentDeleteException(string message, Exception inner = null) 
+			: base(message, inner) { }
+	}
 }

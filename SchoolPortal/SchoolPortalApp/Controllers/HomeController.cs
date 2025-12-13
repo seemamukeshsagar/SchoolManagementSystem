@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SchoolPortal.Services.IServices;
 using SchoolPortalApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using SchoolPortal.Entities.Models;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -13,36 +17,56 @@ namespace SchoolPortalApp.Controllers
 		private readonly IStudentService _studentService;
 		private readonly IClassService _classService;
 		private readonly ILookupService _lookupService;
+		private readonly ILogger<HomeController> _logger;
 
-		public HomeController(IStudentService studentService, IClassService classService, ILookupService lookupService)
+		public HomeController(
+			IStudentService studentService, 
+			IClassService classService, 
+			ILookupService lookupService,
+			ILogger<HomeController> logger)
 		{
-			_studentService = studentService;
-			_classService = classService;
-			_lookupService = lookupService;
+			_studentService = studentService ?? throw new ArgumentNullException(nameof(studentService));
+			_classService = classService ?? throw new ArgumentNullException(nameof(classService));
+			_lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
 		[Microsoft.AspNetCore.Authorization.AllowAnonymous]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var viewModel = GetStudentGenderByClassData();
+			var viewModel = await GetStudentGenderByClassDataAsync();
 			return View(viewModel);
 		}
 
-		private StudentGenderByClassChartViewModel GetStudentGenderByClassData()
+		private async Task<StudentGenderByClassChartViewModel> GetStudentGenderByClassDataAsync()
 		{
 			try
 			{
-				// Get all students and classes
-				var students = _studentService.GetAll().Where(s => s.IsActive && !s.IsDeleted).ToList();
-				var classes = _classService.GetAll().Where(c => c.IsActive && !c.IsDeleted).ToList();
+				// Get all students and classes asynchronously
+				var allStudents = await _studentService.GetAllAsync().ConfigureAwait(false) ?? new List<StudentMaster>();
+				var allClasses = await _classService.GetAllAsync().ConfigureAwait(false) ?? new List<ClassMaster>();
+
+				var students = allStudents
+					.Where(s => s != null && s.IsActive && !s.IsDeleted)
+					.ToList();
+						
+				var classes = allClasses
+					.Where(c => c != null && c.IsActive && !c.IsDeleted)
+					.ToList();
 
 				// Get gender lookup data
-				var genders = _lookupService.GetGenders();
-				var maleGenderId = genders.FirstOrDefault(g => g.Name.ToLower() == "male")?.Id ?? Guid.Empty;
-				var femaleGenderId = genders.FirstOrDefault(g => g.Name.ToLower() == "female")?.Id ?? Guid.Empty;
+				var genders = _lookupService.GetGenders() ?? new List<LookupItem>();
+				var lookup = genders.ToLookup(x => x.Id, x => x.Name);
+				
+				var maleGenderId = genders
+					.Where(g => g != null && !string.IsNullOrEmpty(g.Name))
+					.FirstOrDefault(g => g.Name.Equals("male", StringComparison.OrdinalIgnoreCase))?.Id ?? Guid.Empty;
+				var femaleGenderId = genders
+					.Where(g => g != null && !string.IsNullOrEmpty(g.Name))
+					.FirstOrDefault(g => g.Name.Equals("female", StringComparison.OrdinalIgnoreCase))?.Id ?? Guid.Empty;
 
 				// If no data available, use dummy data
 				if (!students.Any() || !classes.Any() || maleGenderId == Guid.Empty || femaleGenderId == Guid.Empty)
@@ -53,16 +77,20 @@ namespace SchoolPortalApp.Controllers
 				var viewModel = new StudentGenderByClassChartViewModel { HasData = true };
 
 				// Group students by class and gender
-				foreach (var classItem in classes)
+				foreach (var classItem in classes.Where(c => c != null && !string.IsNullOrEmpty(c.Name)))
 				{
-					var classStudents = students.Where(s => s.ClassId == classItem.Id).ToList();
+					var classStudents = students
+						.Where(s => s != null && s.ClassId == classItem.Id)
+						.ToList();
 					
-					var boysCount = classStudents.Count(s => s.Gender.HasValue && s.Gender.Value == maleGenderId);
-					var girlsCount = classStudents.Count(s => s.Gender.HasValue && s.Gender.Value == femaleGenderId);
+					var boysCount = classStudents
+						.Count(s => s.Gender.HasValue && s.Gender.Value == maleGenderId);
+					var girlsCount = classStudents
+						.Count(s => s.Gender.HasValue && s.Gender.Value == femaleGenderId);
 
 					viewModel.Data.Add(new StudentGenderByClassViewModel
 					{
-						ClassName = classItem.Name,
+						ClassName = classItem.Name!,
 						BoysCount = boysCount,
 						GirlsCount = girlsCount
 					});
@@ -70,14 +98,15 @@ namespace SchoolPortalApp.Controllers
 
 				return viewModel;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger?.LogError(ex, "Error in GetStudentGenderByClassDataAsync");
 				// If any error occurs, return dummy data
 				return GetDummyData();
 			}
 		}
 
-		private StudentGenderByClassChartViewModel GetDummyData()
+		private static StudentGenderByClassChartViewModel GetDummyData()
 		{
 			return new StudentGenderByClassChartViewModel
 			{

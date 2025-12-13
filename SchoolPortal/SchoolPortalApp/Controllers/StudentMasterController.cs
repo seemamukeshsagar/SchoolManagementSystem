@@ -264,9 +264,9 @@ namespace SchoolPortalApp.Controllers
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var list = _service.GetAll();
+			var list = await _service.GetAllAsync();
 			var schools = _schoolService.GetAll();
 			var result = list.Select(item =>
 			{
@@ -286,11 +286,11 @@ namespace SchoolPortalApp.Controllers
 
 		[HttpGet]
 		[Route("Details/{id}")]
-		public IActionResult Details(Guid id)
+		public async Task<IActionResult> Details(Guid id)
 		{
 			if (id == Guid.Empty) return BadRequest();
 
-			var item = _service.GetById(id);
+			var item = await _service.GetByIdAsync(id);
 			if (item == null) return NotFound();
 
 			var vm = new StudentViewModel

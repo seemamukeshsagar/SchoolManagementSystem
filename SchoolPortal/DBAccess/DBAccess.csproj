@@ -170,6 +170,7 @@
     <Compile Include="DBAccessException.cs" />
     <Compile Include="ParmList.cs" />
     <Compile Include="Proc.cs" />
+    <Compile Include="ProcExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyConnectionManager.cs" />
     <Compile Include="ReadOnlyProc.cs" />
