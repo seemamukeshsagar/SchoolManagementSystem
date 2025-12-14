@@ -239,7 +239,7 @@ namespace SchoolPortal.Services
 			}
 		}
 
-		public IEnumerable<object> GetRolePrivileges(int roleId)
+		public IEnumerable<object> GetRolePrivileges(Guid roleId)
 		{
 			var result = new List<object>();
 			var dt = new DataTable();

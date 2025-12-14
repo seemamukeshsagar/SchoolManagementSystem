@@ -62,10 +62,10 @@ namespace SchoolPortal.Services
 				await _cacheLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 				try
 				{
-					return await _cache.GetOrCreateAsync(cacheKey, async entry =>
+					var result = await _cache.GetOrCreateAsync(cacheKey, async entry =>
 					{
 						entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
-						
+
 						using (var p = new Proc("Student_GetAll"))
 						{
 							if (schoolId.HasValue)
@@ -73,13 +73,17 @@ namespace SchoolPortal.Services
 
 							var dt = new DataTable();
 							await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
-							
-							return dt.Rows.Cast<DataRow>()
+
+							var students = dt.Rows.Cast<DataRow>()
 								.Select(row => Map(row, _logger))
 								.Where(student => student != null)
-								.ToList()!;
+								.Cast<StudentMaster>()
+								.ToList();
+							return students;
 						}
-					}).ConfigureAwait(false) ?? new List<StudentMaster>();
+					}) ?? new List<StudentMaster>();
+
+					return result ?? new List<StudentMaster>();
 				}
 				finally
 				{
@@ -112,7 +116,7 @@ namespace SchoolPortal.Services
 			}
 		}
 
-		public async Task<StudentMaster> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+		public async Task<StudentMaster> GetByIdAsync(Guid id, ICacheEntry entry, CancellationToken cancellationToken = default)
 		{
 			if (id == Guid.Empty)
 				throw new ArgumentException("Student ID cannot be empty", nameof(id));
@@ -126,7 +130,7 @@ namespace SchoolPortal.Services
 				{
 					return await _cache.GetOrCreateAsync(cacheKey, async entry =>
 					{
-						entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+                        entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
 						
 						using (var p = new Proc("Student_GetById"))
 						{
@@ -253,7 +257,7 @@ namespace SchoolPortal.Services
 
 					// Update specific parameters
 					p["@Id"] = student.Id;
-					p["@ModifiedBy"] = student.ModifiedBy;
+					p["@ModifiedBy"] = student.ModifiedBy ?? (object)DBNull.Value;
 					p["@ModifiedDate"] = student.ModifiedDate;
 
 					var dt = new DataTable();
@@ -297,7 +301,18 @@ namespace SchoolPortal.Services
 			try
 			{
 				// Get student first to get school ID for cache invalidation
-				var student = await GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+				var student = await _cache.GetOrCreateAsync($"Student_{id}", async entry =>
+				{
+					entry.AbsoluteExpirationRelativeToNow = _cacheDuration;
+					using (var p = new Proc("Student_GetById"))
+					{
+						p["@Id"] = id;
+						var dt = new DataTable();
+						await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
+						return dt.Rows.Count > 0 ? Map(dt.Rows[0], _logger) : null;
+					}
+				}).ConfigureAwait(false);
+
 				if (student == null)
 				{
 					_logger.LogWarning("Delete operation failed: Student {StudentGUID} not found", id);
@@ -464,8 +479,8 @@ namespace SchoolPortal.Services
 					p["@StudentGUID"] = attendance.StudentGUID;
 					p["@ClassId"] = attendance.ClassId;
 					p["@SectionId"] = attendance.SectionId;
-					p["@Month"] = attendance.Month;
-					p["@Year"] = attendance.Year;
+					p["@Month"] = attendance.Month ?? (object)DBNull.Value;
+					p["@Year"] = attendance.Year ?? (object)DBNull.Value;
 					p["@AttendenceDate"] = attendance.AttendenceDate;
 					p["@AttendenceStatus"] = attendance.AttendenceStatus;
 					p["@AttendanceReasonId"] = attendance.AttendanceReasonId;
@@ -517,12 +532,13 @@ namespace SchoolPortal.Services
 						var dt = new DataTable();
 						await Task.Run(() => p.Exec(dt), cancellationToken).ConfigureAwait(false);
 
+						// Ensure the result is IEnumerable<StudentMaster> (no nulls)
 						return dt.Rows.Cast<DataRow>()
 							.Select(row => Map(row, _logger))
 							.Where(student => student != null)
-							.ToList()!;
+							.Cast<StudentMaster>();
 					}
-				}).ConfigureAwait(false) ?? new List<StudentMaster>();
+				}).ConfigureAwait(false) ?? Enumerable.Empty<StudentMaster>();
 			}
 			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
 			{
@@ -553,7 +569,7 @@ namespace SchoolPortal.Services
 					using (var p = new Proc("Student_GetStatistics"))
 					{
 						if (schoolId.HasValue)
-							p["@SchoolId"] = schoolId.Value;
+						 p["@SchoolId"] = schoolId.Value;
 
 						var stats = new StudentStats();
 						
@@ -623,7 +639,7 @@ namespace SchoolPortal.Services
 
 		#region Helper Methods
 
-		private static StudentMaster Map(DataRow row, ILogger<StudentService> logger)
+		private static StudentMaster? Map(DataRow row, ILogger<StudentService> logger)
 		{
 			try
 			{
@@ -635,9 +651,9 @@ namespace SchoolPortal.Services
 					RollNumber = row.Field<Guid>("RollNumber"),
 					FirstName = row.Field<string>("FirstName"),
 					LastName = row.Field<string>("LastName"),
-					Address = row.Field<string>("Address"),
-					CityId = row.Field<Guid>("CityId"),
-					StateId = row.Field<Guid>("StateId"),
+					Address = row.Table.Columns.Contains("Address") ? row.Field<string>("Address") : null,
+					CityId = row.Table.Columns.Contains("CityId") && !row.IsNull("CityId") ? row.Field<Guid>("CityId") : Guid.Empty,
+					StateId = row.Table.Columns.Contains("StateId") && !row.IsNull("StateId") ? row.Field<Guid>("StateId") : Guid.Empty,
 					CountryId = row.Field<Guid>("CountryId"),
 					ZipCode = row.Field<string>("ZipCode"),
 					ContactNumber = row.Field<string>("ContactNumber"),
@@ -924,8 +940,8 @@ namespace SchoolPortal.Services
 				p["@AttendanceReasonId"] = attendance.AttendanceReasonId;
 				
 				// Optional parameters
-				p["@Month"] = attendance.Month;
-				p["@Year"] = attendance.Year;
+				p["@Month"] = attendance.Month ?? (object)DBNull.Value;
+				p["@Year"] = attendance.Year ?? (object)DBNull.Value;
 				p["@AttendenceTime"] = attendance.AttendenceTime;
 				p["@CompanyId"] = attendance.CompanyId;
 				p["@SchoolId"] = attendance.SchoolId;

@@ -6,7 +6,7 @@ namespace SchoolPortal.Entities.Models
     public class AcademicYear
     {
         public Guid Id { get; set; }
-        public string AcademicYearName { get; set; }
+        public string? AcademicYearName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool IsCurrent { get; set; }

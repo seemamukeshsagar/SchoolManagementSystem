@@ -24,6 +24,6 @@ namespace SchoolPortal.Services.IServices
         /// </summary>
         /// <param name="roleId">The ID of the role</param>
         /// <returns>List of role privileges</returns>
-        IEnumerable<object> GetRolePrivileges(int roleId);
+        IEnumerable<object> GetRolePrivileges(Guid roleId);
 	}
 }

@@ -76,53 +76,87 @@
 </div>
 
 @section Scripts {
-	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+	<!-- Add Bootstrap JS bundle (includes Modal) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	
 	<script>
-		function showPrivileges(roleId, roleName) {
-			$('#privilegesModalLabel').text('Privileges for ' + roleName);
-			var modal = new bootstrap.Modal(document.getElementById('privilegesModal'));
-			
-			// Show loading state
-			$('#privilegesContent').html(`
-				<div class="text-center">
-					<div class="spinner-border" role="status">
-						<span class="visually-hidden">Loading...</span>
-					</div>
-					<p>Loading privileges...</p>
-				</div>
-			`);
-			
-			// Show modal
-			modal.show();
-			
-			// Fetch privileges
-			$.get('@Url.Action("GetRolePrivileges", "RoleMaster")', { roleId: roleId })
-				.done(function(response) {
-					if (response.success && response.data) {
-						var html = '<div class="table-responsive"><table class="table table-striped">';
-						html += '<thead><tr><th>Privilege Name</th><th>Description</th></tr></thead><tbody>';
-						
-						if (response.data.length > 0) {
-							response.data.forEach(function(priv) {
-								html += `<tr><td>${priv.name || ''}</td><td>${priv.description || ''}</td></tr>`;
-							});
-						} else {
-							html += '<tr><td colspan="2" class="text-center">No privileges assigned to this role.</td></tr>';
-						}
-						
-						html += '</tbody></table></div>';
-						$('#privilegesContent').html(html);
-					} else {
-						$('#privilegesContent').html('<div class="alert alert-danger">Error loading privileges. ' + (response.message || '') + '</div>');
-					}
-				})
-				.fail(function() {
-					$('#privilegesContent').html('<div class="alert alert-danger">Failed to load privileges. Please try again.</div>');
-				});
-		}
-
+        // Make sure the function is in the global scope
+        window.showPrivileges = function(roleId, roleName) {
+            console.log('showPrivileges called with:', { roleId, roleName }); // Debug log
+            
+            var modal = new bootstrap.Modal(document.getElementById('privilegesModal'));
+            $('#privilegesModalLabel').text('Privileges for ' + roleName);
+            
+            // Show loading state
+            $('#privilegesContent').html(`
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading privileges...</p>
+                </div>
+            `);
+            
+            // Show modal first
+            modal.show();
+            
+            // Fetch privileges
+            $.ajax({
+                url: '@Url.Action("GetRolePrivileges", "RoleMaster")',
+                type: 'GET',
+                data: { roleId: roleId },
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Privileges response:', response); // Debug log
+                    
+                    if (response && response.success) {
+                        var html = '<div class="table-responsive"><table class="table table-striped">';
+                        html += '<thead><tr><th>Privilege Name</th><th>Description</th></tr></thead><tbody>';
+                        
+                        if (response.data && response.data.length > 0) {
+                            response.data.forEach(function(priv) {
+                                html += `<tr><td>${escapeHtml(priv.name || '')}</td><td>${escapeHtml(priv.description || '')}</td></tr>`;
+                            });
+                        } else {
+                            html += '<tr><td colspan="2" class="text-center">No privileges assigned to this role.</td></tr>';
+                        }
+                        
+                        html += '</tbody></table></div>';
+                        $('#privilegesContent').html(html);
+                    } else {
+                        var errorMsg = (response && response.message) ? response.message : 'Unknown error occurred';
+                        console.error('Error loading privileges:', errorMsg);
+                        showError('Error loading privileges: ' + errorMsg);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    showError('Failed to load privileges. Please try again later.');
+                }
+            });
+        };
+        // Helper function to escape HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        // Helper function to show error messages
+        function showError(message) {
+            $('#privilegesContent').html(
+                '<div class="alert alert-danger">' + 
+                '<i class="bi bi-exclamation-triangle-fill me-2"></i>' + 
+                message + 
+                '</div>'
+            );
+        }
+		
 		$(document).ready(function () {
 			$('#rolesTable').DataTable({
 				processing: true,

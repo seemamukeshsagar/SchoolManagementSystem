@@ -22,7 +22,8 @@ namespace SchoolPortal.Services.IServices
 		List<LookupItem> GetRelationTypes();
 		List<LookupItem> GetCompanies();
 		List<LookupItem> GetSchools();
-		List<LookupItem> GetGenders();
+        List<LookupItem> GetSchools(Guid schoolId);
+        List<LookupItem> GetGenders();
 		List<LookupItem> GetPaymentModes();
 		List<LookupItem> GetPaymentModes(Guid schoolId);
 		List<LookupItem> GetEmployeeTypes();

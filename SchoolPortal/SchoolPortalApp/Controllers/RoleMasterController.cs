@@ -360,7 +360,7 @@ namespace SchoolPortalApp.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult GetRolePrivileges(int roleId)
+		public IActionResult GetRolePrivileges(Guid roleId)
 		{
 			try
 			{

@@ -71,8 +71,8 @@ namespace SchoolPortal.Services
             p["@SchoolId"] = desig.SchoolId;
             p["@CreatedBy"] = desig.CreatedBy;
             p["@CreatedDate"] = desig.CreatedDate;
-            p["@ModifiedBy"] = desig.ModifiedBy;
-            p["@ModifiedDate"] = desig.ModifiedDate;
+            p["@ModifiedBy"] = desig.ModifiedBy ?? (object)DBNull.Value;
+            p["@ModifiedDate"] = desig.ModifiedDate ?? (object)DBNull.Value;
             p["@Status"] = desig.Status;
             p["@StatusMessage"] = desig.StatusMessage;
             p.Exec();
@@ -105,8 +105,8 @@ namespace SchoolPortal.Services
             p["@SchoolId"] = desig.SchoolId;
             p["@CreatedBy"] = desig.CreatedBy;
             p["@CreatedDate"] = desig.CreatedDate;
-            p["@ModifiedBy"] = desig.ModifiedBy;
-            p["@ModifiedDate"] = desig.ModifiedDate;
+            p["@ModifiedBy"] = desig.ModifiedBy ?? (object)DBNull.Value;
+            p["@ModifiedDate"] = desig.ModifiedDate ?? (object)DBNull.Value;
             p["@Status"] = desig.Status;
             p["@StatusMessage"] = desig.StatusMessage;
             p.Exec();
