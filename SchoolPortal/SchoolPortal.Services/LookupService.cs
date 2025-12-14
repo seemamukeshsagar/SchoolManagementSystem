@@ -407,7 +407,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToClassMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<ClassMaster>();
@@ -423,7 +423,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToSectionMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<SectionMaster>();
@@ -439,7 +439,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToLocationMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<LocationMaster>();
@@ -502,7 +502,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToStudentMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<StudentMaster>();
@@ -519,7 +519,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToAttendanceReasonList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<AttendanceReasonMaster>();

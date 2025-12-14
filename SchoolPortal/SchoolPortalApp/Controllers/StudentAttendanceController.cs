@@ -209,7 +209,7 @@ namespace SchoolPortalApp.Controllers
                 AttendenceTime = DateTime.Now.ToString("HH:mm")
             };
 
-            PopulateDropdowns(vm);
+            _ = PopulateDropdowns(vm);
             return View(vm);
         }
 

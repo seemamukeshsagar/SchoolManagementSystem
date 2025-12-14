@@ -8,6 +8,8 @@ using SchoolPortal.DBAccess;
 using SchoolPortal.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using SchoolPortal.Services;
+using SchoolPortal.Data;
+using SchoolPortal.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +113,8 @@ builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ =>
 
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
      sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 // Core services
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
@@ -247,10 +251,10 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 // Configure AuthorizedManager for each request
-app.Use(async (context, next) =>
-{
-    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
-    await next();
-});
+//app.Use(async (context, next) =>
+//{
+//    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
+//    await next();
+//});
 
 app.Run();

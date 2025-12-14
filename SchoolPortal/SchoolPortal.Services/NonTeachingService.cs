@@ -13,7 +13,7 @@ namespace SchoolPortal.Services.Services
 {
     public class NonTeachingService : INonTeachingService
     {
-        private new readonly ILogger<NonTeachingService> _logger;
+        private readonly ILogger<NonTeachingService> _logger;
         private readonly IDbConnection _connection;
         private readonly INonTeachingDocumentDetailsService _documentService;
         private readonly INonTeachingQualificationDetailsService _qualificationService;
@@ -253,7 +253,7 @@ namespace SchoolPortal.Services.Services
                 ZipCode = r.Table.Columns.Contains("ZipCode") && r["ZipCode"] != DBNull.Value ? r["ZipCode"]?.ToString() : null,
                 Gender = r.Table.Columns.Contains("Gender") && r["Gender"] != DBNull.Value ? r["Gender"]?.ToString() : null,
                 MaritalStatusId = r.Table.Columns.Contains("MaritalStatusId") && r["MaritalStatusId"] != DBNull.Value && Guid.TryParse(r["MaritalStatusId"]?.ToString(), out var maritalStatusId) ? maritalStatusId : Guid.Empty,
-                Image = r.Table.Columns.Contains("Image") && r["Image"] != DBNull.Value ? (byte[])r["Image"] : null,
+                Image = r.Table.Columns.Contains("Image") && r["Image"] != DBNull.Value && r["Image"] is byte[] imageData ? imageData : null,
                 Qualification = r.Table.Columns.Contains("Qualification") && r["Qualification"] != DBNull.Value ? r["Qualification"]?.ToString() : null,
                 Salary = r.Table.Columns.Contains("Salary") && r["Salary"] != DBNull.Value && decimal.TryParse(r["Salary"]?.ToString(), out var salary) ? salary : (decimal?)null,
                 BankAccountNumber = r.Table.Columns.Contains("BankAccountNumber") && r["BankAccountNumber"] != DBNull.Value ? r["BankAccountNumber"]?.ToString() : null,
@@ -269,7 +269,7 @@ namespace SchoolPortal.Services.Services
                 CreatedBy = r.Table.Columns.Contains("CreatedBy") && r["CreatedBy"] != DBNull.Value && r["CreatedBy"] is Guid createdByGuid ? createdByGuid : Guid.Empty,
                 CreatedDate = r.Table.Columns.Contains("CreatedDate") && r["CreatedDate"] != DBNull.Value && r["CreatedDate"] is DateTime createdDate ? createdDate : DateTime.UtcNow,
                 ModifiedBy = r.Table.Columns.Contains("ModifiedBy") && r["ModifiedBy"] != DBNull.Value && r["ModifiedBy"] is Guid modifiedByGuid ? modifiedByGuid : (Guid?)null,
-                ModifiedDate = r.Table.Columns.Contains("ModifiedDate") && r["ModifiedDate"] != DBNull.Value && r["ModifiedDate"] is DateTime modifiedDate ? modifiedDate : (DateTime?)null
+                ModifiedDate = r.Table.Columns.Contains("ModifiedDate") && r["ModifiedDate"] != DBNull.Value && r["ModifiedDate"] is DateTime modifiedDate ? modifiedDate : null
             };
 
             return t;

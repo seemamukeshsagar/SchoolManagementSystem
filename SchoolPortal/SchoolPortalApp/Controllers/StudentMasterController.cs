@@ -654,7 +654,7 @@ namespace SchoolPortalApp.Controllers
 			}
 		}
 
-		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult errorResult)
+		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult? errorResult)
 		{
 			errorResult = null;
 

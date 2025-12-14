@@ -358,5 +358,20 @@ namespace SchoolPortalApp.Controllers
 				return Json(new { error = "An error occurred while processing your request." });
 			}
 		}
+
+		[HttpGet]
+		public IActionResult GetRolePrivileges(int roleId)
+		{
+			try
+			{
+				var privileges = _service.GetRolePrivileges(roleId);
+				return Json(new { success = true, data = privileges });
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error getting role privileges");
+				return Json(new { success = false, message = "Error getting role privileges" });
+			}
+		}
 	}
 }

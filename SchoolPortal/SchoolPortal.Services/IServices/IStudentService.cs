@@ -11,12 +11,12 @@ namespace SchoolPortal.Services.IServices
         // Existing methods
         Task<List<StudentMaster>> GetAllAsync(Guid? schoolId = null);
         List<StudentMaster> GetAll(Guid? schoolId = null);
-        Task<StudentMaster> GetByIdAsync(Guid id);
+        Task<StudentMaster?> GetByIdAsync(Guid id);
         Task<Guid> CreateAsync(StudentMaster student);
         Task<bool> UpdateAsync(StudentMaster student);
         Task<bool> DeleteAsync(Guid id);
         Task<bool> CategoryExistsAsync(Guid categoryId);
-        Task<StudentAttendanceDetails> GetStudentAttendanceByIdAsync(Guid id);
+        Task<StudentAttendanceDetails?> GetStudentAttendanceByIdAsync(Guid id);
         Task<Guid> CreateStudentAttendanceAsync(StudentAttendanceDetails attendance);
         Task<bool> UpdateStudentAttendanceAsync(StudentAttendanceDetails attendance);
         StudentMaster GetById(Guid id);
@@ -33,7 +33,7 @@ namespace SchoolPortal.Services.IServices
 
     public class StudentSearchCriteria
     {
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
         public Guid? SchoolId { get; set; }
         public Guid? ClassId { get; set; }
         public bool? IsActive { get; set; }

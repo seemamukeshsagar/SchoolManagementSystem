@@ -15,9 +15,15 @@ namespace SchoolPortal.Services.IServices
 		(IEnumerable<RoleMaster> items, int totalCount) GetRoles(
         int pageNumber, 
         int pageSize, 
-        string sortColumn = null, 
+        string? sortColumn = null, 
         string sortDirection = "asc", 
-        string searchTerm = null);
-		
+        string? searchTerm = null);
+
+        /// <summary>
+        /// Gets all privileges for a specific role
+        /// </summary>
+        /// <param name="roleId">The ID of the role</param>
+        /// <returns>List of role privileges</returns>
+        IEnumerable<object> GetRolePrivileges(int roleId);
 	}
 }

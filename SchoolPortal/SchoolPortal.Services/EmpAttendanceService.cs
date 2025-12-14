@@ -11,7 +11,7 @@ namespace SchoolPortal.Services.Services
 {
     public class EmpAttendanceService : IEmpAttendanceService
     {
-        private readonly IRepository<EmpAttendanceDetails> _repository;
+         private readonly IRepository<EmpAttendanceDetails> _repository;
 
         public EmpAttendanceService(IRepository<EmpAttendanceDetails> repository)
         {

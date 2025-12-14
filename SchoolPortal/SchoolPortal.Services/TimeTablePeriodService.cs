@@ -16,7 +16,7 @@ namespace SchoolPortal.Services
 {
     public class TimeTablePeriodService : ITimeTablePeriodService
     {
-        private new readonly ILogger<TimeTablePeriodService> _logger;
+        private readonly ILogger<TimeTablePeriodService> _logger;
 
         public TimeTablePeriodService(ILogger<TimeTablePeriodService> logger)
         {

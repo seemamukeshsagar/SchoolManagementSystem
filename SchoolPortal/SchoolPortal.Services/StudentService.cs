@@ -825,15 +825,13 @@ namespace SchoolPortal.Services
 
 		#region IStudentService Implementation
 
-		public async Task<StudentMaster> GetByIdAsync(Guid id)
+		public async Task<StudentMaster?> GetByIdAsync(Guid id)
 		{
 			using (var p = new Proc("Student_GetById"))
 			{
 				p["@Id"] = id;
-				
 				var dt = new DataTable();
 				await Task.Run(() => p.Exec(dt));
-				
 				return dt.Rows.Count > 0 ? Map(dt.Rows[0], _logger) : null;
 			}
 		}
@@ -886,14 +884,12 @@ namespace SchoolPortal.Services
 			}
 		}
 
-		public async Task<StudentAttendanceDetails> GetStudentAttendanceByIdAsync(Guid id)
+		public async Task<StudentAttendanceDetails?> GetStudentAttendanceByIdAsync(Guid id)
 		{
 			if (_disposed)
 				throw new ObjectDisposedException(nameof(StudentService));
-
 			if (id == Guid.Empty)
 				throw new ArgumentException("ID cannot be empty", nameof(id));
-
 			try
 			{
 				using (var p = new Proc("StudentAttendance_GetById"))
@@ -905,7 +901,6 @@ namespace SchoolPortal.Services
 					
 					if (dt.Rows.Count == 0)
 						return null;
-
 					return MapToStudentAttendanceDetails(dt.Rows[0]);
 				}
 			}
@@ -983,7 +978,8 @@ namespace SchoolPortal.Services
 				
 				return dt.Rows.Cast<DataRow>()
 					.Select(row => Map(row, _logger))
-					.Where(student => student != null);
+					.Where(student => student != null)
+					.Select(student => student!);
 			}
 		}
 
@@ -1056,13 +1052,13 @@ namespace SchoolPortal.Services
 
 	public class StudentUpdateException : StudentServiceException
 	{
-		public StudentUpdateException(string message, Exception inner = null) 
-			: base(message, inner) { }
+		public StudentUpdateException(string message, Exception? inner = null) 
+			: base(message, inner ?? new Exception(message)) { }
 	}
 
 	public class StudentDeleteException : StudentServiceException
 	{
-		public StudentDeleteException(string message, Exception inner = null) 
-			: base(message, inner) { }
+		public StudentDeleteException(string message, Exception? inner = null) 
+			: base(message, inner ?? new Exception(message)) { }
 	}
 }

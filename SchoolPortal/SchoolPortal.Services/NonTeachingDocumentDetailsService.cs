@@ -14,7 +14,7 @@ namespace SchoolPortal.Services.Services
 {
 	public class NonTeachingDocumentDetailsService : INonTeachingDocumentDetailsService
 	{
-		private new readonly ILogger<NonTeachingDocumentDetailsService> _logger;
+		private readonly ILogger<NonTeachingDocumentDetailsService> _logger;
 		private readonly IDbConnection _connection;
 
 		public NonTeachingDocumentDetailsService(ILogger<NonTeachingDocumentDetailsService> logger, IDbConnection connection)

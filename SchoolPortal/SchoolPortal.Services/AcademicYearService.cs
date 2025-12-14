@@ -13,7 +13,7 @@ namespace SchoolPortal.Services
 {
     public class AcademicYearService : IAcademicYearService
     {
-        private new readonly ILogger<AcademicYearService> _logger;
+        private readonly ILogger<AcademicYearService> _logger;
 
         public AcademicYearService(ILogger<AcademicYearService> logger)
         {
@@ -29,7 +29,11 @@ namespace SchoolPortal.Services
                 p.Exec(dt);
                 foreach (DataRow r in dt.Rows)
                 {
-                    list.Add(MapAcademicYear(r));
+                    var academicYear = MapAcademicYear(r);
+                    if (academicYear != null)
+                    {
+                        list.Add(academicYear);
+                    }
                 }
             }
             return list;
@@ -44,7 +48,11 @@ namespace SchoolPortal.Services
                 p.Exec(dt);
                 foreach (DataRow r in dt.Rows)
                 {
-                    list.Add(MapAcademicYear(r));
+                    var academicYear = MapAcademicYear(r);
+                    if (academicYear != null)
+                    {
+                        list.Add(academicYear);
+                    }
                 }
             }
             return list;
@@ -146,7 +154,7 @@ namespace SchoolPortal.Services
             }
         }
 
-        private static AcademicYear MapAcademicYear(DataRow r)
+        private static AcademicYear? MapAcademicYear(DataRow r)
         {
             if (r == null) return null;
             

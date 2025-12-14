@@ -17,7 +17,7 @@ namespace SchoolPortalApp.Controllers
 		private readonly IStudentService _studentService;
 		private readonly IClassService _classService;
 		private readonly ILookupService _lookupService;
-		private readonly ILogger<HomeController> _logger;
+		private readonly new ILogger<HomeController> _logger;
 
 		public HomeController(
 			IStudentService studentService, 
