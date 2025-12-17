@@ -54,3 +54,5 @@ TestResult.xml
 nunit-*.xml
 /.vs
 /SchoolPortal/.vs
+/SchoolPortal/SchoolPortalApp/Helpers/ConnectionStringHelper.cs
+/SchoolPortal/SchoolPortalApp/Models/DatabaseSettings.cs

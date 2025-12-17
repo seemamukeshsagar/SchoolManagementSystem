@@ -17,7 +17,7 @@
 <!-- ADMINISTRATION -->
 <div class="accordion-item">
     <h2 class="accordion-header" id="heading-admin">
-        <button class="accordion-button collapsed" type="button"
+        <button class="accordion-button" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapse-admin"
                 aria-expanded="true"
@@ -27,69 +27,36 @@
             <span>Administration</span>
         </button>
     </h2>
-    <div id="collapse-admin" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Company") || 
-                                                              ViewHelper.IsActive(ViewContext, "School") ||
-                                                              ViewHelper.IsActive(ViewContext, "UserDetails") ||
-                                                              ViewHelper.IsActive(ViewContext, "RoleMaster") ||
-                                                              ViewHelper.IsActive(ViewContext, "DeptMaster") ||
-                                                              ViewHelper.IsActive(ViewContext, "DesigMaster") ||
-                                                              ViewHelper.IsActive(ViewContext, "Emp") ||
-                                                              ViewHelper.IsActive(ViewContext, "EmpTypeMaster") ||
-                                                              ViewHelper.IsActive(ViewContext, "Privileges") ||
-                                                              ViewHelper.IsActive(ViewContext, "RolePrivileges") ||
-                                                              ViewHelper.IsActive(ViewContext, "SystemParameters") ||
-                                                              ViewHelper.IsActive(ViewContext, "TaskSchedules") ||
-                                                              ViewHelper.IsActive(ViewContext, "HolidayMaster") ? "show" : "")" 
+    <div id="collapse-admin" class="accordion-collapse collapse show" 
          aria-labelledby="heading-admin" data-bs-parent="#sidebarAccordion">
         <div class="accordion-body p-0">
             <ul class="nav flex-column ms-1 mb-2">
                 <!-- General -->
                 <li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">General</li>
-                <li><a href="@Url.Action("Index", "Company")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Company") ? "active" : "")">Companies</a></li>
-                <li><a href="@Url.Action("Index", "School")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "School") ? "active" : "")">School</a></li>
-                <li><a href="@Url.Action("Index", "UserDetails")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "UserDetails") ? "active" : "")">Users</a></li>
-                <li><a href="@Url.Action("Index", "RoleMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "RoleMaster") ? "active" : "")">Roles</a></li>
-                <li><a href="@Url.Action("Index", "DeptMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "DeptMaster") ? "active" : "")">Departments</a></li>
-                <li><a href="@Url.Action("Index", "DesigMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "DesigMaster") ? "active" : "")">Designations</a></li>
-                <li><a href="@Url.Action("Index", "Emp")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Emp") ? "active" : "")">Employees</a></li>
-                <li><a href="@Url.Action("Index", "EmpTypeMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "EmpTypeMaster") ? "active" : "")">Employee Type Master</a></li>
-                <li><a href="@Url.Action("Index", "Privileges")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Privileges") ? "active" : "")">Privileges</a></li>
-                <li><a href="@Url.Action("Index", "RolePrivileges")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "RolePrivileges") ? "active" : "")">Role Privileges</a></li>
-                <li><a href="@Url.Action("Index", "SystemParameters")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "SystemParameters") ? "active" : "")">System Parameters</a></li>
-                <li><a href="@Url.Action("Index", "TaskSchedules")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "TaskSchedules") ? "active" : "")">Schedules</a></li>
-                <li><a href="@Url.Action("Index", "HolidayMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "HolidayMaster") ? "active" : "")">Holiday</a></li>
+                <li><a href="@Url.Action("Index", "Company")" class="nav-link @(ViewHelper.IsActive(ViewContext, "Company") ? "active" : "")">Companies</a></li>
+                <li><a href="@Url.Action("Index", "School")" class="nav-link @(ViewHelper.IsActive(ViewContext, "School") ? "active" : "")">School</a></li>
+                <li><a href="@Url.Action("Index", "UserDetails")" class="nav-link @(ViewHelper.IsActive(ViewContext, "UserDetails") ? "active" : "")">Users</a></li>
+                <li><a href="@Url.Action("Index", "RoleMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "RoleMaster") ? "active" : "")">Roles</a></li>
+                <li><a href="@Url.Action("Index", "Privileges")" class="nav-link @(ViewHelper.IsActive(ViewContext, "Privileges") ? "active" : "")">Privileges</a></li>
+                <li><a href="@Url.Action("Index", "RolePrivileges")" class="nav-link @(ViewHelper.IsActive(ViewContext, "RolePrivileges") ? "active" : "")">Role Privileges</a></li>
+                <li><a href="@Url.Action("Index", "DeptMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "DeptMaster") ? "active" : "")">Departments</a></li>
+                <li><a href="@Url.Action("Index", "DesigMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "DesigMaster") ? "active" : "")">Designations</a></li>
+                <li><a href="@Url.Action("Index", "Emp")" class="nav-link @(ViewHelper.IsActive(ViewContext, "Emp") ? "active" : "")">Employees</a></li>
+                <li><a href="@Url.Action("Index", "EmpTypeMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "EmpTypeMaster") ? "active" : "")">Employee Type Master</a></li>
+                <li><a href="@Url.Action("Index", "SystemParameters")" class="nav-link @(ViewHelper.IsActive(ViewContext, "SystemParameters") ? "active" : "")">System Parameters</a></li>
+                <li><a href="@Url.Action("Index", "TaskSchedules")" class="nav-link @(ViewHelper.IsActive(ViewContext, "TaskSchedules") ? "active" : "")">Schedules</a></li>
+                <li><a href="@Url.Action("Index", "HolidayMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "HolidayMaster") ? "active" : "")">Holiday</a></li>
 
                 <!-- Masters -->
                 <li class="nav-item text-uppercase small px-3 pt-2" style="background-color: wheat;">Masters</li>
-                <li><a href="@Url.Action("Index", "CategoryMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "CategoryMaster") ? "active" : "")">Category Master</a></li>
-                <li><a href="@Url.Action("Index", "CasteMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "CasteMaster") ? "active" : "")">Caste Master</a></li>
-                <li><a href="@Url.Action("Index", "ReligionMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "ReligionMaster") ? "active" : "")">Religion Master</a></li>
-                <li><a href="@Url.Action("Index", "BloodGroup")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "BloodGroup") ? "active" : "")">Blood Group</a></li>
-                <li><a href="@Url.Action("Index", "CountryMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "CountryMaster") ? "active" : "")">Country Master</a></li>
-                <li><a href="@Url.Action("Index", "StateMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "StateMaster") ? "active" : "")">State Master</a></li>
-                <li><a href="@Url.Action("Index", "CityMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "CityMaster") ? "active" : "")">City Master</a></li>
-                <li><a href="@Url.Action("Index", "LanguageMaster")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "LanguageMaster") ? "active" : "")">Language Master</a></li>
+                <li><a href="@Url.Action("Index", "CategoryMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "CategoryMaster") ? "active" : "")">Category Master</a></li>
+                <li><a href="@Url.Action("Index", "CasteMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "CasteMaster") ? "active" : "")">Caste Master</a></li>
+                <li><a href="@Url.Action("Index", "ReligionMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "ReligionMaster") ? "active" : "")">Religion Master</a></li>
+                <li><a href="@Url.Action("Index", "BloodGroup")" class="nav-link @(ViewHelper.IsActive(ViewContext, "BloodGroup") ? "active" : "")">Blood Group</a></li>
+                <li><a href="@Url.Action("Index", "CountryMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "CountryMaster") ? "active" : "")">Country Master</a></li>
+                <li><a href="@Url.Action("Index", "StateMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "StateMaster") ? "active" : "")">State Master</a></li>
+                <li><a href="@Url.Action("Index", "CityMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "CityMaster") ? "active" : "")">City Master</a></li>
+                <li><a href="@Url.Action("Index", "LanguageMaster")" class="nav-link @(ViewHelper.IsActive(ViewContext, "LanguageMaster") ? "active" : "")">Language Master</a></li>
             </ul>
         </div>
     </div>
@@ -98,7 +65,7 @@
 <!-- ACADEMICS -->
 <div class="accordion-item">
     <h2 class="accordion-header" id="heading-academics">
-        <button class="accordion-button collapsed" type="button"
+        <button class="accordion-button" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapse-academics"
                 aria-expanded="false"

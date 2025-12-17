@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using SchoolPortal.Services;
 using SchoolPortal.Data;
 using SchoolPortal.Data.Repositories;
+using SchoolPortalApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,12 @@ builder.Services.AddControllersWithViews();
 var configuration = builder.Configuration;
 builder.Services.AddSingleton<IConfiguration>(configuration);
 
+// Get dynamic connection string
+var connectionString = ConnectionStringHelper.GetConnectionString(configuration);
+
+// Set the connection string in configuration
+builder.Configuration["ConnectionStrings:DefaultConnectionString"] = connectionString;
+
 builder.Services.AddMemoryCache();
 
 // Authentication & Authorization
@@ -45,10 +52,11 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Index";
+        options.LoginPath = "/Authentication/Login";
         options.LogoutPath = "/Authentication/Logout";
-        options.AccessDeniedPath = "/Home/Index";
+        options.AccessDeniedPath = "/Authentication/AccessDenied";
         options.ReturnUrlParameter = "returnUrl";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
         options.SlidingExpiration = true;
         options.Events = new CookieAuthenticationEvents
         {
@@ -116,6 +124,7 @@ builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+builder.Services.AddMemoryCache();
 // Core services
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
