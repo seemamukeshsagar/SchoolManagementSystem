@@ -17,18 +17,16 @@ namespace SchoolPortalApp.Controllers
 		private readonly IStudentService _studentService;
 		private readonly IClassService _classService;
 		private readonly ILookupService _lookupService;
-		private readonly new ILogger<HomeController> _logger;
 
 		public HomeController(
 			IStudentService studentService, 
 			IClassService classService, 
 			ILookupService lookupService,
-			ILogger<HomeController> logger)
+			ILogger<HomeController> logger) : base(logger)
 		{
 			_studentService = studentService ?? throw new ArgumentNullException(nameof(studentService));
 			_classService = classService ?? throw new ArgumentNullException(nameof(classService));
 			_lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
-			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]

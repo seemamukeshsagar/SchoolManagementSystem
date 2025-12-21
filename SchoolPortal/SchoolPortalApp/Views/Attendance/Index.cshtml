@@ -88,17 +88,13 @@
                                         </td>
                                         <td>@Html.DisplayFor(modelItem => item.LeaveType)</td>
                                         <td>
-                                            @if (item.IsHalfDay.HasValue && item.IsHalfDay.Value)
+                                            @if (item.IsHalfDay)
                                             {
                                                 <span class="badge bg-warning">Yes</span>
                                             }
-                                            else if (item.IsHalfDay.HasValue)
-                                            {
-                                                <span class="badge bg-info">No</span>
-                                            }
                                             else
                                             {
-                                                <span>-</span>
+                                                <span class="badge bg-info">No</span>
                                             }
                                         </td>
                                         <td>@Html.DisplayFor(modelItem => item.AttendanceTime)</td>

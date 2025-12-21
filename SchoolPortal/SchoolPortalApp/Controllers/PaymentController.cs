@@ -13,7 +13,7 @@ namespace SchoolPortalApp.Controllers
     public class PaymentController : Controller
     {
         private readonly IConfiguration _configuration;
-        private new readonly ILogger<PaymentController> _logger;
+        private readonly ILogger<PaymentController> _logger;
         private readonly string _key;
         private readonly string _secret;
 

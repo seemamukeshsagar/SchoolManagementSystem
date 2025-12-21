@@ -5,27 +5,33 @@ namespace SchoolPortalApp.Models.Attendance
 {
     public class AttendanceListItemViewModel
     {
-        public Guid Id { get; set; }
-        public Guid EmployeeId { get; set; }
+        public Guid Id { get; set; } = Guid.Empty;
+        
+        [Required]
+        public Guid EmployeeId { get; set; } = Guid.Empty;
         
         [Display(Name = "Employee")]
-        public string EmployeeName { get; set; }
+        [Required]
+        public string EmployeeName { get; set; } = string.Empty;
         
         [Display(Name = "Date")]
         [DataType(DataType.Date)]
-        public DateTime AttendanceDate { get; set; }
+        public DateTime AttendanceDate { get; set; } = DateTime.Today;
         
         [Display(Name = "Status")]
-        public string Status { get; set; }
+        [Required]
+        public string Status { get; set; } = "Present";
         
         [Display(Name = "Leave Type")]
-        public string LeaveType { get; set; }
+        [Required]
+        public string LeaveType { get; set; } = "N/A";
         
         [Display(Name = "Half Day")]
-        public bool? IsHalfDay { get; set; }
+        public bool IsHalfDay { get; set; }
         
         [Display(Name = "Time")]
-        public string AttendanceTime { get; set; }
+        [Required]
+        public string AttendanceTime { get; set; } = DateTime.Now.ToString("HH:mm");
         
         [Display(Name = "Marked")]
         public bool AttendanceMarked { get; set; }

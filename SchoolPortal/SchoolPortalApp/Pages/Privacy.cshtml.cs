@@ -5,7 +5,7 @@ namespace SchoolPortalApp.Pages
 {
     public class PrivacyModel : PageModel
     {
-        private new readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<PrivacyModel> _logger;
 
         public PrivacyModel(ILogger<PrivacyModel> logger)
         {

@@ -316,7 +316,7 @@ namespace SchoolPortalApp.Controllers
 				Email = item.Email,
 				Phone = item.Phone,
 				CategoryId = item.CategoryId,
-				SiblingsIfAny = item.SiblingsIfAny,
+				SiblingsIfAny = item.SiblingsIfAny ?? false,
 				SiblingClassId = item.SiblingClassId,
 				Gender = item.Gender ?? Guid.Empty,
 				DisabilityAny = item.DisabilityAny,
@@ -340,12 +340,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = item.RouteId,
 				RouteStopDetailsId = item.RouteStopDetailsId,
 				ClassTeacherId = item.ClassTeacherId,
-				RoutePickAndDrop = item.RoutePickAndDrop,
+				RoutePickAndDrop = item.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
 				TutionFees = item.TutionFees,
 				AnnualFees = item.AnnualFees,
 				TransportFees = item.TransportFees,
-				UseTransportFees = item.UseTransportFees,
+				UseTransportFees = item.UseTransportFees ?? false,
 				SessionId = item.SessionId,
 				CompanyId = item.CompanyId,
 				SchoolId = item.SchoolId,
@@ -589,6 +589,11 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(StudentViewModel model)
 		{
+			if (model == null)
+			{
+				return BadRequest("Invalid student data");
+			}
+
 			var schoolId = CurrentSchoolId;
 			if (schoolId.HasValue)
 			{
@@ -597,6 +602,12 @@ namespace SchoolPortalApp.Controllers
 			}
 
 			// Server-side required validations for location fields
+			if (!ModelState.IsValid)
+			{
+				PopulateDropdowns(model);
+				return View(model);
+			}
+
 			ValidateLocationFields(model);
 
 			var userId = CurrentUserId;
@@ -839,7 +850,7 @@ namespace SchoolPortalApp.Controllers
 				Image = model.Image ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				CategoryId = model.CategoryId,
-				SiblingsIfAny = model.SiblingsIfAny,
+				SiblingsIfAny = model.SiblingsIfAny ?? false,
 				SiblingClassId = model.SiblingClassId,
 				Gender = model.Gender,
 				DisabilityAny = model.DisabilityAny ?? string.Empty,
@@ -864,12 +875,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = model.RouteId,
 				RouteStopDetailsId = model.RouteStopDetailsId,
 				ClassTeacherId = model.ClassTeacherId,
-				RoutePickAndDrop = model.RoutePickAndDrop,
+				RoutePickAndDrop = model.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = model.FeesDiscountCategoryMasterId,
 				TutionFees = model.TutionFees,
 				AnnualFees = model.AnnualFees,
 				TransportFees = model.TransportFees,
-				UseTransportFees = model.UseTransportFees,
+				UseTransportFees = model.UseTransportFees ?? false,
 				SessionId = model.SessionId,
 				CompanyId = companyId,
 				SchoolId = model.SchoolId,
@@ -1025,12 +1036,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = item.RouteId,
 				RouteStopDetailsId = item.RouteStopDetailsId,
 				ClassTeacherId = item.ClassTeacherId,
-				RoutePickAndDrop = item.RoutePickAndDrop,
+				RoutePickAndDrop = item.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
 				TutionFees = item.TutionFees,
 				AnnualFees = item.AnnualFees,
 				TransportFees = item.TransportFees,
-				UseTransportFees = item.UseTransportFees,
+				UseTransportFees = item.UseTransportFees ?? false,
 				SessionId = item.SessionId,
 				CompanyId = item.CompanyId,
 				SchoolId = item.SchoolId,
@@ -1139,7 +1150,7 @@ namespace SchoolPortalApp.Controllers
 				Image = model.Image ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				CategoryId = model.CategoryId,
-				SiblingsIfAny = model.SiblingsIfAny,
+				SiblingsIfAny = model.SiblingsIfAny ?? false,
 				SiblingClassId = model.SiblingClassId,
 				Gender = model.Gender,
 				DisabilityAny = model.DisabilityAny ?? string.Empty,
@@ -1164,12 +1175,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = model.RouteId,
 				RouteStopDetailsId = model.RouteStopDetailsId,
 				ClassTeacherId = model.ClassTeacherId,
-				RoutePickAndDrop = model.RoutePickAndDrop,
+				RoutePickAndDrop = model.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = model.FeesDiscountCategoryMasterId,
 				TutionFees = model.TutionFees,
 				AnnualFees = model.AnnualFees,
 				TransportFees = model.TransportFees,
-				UseTransportFees = model.UseTransportFees,
+				UseTransportFees = model.UseTransportFees ?? false,
 				SessionId = model.SessionId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
@@ -1221,6 +1232,13 @@ namespace SchoolPortalApp.Controllers
 		public bool Success { get; set; }
 		public string Message { get; set; } = string.Empty;
 		public Guid StudentId { get; set; } = Guid.Empty;
+
+		// Factory methods for common results
+		public static StudentCreationResult SuccessResult(Guid studentId) => 
+			new() { Success = true, StudentId = studentId };
+
+		public static StudentCreationResult ErrorResult(string? message) => 
+			new() { Success = false, Message = message ?? "An unknown error occurred" };
 	}
 
     #endregion    

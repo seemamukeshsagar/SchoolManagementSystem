@@ -446,6 +446,103 @@ namespace SchoolPortal.Web.Controllers
 
         #region Helper Methods
 
+        private NonTeachingViewModel MapToNonTeachingViewModel(NonTeachingMaster entity)
+        {
+            if (entity == null)
+            {
+                return new NonTeachingViewModel
+                {
+                    Id = Guid.Empty,
+                    FirstName = string.Empty,
+                    MiddleName = string.Empty,
+                    LastName = string.Empty,
+                    Email = string.Empty,
+                    Phone = string.Empty,
+                    MobilePhone = string.Empty,
+                    Designation = string.Empty,
+                    Department = string.Empty,
+                    IsActive = true,
+                    IsDeleted = false,
+                    EmployeeCode = string.Empty,
+                    DOB = null,
+                    DOJ = null,
+                    DateOfLeaving = null,
+                    Address = string.Empty,
+                    CityId = null,
+                    StateId = null,
+                    CountryId = null,
+                    ZipCode = string.Empty,
+                    Gender = string.Empty,
+                    MaritalStatusId = null,
+                    ImageFile = null,
+                    Image = Array.Empty<byte>(),
+                    Qualification = string.Empty,
+                    Salary = null,
+                    BankAccountNumber = string.Empty,
+                    BankName = string.Empty,
+                    IFSCCode = string.Empty,
+                    PAN = string.Empty,
+                    AadharNumber = string.Empty,
+                    EmergencyContactName = string.Empty,
+                    EmergencyContactNumber = string.Empty,
+                    EmergencyContactRelation = string.Empty,
+                    CompanyId = Guid.Empty,
+                    SchoolId = Guid.Empty,
+                    CreatedBy = Guid.Empty,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedBy = null,
+                    ModifiedDate = null,
+                    Documents = new List<NonTeachingDocumentDetails>(),
+                    Qualifications = new List<NonTeachingQualificationDetails>()
+                };
+            }
+
+            return new NonTeachingViewModel
+            {
+                Id = entity.Id,
+                FirstName = entity.FirstName ?? string.Empty,
+                MiddleName = entity.MiddleName ?? string.Empty,
+                LastName = entity.LastName ?? string.Empty,
+                Email = entity.Email ?? string.Empty,
+                Phone = entity.Phone ?? string.Empty,
+                MobilePhone = entity.MobilePhone ?? string.Empty,
+                Designation = entity.Designation ?? string.Empty,
+                Department = entity.Department ?? string.Empty,
+                IsActive = entity.IsActive,
+                IsDeleted = entity.IsDeleted,
+                EmployeeCode = entity.EmployeeCode ?? string.Empty,
+                DOB = entity.DOB,
+                DOJ = entity.DOJ,
+                DateOfLeaving = entity.DateOfLeaving,
+                Address = entity.Address ?? string.Empty,
+                CityId = entity.CityId,
+                StateId = entity.StateId,
+                CountryId = entity.CountryId,
+                ZipCode = entity.ZipCode ?? string.Empty,
+                Gender = entity.Gender ?? string.Empty,
+                MaritalStatusId = entity.MaritalStatusId,
+                Image = entity.Image,
+                Qualification = entity.Qualification ?? string.Empty,
+                Salary = entity.Salary,
+                BankAccountNumber = entity.BankAccountNumber ?? string.Empty,
+                BankName = entity.BankName ?? string.Empty,
+                IFSCCode = entity.IFSCCode ?? string.Empty,
+                PAN = entity.PAN ?? string.Empty,
+                AadharNumber = entity.AadharNumber ?? string.Empty,
+                EmergencyContactName = entity.EmergencyContactName ?? string.Empty,
+                EmergencyContactNumber = entity.EmergencyContactNumber ?? string.Empty,
+                EmergencyContactRelation = entity.EmergencyContactRelation ?? string.Empty,
+                CompanyId = entity.CompanyId,
+                SchoolId = entity.SchoolId,
+                CreatedBy = entity.CreatedBy,
+                CreatedDate = entity.CreatedDate,
+                ModifiedBy = entity.ModifiedBy,
+                ModifiedDate = entity.ModifiedDate,
+                Documents = entity.Documents?.ToList() ?? new List<NonTeachingDocumentDetails>(),
+                Qualifications = entity.Qualifications?.ToList() ?? new List<NonTeachingQualificationDetails>()
+            };
+        }
+
         private NonTeachingMaster? MapToNonTeachingMaster(NonTeachingViewModel model)
         {
             if (model == null) return null;
@@ -454,27 +551,27 @@ namespace SchoolPortal.Web.Controllers
             {
                 // Basic Information
                 Id = model.Id,
-                FirstName = model.FirstName,
+                FirstName = model.FirstName ?? string.Empty,
                 MiddleName = model.MiddleName ?? string.Empty,
-                LastName = model.LastName,
-                Email = model.Email,
-                Phone = model.Phone,
-                MobilePhone = model.MobilePhone,
-                EmployeeCode = model.EmployeeCode,
-                Designation = model.Designation,
-                Department = model.Department,
+                LastName = model.LastName ?? string.Empty,
+                Email = model.Email ?? string.Empty,
+                Phone = model.Phone ?? string.Empty,
+                MobilePhone = model.MobilePhone ?? string.Empty,
+                EmployeeCode = model.EmployeeCode ?? string.Empty,
+                Designation = model.Designation ?? string.Empty,
+                Department = model.Department ?? string.Empty,
         
                 // Personal Details
                 DOB = model.DOB,
-                Gender = model.Gender,
+                Gender = model.Gender ?? string.Empty,
                 MaritalStatusId = model.MaritalStatusId,
         
                 // Address Information
-                Address = model.Address,
+                Address = model.Address ?? string.Empty,
                 CityId = model.CityId,
                 StateId = model.StateId,
                 CountryId = model.CountryId,
-                ZipCode = model.ZipCode,
+                ZipCode = model.ZipCode ?? string.Empty,
         
                 // Employment Details
                 DOJ = model.DOJ,
@@ -482,11 +579,11 @@ namespace SchoolPortal.Web.Controllers
                 Salary = model.Salary,
         
                 // Financial Information
-                BankAccountNumber = model.BankAccountNumber,
-                BankName = model.BankName,
-                IFSCCode = model.IFSCCode,
-                PAN = model.PAN,
-                AadharNumber = model.AadharNumber,
+                BankAccountNumber = model.BankAccountNumber ?? string.Empty,
+                BankName = model.BankName ?? string.Empty,
+                IFSCCode = model.IFSCCode ?? string.Empty,
+                PAN = model.PAN ?? string.Empty,
+                AadharNumber = model.AadharNumber ?? string.Empty,
         
                 // Emergency Contact
                 EmergencyContactName = model.EmergencyContactName ?? string.Empty,
@@ -504,9 +601,9 @@ namespace SchoolPortal.Web.Controllers
                 ModifiedDate = model.ModifiedDate,
                 ModifiedOn = model.ModifiedDate,
         
-                // Image
+                // Image and Qualification
                 Image = model.Image,
-                Qualification = model.Qualification
+                Qualification = model.Qualification ?? string.Empty
             };
 
             // Map Documents if they exist
@@ -567,152 +664,6 @@ namespace SchoolPortal.Web.Controllers
 
             return nonTeachingMaster;
         }
-
-        private NonTeachingViewModel MapToNonTeachingViewModel(NonTeachingMaster entity)
-        {
-            // Return an empty view model when input is null to ensure all code paths return a value
-            if (entity == null)
-                return new NonTeachingViewModel
-                {
-                    Id = Guid.Empty,
-                    FirstName = string.Empty,
-                    MiddleName = string.Empty,
-                    LastName = string.Empty,
-                    Email = string.Empty,
-                    Phone = string.Empty,
-                    MobilePhone = string.Empty,
-                    Designation = string.Empty,
-                    Department = string.Empty,
-                    IsActive = true,
-                    IsDeleted = false,
-                    EmployeeCode = string.Empty,
-                    DOB = null,
-                    DOJ = null,
-                    DateOfLeaving = null,
-                    Address = string.Empty,
-                    CityId = null,
-                    StateId = null,
-                    CountryId = null,
-                    ZipCode = string.Empty,
-                    Gender = string.Empty,
-                    MaritalStatusId = null,
-                    ImageFile = null,
-                    Image = Array.Empty<byte>(),
-                    Qualification = string.Empty,
-                    Salary = null,
-                    BankAccountNumber = string.Empty,
-                    BankName = string.Empty,
-                    IFSCCode = string.Empty,
-                    PAN = string.Empty,
-                    AadharNumber = string.Empty,
-                    EmergencyContactName = string.Empty,
-                    EmergencyContactNumber = string.Empty,
-                    EmergencyContactRelation = string.Empty,
-                    CompanyId = Guid.Empty,
-                    SchoolId = Guid.Empty,
-                    CreatedBy = Guid.Empty,
-                    CreatedDate = DateTime.UtcNow,
-                    ModifiedBy = null,
-                    ModifiedDate = null,
-                    Documents = new List<NonTeachingDocumentDetails>(),
-                    Qualifications = new List<NonTeachingQualificationDetails>()
-                };
-
-            var viewModel = new NonTeachingViewModel
-            {
-                Id = entity.Id,
-                FirstName = entity.FirstName,
-                MiddleName = entity.MiddleName,
-                LastName = entity.LastName,
-                Email = entity.Email,
-                Phone = entity.Phone,
-                MobilePhone = entity.MobilePhone,
-                Designation = entity.Designation,
-                Department = entity.Department,
-                IsActive = entity.IsActive,
-                IsDeleted = entity.IsDeleted,
-                EmployeeCode = entity.EmployeeCode,
-                DOB = entity.DOB,
-                DOJ = entity.DOJ,
-                DateOfLeaving = entity.DateOfLeaving,
-                Address = entity.Address,
-                CityId = entity.CityId ?? Guid.Empty,
-                StateId = entity.StateId ?? Guid.Empty,
-                CountryId = entity.CountryId ?? Guid.Empty,
-                ZipCode = entity.ZipCode,
-                Gender = entity.Gender,
-                MaritalStatusId = entity.MaritalStatusId ?? Guid.Empty,
-                Image = entity.Image,
-                Qualification = entity.Qualification,
-                Salary = entity.Salary,
-                BankAccountNumber = entity.BankAccountNumber,
-                BankName = entity.BankName,
-                IFSCCode = entity.IFSCCode,
-                PAN = entity.PAN,
-                AadharNumber = entity.AadharNumber,
-                EmergencyContactName = entity.EmergencyContactName,
-                EmergencyContactNumber = entity.EmergencyContactNumber,
-                EmergencyContactRelation = entity.EmergencyContactRelation,
-                CompanyId = entity.CompanyId,
-                SchoolId = entity.SchoolId,
-                CreatedBy = entity.CreatedBy,
-                CreatedDate = entity.CreatedDate,
-                ModifiedBy = entity.ModifiedBy,
-                ModifiedDate = entity.ModifiedDate,
-                // Map documents safely: project if not null otherwise use empty list to avoid null assignment
-                Documents = entity.Documents?.Select(d => new NonTeachingDocumentDetails
-                {
-                    Id = d.Id,
-                    NonTeachingId = entity.Id,
-                    DocumentType = d.DocumentType,
-                    DocumentTypeId = d.DocumentTypeId,
-                    DocumentNumber = d.DocumentNumber,
-                    DocumentPath = d.DocumentPath,
-                    IssueDate = d.IssueDate,
-                    ExpiryDate = d.ExpiryDate,
-                    Remarks = d.Remarks,
-                    IsVerified = d.IsVerified,
-                    VerifiedBy = d.VerifiedBy,
-                    VerifiedOn = d.VerifiedOn,
-                    FileContent = d.FileContent,
-                    FileType = d.FileType,
-                    FileName = d.FileName,
-                    Description = d.Description,
-                    IsActive = d.IsActive,
-                    CreatedBy = d.CreatedBy,
-                    CreatedDate = d.CreatedDate,
-                    ModifiedBy = d.ModifiedBy,
-                    ModifiedDate = d.ModifiedDate
-                }).ToList() ?? new List<NonTeachingDocumentDetails>(),
-
-                // Map qualifications safely: project if not null otherwise use empty list
-                Qualifications = entity.Qualifications?.Select(q => new NonTeachingQualificationDetails
-                {
-                    Id = q.Id,
-                    NonTeachingId = entity.Id,
-                    Qualification = q.Qualification,
-                    QualificationTypeId = q.QualificationTypeId,
-                    Institution = q.Institution,
-                    BoardUniversity = q.BoardUniversity,
-                    YearOfPassing = q.YearOfPassing,
-                    Percentage = q.Percentage,
-                    Division = q.Division,
-                    DocumentPath = q.DocumentPath,
-                    IsVerified = q.IsVerified,
-                    VerifiedBy = q.VerifiedBy,
-                    VerifiedOn = q.VerifiedOn,
-                    Remarks = q.Remarks,
-                    IsActive = q.IsActive,
-                    CreatedBy = q.CreatedBy,
-                    CreatedDate = q.CreatedDate,
-                    ModifiedBy = q.ModifiedBy,
-                    ModifiedDate = q.ModifiedDate
-                }).ToList() ?? new List<NonTeachingQualificationDetails>()
-            };
-
-            return viewModel;
-        }
-
         #endregion
     }
 }

@@ -13,22 +13,22 @@ namespace SchoolPortalApp.Controllers
 	[Route("Attendance")]
 	public class AttendanceController : BaseController
 	{
-		private readonly IEmpAttendanceService _attendanceService;
+        private readonly IEmpAttendanceService _attendanceService;
         private readonly IEmpService _employeeService;
         private readonly IAttendanceReasonMasterService _attendanceReasonService;
-        private readonly ILogger<AttendanceController> _logger;
+
         public AttendanceController(
             IEmpAttendanceService attendanceService,
             IEmpService employeeService,
             IAttendanceReasonMasterService attendanceReasonService,
-            ILogger<AttendanceController> logger)
+            ILogger<AttendanceController> logger) : base(logger)
         {
             _attendanceService = attendanceService ?? throw new ArgumentNullException(nameof(attendanceService));
             _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
             _attendanceReasonService = attendanceReasonService ?? throw new ArgumentNullException(nameof(attendanceReasonService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+		// Update the Index action to handle potential null values
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
@@ -36,33 +36,36 @@ namespace SchoolPortalApp.Controllers
 		{
 			try
 			{
-				var attendanceList = _attendanceService.GetAll();
-				var employees = _employeeService.GetAll();
-				var leaveTypes = _attendanceReasonService.GetAll();
+				var attendanceList = _attendanceService.GetAll() ?? new List<EmpAttendanceDetails>();
+				var employees = _employeeService.GetAll() ?? new List<EmpMaster>();
+				var leaveTypes = _attendanceReasonService.GetAll() ?? new List<AttendanceReasonMaster>();
 
-				var viewModel = attendanceList.Select(attendance => {
-				var employee = employees.FirstOrDefault(e => e.Id == attendance.EmployeeId);
-				var leaveType = attendance.AttendenceLeaveTypeId != Guid.Empty ? 
-					leaveTypes.FirstOrDefault(lt => lt.Id == attendance.AttendenceLeaveTypeId) : null;
-				return new AttendanceListItemViewModel
-				{
-					Id = attendance.Id,
-					EmployeeId = attendance.EmployeeId,
-					EmployeeName = employee != null ? $"{employee.FirstName} {employee.LastName}" : "Unknown",
-					AttendanceDate = attendance.AttendenceDate,
-					AttendanceMarked = attendance.AttendenceMarked,
-					LeaveType = leaveType?.Description ?? "N/A",
-					IsHalfDay = attendance.IsHalfDay,
-					AttendanceTime = attendance.AttendenceTime,
-					Status = attendance.Status
-				};
-			}).ToList();
+				var viewModel = attendanceList
+					.Where(a => a != null)
+					.Select(attendance => {
+						var employee = employees.FirstOrDefault(e => e?.Id == attendance.EmployeeId);
+						var leaveType = attendance.AttendenceLeaveTypeId != Guid.Empty ? 
+							leaveTypes.FirstOrDefault(lt => lt?.Id == attendance.AttendenceLeaveTypeId) : null;
+						return new AttendanceListItemViewModel
+						{
+							Id = attendance.Id,
+							EmployeeId = attendance.EmployeeId,
+							EmployeeName = employee != null ? $"{employee.FirstName} {employee.LastName}" : "Unknown",
+							AttendanceDate = attendance.AttendenceDate,
+							AttendanceMarked = attendance.AttendenceMarked,
+							LeaveType = leaveType?.Description ?? "N/A",
+							IsHalfDay = attendance.IsHalfDay ?? false,
+							AttendanceTime = attendance.AttendenceTime ?? string.Empty,
+							Status = attendance.Status ?? "Unknown"
+						};
+					})
+					.ToList();
 
 				return View(viewModel);
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Error occurred while getting attendance list");
+				_logger?.LogError(ex, "Error occurred while getting attendance list");
 				return View(new List<AttendanceListItemViewModel>());
 			}
 		}
@@ -203,7 +206,7 @@ namespace SchoolPortalApp.Controllers
 					AttendanceDate = attendance.AttendenceDate,
 					AttendanceMarked = attendance.AttendenceMarked,
 					LeaveTypeId = attendance.AttendenceLeaveTypeId != Guid.Empty ? attendance.AttendenceLeaveTypeId : (Guid?)null,
-					IsHalfDay = attendance.IsHalfDay,
+					IsHalfDay = attendance.IsHalfDay ?? false,
 					AttendanceTime = attendance.AttendenceTime
 				};
 				PopulateDropdowns(viewModel);
