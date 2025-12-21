@@ -38,7 +38,7 @@ namespace SchoolPortal.DBAccess
 							{
 								System.Diagnostics.Debug.WriteLine($"Error creating DefaultConnectionManager: {ex.Message}");
 								string machineName = Environment.MachineName;
-								_defaultConnectionManager = new ConnectionManager($"Data Source={machineName}\\SQL2026;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True");
+								_defaultConnectionManager = new ConnectionManager($"Data Source={machineName};Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True");
 							}
 						}
 					}
@@ -69,7 +69,7 @@ namespace SchoolPortal.DBAccess
 				else
 				{
 					//connectionString = connectionString.Replace("${ServerName}", machineName + "\\SQL2026");
-					connectionString = "Data Source=" + machineName + "\\SQL2026;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+					connectionString = "Data Source=" + machineName + ";Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
                 }
 				return connectionString;
 			}
@@ -77,7 +77,7 @@ namespace SchoolPortal.DBAccess
 			{
 				System.Diagnostics.Debug.WriteLine($"Error accessing Settings.Default.DefaultConnectionString: {ex.Message}");
 				string machineName = Environment.MachineName;
-				return $"Data Source={machineName}\\SQL2026;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+				return $"Data Source={machineName};Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
 			}
 		}
 

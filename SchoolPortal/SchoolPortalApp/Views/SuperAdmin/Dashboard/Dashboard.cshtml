@@ -1,0 +1,129 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Super Admin Dashboard</h2>
+    
+    <div class="row">
+        <!-- System Overview Cards -->
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase">Total Users</h6>
+                            <h2 class="display-6">1,234</h2>
+                        </div>
+                        <i class="bi bi-people fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="bi bi-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase">Active Sessions</h6>
+                            <h2 class="display-6">42</h2>
+                        </div>
+                        <i class="bi bi-activity fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="bi bi-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-dark h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase">Pending Tasks</h6>
+                            <h2 class="display-6">7</h2>
+                        </div>
+                        <i class="bi bi-list-task fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-dark stretched-link" href="#">View Tasks</a>
+                    <div class="small text-dark"><i class="bi bi-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card bg-danger text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase">System Alerts</h6>
+                            <h2 class="display-6">3</h2>
+                        </div>
+                        <i class="bi bi-exclamation-triangle fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Alerts</a>
+                    <div class="small text-white"><i class="bi bi-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-activity me-1"></i>
+            Recent Activity
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Just now</td>
+                            <td>System</td>
+                            <td>System Check</td>
+                            <td>Daily backup completed successfully</td>
+                            <td><span class="badge bg-success">Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>5 mins ago</td>
+                            <td>admin@school.edu</td>
+                            <td>User Login</td>
+                            <td>Successful login from 192.168.1.100</td>
+                            <td><span class="badge bg-success">Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>1 hour ago</td>
+                            <td>teacher@school.edu</td>
+                            <td>Failed Login</td>
+                            <td>Invalid password attempt</td>
+                            <td><span class="badge bg-warning">Warning</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

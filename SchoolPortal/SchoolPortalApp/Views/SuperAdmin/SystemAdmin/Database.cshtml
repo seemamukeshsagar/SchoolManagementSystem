@@ -1,0 +1,321 @@
+@{
+    ViewData["Title"] = "Database Management";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Database Management</h1>
+    </div>
+
+    <div class="row">
+        <!-- Database Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Database Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="small font-weight-bold">Server Version</h6>
+                        <div class="text-muted small">Microsoft SQL Server 2019</div>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="small font-weight-bold">Database Name</h6>
+                        <div class="text-muted small">SchoolPortalDB</div>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="small font-weight-bold">Size</h6>
+                        <div class="text-muted small">245.7 MB</div>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="small font-weight-bold">Last Backup</h6>
+                        <div class="text-muted small">@DateTime.Now.AddDays(-1).ToString("dd MMM yyyy HH:mm")</div>
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#backupModal">
+                            <i class="bi bi-database-check me-1"></i> Create Backup
+                        </button>
+                        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#optimizeModal">
+                            <i class="bi bi-speedometer2 me-1"></i> Optimize Database
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Health -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Database Health</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Space Used</span>
+                            <span class="text-primary">65%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Index Health</span>
+                            <span class="text-primary">92%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-success small mb-0">
+                        <i class="bi bi-check-circle-fill me-1"></i> Database is healthy and performing well.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Backup History -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Backup History</h6>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="backupFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            Last 30 Days
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="backupFilter">
+                            <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+                            <li><a class="dropdown-item active" href="#">Last 30 Days</a></li>
+                            <li><a class="dropdown-item" href="#">Last 90 Days</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">All Time</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@DateTime.Now.AddDays(-1).ToString("dd MMM yyyy HH:mm")</td>
+                                    <td>Full Backup</td>
+                                    <td>245.7 MB</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@DateTime.Now.AddDays(-2).ToString("dd MMM yyyy HH:mm")</td>
+                                    <td>Full Backup</td>
+                                    <td>243.2 MB</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@DateTime.Now.AddDays(-3).ToString("dd MMM yyyy HH:mm")</td>
+                                    <td>Full Backup</td>
+                                    <td>240.8 MB</td>
+                                    <td><span class="badge bg-warning">Partial</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Tables -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Database Tables</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Table Name</th>
+                                    <th>Rows</th>
+                                    <th>Size</th>
+                                    <th>Index Size</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Users</td>
+                                    <td>1,245</td>
+                                    <td>12.4 MB</td>
+                                    <td>3.2 MB</td>
+                                    <td>@DateTime.Now.AddHours(-2).ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td>Students</td>
+                                    <td>856</td>
+                                    <td>8.7 MB</td>
+                                    <td>2.1 MB</td>
+                                    <td>@DateTime.Now.AddHours(-5).ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td>Teachers</td>
+                                    <td>124</td>
+                                    <td>1.2 MB</td>
+                                    <td>0.5 MB</td>
+                                    <td>@DateTime.Now.AddDays(-1).ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td>Courses</td>
+                                    <td>45</td>
+                                    <td>0.8 MB</td>
+                                    <td>0.2 MB</td>
+                                    <td>@DateTime.Now.AddDays(-2).ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <td>Attendance</td>
+                                    <td>24,567</td>
+                                    <td>45.2 MB</td>
+                                    <td>12.8 MB</td>
+                                    <td>@DateTime.Now.AddHours(-1).ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Backup Modal -->
+<div class="modal fade" id="backupModal" tabindex="-1" aria-labelledby="backupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="backupModalLabel">Create Database Backup</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="backupForm">
+                    <div class="mb-3">
+                        <label for="backupName" class="form-label">Backup Name</label>
+                        <input type="text" class="form-control" id="backupName" value="SchoolPortalDB_@DateTime.Now.ToString("yyyyMMdd_HHmmss")" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="backupType" class="form-label">Backup Type</label>
+                        <select class="form-select" id="backupType" required>
+                            <option value="full">Full Backup</option>
+                            <option value="differential">Differential Backup</option>
+                            <option value="transaction">Transaction Log</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="compressBackup" checked>
+                        <label class="form-check-label" for="compressBackup">Compress Backup</label>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="verifyBackup" checked>
+                        <label class="form-check-label" for="verifyBackup">Verify backup when finished</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="startBackup">
+                    <i class="bi bi-database-check me-1"></i> Start Backup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optimize Modal -->
+<div class="modal fade" id="optimizeModal" tabindex="-1" aria-labelledby="optimizeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="optimizeModalLabel">Optimize Database</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    This operation may take several minutes depending on the database size. It's recommended to perform this during off-peak hours.
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Optimization Type</label>
+                    <select class="form-select">
+                        <option>Update Statistics</option>
+                        <option>Rebuild Indexes</option>
+                        <option>Reorganize Indexes</option>
+                        <option>Shrink Database</option>
+                    </select>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="scheduleOptimization">
+                    <label class="form-check-label" for="scheduleOptimization">Schedule for maintenance window</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning">
+                    <i class="bi bi-speedometer2 me-1"></i> Run Optimization
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+        // Handle backup button click
+        document.getElementById('startBackup').addEventListener('click', function() {
+            const backupName = document.getElementById('backupName').value;
+            const backupType = document.getElementById('backupType').value;
+            
+            // Show loading state
+            const button = this;
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Backing up...';
+            
+            // Simulate backup process
+            setTimeout(function() {
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = originalText;
+                
+                // Close modal
+                var modal = bootstrap.Modal.getInstance(document.getElementById('backupModal'));
+                modal.hide();
+                
+                // Show success message
+                alert(`Backup "${backupName}" completed successfully!`);
+            }, 3000);
+        });
+    </script>
+}

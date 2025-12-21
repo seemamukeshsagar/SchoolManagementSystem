@@ -1,0 +1,174 @@
+@{
+    ViewData["Title"] = "Quick Actions";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Quick Actions</h2>
+    
+    <div class="row">
+        <!-- System Actions -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">System Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-primary">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-database fs-1 text-primary mb-3"></i>
+                                    <h5 class="card-title">Run Database Backup</h5>
+                                    <p class="card-text small">Create a manual backup of the database</p>
+                                    <button class="btn btn-primary btn-sm">Run Backup</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-success">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-arrow-clockwise fs-1 text-success mb-3"></i>
+                                    <h5 class="card-title">Clear Cache</h5>
+                                    <p class="card-text small">Clear system cache and temporary files</p>
+                                    <button class="btn btn-success btn-sm">Clear Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-info">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-gear fs-1 text-info mb-3"></i>
+                                    <h5 class="card-title">System Maintenance</h5>
+                                    <p class="card-text small">Run system maintenance tasks</p>
+                                    <button class="btn btn-info btn-sm text-white">Run Maintenance</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 border-left-warning">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-shield-check fs-1 text-warning mb-3"></i>
+                                    <h5 class="card-title">Security Scan</h5>
+                                    <p class="card-text small">Run a security audit</p>
+                                    <button class="btn btn-warning btn-sm">Start Scan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">User Management</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="h6 mb-3">Create New User</h5>
+                        <form class="needs-validation" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="user@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select class="form-select" id="role" required>
+                                        <option value="" selected disabled>Choose...</option>
+                                        <option>Administrator</option>
+                                        <option>Teacher</option>
+                                        <option>Student</option>
+                                        <option>Parent</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary" type="submit">Create User</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="mt-4">
+                        <h5 class="h6 mb-3">Bulk Actions</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-upload me-2"></i>Import Users
+                            </button>
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-download me-2"></i>Export Users
+                            </button>
+                            <button class="btn btn-outline-danger" type="button">
+                                <i class="bi bi-trash me-2"></i>Deactivate Inactive Users
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+            <button class="btn btn-sm btn-outline-secondary">View All</button>
+        </div>
+        <div class="card-body">
+            <div class="list-group list-group-flush">
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-person-plus-fill text-success me-2"></i>
+                        New user "John Doe" created
+                    </div>
+                    <small class="text-muted">Just now</small>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-arrow-clockwise text-primary me-2"></i>
+                        System cache cleared
+                    </div>
+                    <small class="text-muted">5 minutes ago</small>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-database text-info me-2"></i>
+                        Database backup completed
+                    </div>
+                    <small class="text-muted">1 hour ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

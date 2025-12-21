@@ -1,0 +1,532 @@
+@using System.Text.Json
+@model IEnumerable<SchoolPortalApp.ViewModels.AuditLogViewModel>
+@{
+    ViewData["Title"] = "Audit Logs";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Audit Logs</h1>
+        <div class="d-flex">
+            <button class="btn btn-outline-secondary me-2" id="refreshAuditLogs">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            </button>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-download me-1"></i> Export
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="exportDropdown">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-csv me-2"></i>CSV</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-xlsx me-2"></i>Excel</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf me-2"></i>PDF</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Filter Logs</h6>
+        </div>
+        <div class="card-body">
+            <form id="auditLogFilterForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Date Range</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="startDate">
+                            <span class="input-group-text">to</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Action Type</label>
+                        <select class="form-select" id="actionType">
+                            <option value="">All Actions</option>
+                            <option value="Create">Create</option>
+                            <option value="Update">Update</option>
+                            <option value="Delete">Delete</option>
+                            <option value="Login">Login</option>
+                            <option value="Logout">Logout</option>
+                            <option value="Access Denied">Access Denied</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">User</label>
+                        <input type="text" class="form-control" id="userFilter" placeholder="Username or ID">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Entity Type</label>
+                        <select class="form-select" id="entityType">
+                            <option value="">All Entities</option>
+                            <option value="User">User</option>
+                            <option value="Role">Role</option>
+                            <option value="Permission">Permission</option>
+                            <option value="System">System</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="showOnlyErrors" checked>
+                            <label class="form-check-label" for="showOnlyErrors">Show only errors</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-funnel me-1"></i> Apply Filters
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle me-1"></i> Clear
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Audit Logs Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Audit Logs</h6>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="viewOptions" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-list-ul me-1"></i> View Options
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="viewOptions">
+                    <li><a class="dropdown-item" href="#" data-columns="all">Show All Columns</a></li>
+                    <li><a class="dropdown-item" href="#" data-columns="basic">Basic View</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="dropdown-header">Toggle Columns</li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="1"><i class="bi bi-check2 me-2"></i>Timestamp</a></li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="2"><i class="bi bi-check2 me-2"></i>User</a></li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="3"><i class="bi bi-check2 me-2"></i>Action</a></li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="4"><i class="bi bi-check2 me-2"></i>Entity</a></li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="5"><i class="bi bi-check2 me-2"></i>Details</a></li>
+                    <li><a class="dropdown-item toggle-vis" href="#" data-column="6"><i class="bi bi-check2 me-2"></i>IP Address</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="auditLogsTable" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Entity</th>
+                            <th>Details</th>
+                            <th>IP Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model)
+                        {
+                            <tr>
+                                <td>@log.Id</td>
+                                <td data-order="@log.Timestamp.Ticks">
+                                    @{
+                                        var timestamp = log.Timestamp;
+                                        var tooltip = timestamp.ToString("f");
+                                        var display = timestamp.ToString("g");
+                                    }
+                                    <span data-bs-toggle="tooltip" title="@tooltip">
+                                        @display
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-sm me-2">
+                                            <span class="avatar-initial rounded-circle bg-primary text-white">@log.UserName[0]</span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@log.UserName</div>
+                                            <small class="text-muted">@log.UserId</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        var badgeClass = "bg-secondary";
+                                        switch (log.Action)
+                                        {
+                                            case "Create":
+                                                badgeClass = "bg-success";
+                                                break;
+                                            case "Update":
+                                                badgeClass = "bg-primary";
+                                                break;
+                                            case "Delete":
+                                                badgeClass = "bg-danger";
+                                                break;
+                                            case "Login":
+                                                badgeClass = "bg-info";
+                                                break;
+                                            case "Logout":
+                                                badgeClass = "bg-warning text-dark";
+                                                break;
+                                        }
+                                    }
+                                    <span class="badge @badgeClass">@log.Action</span>
+                                </td>
+                                <td>@(log.EntityType ?? "N/A")</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(log.EntityId))
+                                    {
+                                        var detailsJson = log.Details != null ? 
+                                            System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(JsonSerializer.Serialize(log.Details)) : "{}";
+                                        <a href="#" class="view-details" data-details='@(new Microsoft.AspNetCore.Html.HtmlString(detailsJson))'>
+                                            <i class="bi bi-zoom-in me-1"></i> View Details
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No details available</span>
+                                    }
+                                </td>
+                                <td>@log.IpAddress</td>
+                                <td>
+                                    @if (log.IsSuccess)
+                                    {
+                                        <span class="badge bg-success">Success</span>
+                                    }
+                                    else
+                                    {
+                                        var errorTitle = !string.IsNullOrEmpty(log.ErrorMessage) ? log.ErrorMessage : "An error occurred";
+                                        <span class="badge bg-danger" data-bs-toggle="tooltip" title="@errorTitle">
+                                            <i class="bi bi-exclamation-triangle-fill me-1"></i>Error
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Details Modal -->
+    <div class="modal fade" id="logDetailsModal" tabindex="-1" aria-labelledby="logDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logDetailsModalLabel">Audit Log Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Log Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-4">Timestamp:</dt>
+                                        <dd class="col-sm-8" id="detail-timestamp">-</dd>
+                                        
+                                        <dt class="col-sm-4">Action:</dt>
+                                        <dd class="col-sm-8" id="detail-action">-</dd>
+                                        
+                                        <dt class="col-sm-4">Entity Type:</dt>
+                                        <dd class="col-sm-8" id="detail-entity-type">-</dd>
+                                        
+                                        <dt class="col-sm-4">Entity ID:</dt>
+                                        <dd class="col-sm-8" id="detail-entity-id">-</dd>
+                                        
+                                        <dt class="col-sm-4">IP Address:</dt>
+                                        <dd class="col-sm-8" id="detail-ip">-</dd>
+                                        
+                                        <dt class="col-sm-4">Status:</dt>
+                                        <dd class="col-sm-8"><span id="detail-status">-</span></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0">User Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar avatar-xl me-3">
+                                            <span class="avatar-initial rounded-circle bg-primary text-white" id="detail-user-initial">U</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0" id="detail-username">-</h5>
+                                            <small class="text-muted" id="detail-userid">-</small>
+                                        </div>
+                                    </div>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-4">User Agent:</dt>
+                                        <dd class="col-sm-8 small text-truncate" id="detail-user-agent" data-bs-toggle="tooltip" data-bs-placement="top">-</dd>
+                                        
+                                        <dt class="col-sm-4">Location:</dt>
+                                        <dd class="col-sm-8" id="detail-location">-</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Change Details</h6>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" id="view-raw">Raw</button>
+                                <button type="button" class="btn btn-outline-secondary" id="view-compare">Compare</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="raw-details" class="p-3">
+                                <pre class="mb-0"><code id="detail-raw" class="language-json"></code></pre>
+                            </div>
+                            <div id="compare-details" class="p-3 d-none">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-center">Old Values</h6>
+                                        <pre class="border rounded p-2" style="min-height: 200px; max-height: 400px; overflow-y: auto;"><code id="detail-old-values" class="language-json"></code></pre>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-center">New Values</h6>
+                                        <pre class="border rounded p-2" style="min-height: 200px; max-height: 400px; overflow-y: auto;"><code id="detail-new-values" class="language-json"></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="export-details">
+                        <i class="bi bi-download me-1"></i> Export Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .log-entry {
+            border-left: 4px solid #4e73df;
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        .log-entry.error {
+            border-left-color: #e74a3b;
+        }
+        .log-entry.warning {
+            border-left-color: #f6c23e;
+        }
+        .log-entry.success {
+            border-left-color: #1cc88a;
+        }
+        .log-timestamp {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .log-message {
+            margin-bottom: 0.25rem;
+        }
+        .log-details {
+            font-family: monospace;
+            font-size: 0.8rem;
+            background-color: #f8f9fc;
+            padding: 5px;
+            border-radius: 3px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .badge {
+            font-weight: 500;
+        }
+        .avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-initial {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .avatar-sm { width: 2rem; height: 2rem; }
+        .avatar-xl { width: 3.5rem; height: 3.5rem; }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#auditLogsTable').DataTable({
+                responsive: true,
+                order: [[1, 'desc']], // Sort by timestamp descending by default
+                pageLength: 25,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"f<"d-flex align-items-center"><"d-flex align-items-center"l>>rt<"d-flex justify-content-between align-items-center"ip>',
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search logs...",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    paginate: {
+                        previous: "<i class='bi bi-chevron-left'></i>",
+                        next: "<i class='bi bi-chevron-right'></i>"
+                    }
+                },
+                columnDefs: [
+                    { visible: false, targets: [0] }, // Hide ID column by default
+                    { orderable: false, targets: [6, 7] } // Disable sorting on Details and Status columns
+                ]
+            });
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Toggle columns
+            $('.toggle-vis').on('click', function (e) {
+                e.preventDefault();
+                
+                // Get the column API object
+                var column = table.column($(this).data('column'));
+                
+                // Toggle the visibility
+                column.visible(!column.visible());
+                
+                // Toggle the checkmark icon
+                $(this).find('i').toggleClass('bi-check2 bi-dash');
+            });
+
+            // View preset: All columns
+            $('a[data-columns="all"]').on('click', function(e) {
+                e.preventDefault();
+                table.columns().visible(true);
+                $('.toggle-vis i').removeClass('bi-dash').addClass('bi-check2');
+            });
+
+            // View preset: Basic view
+            $('a[data-columns="basic"]').on('click', function(e) {
+                e.preventDefault();
+                table.columns().visible(false);
+                table.columns([1, 2, 3, 4, 7]).visible(true); // Show Timestamp, User, Action, Entity, Status
+                
+                // Update checkmarks
+                $('.toggle-vis i').removeClass('bi-check2').addClass('bi-dash');
+                $('.toggle-vis[data-column="1"], .toggle-vis[data-column="2"], .toggle-vis[data-column="3"], .toggle-vis[data-column="4"], .toggle-vis[data-column="7"]')
+                    .find('i').removeClass('bi-dash').addClass('bi-check2');
+            });
+
+            // View mode toggle
+            $('#view-raw, #view-compare').on('click', function() {
+                $('#view-raw, #view-compare').toggleClass('active');
+                $('#raw-details, #compare-details').toggleClass('d-none');
+            });
+
+            // View log details
+            $('.view-details').on('click', function(e) {
+                e.preventDefault();
+                const details = $(this).data('details');
+                const row = $(this).closest('tr');
+                
+                // Populate modal
+                $('#detail-timestamp').text(row.find('td:eq(1)').text().trim());
+                
+                const userInfo = row.find('td:eq(2)');
+                $('#detail-username').text(userInfo.find('.fw-bold').text().trim());
+                $('#detail-userid').text(userInfo.find('small').text().trim());
+                $('#detail-user-initial').text($('#detail-username').text().charAt(0).toUpperCase());
+                
+                $('#detail-action').html(row.find('td:eq(3)').html());
+                $('#detail-entity-type').text(row.find('td:eq(4)').text().trim());
+                $('#detail-entity-id').text(row.find('td:eq(0)').text().trim());
+                $('#detail-ip').text(row.find('td:eq(6)').text().trim());
+                $('#detail-status').html(row.find('td:eq(7)').html());
+                
+                // Format and display raw JSON
+                const rawJson = JSON.stringify(details, null, 2);
+                $('#detail-raw').text(rawJson);
+                
+                // Format and display old/new values if available
+                if (details.oldValues || details.newValues) {
+                    $('#detail-old-values').text(JSON.stringify(details.oldValues || {}, null, 2));
+                    $('#detail-new-values').text(JSON.stringify(details.newValues || {}, null, 2));
+                } else {
+                    $('#detail-old-values').text('No old values available');
+                    $('#detail-new-values').text('No new values available');
+                }
+                
+                // Highlight JSON syntax
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAll();
+                }
+                
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById('logDetailsModal'));
+                modal.show();
+            });
+
+            // Export details
+            $('#export-details').on('click', function() {
+                // In a real app, this would generate and download a file
+                alert('Exporting log details...');
+            });
+
+            // Refresh logs
+            $('#refreshAuditLogs').on('click', function() {
+                const $btn = $(this);
+                $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Refreshing...');
+                
+                // Simulate API call
+                setTimeout(function() {
+                    table.ajax.reload(function() {
+                        $btn.html('<i class="bi bi-arrow-clockwise me-1"></i> Refresh').prop('disabled', false);
+                        // Re-attach event handlers to new elements
+                        $('.view-details').off('click').on('click', function(e) {
+                            e.preventDefault();
+                            // ... existing view details code ...
+                        });
+                    });
+                }, 1000);
+            });
+
+            // Apply filters
+            $('#auditLogFilterForm').on('submit', function(e) {
+                e.preventDefault();
+                // In a real app, this would send filter parameters to the server
+                // For now, we'll just show a loading state
+                const $btn = $(this).find('button[type="submit"]');
+                const originalText = $btn.html();
+                $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Applying...');
+                
+                // Simulate API call
+                setTimeout(function() {
+                    $btn.html(originalText).prop('disabled', false);
+                    // Apply client-side filtering
+                    table.draw();
+                }, 1000);
+            });
+            
+            // Reset filters
+            $('button[type="reset"]').on('click', function() {
+                $('#auditLogFilterForm')[0].reset();
+                table.search('').columns().search('').draw();
+            });
+
+            // Initialize with basic view
+            $('a[data-columns="basic"]').trigger('click');
+        });
+    </script>
+}

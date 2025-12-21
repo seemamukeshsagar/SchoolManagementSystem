@@ -1,0 +1,379 @@
+@model IEnumerable<SchoolPortalApp.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <i class="bi bi-plus-lg me-1"></i> Add New User
+        </button>
+    </div>
+
+    <!-- User Filter Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Filter Users</h6>
+        </div>
+        <div class="card-body">
+            <form class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Search</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search users...">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Role</label>
+                    <select class="form-select">
+                        <option value="">All Roles</option>
+                        <option>Administrator</option>
+                        <option>Teacher</option>
+                        <option>Student</option>
+                        <option>Parent</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select">
+                        <option value="">All Statuses</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                        <option>Pending</option>
+                        <option>Locked</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-funnel me-1"></i> Apply Filters
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-download me-1"></i> Export
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-csv me-2"></i>CSV</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-xlsx me-2"></i>Excel</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf me-2"></i>PDF</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="usersTable" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3">
+                                            @if (!string.IsNullOrEmpty(user.ProfileImage))
+                                            {
+                                                <img src="@user.ProfileImage" class="rounded-circle" width="40" height="40" alt="@user.FullName">
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    @if (!string.IsNullOrEmpty(user.FullName) && user.FullName.Length > 0)
+                                                    {
+                                                        <text>@user.FullName[0]</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>U</text>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@(user.FullName ?? "Unnamed User")</div>
+                                            <div class="text-muted small">@user.UserName</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.Roles != null)
+                                    {
+                                        foreach (var role in user.Roles)
+                                        {
+                                            <span class="badge bg-primary me-1">@role</span>
+                                        }
+                                    }
+                                </td>
+                                <td>@(user.LastLogin?.ToString("dd MMM yyyy HH:mm") ?? "Never")</td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                    @if (user.IsLockedOut)
+                                    {
+                                        <span class="badge bg-danger ms-1">Locked</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" title="View Profile">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Edit User">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-gear"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-key me-2"></i>Reset Password</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-lock me-2"></i>@(user.IsLockedOut ? "Unlock Account" : "Lock Account")</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-person-x me-2"></i>Deactivate</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-person-dash me-2"></i>Delete Permanently</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addUserForm">
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-4" id="userTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Basic Info</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account">Account</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="permissions-tab" data-bs-toggle="tab" data-bs-target="#permissions" type="button" role="tab" aria-controls="permissions">Permissions</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="userTabsContent">
+                        <!-- Basic Info Tab -->
+                        <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="col-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Account Tab -->
+                        <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label">Username</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="username" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="generateUsername">
+                                            <i class="bi bi-shuffle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="generatePassword">
+                                            <i class="bi bi-key"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">Password must be at least 8 characters long</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Account Status</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="isActive" checked>
+                                        <label class="form-check-label" for="isActive">Active Account</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="emailVerified">
+                                        <label class="form-check-label" for="emailVerified">Email Verified</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Account Expiry</label>
+                                    <input type="date" class="form-control" id="expiryDate">
+                                    <div class="form-text">Leave empty for no expiry</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Permissions Tab -->
+                        <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Roles</h6>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="roleAdmin">
+                                            <label class="form-check-label" for="roleAdmin">
+                                                Administrator
+                                                <small class="d-block text-muted">Full access to all features</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" id="roleTeacher">
+                                            <label class="form-check-label" for="roleTeacher">
+                                                Teacher
+                                                <small class="d-block text-muted">Can manage courses and students</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" id="roleStudent" checked>
+                                            <label class="form-check-label" for="roleStudent">
+                                                Student
+                                                <small class="d-block text-muted">Can access courses and materials</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Additional Permissions</h6>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="canEditContent">
+                                        <label class="form-check-label" for="canEditContent">Can edit content</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="canDeleteContent">
+                                        <label class="form-check-label" for="canDeleteContent">Can delete content</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="canManageUsers">
+                                        <label class="form-check-label" for="canManageUsers">Can manage users</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/userManagement.js"></script>
+    <script>
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                responsive: true,
+                order: [[0, 'asc']],
+                pageLength: 10,
+                dom: '<"d-flex justify-content-between align-items-center mb-3"f<"d-flex align-items-center"><"d-flex align-items-center"l>>rt<"d-flex justify-content-between align-items-center"ip>',
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search users...",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    paginate: {
+                        previous: "<i class='bi bi-chevron-left'></i>",
+                        next: "<i class='bi bi-chevron-right'></i>"
+                    }
+                },
+                initComplete: function() {
+                    $('.dataTables_filter input').addClass('form-control');
+                    $('.dataTables_length select').addClass('form-select');
+                }
+            });
+
+            // Tab validation
+            var firstTab = document.querySelector('\x23userTabs .nav-link:first-child');
+            if (firstTab) {
+                var tabTarget = firstTab.getAttribute('data-bs-target');
+                if (tabTarget) {
+                    var firstTabPane = document.querySelector(tabTarget);
+                }
+            }
+            
+            // Enable form validation
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+    </script>
+}
