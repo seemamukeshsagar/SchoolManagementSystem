@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "System Health";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">System Health</h2>
+    
+    <div class="row">
+        <!-- Server Status -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Server Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>CPU Usage</span>
+                            <span class="text-primary">42%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 42%" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Memory Usage</span>
+                            <span class="text-primary">65%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Disk Space</span>
+                            <span class="text-primary">78%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Status -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Service Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-database-check text-success me-2"></i>
+                                Database
+                            </div>
+                            <span class="badge bg-success rounded-pill">Online</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-hdd-rack text-success me-2"></i>
+                                Storage Service
+                            </div>
+                            <span class="badge bg-success rounded-pill">Online</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-envelope text-success me-2"></i>
+                                Email Service
+                            </div>
+                            <span class="badge bg-success rounded-pill">Online</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-cloud-arrow-up text-success me-2"></i>
+                                Backup Service
+                            </div>
+                            <span class="badge bg-warning rounded-pill">Warning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Logs -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Recent System Logs</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Component</th>
+                            <th>Level</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@DateTime.Now.AddMinutes(-5).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>Database</td>
+                            <td><span class="badge bg-info">Info</span></td>
+                            <td>Database maintenance completed successfully</td>
+                        </tr>
+                        <tr>
+                            <td>@DateTime.Now.AddMinutes(-15).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>Backup</td>
+                            <td><span class="badge bg-warning">Warning</span></td>
+                            <td>Backup completed with warnings: 2 files skipped</td>
+                        </tr>
+                        <tr>
+                            <td>@DateTime.Now.AddHours(-1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>System</td>
+                            <td><span class="badge bg-success">Success</span></td>
+                            <td>System check completed - All services operational</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

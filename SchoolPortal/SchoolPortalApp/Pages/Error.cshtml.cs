@@ -12,7 +12,7 @@ namespace SchoolPortalApp.Pages
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        private new readonly ILogger<ErrorModel> _logger;
+        private readonly ILogger<ErrorModel> _logger;
 
         public ErrorModel(ILogger<ErrorModel> logger)
         {

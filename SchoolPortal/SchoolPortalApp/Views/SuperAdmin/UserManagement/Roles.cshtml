@@ -1,0 +1,308 @@
+@model IEnumerable<SchoolPortalApp.ViewModels.RoleViewModel>
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Role Management</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+            <i class="bi bi-plus-lg me-1"></i> Create Role
+        </button>
+    </div>
+
+    <!-- Roles Grid -->
+    <div class="row">
+        @foreach (var role in Model)
+        {
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="d-flex justify-content-between">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        @role.Name
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-link text-gray-400" type="button" id="roleMenu-@role.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="roleMenu-@role.Id">
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editRoleModal-@role.Id"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Manage Users</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-shield-lock me-2"></i>Permissions</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteRoleModal-@role.Id"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@(role.UsersCount > 0 ? $"{role.UsersCount} user{(role.UsersCount > 1 ? "s" : "")}" : "No users")</div>
+                                <div class="mt-2">
+                                    @if (role.IsSystemRole)
+                                    {
+                                        <span class="badge bg-info me-1">System Role</span>
+                                    }
+                                    @if (role.IsDefault)
+                                    {
+                                        <span class="badge bg-success">Default</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="bi bi-people fs-1 text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Last updated @role.LastModified.ToString("g")</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Role Modal -->
+            <div class="modal fade" id="editRoleModal-@role.Id" tabindex="-1" aria-labelledby="editRoleModalLabel-@role.Id" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editRoleModalLabel-@role.Id">Edit Role</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="roleName-@role.Id" class="form-label">Role Name</label>
+                                    <input type="text" class="form-control" id="roleName-@role.Id" value="@role.Name" @(role.IsSystemRole ? "disabled" : "")>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="roleDescription-@role.Id" class="form-label">Description</label>
+                                    <textarea class="form-control" id="roleDescription-@role.Id" rows="3">@role.Description</textarea>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="isDefault-@role.Id" @(role.IsDefault ? "checked" : "")>
+                                    <label class="form-check-label" for="isDefault-@role.Id">Default Role</label>
+                                    <div class="form-text">New users will be assigned this role by default</div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Role Confirmation -->
+            <div class="modal fade" id="deleteRoleModal-@role.Id" tabindex="-1" aria-labelledby="deleteRoleModalLabel-@role.Id" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="deleteRoleModalLabel-@role.Id">Delete Role</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the role <strong>@role.Name</strong>?</p>
+                            @if (role.UsersCount > 0)
+                            {
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    This role is assigned to @role.UsersCount user(s). These users will lose all permissions associated with this role.
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Assign users to:</label>
+                                    <select class="form-select">
+                                        @foreach (var otherRole in Model.Where(r => r.Id != role.Id))
+                                        {
+                                            <option value="@otherRole.Id">@otherRole.Name (@otherRole.UsersCount users)</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger">Delete Role</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- System Roles Info -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Default System Roles</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Description</th>
+                            <th>Permissions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Administrator</td>
+                            <td>Full access to all system features and settings</td>
+                            <td>All permissions</td>
+                        </tr>
+                        <tr>
+                            <td>Teacher</td>
+                            <td>Can manage courses, assignments, and student grades</td>
+                            <td>Manage Courses, View Students, Grade Assignments</td>
+                        </tr>
+                        <tr>
+                            <td>Student</td>
+                            <td>Can access enrolled courses and submit assignments</td>
+                            <td>View Courses, Submit Assignments, View Grades</td>
+                        </tr>
+                        <tr>
+                            <td>Parent</td>
+                            <td>Can view their children's progress and attendance</td>
+                            <td>View Student Progress, View Attendance</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Role Modal -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRoleModalLabel">Create New Role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addRoleForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="newRoleName" class="form-label">Role Name</label>
+                        <input type="text" class="form-control" id="newRoleName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newRoleDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="newRoleDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="newRoleIsDefault">
+                        <label class="form-check-label" for="newRoleIsDefault">Default Role</label>
+                        <div class="form-text">New users will be assigned this role by default</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Copy Permissions From</label>
+                        <select class="form-select">
+                            <option value="">-- Select a role to copy --</option>
+                            @foreach (var role in Model)
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Role</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Permission Management Modal -->
+<div class="modal fade" id="permissionManagementModal" tabindex="-1" aria-labelledby="permissionManagementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="permissionManagementModalLabel">Manage Permissions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Permission</th>
+                                <th>Description</th>
+                                <th class="text-center">Allow</th>
+                                <th class="text-center">Deny</th>
+                                <th class="text-center">Inherit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Users.Create</td>
+                                <td>Create new users</td>
+                                <td class="text-center"><input type="radio" name="usersCreate" value="allow" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersCreate" value="deny" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersCreate" value="inherit" checked class="form-check-input"></td>
+                            </tr>
+                            <tr>
+                                <td>Users.Edit</td>
+                                <td>Edit existing users</td>
+                                <td class="text-center"><input type="radio" name="usersEdit" value="allow" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersEdit" value="deny" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersEdit" value="inherit" checked class="form-check-input"></td>
+                            </tr>
+                            <tr>
+                                <td>Users.Delete</td>
+                                <td>Delete users</td>
+                                <td class="text-center"><input type="radio" name="usersDelete" value="allow" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersDelete" value="deny" class="form-check-input"></td>
+                                <td class="text-center"><input type="radio" name="usersDelete" value="inherit" checked class="form-check-input"></td>
+                            </tr>
+                            <!-- Add more permission rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+
+        // Handle add role form submission
+        document.getElementById('addRoleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your form submission logic here
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addRoleModal'));
+            modal.hide();
+            // Show success message
+            alert('Role created successfully!');
+        });
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+}

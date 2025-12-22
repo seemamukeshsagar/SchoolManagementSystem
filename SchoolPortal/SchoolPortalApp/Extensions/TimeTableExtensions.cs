@@ -2,7 +2,7 @@ using SchoolPortal.Entities.Models;
 
 public static class TimeTableExtensions
 {
-	public static TimeTablePeriodMaster ToTimeTablePeriodMaster(this TimeTableClassPeriodDetails details, TimeTablePeriodMaster master = null)
+	public static TimeTablePeriodMaster ToTimeTablePeriodMaster(this TimeTableClassPeriodDetails details, TimeTablePeriodMaster? master = null)
 	{
 		if (master == null)
 		{
@@ -26,7 +26,7 @@ public static class TimeTableExtensions
 		return master;
 	}
 
-	public static TimeTableClassPeriodDetails ToTimeTableClassPeriodDetails(this TimeTablePeriodMaster master, TimeTableClassPeriodDetails details = null)
+	public static TimeTableClassPeriodDetails ToTimeTableClassPeriodDetails(this TimeTablePeriodMaster master, TimeTableClassPeriodDetails? details = null)
 	{
 		if (details == null)
 		{

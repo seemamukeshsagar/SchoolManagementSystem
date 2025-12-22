@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Text;
@@ -14,7 +16,7 @@ namespace SchoolPortal.DBAccess
 	{
 		private const int TRANSPORT_ERROR_RETRY_COUNT = 3;
 		private static readonly Hashtable _parmCache = Hashtable.Synchronized(new Hashtable());
-		private string _hashkey;
+		private string? _hashkey;
 		private readonly ConnectionManager _connectionManager;
 
 		 private bool disposed = false;
@@ -96,13 +98,7 @@ namespace SchoolPortal.DBAccess
 		/// <summary>
 		/// the key for this proc in the cache
 		/// </summary>
-		private string HashKey
-		{
-			get
-			{
-				return string.Format("{0}:{1}", _connectionManager.ConnectionString, _procName);
-			}
-		}
+		private string HashKey => _hashkey ??= string.Format("{0}:{1}", _connectionManager.ConnectionString, _procName);
 
 		private void ClearParmsFromCache()
 		{
@@ -123,13 +119,10 @@ namespace SchoolPortal.DBAccess
 				_hashkey = HashKey;
 
 				//retrieve the parms from the cache
-				ParmList parms = _parmCache[_hashkey] as ParmList;
-
-				//if they haven't been cached yet, ask the database for them
-				if (parms == null)
+				if (_parmCache[_hashkey] is not ParmList parms)
 				{
 					// to avoid transaction contension, we'll close/use a new connection
-					using (SqlConnection conn = _connectionManager.GetConnection())
+					using (SqlConnection conn = _connectionManager.GetConnection() ?? throw new InvalidOperationException("Connection cannot be null."))
 					{
 						_command.Connection = conn;
 
@@ -139,9 +132,8 @@ namespace SchoolPortal.DBAccess
 
 						//deep copy the parms from this cmd object to the cache (to avoid network roundtrip next time around)
 						ParmList parms2 = new ParmList(_command.Parameters);
-						_parmCache.Add(_hashkey, parms2);
+						_parmCache[_hashkey] = parms2;
 					}
-
 				}
 				else
 				{
@@ -149,7 +141,6 @@ namespace SchoolPortal.DBAccess
 					parms.CopyToCommand(_command);
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -210,19 +201,21 @@ namespace SchoolPortal.DBAccess
 			}
 		}
 
-		private void ForceRollback(SqlConnection conn)
+		private void ForceRollback(SqlConnection? conn)
 		{
 			try
 			{
-				if (conn.State == ConnectionState.Open)
+				if (conn != null && conn.State != ConnectionState.Closed)
 				{
-					using (SqlCommand cmd = new SqlCommand("if (@@trancount > 0) rollback tran", conn))
+					using (SqlCommand cmd = new SqlCommand("IF @@TRANCOUNT > 0 ROLLBACK", conn))
 					{
 						cmd.ExecuteNonQuery();
 					}
 				}
 			}
-			catch { }
+			catch (Exception)
+			{
+			}
 		}
 
 		public static void Fill(SqlDataReader dr, DataTable table)
@@ -244,13 +237,13 @@ namespace SchoolPortal.DBAccess
 		/// <param name="callbackDelegate">callback method to invoke when the query completes</param>
 		/// <param name="asyncState">state object passed back to the callback when the query completes</param>
 		/// <param name="synchronizationContext"></param>
-		public AsyncCommand ExecAsync(object asyncState, AsyncDelegate callbackDelegate, AsyncErrorDelegate errorDel, SynchronizationContext synchronizationContext)
+		public AsyncCommand ExecAsync(object? asyncState, AsyncDelegate callbackDelegate, AsyncErrorDelegate? errorDel, SynchronizationContext? synchronizationContext)
 		{
-			SqlConnection conn = null;
+			SqlConnection? conn = null;
 
 			try
 			{
-				conn = _connectionManager.GetConnection();
+				conn = _connectionManager.GetConnection() ?? throw new InvalidOperationException("Connection cannot be null.");
 				// we need to ensure the Connection is open prior to attempting
 				// to start a transaction
 				PrepareConnection(conn);
@@ -308,7 +301,7 @@ namespace SchoolPortal.DBAccess
 		private void HandleCallback(IAsyncResult result)
 		{
 			AsyncHelper e = (AsyncHelper)result.AsyncState;
-			SqlDataReader reader = null;
+			SqlDataReader?	 reader = null;
 			try
 			{
 				// Retrieve the original command object, passed
@@ -387,7 +380,7 @@ namespace SchoolPortal.DBAccess
 		/// <param name="wrapInTransaction"></param>
 		public void Exec(bool wrapInTransaction)
 		{
-			SqlTransaction tran = null;
+			SqlTransaction? tran = null;
 			using (SqlConnection conn = _connectionManager.GetConnection())
 			{
 				try
@@ -412,7 +405,7 @@ namespace SchoolPortal.DBAccess
 
 					_command.ExecuteNonQuery();
 
-					if (wrapInTransaction)
+					if (wrapInTransaction && tran != null)
 					{
 						tran.Commit();
 					}
@@ -448,11 +441,16 @@ namespace SchoolPortal.DBAccess
 		/// <param name="tran"></param>
 		public void Exec(SqlTransaction tran)
 		{
-			if (tran == null || tran.Connection == null)
+			if (tran == null)
 			{
-				throw new ArgumentException("The transaction was rollbacked or commited, please provide an open transaction.", "tran");
+				throw new ArgumentNullException(nameof(tran), "Transaction cannot be null.");
 			}
-			// PrepareConnection(Connection);
+			
+			if (tran.Connection == null)
+			{
+				throw new ArgumentException("The transaction was rolled back or committed, please provide an open transaction.", nameof(tran));
+			}
+
 			try
 			{
 				_connectionManager.LogQuery(this);
@@ -722,29 +720,23 @@ namespace SchoolPortal.DBAccess
 		#endregion Exec w/ overloads
 
 		#region +LoanReader(BorrowReader, bool) method
-		public object LoanReader(BorrowReader del, bool primeReader)
+		public object? LoanReader(BorrowReader del, bool primeReader)
 		{
-			SqlDataReader reader = null;
-			using (SqlConnection conn = _connectionManager.GetConnection())
+			SqlDataReader? reader = null;
+			using (SqlConnection conn = _connectionManager.GetConnection() ?? throw new InvalidOperationException("Connection cannot be null."))
 			{
 				try
 				{
-					this.PrepareConnection(conn);
+					PrepareConnection(conn);
 					_command.Connection = conn;
 					_connectionManager.LogQuery(this);
-					reader = this._command.ExecuteReader();
+					reader = _command.ExecuteReader();
+					
 					if (primeReader)
 					{
-						if (reader.Read())
-						{
-							return del(reader, null);
-						}
+						return reader.Read() ? del(reader, Array.Empty<object>()) : null;
 					}
-					else
-					{
-						return del(reader, null);
-					}
-					return null;
+					return del(reader, Array.Empty<object>());
 				}
 				finally
 				{
@@ -762,29 +754,25 @@ namespace SchoolPortal.DBAccess
 		#endregion
 
 		#region ~LoanReader(BorrowReader, bool, object[]) method
-		protected object LoanReader(BorrowReader del, bool primeReader, object[] args)
+		protected object? LoanReader(BorrowReader del, bool primeReader, object[] args)
 		{
-			SqlDataReader reader = null;
-			using (SqlConnection conn = _connectionManager.GetConnection())
+			if (args == null) throw new ArgumentNullException(nameof(args));
+			
+			SqlDataReader? reader = null;
+			using (SqlConnection conn = _connectionManager.GetConnection() ?? throw new InvalidOperationException("Connection cannot be null."))
 			{
 				try
 				{
-					this.PrepareConnection(conn);
+					PrepareConnection(conn);
 					_command.Connection = conn;
 					_connectionManager.LogQuery(this);
-					reader = this._command.ExecuteReader();
+					reader = _command.ExecuteReader();
+					
 					if (primeReader)
 					{
-						if (reader.Read())
-						{
-							return del(reader, null);
-						}
+						return reader.Read() ? del(reader, args) : null;
 					}
-					else
-					{
-						return del(reader, null);
-					}
-					return null;
+					return del(reader, args);
 				}
 				finally
 				{
@@ -803,38 +791,46 @@ namespace SchoolPortal.DBAccess
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			if (string.IsNullOrEmpty(ProcName))
+			{
+				return base.ToString() ?? string.Empty;
+			}
+
+			StringBuilder sb = new();
 			sb.AppendFormat("exec {0}", ProcName);
+			
 			for (int i = 0; i < Parameters.Count; i++)
 			{
-				if (Parameters[i].ParameterName.Equals("@RETURN_VALUE", StringComparison.CurrentCultureIgnoreCase))
+				var param = Parameters[i];
+				if (param.ParameterName?.Equals("@RETURN_VALUE", StringComparison.CurrentCultureIgnoreCase) == true)
 					continue;
 
-				sb.AppendFormat(" {0} = ", Parameters[i].ParameterName);
-				if ((Parameters[i].Value == null) || (Parameters[i].Value == DBNull.Value))
+				sb.AppendFormat(" {0} = ", param.ParameterName ?? "@param" + i);
+				
+				if (param.Value == null || param.Value == DBNull.Value)
 				{
 					sb.Append("null");
 				}
-				else if ((Parameters[i].Value is string) || (Parameters[i].Value is Guid))
+				else if (param.Value is string || param.Value is Guid)
 				{
-					sb.AppendFormat("'{0}'", Parameters[i].Value);
+					sb.Append('\'').Append(param.Value).Append('\'');
 				}
-				else if (Parameters[i].Value is bool)
+				else if (param.Value is bool boolVal)
 				{
-					sb.Append(Convert.ToBoolean(Parameters[i].Value) ? "1" : "0");
+					sb.Append(boolVal ? "1" : "0");
 				}
-				else if (Parameters[i].Value is DateTime)
+				else if (param.Value is DateTime)
 				{
-					sb.AppendFormat("'{0}'", Parameters[i].Value);
+					sb.Append('\'').Append(param.Value).Append('\'');
 				}
 				else
 				{
-					sb.Append(Parameters[i].Value.ToString());
+					sb.Append(param.Value.ToString() ?? "null");
 				}
 
 				if (i < Parameters.Count - 1)
 				{
-					sb.Append(",");
+					sb.Append(',');
 				}
 			}
 
@@ -854,14 +850,8 @@ namespace SchoolPortal.DBAccess
                 if (disposing)
                 {
                     // Dispose managed resources
-                    if (_command != null)
-                    {
-                        _command.Dispose();
-                    }
-                    if (_connectionManager != null)
-                    {
-                        _connectionManager.Dispose();
-                    }
+                    _command?.Dispose();
+                    _connectionManager?.Dispose();
                 }
                 disposed = true;
             }

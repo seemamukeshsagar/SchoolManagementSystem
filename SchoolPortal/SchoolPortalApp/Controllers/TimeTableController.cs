@@ -172,9 +172,9 @@ namespace SchoolPortalApp.Controllers
                 ClassId = classId,
                 SectionId = sectionId,
                 AcademicYearId = academicYearId,
-                ClassName = classInfo.Name,
-                SectionName = section.Name,
-                AcademicYearName = academicYear.AcademicYearName,
+                ClassName = classInfo?.Name ?? string.Empty,
+                SectionName = section?.Name ?? string.Empty,
+                AcademicYearName = academicYear?.AcademicYearName ?? string.Empty,
                 EffectiveFrom = DateTime.Today,
                 IsActive = true
             };

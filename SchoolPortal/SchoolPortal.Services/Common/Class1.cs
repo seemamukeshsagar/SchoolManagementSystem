@@ -15,14 +15,14 @@ namespace SchoolPortal.Services.Common
                 : null;
 
         public static Guid GetGuid(this DataRow row, string col) =>
-            row.Table.Columns.Contains(col) && row[col] != DBNull.Value
-                ? Guid.Parse(row[col].ToString())
+            row.Table.Columns.Contains(col) && row[col] != DBNull.Value && row[col] != null
+                ? Guid.Parse(row[col]?.ToString() ?? string.Empty)
                 : Guid.Empty;
 
         public static Guid? GetNullableGuid(this DataRow row, string col)
         {
-            return row.Table.Columns.Contains(col) && row[col] != DBNull.Value
-                ? Guid.Parse(row[col].ToString())
+            return row.Table.Columns.Contains(col) && row[col] != DBNull.Value && row[col] != null
+                ? Guid.Parse(row[col]?.ToString() ?? string.Empty)
                 : (Guid?)null;
         }
 

@@ -8,9 +8,9 @@ namespace SchoolPortalApp.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected readonly ILogger<BaseController>? _logger;
+        protected readonly ILogger _logger;
 
-        protected BaseController(ILogger<BaseController>? logger = null)
+        protected BaseController(ILogger<BaseController> logger = null)
         {
             _logger = logger;
         }

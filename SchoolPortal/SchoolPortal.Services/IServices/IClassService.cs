@@ -9,6 +9,8 @@ namespace SchoolPortal.Services.IServices
 	{
 		List<ClassMaster> GetAll();
         List<ClassMaster> GetAll(Guid? schoolId);
+		Task<List<ClassMaster>> GetAllAsync();
+		Task<List<ClassMaster>> GetAllAsync(Guid? schoolId);
         ClassMaster? GetById(Guid id);
         Task<ClassMaster?> GetByIdAsync(Guid id);
 		Guid Create(ClassMaster cls);

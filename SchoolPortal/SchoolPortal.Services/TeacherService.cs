@@ -71,7 +71,7 @@ namespace SchoolPortal.Services
 		{
 			var list = new List<TeacherMaster>();
 			Proc p = new Proc("Teacher_GetAll");
-			p["@SchoolId"] = schoolId;
+			p["@SchoolId"] = schoolId ?? (object)DBNull.Value;
 			var dt = new DataTable();
 			p.Exec(dt);
 			foreach (DataRow r in dt.Rows)

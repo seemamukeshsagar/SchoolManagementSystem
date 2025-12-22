@@ -4,12 +4,47 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace SchoolPortal.DBAccess
 {
     public static class ProcExtensions
     {
+        /// <summary>
+        /// Executes the stored procedure and returns the first column of the first row
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static object ExecScalar(this Proc proc)
+        {
+            var command = GetCommand(proc);
+            var connectionManager = GetConnectionManager(proc);
+            
+            using (var conn = connectionManager.GetConnection())
+            {
+                command.Connection = conn;
+                conn.Open();
+                
+                return command.ExecuteScalar();
+            }
+        }
+
+        /// <summary>
+        /// Executes the stored procedure and returns a data reader
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SqlDataReader ExecReader(this Proc proc)
+        {
+            var command = GetCommand(proc);
+            var connectionManager = GetConnectionManager(proc);
+            
+            // Note: The connection will be closed when the reader is disposed
+            var conn = connectionManager.GetConnection();
+            conn.Open();
+            
+            command.Connection = conn;
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
+        }
         /// <summary>
         /// Gets the SqlCommand from a Proc instance using reflection
         /// </summary>
@@ -31,6 +66,7 @@ namespace SchoolPortal.DBAccess
         /// <summary>
         /// Executes the stored procedure and returns a list of the specified type
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static List<T> Exec<T>(this Proc proc) where T : new()
         {
             var command = GetCommand(proc);
@@ -88,6 +124,7 @@ namespace SchoolPortal.DBAccess
         /// <summary>
         /// Executes the stored procedure and returns the first row as the specified type
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T ExecSingle<T>(this Proc proc) where T : new()
         {
             return proc.Exec<T>().FirstOrDefault();
@@ -96,6 +133,7 @@ namespace SchoolPortal.DBAccess
         /// <summary>
         /// Executes the stored procedure and returns the number of rows affected
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ExecNonQuery(this Proc proc)
         {
             var command = GetCommand(proc);

@@ -1,0 +1,58 @@
+@{
+    ViewData["Title"] = "Database Error";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-database me-2"></i>Database Connection Error</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">Unable to connect to the database</h5>
+                        <p class="mb-0">
+                            The application is unable to establish a connection to the database. This might be due to:
+                        </p>
+                        <ul class="mt-2">
+                            <li>The database server is not running</li>
+                            <li>Network connectivity issues</li>
+                            <li>Incorrect database credentials or connection string</li>
+                            <li>Firewall blocking the connection</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>What you can do:</h5>
+                        <ol>
+                            <li>Verify that the database server is running</li>
+                            <li>Check your connection string in appsettings.json</li>
+                            <li>Contact your system administrator for assistance</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-home me-1"></i> Return to Home
+                        </a>
+                        <button onclick="window.location.reload()" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-sync-alt me-1"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <small>If the problem persists, please contact technical support.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add any client-side error handling here if needed
+        console.error('Database connection error occurred');
+    </script>
+}

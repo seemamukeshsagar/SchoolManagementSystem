@@ -14,7 +14,7 @@ namespace SchoolPortal.Services
 		private readonly ILookupService _lookupService;
 		private readonly IRoleMasterService _roleService;
 
-		private new readonly ILogger<UserDetailsService> _logger;
+		private readonly ILogger<UserDetailsService> _logger;
 
 		public UserDetailsService(
 			ILookupService lookupService, 
@@ -26,85 +26,85 @@ namespace SchoolPortal.Services
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-        public List<UserDetailsListViewModel> GetAll()
-        {
-            var list = new List<UserDetailsListViewModel>();
+		public List<UserDetailsListViewModel> GetAll()
+		{
+			var list = new List<UserDetailsListViewModel>();
 
-            try
-            {
-                _logger.LogInformation("Starting to fetch all user details");
+			try
+			{
+				_logger.LogInformation("Starting to fetch all user details");
 
-                // Load lookup dictionaries
-                var designations = _lookupService.GetDesignations()?
-                    .ToDictionary(d => d.Id, d => d.Name ?? string.Empty) 
-                    ?? new Dictionary<Guid, string>();
+				// Load lookup dictionaries
+				var designations = _lookupService.GetDesignations()?
+					.ToDictionary(d => d.Id, d => d.Name ?? string.Empty) 
+					?? new Dictionary<Guid, string>();
 
-                var roles = _roleService.GetAll()?
-                    .Where(r => r != null && r.Name != null)
-                    .ToDictionary(r => r.Id, r => r.Name ?? string.Empty)
-                    ?? new Dictionary<Guid, string>();
+				var roles = _roleService.GetAll()?
+					.Where(r => r != null && r.Name != null)
+					.ToDictionary(r => r.Id, r => r.Name ?? string.Empty)
+					?? new Dictionary<Guid, string>();
 
-                var companies = _lookupService.GetCompanies()?
-                    .ToDictionary(c => c.Id, c => c.Name ?? string.Empty)
-                    ?? new Dictionary<Guid, string>();
+				var companies = _lookupService.GetCompanies()?
+					.ToDictionary(c => c.Id, c => c.Name ?? string.Empty)
+					?? new Dictionary<Guid, string>();
 
-                var schools = _lookupService.GetSchools()?
-                    .ToDictionary(s => s.Id, s => s.Name ?? string.Empty)
-                    ?? new Dictionary<Guid, string>();
+				var schools = _lookupService.GetSchools()?
+					.ToDictionary(s => s.Id, s => s.Name ?? string.Empty)
+					?? new Dictionary<Guid, string>();
 
-                Proc p = new Proc("UserDetails_GetAll");
-                var dt = new DataTable();
-                p.Exec(dt);
+				Proc p = new Proc("UserDetails_GetAll");
+				var dt = new DataTable();
+				p.Exec(dt);
 
-                _logger.LogInformation($"Retrieved {dt.Rows.Count} users from database");
+				_logger.LogInformation($"Retrieved {dt.Rows.Count} users from database");
 
 				// Log column names for debugging
 				var columnNames = dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName);
 				_logger.LogInformation($"Retrieved columns: {string.Join(", ", columnNames)}");
 
-                foreach (DataRow row in dt.Rows)
-                {
-                    try
-                    {
-                        var user = new UserDetailsListViewModel
-                        {
-                            Id = Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty,
-                            UserName = row["UserName"]?.ToString() ?? string.Empty,
-                            FirstName = row["FirstName"]?.ToString() ?? string.Empty,
-                            LastName = row["LastName"]?.ToString() ?? string.Empty,
+				foreach (DataRow row in dt.Rows)
+				{
+					try
+					{
+						var user = new UserDetailsListViewModel
+						{
+							Id = Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty,
+							UserName = row["UserName"]?.ToString() ?? string.Empty,
+							FirstName = row["FirstName"]?.ToString() ?? string.Empty,
+							LastName = row["LastName"]?.ToString() ?? string.Empty,
 							FullName = row["FullName"]?.ToString() ?? string.Empty,
-                            EmailAddress = row["EmailAddress"]?.ToString() ?? string.Empty,
+							EmailAddress = row["EmailAddress"]?.ToString() ?? string.Empty,
 
-                            IsActive = bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
+							IsActive = bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
 							DesignationName = row["DesignationName"]?.ToString() ?? string.Empty,
 							RoleName = row["RoleName"]?.ToString() ?? string.Empty
-                        };
+						};
 
-                        list.Add(user);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, $"Error processing user row: {ex.Message}");
-                    }
-                }
+						list.Add(user);
+					}
+					catch (Exception ex)
+					{
+						_logger.LogError(ex, $"Error processing user row: {ex.Message}");
+					}
+				}
 				return list;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in UserDetailsService.GetAll: " + ex.Message);
-                throw;
-            }
-        }
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error in UserDetailsService.GetAll: " + ex.Message);
+				throw;
+			}
+		}
 
-        public UserDetails? GetById(Guid id)
+		public UserDetails? GetById(Guid id)
 		{
 			try
-            {
-                if (id == Guid.Empty)
-                {
-                    _logger?.LogWarning("Empty GUID provided to GetById");
-                    return null;
-                }
+			{
+				if (id == Guid.Empty)
+				{
+					_logger?.LogWarning("Empty GUID provided to GetById");
+					return null;
+				}
 				Proc p = new Proc("UserDetails_GetById");
 				p["@Id"] = id;
 				var dt = new DataTable();
@@ -126,11 +126,11 @@ namespace SchoolPortal.Services
 					SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null
 				};
 			}
-            catch (Exception ex)
-            {
-                _logger?.LogError(ex, "Error getting user details for ID: {UserId}", id);
-                return null;
-            }
+			catch (Exception ex)
+			{
+				_logger?.LogError(ex, "Error getting user details for ID: {UserId}", id);
+				return null;
+			}
 		}
 
 		public Guid Create(UserDetails entity)

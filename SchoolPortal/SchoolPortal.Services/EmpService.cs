@@ -11,7 +11,7 @@ namespace SchoolPortal.Services
 {
 	public class EmpService : IEmpService
 	{
-		private new readonly ILogger<EmpService> _logger;
+		private readonly ILogger<EmpService> _logger;
 		
 		public EmpService(ILogger<EmpService> logger)
 		{

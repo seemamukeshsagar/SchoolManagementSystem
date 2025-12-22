@@ -264,9 +264,9 @@ namespace SchoolPortalApp.Controllers
 		[HttpGet]
 		[Route("")]
 		[Route("Index")]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var list = _service.GetAll();
+			var list = await _service.GetAllAsync();
 			var schools = _schoolService.GetAll();
 			var result = list.Select(item =>
 			{
@@ -286,11 +286,11 @@ namespace SchoolPortalApp.Controllers
 
 		[HttpGet]
 		[Route("Details/{id}")]
-		public IActionResult Details(Guid id)
+		public async Task<IActionResult> Details(Guid id)
 		{
 			if (id == Guid.Empty) return BadRequest();
 
-			var item = _service.GetByIdAsync(id);
+			var item = await _service.GetByIdAsync(id);
 			if (item == null) return NotFound();
 
 			var vm = new StudentViewModel
@@ -316,7 +316,7 @@ namespace SchoolPortalApp.Controllers
 				Email = item.Email,
 				Phone = item.Phone,
 				CategoryId = item.CategoryId,
-				SiblingsIfAny = item.SiblingsIfAny,
+				SiblingsIfAny = item.SiblingsIfAny ?? false,
 				SiblingClassId = item.SiblingClassId,
 				Gender = item.Gender ?? Guid.Empty,
 				DisabilityAny = item.DisabilityAny,
@@ -340,12 +340,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = item.RouteId,
 				RouteStopDetailsId = item.RouteStopDetailsId,
 				ClassTeacherId = item.ClassTeacherId,
-				RoutePickAndDrop = item.RoutePickAndDrop,
+				RoutePickAndDrop = item.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
 				TutionFees = item.TutionFees,
 				AnnualFees = item.AnnualFees,
 				TransportFees = item.TransportFees,
-				UseTransportFees = item.UseTransportFees,
+				UseTransportFees = item.UseTransportFees ?? false,
 				SessionId = item.SessionId,
 				CompanyId = item.CompanyId,
 				SchoolId = item.SchoolId,
@@ -589,6 +589,11 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(StudentViewModel model)
 		{
+			if (model == null)
+			{
+				return BadRequest("Invalid student data");
+			}
+
 			var schoolId = CurrentSchoolId;
 			if (schoolId.HasValue)
 			{
@@ -597,6 +602,12 @@ namespace SchoolPortalApp.Controllers
 			}
 
 			// Server-side required validations for location fields
+			if (!ModelState.IsValid)
+			{
+				PopulateDropdowns(model);
+				return View(model);
+			}
+
 			ValidateLocationFields(model);
 
 			var userId = CurrentUserId;
@@ -654,7 +665,7 @@ namespace SchoolPortalApp.Controllers
 			}
 		}
 
-		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult errorResult)
+		private bool ValidateUserAndCompany(Guid? userId, Guid? companyId, Guid schoolId, out IActionResult? errorResult)
 		{
 			errorResult = null;
 
@@ -738,9 +749,9 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				var entity = MapToStudentEntity(model, companyId, userId);
-				var newId = _service.CreateAsync(entity);
+				var newId = _service.Create(entity);
 				
-				if (Guid.Parse(newId) == Guid.Empty)
+				if (newId == Guid.Empty)
 				{
 					return new StudentCreationResult
 					{
@@ -839,7 +850,7 @@ namespace SchoolPortalApp.Controllers
 				Image = model.Image ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				CategoryId = model.CategoryId,
-				SiblingsIfAny = model.SiblingsIfAny,
+				SiblingsIfAny = model.SiblingsIfAny ?? false,
 				SiblingClassId = model.SiblingClassId,
 				Gender = model.Gender,
 				DisabilityAny = model.DisabilityAny ?? string.Empty,
@@ -864,12 +875,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = model.RouteId,
 				RouteStopDetailsId = model.RouteStopDetailsId,
 				ClassTeacherId = model.ClassTeacherId,
-				RoutePickAndDrop = model.RoutePickAndDrop,
+				RoutePickAndDrop = model.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = model.FeesDiscountCategoryMasterId,
 				TutionFees = model.TutionFees,
 				AnnualFees = model.AnnualFees,
 				TransportFees = model.TransportFees,
-				UseTransportFees = model.UseTransportFees,
+				UseTransportFees = model.UseTransportFees ?? false,
 				SessionId = model.SessionId,
 				CompanyId = companyId,
 				SchoolId = model.SchoolId,
@@ -933,7 +944,7 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				var student = MapToStudentEntity(model, companyId, userId);
-				var studentId = _service.CreateAsync(student);
+				var studentId = _service.Create(student);
 				
 				if (studentId != Guid.Empty)
 				{
@@ -975,7 +986,7 @@ namespace SchoolPortalApp.Controllers
 		[Route("Edit/{id}")]
 		public IActionResult Edit(Guid id)
 		{
-			var item = _service.GetByIdAsync(id);
+			var item = _service.GetById(id);
 			if (item == null) return NotFound();
 
 			var vm = new StudentViewModel
@@ -1025,12 +1036,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = item.RouteId,
 				RouteStopDetailsId = item.RouteStopDetailsId,
 				ClassTeacherId = item.ClassTeacherId,
-				RoutePickAndDrop = item.RoutePickAndDrop,
+				RoutePickAndDrop = item.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = item.FeesDiscountCategoryMasterId,
 				TutionFees = item.TutionFees,
 				AnnualFees = item.AnnualFees,
 				TransportFees = item.TransportFees,
-				UseTransportFees = item.UseTransportFees,
+				UseTransportFees = item.UseTransportFees ?? false,
 				SessionId = item.SessionId,
 				CompanyId = item.CompanyId,
 				SchoolId = item.SchoolId,
@@ -1139,7 +1150,7 @@ namespace SchoolPortalApp.Controllers
 				Image = model.Image ?? string.Empty,
 				Email = model.Email ?? string.Empty,
 				CategoryId = model.CategoryId,
-				SiblingsIfAny = model.SiblingsIfAny,
+				SiblingsIfAny = model.SiblingsIfAny ?? false,
 				SiblingClassId = model.SiblingClassId,
 				Gender = model.Gender,
 				DisabilityAny = model.DisabilityAny ?? string.Empty,
@@ -1164,12 +1175,12 @@ namespace SchoolPortalApp.Controllers
 				RouteId = model.RouteId,
 				RouteStopDetailsId = model.RouteStopDetailsId,
 				ClassTeacherId = model.ClassTeacherId,
-				RoutePickAndDrop = model.RoutePickAndDrop,
+				RoutePickAndDrop = model.RoutePickAndDrop ?? false,
 				FeesDiscountCategoryMasterId = model.FeesDiscountCategoryMasterId,
 				TutionFees = model.TutionFees,
 				AnnualFees = model.AnnualFees,
 				TransportFees = model.TransportFees,
-				UseTransportFees = model.UseTransportFees,
+				UseTransportFees = model.UseTransportFees ?? false,
 				SessionId = model.SessionId,
 				SchoolId = model.SchoolId,
 				IsActive = model.IsActive,
@@ -1181,7 +1192,7 @@ namespace SchoolPortalApp.Controllers
 				HouseAllotted = model.HouseAllotted
 			};
 
-			if (!_service.UpdateAsync(entity))
+			if (!_service.Update(entity))
 			{
 				ModelState.AddModelError(string.Empty, "Failed to update student.");
 				PopulateDropdowns(model);
@@ -1194,7 +1205,7 @@ namespace SchoolPortalApp.Controllers
 		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
-			var item = _service.GetByIdAsync(id);
+			var item = _service.GetById(id);
 			if (item == null) return NotFound();
 			return View(item);
 		}
@@ -1205,7 +1216,7 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ConfirmDelete(Guid id)
 		{
-			if (!_service.DeleteAsync(id))
+			if (!_service.Delete(id))
 			{
 				TempData["ErrorMessage"] = "Failed to delete student.";
 				return RedirectToAction("Delete", new { id });
@@ -1221,6 +1232,13 @@ namespace SchoolPortalApp.Controllers
 		public bool Success { get; set; }
 		public string Message { get; set; } = string.Empty;
 		public Guid StudentId { get; set; } = Guid.Empty;
+
+		// Factory methods for common results
+		public static StudentCreationResult SuccessResult(Guid studentId) => 
+			new() { Success = true, StudentId = studentId };
+
+		public static StudentCreationResult ErrorResult(string? message) => 
+			new() { Success = false, Message = message ?? "An unknown error occurred" };
 	}
 
     #endregion    

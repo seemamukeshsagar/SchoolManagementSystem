@@ -57,7 +57,7 @@ namespace SchoolPortalApp.Controllers
 				var viewModel = new AcademicYearViewModel
 				{
 					Id = academicYear.Id,
-					AcademicYearName = academicYear.AcademicYearName,
+					AcademicYearName = academicYear.AcademicYearName ?? string.Empty, // Handle null
 					StartDate = academicYear.StartDate,
 					EndDate = academicYear.EndDate,
 					IsCurrent = academicYear.IsCurrent,
@@ -135,7 +135,7 @@ namespace SchoolPortalApp.Controllers
 				var viewModel = new AcademicYearViewModel
 				{
 					Id = academicYear.Id,
-					AcademicYearName = academicYear.AcademicYearName,
+					AcademicYearName = academicYear.AcademicYearName ?? string.Empty, // Handle null
 					StartDate = academicYear.StartDate,
 					EndDate = academicYear.EndDate,
 					IsCurrent = academicYear.IsCurrent,

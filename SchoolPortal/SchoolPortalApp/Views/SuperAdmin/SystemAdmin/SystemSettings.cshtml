@@ -1,0 +1,267 @@
+@{
+    ViewData["Title"] = "System Settings";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">System Settings</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Settings Menu</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="#general" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
+                        <i class="bi bi-gear me-2"></i>General
+                    </a>
+                    <a href="#email" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="bi bi-envelope me-2"></i>Email Settings
+                    </a>
+                    <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="bi bi-bell me-2"></i>Notifications
+                    </a>
+                    <a href="#maintenance" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="bi bi-tools me-2"></i>Maintenance
+                    </a>
+                    <a href="#api" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="bi bi-plug me-2"></i>API Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- General Settings -->
+                <div class="tab-pane fade show active" id="general">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">General Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">School Name</label>
+                                        <input type="text" class="form-control" value="ABC Public School">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Time Zone</label>
+                                        <select class="form-select">
+                                            <option>(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
+                                            <option>(UTC+05:30) Sri Jayawardenepura</option>
+                                            <option>(UTC+05:45) Kathmandu</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Default Language</label>
+                                        <select class="form-select">
+                                            <option>English (United States)</option>
+                                            <option>हिंदी (Hindi)</option>
+                                            <option>தமிழ் (Tamil)</option>
+                                            <option>తెలుగు (Telugu)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Date Format</label>
+                                        <select class="form-select">
+                                            <option>DD/MM/YYYY (21/12/2025)</option>
+                                            <option>MM/DD/YYYY (12/21/2025)</option>
+                                            <option>YYYY-MM-DD (2025-12-21)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="maintenanceMode" checked>
+                                    <label class="form-check-label" for="maintenanceMode">Enable Maintenance Mode</label>
+                                    <small class="form-text text-muted d-block">When enabled, only administrators can access the system.</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Settings -->
+                <div class="tab-pane fade" id="email">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Email Configuration</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mail Server</label>
+                                        <input type="text" class="form-control" placeholder="smtp.example.com">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Port</label>
+                                        <input type="number" class="form-control" value="587">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Security</label>
+                                        <select class="form-select">
+                                            <option>STARTTLS</option>
+                                            <option>SSL/TLS</option>
+                                            <option>None</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control" placeholder="noreply@example.com">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" value="••••••••">
+                                            <button class="btn btn-outline-secondary" type="button" id="showPassword">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="enableEmail" checked>
+                                    <label class="form-check-label" for="enableEmail">Enable Email Notifications</label>
+                                </div>
+                                <button type="button" class="btn btn-primary">Test Connection</button>
+                                <button type="submit" class="btn btn-success">Save Email Settings</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other tabs content would go here -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Notification settings will be available soon.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="maintenance">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 bg-warning">
+                            <h6 class="m-0 font-weight-bold">System Maintenance</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <strong>Warning:</strong> These settings affect system performance and availability.
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-danger me-2">
+                                    <i class="bi bi-trash me-1"></i> Clear System Cache
+                                </button>
+                                <small class="text-muted">Clears all cached data and temporary files.</small>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-outline-danger me-2">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Rebuild Search Index
+                                </button>
+                                <small class="text-muted">Rebuilds the search index for better performance.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="api">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">API Configuration</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h5 class="h6">API Status: <span class="badge bg-success">Active</span></h5>
+                                <p class="text-muted">Manage API access and security settings.</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">API Base URL</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control" value="https://api.schoolportal.com/v1" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="copyApiUrl">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="h6">API Keys</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Key</th>
+                                                <th>Created</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Mobile App</td>
+                                                <td>sk_test_...7890</td>
+                                                <td>15 Dec 2025</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                                                    <button class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-primary btn-sm mt-2">
+                                    <i class="bi bi-plus-lg me-1"></i> Generate New API Key
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Toggle password visibility
+        document.getElementById('showPassword').addEventListener('click', function() {
+            const passwordInput = this.previousElementSibling;
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+
+        // Copy API URL to clipboard
+        document.getElementById('copyApiUrl').addEventListener('click', function() {
+            const apiUrl = this.previousElementSibling;
+            apiUrl.select();
+            document.execCommand('copy');
+            
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="bi bi-check"></i> Copied!';
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+            }, 2000);
+        });
+    </script>
+}

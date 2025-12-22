@@ -198,7 +198,7 @@ namespace SchoolPortal.Services
                     list.Add(Map(r));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception if needed
                 // _logger.LogError(ex, "Error getting timetable periods by setup ID");

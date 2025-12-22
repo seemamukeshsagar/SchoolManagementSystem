@@ -1,4 +1,5 @@
 #nullable enable
+using OfficeOpenXml;
 using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
@@ -8,6 +9,9 @@ using SchoolPortal.DBAccess;
 using SchoolPortal.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using SchoolPortal.Services;
+using SchoolPortal.Data;
+using SchoolPortal.Data.Repositories;
+using SchoolPortalApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +40,12 @@ builder.Services.AddControllersWithViews();
 var configuration = builder.Configuration;
 builder.Services.AddSingleton<IConfiguration>(configuration);
 
+// Get dynamic connection string
+var connectionString = ConnectionStringHelper.GetConnectionString(configuration);
+
+// Set the connection string in configuration
+builder.Configuration["ConnectionStrings:DefaultConnectionString"] = connectionString;
+
 builder.Services.AddMemoryCache();
 
 // Authentication & Authorization
@@ -43,10 +53,11 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Index";
+        options.LoginPath = "/Authentication/Login";
         options.LogoutPath = "/Authentication/Logout";
-        options.AccessDeniedPath = "/Home/Index";
+        options.AccessDeniedPath = "/Authentication/AccessDenied";
         options.ReturnUrlParameter = "returnUrl";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
         options.SlidingExpiration = true;
         options.Events = new CookieAuthenticationEvents
         {
@@ -92,6 +103,9 @@ builder.Services.AddAntiforgery(o =>
     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
+// Add memory cache
+builder.Services.AddMemoryCache();
+
 // Register IHttpContextAccessor (singleton)
 builder.Services.AddHttpContextAccessor();
 
@@ -109,47 +123,78 @@ builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ =>
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
      sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddMemoryCache();
+// Core services
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
-builder.Services.AddScoped<ICategoryMasterService, SchoolPortal.Services.CategoryMasterService>();
-builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();
+builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
+
+// School management services
+builder.Services.AddScoped<ICompanyService, SchoolPortal.Services.CompanyService>();
 builder.Services.AddScoped<ISchoolService, SchoolPortal.Services.SchoolService>();
 builder.Services.AddScoped<ISchoolContactService, SchoolPortal.Services.SchoolContactService>();
+
+// Academic services
 builder.Services.AddScoped<IClassService, SchoolPortal.Services.ClassService>();
 builder.Services.AddScoped<ISectionService, SchoolPortal.Services.SectionService>();
 builder.Services.AddScoped<ISubjectService, SchoolPortal.Services.SubjectService>();
 builder.Services.AddScoped<ISubjectCategoryService, SchoolPortal.Services.SubjectCategoryService>();
 builder.Services.AddScoped<IClassRoomService, SchoolPortal.Services.ClassRoomService>();
-builder.Services.AddScoped<ITeacherService, SchoolPortal.Services.TeacherService>();
+builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
+builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
+
+// Student services
 builder.Services.AddScoped<IStudentService, SchoolPortal.Services.StudentService>();
+builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
+
+// Teacher services
+builder.Services.AddScoped<ITeacherService, SchoolPortal.Services.TeacherService>();
 builder.Services.AddScoped<ITeacherClassDetailsService, SchoolPortal.Services.TeacherClassDetailsService>();
 builder.Services.AddScoped<ITeacherSubjectDetailsService, SchoolPortal.Services.TeacherSubjectDetailsService>();
 builder.Services.AddScoped<ITeacherSectionDetailsService, SchoolPortal.Services.TeacherSectionDetailsService>();
 builder.Services.AddScoped<ITeacherDocumentDetailsService, SchoolPortal.Services.TeacherDocumentDetailsService>();
 builder.Services.AddScoped<ITeacherQualificationDetailsService, SchoolPortal.Services.TeacherQualificationDetailsService>();
-builder.Services.AddScoped<ISystemParametersService, SchoolPortal.Services.SystemParametersService>();
+
+// Employee services
+builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
+builder.Services.AddScoped<IEmpTypeService, SchoolPortal.Services.EmpTypeService>();
+builder.Services.AddScoped<IEmpAttendanceService, EmpAttendanceService>();
+
+// Parent services
+builder.Services.AddScoped<IParentService, SchoolPortal.Services.ParentService>();
+
+// Role and security services
+builder.Services.AddScoped<IRoleMasterService, SchoolPortal.Services.RoleMasterService>();
+builder.Services.AddScoped<IPrivilegeService, SchoolPortal.Services.PrivilegeService>();
+builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePrivilegeService>();
+
+// Lookup and master data services
+builder.Services.AddScoped<ICategoryMasterService, SchoolPortal.Services.CategoryMasterService>();
 builder.Services.AddScoped<IDesigMasterService, SchoolPortal.Services.DesigMasterService>();
 builder.Services.AddScoped<IProfessionMasterService, SchoolPortal.Services.ProfessionMasterService>();
 builder.Services.AddScoped<IQualificationMasterService, SchoolPortal.Services.QualificationMasterService>();
 builder.Services.AddScoped<IDeptMasterService, SchoolPortal.Services.DeptMasterService>();
 builder.Services.AddScoped<IDeptDesigDetailsService, SchoolPortal.Services.DeptDesigDetailsService>();
-builder.Services.AddScoped<IClassSubjectService, SchoolPortal.Services.ClassSubjectService>();
-builder.Services.AddScoped<IClassSectionDetailService, SchoolPortal.Services.ClassSectionDetailService>();
-builder.Services.AddScoped<IEmpService, SchoolPortal.Services.EmpService>();
-builder.Services.AddScoped<IParentService, SchoolPortal.Services.ParentService>();
-builder.Services.AddScoped<IRoleMasterService, SchoolPortal.Services.RoleMasterService>();
-builder.Services.AddScoped<IPrivilegeService, SchoolPortal.Services.PrivilegeService>();
-builder.Services.AddScoped<IRolePrivilegeService, SchoolPortal.Services.RolePrivilegeService>();
+
+// Time and attendance services
 builder.Services.AddScoped<IHolidayMasterService, SchoolPortal.Services.HolidayMasterService>();
 builder.Services.AddScoped<IHolidayTypeMasterService, SchoolPortal.Services.HolidayTypeMasterService>();
-builder.Services.AddScoped<IEmpTypeService, SchoolPortal.Services.EmpTypeService>();
+builder.Services.AddScoped<IAttendanceReasonMasterService, SchoolPortal.Services.AttendanceReasonMasterService>();
+
+// Visitor and facility services
 builder.Services.AddScoped<IVisitorService, SchoolPortal.Services.VisitorService>();
+
+// Staff services
 builder.Services.AddScoped<ICleanerMasterService, SchoolPortal.Services.CleanerMasterService>();
 builder.Services.AddScoped<ICleanerDocumentDetailsService, SchoolPortal.Services.CleanerDocumentDetailsService>();
 builder.Services.AddScoped<ICleanerQualificationDetailsService, SchoolPortal.Services.CleanerQualificationDetailsService>();
 builder.Services.AddScoped<IDriverMasterService, SchoolPortal.Services.DriverMasterService>();
 builder.Services.AddScoped<IDriverDocumentDetailsService, SchoolPortal.Services.DriverDocumentDetailsService>();
 builder.Services.AddScoped<IDriverQualificationDetailsService, SchoolPortal.Services.DriverQualificationDetailsService>();
+
+// Inventory and resource services
 builder.Services.AddScoped<ISupplierService, SchoolPortal.Services.SupplierService>();
 builder.Services.AddScoped<IVendorService, SchoolPortal.Services.VendorService>();
 builder.Services.AddScoped<IVehicleMasterService, SchoolPortal.Services.VehicleMasterService>();
@@ -160,20 +205,23 @@ builder.Services.AddScoped<IBookTypeService, SchoolPortal.Services.BookTypeServi
 builder.Services.AddScoped<IItemTypeService, SchoolPortal.Services.ItemTypeService>();
 builder.Services.AddScoped<IItemService, SchoolPortal.Services.ItemService>();
 builder.Services.AddScoped<IInventoryService, SchoolPortal.Services.InventoryService>();
+
+// User and account services
 builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetailsService>();
+
+// Academic services
 builder.Services.AddScoped<IFeesCategoryMasterService, SchoolPortal.Services.FeesCategoryMasterService>();
 builder.Services.AddScoped<IAssesmentMasterService, SchoolPortal.Services.AssesmentMasterService>();
-builder.Services.AddScoped<IAttendanceReasonMasterService, SchoolPortal.Services.AttendanceReasonMasterService>();
 builder.Services.AddScoped<ITimeTablePeriodMasterService, SchoolPortal.Services.TimeTablePeriodMasterService>();
 builder.Services.AddScoped<ITimeTableSetupDetailsService, SchoolPortal.Services.TimeTableSetupDetailsService>();
 builder.Services.AddScoped<ISessionMasterService, SchoolPortal.Services.SessionMasterService>();
+builder.Services.AddScoped<ITimeTablePeriodService, SchoolPortal.Services.TimeTablePeriodService>();
+builder.Services.AddScoped<IAcademicYearService, SchoolPortal.Services.AcademicYearService>();
+
+// Non-teaching staff services
 builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
 builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
-builder.Services.AddScoped<ITimeTablePeriodService, SchoolPortal.Services.TimeTablePeriodService>();
-builder.Services.AddScoped<IAcademicYearService, SchoolPortal.Services.AcademicYearService>();
-builder.Services.AddScoped<IEmpAttendanceService, EmpAttendanceService>(); // You'll need to implement this
-builder.Services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
 
 var app = builder.Build();
 
@@ -213,10 +261,10 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 // Configure AuthorizedManager for each request
-app.Use(async (context, next) =>
-{
-    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
-    await next();
-});
+//app.Use(async (context, next) =>
+//{
+//    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
+//    await next();
+//});
 
 app.Run();

@@ -14,7 +14,7 @@ namespace SchoolPortal.Services.Services
 {
 	public class NonTeachingDocumentDetailsService : INonTeachingDocumentDetailsService
 	{
-		private new readonly ILogger<NonTeachingDocumentDetailsService> _logger;
+		private readonly ILogger<NonTeachingDocumentDetailsService> _logger;
 		private readonly IDbConnection _connection;
 
 		public NonTeachingDocumentDetailsService(ILogger<NonTeachingDocumentDetailsService> logger, IDbConnection connection)
@@ -106,7 +106,7 @@ namespace SchoolPortal.Services.Services
 					p["@Id"] = id;
 					var dt = new DataTable();
 					p.Exec(dt);
-					if (dt.Rows.Count == 0) return null;
+					if (dt.Rows.Count == 0) return null!; // Use null-forgiving operator to satisfy non-nullable contract
 					return (NonTeachingDocumentDetails)Map(dt.Rows[0]);
 				}
 			}
@@ -126,20 +126,20 @@ namespace SchoolPortal.Services.Services
 							p["@Id"] = entity.Id;
 							p["@NonTeachingId"] = entity.NonTeachingId;
 							p["@DocumentTypeId"] = entity.DocumentTypeId;
-							p["@DocumentType"] = entity.DocumentType;
-							p["@DocumentNumber"] = entity.DocumentNumber;
-							p["@DocumentPath"] = entity.DocumentPath;
-							p["@IssueDate"] = entity.IssueDate;
-							p["@ExpiryDate"] = entity.ExpiryDate;
-							p["@Remarks"] = entity.Remarks;
+							p["@DocumentType"] = entity.DocumentType ?? (object)DBNull.Value;
+							p["@DocumentNumber"] = entity.DocumentNumber ?? (object)DBNull.Value;
+							p["@DocumentPath"] = entity.DocumentPath ?? (object)DBNull.Value;
+							p["@IssueDate"] = entity.IssueDate ?? (object)DBNull.Value;
+							p["@ExpiryDate"] = entity.ExpiryDate ?? (object)DBNull.Value;
+							p["@Remarks"] = entity.Remarks ?? (object)DBNull.Value;
 							p["@IsActive"] = entity.IsActive;
 							p["@IsVerified"] = entity.IsVerified;
 							p["@VerifiedBy"] = entity.VerifiedBy;
-							p["@VerifiedOn"] = entity.VerifiedOn;
+							p["@VerifiedOn"] = entity.VerifiedOn ?? (object)DBNull.Value;
 							p["@CreatedBy"] = entity.CreatedBy;
 							p["@CreatedDate"] = entity.CreatedDate;
 							p["@ModifiedBy"] = entity.ModifiedBy;
-							p["@ModifiedDate"] = entity.ModifiedDate;
+							p["@ModifiedDate"] = entity.ModifiedDate ?? (object)DBNull.Value;
 
 							var dt = new DataTable();
 							p.Exec(dt);
@@ -168,30 +168,30 @@ namespace SchoolPortal.Services.Services
 				{
 					p["@Id"] = entity.Id;
 					p["@DocumentTypeId"] = entity.DocumentTypeId;
-					p["@DocumentType"] = entity.DocumentType;
-					p["@DocumentNumber"] = entity.DocumentNumber;
-					p["@DocumentPath"] = entity.DocumentPath;
-					p["@IssueDate"] = entity.IssueDate;
-					p["@ExpiryDate"] = entity.ExpiryDate;
-					p["@Remarks"] = entity.Remarks;
+					p["@DocumentType"] = entity.DocumentType ?? (object)DBNull.Value;
+					p["@DocumentNumber"] = entity.DocumentNumber ?? (object)DBNull.Value;
+					p["@DocumentPath"] = entity.DocumentPath ?? (object)DBNull.Value;
+					p["@IssueDate"] = entity.IssueDate ?? (object)DBNull.Value;
+					p["@ExpiryDate"] = entity.ExpiryDate ?? (object)DBNull.Value;
+					p["@Remarks"] = entity.Remarks ?? (object)DBNull.Value;
 					p["@IsActive"] = entity.IsActive;
 					p["@IsVerified"] = entity.IsVerified;
 					p["@VerifiedBy"] = entity.VerifiedBy;
-					p["@VerifiedOn"] = entity.VerifiedOn;
+					p["@VerifiedOn"] = entity.VerifiedOn ?? (object)DBNull.Value;
 					p["@ModifiedBy"] = entity.ModifiedBy;
-					p["@ModifiedDate"] = entity.ModifiedDate;
+					p["@ModifiedDate"] = entity.ModifiedDate ?? (object)DBNull.Value;
 
-							var dt = new DataTable();
-							p.Exec(dt);
-							if (dt.Rows.Count > 0)
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						}
+					var dt = new DataTable();
+					p.Exec(dt);
+					if (dt.Rows.Count > 0)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
 			}
 			catch (Exception ex)
 			{

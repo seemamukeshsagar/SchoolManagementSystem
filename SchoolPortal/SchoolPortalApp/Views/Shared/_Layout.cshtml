@@ -1,419 +1,464 @@
 @using System.Security.Claims
+@using SchoolPortal.Services.IServices
 @using SchoolPortalApp.Extensions
-@inject SchoolPortal.Services.IServices.ILookupService Lookup
-@inject SchoolPortal.Services.IServices.ISchoolService SchoolService
+@using Microsoft.AspNetCore.Mvc.Rendering
+@inject ILookupService Lookup
+@inject ISchoolService SchoolService
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
-    var displayName = User?.Identity?.Name;
-    var token = Xsrf.GetAndStoreTokens(Context).RequestToken;
-    
-    // Initialize session variables
-    string companyIdStr1 = string.Empty;
-    string schoolIdStr1 = string.Empty;
-    string companyName = string.Empty;
-    string schoolName = string.Empty;
-    
-    if (isAuthenticated)
-    {
-        companyIdStr1 = Context.Session.GetString("CompanyId") ?? string.Empty;
-        schoolIdStr1 = Context.Session.GetString("SchoolId") ?? string.Empty;
-        
-        if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var companyId))
-        {
-            var companies = Lookup.GetCompanies();
-            var comp = companies?.FirstOrDefault(c => c.Id == companyId);
-            companyName = comp?.Name ?? string.Empty;
-        }
+	var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+	var displayName = User?.Identity?.Name;
+	var token = Xsrf.GetAndStoreTokens(Context).RequestToken;
+	
+	// Initialize session variables
+	string companyIdStr1 = string.Empty;
+	string schoolIdStr1 = string.Empty;
+	string companyName = string.Empty;
+	string schoolName = string.Empty;
+	
+	if (isAuthenticated)
+	{
+		companyIdStr1 = Context.Session.GetString("CompanyId") ?? string.Empty;
+		schoolIdStr1 = Context.Session.GetString("SchoolId") ?? string.Empty;
+		
+		if (!string.IsNullOrWhiteSpace(companyIdStr1) && Guid.TryParse(companyIdStr1, out var companyId))
+		{
+			var companies = Lookup.GetCompanies();
+			var comp = companies?.FirstOrDefault(c => c.Id == companyId);
+			companyName = comp?.Name ?? string.Empty;
+		}
 
-        if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
-        {
-            var schools = Lookup.GetSchools();
-            var sch = schools?.FirstOrDefault(s => s.Id == schoolId);
-            schoolName = sch?.Name ?? string.Empty;
-        }
-    }
+		if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
+		{
+			var schools = Lookup.GetSchools(schoolId);
+			var sch = schools?.FirstOrDefault(s => s.Id == schoolId);
+			schoolName = sch?.Name ?? string.Empty;
+		}
+	}
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SchoolPortal.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/layout-styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @RenderSection("Styles", required: false)
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - SchoolPortal.Web</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/layout-styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	@RenderSection("Styles", required: false)
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container-fluid">
-                    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <a class="navbar-brand ms-2" asp-area="" asp-controller="Home" asp-action="Index">
-                        @if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
-                        {
-                            @companyName
-                            @if (!string.IsNullOrEmpty(companyName) && !string.IsNullOrEmpty(schoolName))
-                            {
-                                <text> | </text>
-                            }
-                            @schoolName
-                        }
-                        else
-                        {
-                            <text>School Portal</text>
-                        }
-                    </a>
-                    <div class="d-flex align-items-center ms-auto">
-                        <div class="me-3">
-                            <span class="text-light me-2">
-                                @(Context.Session.GetString("FullName") ?? "User")
-                            </span>
-                            <form asp-controller="Authentication" asp-action="Logout" method="post" class="d-inline">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        }
-        else
-        {
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container-fluid">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">School Portal</a>
-                    <div class="ms-auto">
-                        <a class="btn btn-outline-light" href="/Authentication/Login">Login</a>
-                    </div>
-                </div>
-            </nav>
-        }
-    </header>
+	<!-- HEADER -->
+	<header>
+		@if (User.Identity.IsAuthenticated)
+		{
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<div class="container-fluid">
+					<button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+						<i class="bi bi-list"></i>
+					</button>
+					<a class="navbar-brand ms-2" asp-area="" asp-controller="Home" asp-action="Index">
+						@if (!string.IsNullOrEmpty(companyName) || !string.IsNullOrEmpty(schoolName))
+						{
+							@companyName
+							@if (!string.IsNullOrEmpty(companyName) && !string.IsNullOrEmpty(schoolName))
+							{
+								<text> | </text>
+							}
+							@schoolName
+						}
+						else
+						{
+							<text>School Portal</text>
+						}
+					</a>
+					<div class="d-flex align-items-center ms-auto">
+						<div class="me-3">
+							<div class="dropdown d-inline-block me-3">
+								<button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="schoolDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+									@(string.IsNullOrEmpty(schoolName) ? "Select School" : schoolName)
+								</button>
+								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="schoolDropdown" id="schoolDropdownMenu">
+									@if (isAuthenticated)
+									{
+										var schools = Lookup.GetSchools()?.OrderBy(s => s.Name) ?? Enumerable.Empty<LookupItem>();
+										if (schools.Any())
+										{
+											foreach (var school in schools)
+											{
+												<li><a class="dropdown-item" href="#" onclick="setSchool('@school.Id', this)">@school.Name</a></li>
+											}
+										}
+										else
+										{
+											<li><a class="dropdown-item disabled" href="#">No schools found</a></li>
+										}
+									}
+								</ul>
+							</div>
+							<span class="text-light me-2">
+								@(Context.Session.GetString("FullName") ?? "User")
+							</span>
+							<form asp-controller="Authentication" asp-action="Logout" method="post" class="d-inline">
+								@Html.AntiForgeryToken()
+								<button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</nav>
+		}
+		else
+		{
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<div class="container-fluid">
+					<a class="navbar-brand" asp-controller="Home" asp-action="Index">School Portal</a>
+					<div class="ms-auto">
+						<a class="btn btn-outline-light" href="/Authentication/Login">Login</a>
+					</div>
+				</div>
+			</nav>
+		}
+	</header>
 
-    <!-- MAIN LAYOUT -->
-    <div class="main-container">
-        @if (isAuthenticated)
-        {
-            var userRole = Context.Session.GetString("UserRole") ?? "";
-            string navigationBar = "_NavigationBar"; // Default navigation bar
+	<!-- MAIN LAYOUT -->
+	<div class="main-container">
+		@if (isAuthenticated)
+		{
+			var userRole = Context.Session.GetString("UserRole") ?? "";
+			string navigationBar = "_NavigationBar"; // Default navigation bar
 
-            switch (userRole.ToLower())
-            {
-                case "account":
-                    navigationBar = "_AccountNavigation";
-                    break;
-                case "management":
-                    navigationBar = "_ManagementNavigation";
-                    break;
-                case "administrator":
-                    navigationBar = "_AdministratorNavigation";
-                    break;
-                case "student":
-                    navigationBar = "_StudentNavigation";
-                    break;
-                case "librarian":
-                    navigationBar = "_LibrarianNavigation";
-                    break;
-                case "teacher":
-                case "teachers":    
-                    navigationBar = "_TeacherNavigation";
-                    break;
-                case "parent":
-                    navigationBar = "_ParentNavigation";
-                    break;
-                case "superadministrator":
-                case "super administrator":
-                    navigationBar = "_SuperAdministratorNavigation";
-                    break;
-                case "reception":
-                    navigationBar = "_ReceptionNavigationBar";
-                    break;
-                case "user":
-                    navigationBar = "";
-                    break;
-            }
+			switch (userRole.ToLower())
+			{
+				case "account":
+					navigationBar = "_AccountNavigation";
+					break;
+				case "management":
+					navigationBar = "_ManagementNavigation";
+					break;
+				case "administrator":
+					navigationBar = "_AdministratorNavigation";
+					break;
+				case "student":
+					navigationBar = "_StudentNavigation";
+					break;
+				case "librarian":
+					navigationBar = "_LibrarianNavigation";
+					break;
+				case "teacher":
+				case "teachers":    
+					navigationBar = "_TeacherNavigation";
+					break;
+				case "parent":
+					navigationBar = "_ParentNavigation";
+					break;
+				case "superadministrator":
+				case "super administrator":
+					navigationBar = "_SuperAdministratorNavigation";
+					break;
+				case "reception":
+					navigationBar = "_ReceptionNavigationBar";
+					break;
+				case "user":
+					navigationBar = "";
+					break;
+			}
 
-            if (!string.IsNullOrEmpty(navigationBar))
-            {
-                <partial name="~/Views/Shared/NavigationBars/@(navigationBar).cshtml" />
-            }
-        }
-        
-        <!-- MAIN CONTENT -->
-        <main role="main" class="content-area @(isAuthenticated ? "" : "full-width")" id="content">
-            <div class="body-scroll">
-                @RenderBody()
-            </div>
-        </main>
-    </div>
+			if (!string.IsNullOrEmpty(navigationBar))
+			{
+				<partial name="~/Views/Shared/NavigationBars/@(navigationBar).cshtml" />
+			}
+		}
+		
+		<!-- MAIN CONTENT -->
+		<main role="main" class="content-area @(isAuthenticated ? "" : "full-width")" id="content">
+			<div class="body-scroll">
+				@RenderBody()
+			</div>
+		</main>
+	</div>
 
-    <!-- FOOTER -->
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+	<!-- FOOTER -->
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+		</div>
+	</footer>
 
-    <!-- SCRIPTS -->
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/cascading-dropdowns.js" asp-append-version="true"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+	<!-- SCRIPTS -->
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/cascading-dropdowns.js" asp-append-version="true"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            (async () => {
-                try {
-                    const response = await fetch('/Account/GetUserProfile');
-                    if (!response.ok) throw new Error('Failed to load profile');
+	<script>
+		async function setSchool(schoolId, element) {
+			try {
+				const response = await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(schoolId)}`);
+				if (response.ok) {
+					// Update active state in dropdown
+					document.querySelectorAll('#schoolDropdownMenu .dropdown-item').forEach(item => {
+						item.classList.remove('active');
+					});
+					element.classList.add('active');
+					
+					// Update dropdown button text
+					document.getElementById('schoolDropdown').textContent = element.textContent.trim();
+					
+					// Reload the page to reflect changes
+					window.location.reload();
+				}
+			} catch (error) {
+				console.error('Error setting school:', error);
+			}
+		}
 
-                    const data = await response.json();
-                    if (data.success) {
-                        const userData = data.data || {};
-                        const setText = (id, val) => {
-                            const el = document.getElementById(id);
-                            if (el) el.textContent = val;
-                        };
-                        setText('userFullName', userData.fullName || 'Not available');
-                        setText('userRole', userData.role || 'Not specified');
-                        setText('userDepartment', userData.department || 'Not specified');
-                        setText('userEmail', userData.email || 'Not available');
+		document.addEventListener('DOMContentLoaded', function () {
+			(async () => {
+				try {
+					const response = await fetch('/Account/GetUserProfile');
+					if (!response.ok) throw new Error('Failed to load profile');
 
-                        const avatar = document.querySelector('.user-avatar');
-                        if (avatar && userData.fullName) {
-                            avatar.textContent = userData.fullName.charAt(0).toUpperCase();
-                        }
-                        const ids = ['userFullName', 'userRole', 'userDepartment', 'userEmail'];
-                        const els = ids.map(id => document.getElementById(id)).filter(Boolean);
-                        if (els.length > 0) {
-                            const sameParent = els.every(e => e.parentElement === els[0].parentElement);
-                            const parent = sameParent ? els[0].parentElement : null;
-                            if (parent) parent.classList.add('user-info');
-                        }
-                    } else {
-                        const roleEl = document.getElementById('userRole');
-                        if (roleEl) roleEl.textContent = data.message || 'Error loading profile';
-                    }
-                } catch (err) {
-                    const roleEl = document.getElementById('userRole');
-                    if (roleEl) roleEl.textContent = 'Error loading profile';
-                }
-            })();
+					const data = await response.json();
+					if (data.success) {
+						const userData = data.data || {};
+						const setText = (id, val) => {
+							const el = document.getElementById(id);
+							if (el) el.textContent = val;
+						};
+						setText('userFullName', userData.fullName || 'Not available');
+						setText('userRole', userData.role || 'Not specified');
+						setText('userDepartment', userData.department || 'Not specified');
+						setText('userEmail', userData.email || 'Not available');
 
-            const companySelect = document.getElementById('companySelect');
-            const schoolSelect = document.getElementById('schoolSelect');
-            const selectorsContainer = document.getElementById('companySchoolSelectors');
+						const avatar = document.querySelector('.user-avatar');
+						if (avatar && userData.fullName) {
+							avatar.textContent = userData.fullName.charAt(0).toUpperCase();
+						}
+						const ids = ['userFullName', 'userRole', 'userDepartment', 'userEmail'];
+						const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+						if (els.length > 0) {
+							const sameParent = els.every(e => e.parentElement === els[0].parentElement);
+							const parent = sameParent ? els[0].parentElement : null;
+							if (parent) parent.classList.add('user-info');
+						}
+					} else {
+						const roleEl = document.getElementById('userRole');
+						if (roleEl) roleEl.textContent = data.message || 'Error loading profile';
+					}
+				} catch (err) {
+					const roleEl = document.getElementById('userRole');
+					if (roleEl) roleEl.textContent = 'Error loading profile';
+				}
+			})();
 
-            async function loadCompanies(preselectId) {
-                try {
-                    const res = await fetch('/Lookup/GetCompanies');
-                    if (!res.ok) return;
-                    const items = await res.json();
-                    companySelect.innerHTML = '<option value="">Select Company</option>';
-                    (items || []).forEach(i => {
-                        const opt = document.createElement('option');
-                        opt.value = i.id;
-                        opt.textContent = i.name;
-                        if (preselectId && i.id.toLowerCase() === preselectId.toLowerCase()) opt.selected = true;
-                        companySelect.appendChild(opt);
-                    });
-                    const selectedCompanyId = companySelect.value || preselectId || '';
-                    await loadSchools(selectedCompanyId, schoolSelect?.getAttribute('data-current-school-id'));
-                } catch {}
-            }
+			const companySelect = document.getElementById('companySelect');
+			const schoolSelect = document.getElementById('schoolSelect');
+			const selectorsContainer = document.getElementById('companySchoolSelectors');
 
-            async function loadSchools(companyId, preselectSchoolId) {
-                schoolSelect.innerHTML = '<option value="">Select School</option>';
-                if (!companyId) { schoolSelect.disabled = true; return; }
-                try {
-                    const res = await fetch(`/Lookup/GetSchoolsByCompany?companyId=${encodeURIComponent(companyId)}`);
-                    if (!res.ok) { schoolSelect.disabled = true; return; }
-                    const items = await res.json();
-                    (items || []).forEach(i => {
-                        const opt = document.createElement('option');
-                        opt.value = i.id;
-                        opt.textContent = i.name;
-                        if (preselectSchoolId && i.id.toLowerCase() === preselectSchoolId.toLowerCase()) opt.selected = true;
-                        schoolSelect.appendChild(opt);
-                    });
-                    schoolSelect.disabled = false;
+			async function loadCompanies(preselectId) {
+				try {
+					const res = await fetch('/Lookup/GetCompanies');
+					if (!res.ok) return;
+					const items = await res.json();
+					companySelect.innerHTML = '<option value="">Select Company</option>';
+					(items || []).forEach(i => {
+						const opt = document.createElement('option');
+						opt.value = i.id;
+						opt.textContent = i.name;
+						if (preselectId && i.id.toLowerCase() === preselectId.toLowerCase()) opt.selected = true;
+						companySelect.appendChild(opt);
+					});
+					const selectedCompanyId = companySelect.value || preselectId || '';
+					await loadSchools(selectedCompanyId, schoolSelect?.getAttribute('data-current-school-id'));
+				} catch {}
+			}
 
-                    // If there's a preselected school ID and it's not already selected, select it
-                    if (preselectSchoolId && !schoolSelect.value) {
-                        schoolSelect.value = preselectSchoolId;
-                    }
+			async function loadSchools(companyId, preselectSchoolId) {
+				schoolSelect.innerHTML = '<option value="">Select School</option>';
+				if (!companyId) { schoolSelect.disabled = true; return; }
+				try {
+					const res = await fetch(`/Lookup/GetSchoolsByCompany?companyId=${encodeURIComponent(companyId)}`);
+					if (!res.ok) { schoolSelect.disabled = true; return; }
+					const items = await res.json();
+					(items || []).forEach(i => {
+						const opt = document.createElement('option');
+						opt.value = i.id;
+						opt.textContent = i.name;
+						if (preselectSchoolId && i.id.toLowerCase() === preselectSchoolId.toLowerCase()) opt.selected = true;
+						schoolSelect.appendChild(opt);
+					});
+					schoolSelect.disabled = false;
 
-                    // If there's only one school, automatically select it
-                    if (items && items.length === 1) {
-                        schoolSelect.value = items[0].id;
-                        // Trigger change event to set session
-                        schoolSelect.dispatchEvent(new Event('change'));
-                    }
-                } catch {
-                    schoolSelect.disabled = true;
-                }
-            }
+					// If there's a preselected school ID and it's not already selected, select it
+					if (preselectSchoolId && !schoolSelect.value) {
+						schoolSelect.value = preselectSchoolId;
+					}
 
-            if (companySelect && schoolSelect) {
-                const currentCompanyId = companySelect.getAttribute('data-current-company-id') || '';
-                const currentSchoolId = schoolSelect.getAttribute('data-current-school-id') || '';
-                if (currentCompanyId) {
-                    loadCompanies(currentCompanyId).then(async () => {
-                        if (currentCompanyId) {
-                            try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(currentCompanyId)}`); } catch {}
-                        }
-                        if (currentSchoolId) {
-                            try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(currentSchoolId)}`); } catch {}
-                        }
-                    });
-                } else {
-                    loadCompanies('');
-                }
+					// If there's only one school, automatically select it
+					if (items && items.length === 1) {
+						schoolSelect.value = items[0].id;
+						// Trigger change event to set session
+						schoolSelect.dispatchEvent(new Event('change'));
+					}
+				} catch {
+					schoolSelect.disabled = true;
+				}
+			}
 
-                companySelect.addEventListener('change', async (event) => {
-                    const val = companySelect.value;
-                    try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
-                    await loadSchools(val, currentSchoolId); // Pass the session school ID
+			if (companySelect && schoolSelect) {
+				const currentCompanyId = companySelect.getAttribute('data-current-company-id') || '';
+				const currentSchoolId = schoolSelect.getAttribute('data-current-school-id') || '';
+				if (currentCompanyId) {
+					loadCompanies(currentCompanyId).then(async () => {
+						if (currentCompanyId) {
+							try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(currentCompanyId)}`); } catch {}
+						}
+						if (currentSchoolId) {
+							try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(currentSchoolId)}`); } catch {}
+						}
+					});
+				} else {
+					loadCompanies('');
+				}
 
-                    // OPTIONAL: If you want to refresh immediately on company change (even before school is picked),
-                    // only do it for user-triggered changes to avoid loops.
-                    // if (event.isTrusted) {
-                    //  window.location.reload();
-                    // }
-                });
-                schoolSelect.addEventListener('change', async (event) => {
-                    const val = schoolSelect.value;
-                    try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(val)}`); } catch {}
+				companySelect.addEventListener('change', async (event) => {
+					const val = companySelect.value;
+					try { await fetch(`/Lookup/SetCompany?companyId=${encodeURIComponent(val)}`); } catch {}
+					await loadSchools(val, currentSchoolId); // Pass the session school ID
 
-                    // Determine the previously known school (from initial render / last change)
-                    const previous = (schoolSelect.getAttribute('data-current-school-id') || '').toLowerCase();
-                    const current = (val || '').toLowerCase();
+					// OPTIONAL: If you want to refresh immediately on company change (even before school is picked),
+					// only do it for user-triggered changes to avoid loops.
+					// if (event.isTrusted) {
+					//  window.location.reload();
+					// }
+				});
+				schoolSelect.addEventListener('change', async (event) => {
+					const val = schoolSelect.value;
+					try { await fetch(`/Lookup/SetSchool?schoolId=${encodeURIComponent(val)}`); } catch {}
 
-                    // Update the attribute to the new value so we don't reload again for the same school
-                    schoolSelect.setAttribute('data-current-school-id', val || '');
+					// Determine the previously known school (from initial render / last change)
+					const previous = (schoolSelect.getAttribute('data-current-school-id') || '').toLowerCase();
+					const current = (val || '').toLowerCase();
 
-                    // Reload if either:
-                    // 1) The user changed the dropdown (event.isTrusted), OR
-                    // 2) Code selected a *different* school than before (e.g. after changing company)
-                    if (event.isTrusted || previous !== current) {
-                        window.location.reload();
-                    }
-                });
-            }
+					// Update the attribute to the new value so we don't reload again for the same school
+					schoolSelect.setAttribute('data-current-school-id', val || '');
 
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const toggleButton = document.getElementById('sidebarToggle');
+					// Reload if either:
+					// 1) The user changed the dropdown (event.isTrusted), OR
+					// 2) Code selected a *different* school than before (e.g. after changing company)
+					if (event.isTrusted || previous !== current) {
+						window.location.reload();
+					}
+				});
+			}
 
-            toggleButton?.addEventListener('click', () => {
-                if (!sidebar || !content) return;
+			const sidebar = document.getElementById('sidebar');
+			const content = document.getElementById('content');
+			const toggleButton = document.getElementById('sidebarToggle');
 
-                if (window.innerWidth > 768) {
-                    sidebar.classList.toggle('collapsed');
-                    content.classList.toggle('collapsed');
+			toggleButton?.addEventListener('click', () => {
+				if (!sidebar || !content) return;
 
-                    if (sidebar.classList.contains('collapsed')) {
-                        const openSubmenus = sidebar.querySelectorAll('.collapse.show');
-                        openSubmenus.forEach(el => {
-                            if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
-                                const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
-                                instance.hide();
-                            } else {
-                                el.classList.remove('show');
-                            }
-                        });
+				if (window.innerWidth > 768) {
+					sidebar.classList.toggle('collapsed');
+					content.classList.toggle('collapsed');
 
-                        const triggers = sidebar.querySelectorAll('[data-bs-toggle="collapse"]');
-                        triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
-                    }
-                } else {
-                    sidebar.classList.toggle('show');
-                }
-            });
+					if (sidebar.classList.contains('collapsed')) {
+						const openSubmenus = sidebar.querySelectorAll('.collapse.show');
+						openSubmenus.forEach(el => {
+							if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+								const instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+								instance.hide();
+							} else {
+								el.classList.remove('show');
+							}
+						});
 
-            // Centralized DataTables initialization
-            if (window.jQuery && $.fn.DataTable) {
-                $('table[data-datatable="true"]').each(function () {
-                    var $table = $(this);
-                    var $thead = $table.find('thead');
+						const triggers = sidebar.querySelectorAll('[data-bs-toggle="collapse"]');
+						triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+					}
+				} else {
+					sidebar.classList.toggle('show');
+				}
+			});
 
-                    if ($thead.length) {
-                        var $headerRow = $thead.find('tr').first();
-                        var $filterRow = $thead.find('tr').eq(1);
+			// Centralized DataTables initialization
+			if (window.jQuery && $.fn.DataTable) {
+				$('table[data-datatable="true"]').each(function () {
+					var $table = $(this);
+					var $thead = $table.find('thead');
 
-                        // If no explicit filter row exists, create one with inputs for each header cell
-                        if ($filterRow.length === 0) {
-                            $filterRow = $('<tr/>');
-                            $headerRow.find('th').each(function () {
-                                var $headerCell = $(this);
-                                var headerText = $.trim($headerCell.text());
-                                var $filterCell = $('<th/>' );
+					if ($thead.length) {
+						var $headerRow = $thead.find('tr').first();
+						var $filterRow = $thead.find('tr').eq(1);
 
-                                // Skip filter for empty headers or explicitly marked no-filter columns
-                                if (headerText && !$headerCell.hasClass('no-filter')) {
-                                    $('<input/>', {
-                                        type: 'text',
-                                        'class': 'form-control form-control-sm',
-                                        placeholder: 'Search ' + headerText
-                                    }).appendTo($filterCell);
-                                }
+						// If no explicit filter row exists, create one with inputs for each header cell
+						if ($filterRow.length === 0) {
+							$filterRow = $('<tr/>');
+							$headerRow.find('th').each(function () {
+								var $headerCell = $(this);
+								var headerText = $.trim($headerCell.text());
+								var $filterCell = $('<th/>' );
 
-                                $filterRow.append($filterCell);
-                            });
-                            $thead.append($filterRow);
-                        }
-                    }
+								// Skip filter for empty headers or explicitly marked no-filter columns
+								if (headerText && !$headerCell.hasClass('no-filter')) {
+									$('<input/>', {
+										type: 'text',
+										'class': 'form-control form-control-sm',
+										placeholder: 'Search ' + headerText
+									}).appendTo($filterCell);
+								}
 
-                    var dataTable = $table.DataTable({
-                        orderCellsTop: true,
-                        fixedHeader: true,
-                        paging: true,
-                        searching: true,
-                        pageLength: 10,
-                        lengthMenu: [
-                            [10, 25, 50, -1],
-                            [10, 25, 50, 'All']
-                        ],
-                        columnDefs: [
-                            { targets: -1, orderable: false, searchable: false }
-                        ]
-                    });
+								$filterRow.append($filterCell);
+							});
+							$thead.append($filterRow);
+						}
+					}
 
-                    // Wire up per-column filters from the second header row
-                    $thead.find('tr:eq(1) th').each(function (i) {
-                        var $input = $(this).find('input');
-                        if ($input.length) {
-                            $input.on('keyup change', function () {
-                                if (dataTable.column(i).search() !== this.value) {
-                                    dataTable.column(i).search(this.value).draw();
-                                }
-                            });
-                        }
-                    });
-                });
-            }
-        });
-    </script>
-    @{
-        // This will render any scripts that were registered
-        @Html.Raw(ScriptManager.RenderScripts())
-        // Still allow regular script sections
-        await RenderSectionAsync("Scripts", required: false);
-    }
+					var dataTable = $table.DataTable({
+						orderCellsTop: true,
+						fixedHeader: true,
+						paging: true,
+						searching: true,
+						pageLength: 10,
+						lengthMenu: [
+							[10, 25, 50, -1],
+							[10, 25, 50, 'All']
+						],
+						columnDefs: [
+							{ targets: -1, orderable: false, searchable: false }
+						]
+					});
+
+					// Wire up per-column filters from the second header row
+					$thead.find('tr:eq(1) th').each(function (i) {
+						var $input = $(this).find('input');
+						if ($input.length) {
+							$input.on('keyup change', function () {
+								if (dataTable.column(i).search() !== this.value) {
+									dataTable.column(i).search(this.value).draw();
+								}
+							});
+						}
+					});
+				});
+			}
+		});
+	</script>
+	@{
+		// This will render any scripts that were registered
+		@Html.Raw(ScriptManager.RenderScripts())
+		// Still allow regular script sections
+		await RenderSectionAsync("Scripts", required: false);
+	}
 </body>
 </html>

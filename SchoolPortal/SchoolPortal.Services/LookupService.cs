@@ -4,18 +4,27 @@ using System.Data;
 using SchoolPortal.DBAccess;
 using SchoolPortal.Services.IServices;
 using SchoolPortal.Entities.Models;
+using Microsoft.Extensions.Logging;
 
 namespace SchoolPortal.Services
 {
 	public class LookupService : ILookupService
 	{
+		private readonly ILogger<LookupService> _logger;
+
+		public LookupService(ILogger<LookupService> logger)
+		{
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
 		private static List<LookupItem> Map(DataTable dt, string idCol = "Id", string nameCol = "Name")
 		{
 			var list = new List<LookupItem>();
 			foreach (DataRow r in dt.Rows)
 			{
 				var item = new LookupItem();
-				if (dt.Columns.Contains(idCol) && Guid.TryParse(r[idCol]?.ToString(), out var id)) item.Id = id;
+				if (dt.Columns.Contains(idCol) && r[idCol] != DBNull.Value && Guid.TryParse(r[idCol].ToString(), out var id)) 
+					item.Id = id;
 				item.Name = dt.Columns.Contains(nameCol) ? (r[nameCol]?.ToString() ?? string.Empty) : string.Empty;
 				list.Add(item);
 			}
@@ -152,6 +161,23 @@ namespace SchoolPortal.Services
 			}
 		}
 
+		public List<LookupItem> GetSchools(Guid schoolId)
+		{
+			try
+			{
+				Proc p = new Proc("School_GetAll");
+				p["@schoolId"] = schoolId;
+				var dt = new DataTable();
+				p.Exec(dt);
+				return Map(dt, "Id", "Name");
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error getting schools");
+				return new List<LookupItem>();
+			}
+		}
+
 		public List<LookupItem> GetSchools()
 		{
 			try
@@ -159,11 +185,11 @@ namespace SchoolPortal.Services
 				Proc p = new Proc("School_GetAll");
 				var dt = new DataTable();
 				p.Exec(dt);
-				return Map(dt, "Id", "SchoolName");
+				return Map(dt, "Id", "Name");
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				// Log the exception if needed
+				_logger.LogError(ex, "Error getting schools");
 				return new List<LookupItem>();
 			}
 		}
@@ -407,7 +433,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToClassMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<ClassMaster>();
@@ -423,7 +449,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToSectionMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<SectionMaster>();
@@ -439,7 +465,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToLocationMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<LocationMaster>();
@@ -492,7 +518,7 @@ namespace SchoolPortal.Services
 			return list;
 		}
 
-        public List<StudentMaster> GetStudents(Guid schoolId)
+		public List<StudentMaster> GetStudents(Guid schoolId)
 		{
 			try
 			{
@@ -502,7 +528,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToStudentMasterList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<StudentMaster>();
@@ -519,7 +545,7 @@ namespace SchoolPortal.Services
 				p.Exec(dt);
 				return MapToAttendanceReasonList(dt);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				// Log the exception if needed
 				return new List<AttendanceReasonMaster>();
@@ -578,5 +604,5 @@ namespace SchoolPortal.Services
 		{
 			return await Task.Run(() => GetAttendanceReasons(schoolId));
 		}
-    }
+	}
 }

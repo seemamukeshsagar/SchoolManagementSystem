@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Compile Remove="IServices\ItemService.cs" />
+    <Compile Remove="StudentService_old.cs" />
   </ItemGroup>
 
 </Project>
