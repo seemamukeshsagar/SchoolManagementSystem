@@ -36,8 +36,8 @@ namespace SchoolPortalApp.Controllers
 			try
 			{
 				// Get all students and classes
-				var students = _studentService.GetAll().Where(s => s.IsActive && !s.IsDeleted).ToList();
-				var classes = _classService.GetAll().Where(c => c.IsActive && !c.IsDeleted).ToList();
+				var students = (_studentService.GetAllAsync()).Where(s => s.IsActive && !s.IsDeleted).ToList();
+                var classes = _classService.GetAll().Where(c => c.IsActive && !c.IsDeleted).ToList();
 
 				// Get gender lookup data
 				var genders = _lookupService.GetGenders();

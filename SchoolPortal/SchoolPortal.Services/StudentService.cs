@@ -413,8 +413,12 @@ namespace SchoolPortal.Services
             using (var p = new Proc("Student_Delete"))
             {
                 p["@Id"] = id;
-                var result = await Task.Run(() => p.ExecuteNonQuery());
-                return result > 0;
+                DataTable dt = new DataTable();
+                await Task.Run(() => p.Execute(dt));
+                if (dt.Rows.Count > 0)
+                    return true;
+                else
+                    return false;
             }
         }
 

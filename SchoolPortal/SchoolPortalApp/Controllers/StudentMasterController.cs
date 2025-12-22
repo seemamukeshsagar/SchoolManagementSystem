@@ -290,7 +290,7 @@ namespace SchoolPortalApp.Controllers
 		{
 			if (id == Guid.Empty) return BadRequest();
 
-			var item = _service.GetById(id);
+			var item = _service.GetByIdAsync(id);
 			if (item == null) return NotFound();
 
 			var vm = new StudentViewModel
@@ -738,9 +738,9 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				var entity = MapToStudentEntity(model, companyId, userId);
-				var newId = _service.Create(entity);
+				var newId = _service.CreateAsync(entity);
 				
-				if (newId == Guid.Empty)
+				if (Guid.Parse(newId) == Guid.Empty)
 				{
 					return new StudentCreationResult
 					{
@@ -933,7 +933,7 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				var student = MapToStudentEntity(model, companyId, userId);
-				var studentId = _service.Create(student);
+				var studentId = _service.CreateAsync(student);
 				
 				if (studentId != Guid.Empty)
 				{
@@ -975,7 +975,7 @@ namespace SchoolPortalApp.Controllers
 		[Route("Edit/{id}")]
 		public IActionResult Edit(Guid id)
 		{
-			var item = _service.GetById(id);
+			var item = _service.GetByIdAsync(id);
 			if (item == null) return NotFound();
 
 			var vm = new StudentViewModel
@@ -1181,7 +1181,7 @@ namespace SchoolPortalApp.Controllers
 				HouseAllotted = model.HouseAllotted
 			};
 
-			if (!_service.Update(entity))
+			if (!_service.UpdateAsync(entity))
 			{
 				ModelState.AddModelError(string.Empty, "Failed to update student.");
 				PopulateDropdowns(model);
@@ -1194,7 +1194,7 @@ namespace SchoolPortalApp.Controllers
 		[Route("Delete/{id}")]
 		public IActionResult Delete(Guid id)
 		{
-			var item = _service.GetById(id);
+			var item = _service.GetByIdAsync(id);
 			if (item == null) return NotFound();
 			return View(item);
 		}
@@ -1205,7 +1205,7 @@ namespace SchoolPortalApp.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult ConfirmDelete(Guid id)
 		{
-			if (!_service.Delete(id))
+			if (!_service.DeleteAsync(id))
 			{
 				TempData["ErrorMessage"] = "Failed to delete student.";
 				return RedirectToAction("Delete", new { id });
