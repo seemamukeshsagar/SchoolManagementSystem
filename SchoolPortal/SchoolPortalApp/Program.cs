@@ -10,8 +10,10 @@ using SchoolPortal.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using SchoolPortal.Services;
 using SchoolPortal.Data;
-using SchoolPortal.Data.Repositories;
 using SchoolPortalApp.Helpers;
+using SchoolPortal.Data.Repositories;
+using SchoolPortalApp.Utilities;  // For ConnectionStringHelper
+using Microsoft.Extensions.DependencyInjection;  // For DependencyInjection
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,12 +42,19 @@ builder.Services.AddControllersWithViews();
 var configuration = builder.Configuration;
 builder.Services.AddSingleton<IConfiguration>(configuration);
 
-// Get dynamic connection string
-var connectionString = ConnectionStringHelper.GetConnectionString(configuration);
+// Initialize ConnectionStringHelper
+ConnectionStringHelper.Initialize(configuration);
+
+// Get connection string using the helper
+var connectionString = ConnectionStringHelper.GetConnectionString();
 
 // Set the connection string in configuration
 builder.Configuration["ConnectionStrings:DefaultConnectionString"] = connectionString;
 
+// Add data services and configure dependency injection
+builder.Services.AddDataServices();
+
+// Add memory cache
 builder.Services.AddMemoryCache();
 
 // Authentication & Authorization
@@ -103,9 +112,6 @@ builder.Services.AddAntiforgery(o =>
     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
-// Add memory cache
-builder.Services.AddMemoryCache();
-
 // Register IHttpContextAccessor (singleton)
 builder.Services.AddHttpContextAccessor();
 
@@ -116,16 +122,13 @@ builder.Services.AddLogging(loggingBuilder =>
     loggingBuilder.AddDebug();
 });
 
-// DI registrations
+// Register connection manager and database connection
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ =>
     SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
      sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
 
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
-builder.Services.AddMemoryCache();
 // Core services
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
 builder.Services.AddScoped<ILookupService, SchoolPortal.Services.LookupService>();

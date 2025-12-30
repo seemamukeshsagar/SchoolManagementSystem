@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SchoolPortal.Data;
 
 namespace SchoolPortal.Data.Repositories
@@ -23,46 +24,42 @@ namespace SchoolPortal.Data.Repositories
             return new List<T>();
         }
 
-        void IRepository<T>.Add(T entity)
+        public virtual T GetById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        void IRepository<T>.Delete(T entity)
+        public virtual void Add(T entity)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<T> IRepository<T>.Find(Expression<Func<T, bool>> predicate)
+        public virtual void Update(T entity)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<T> IRepository<T>.GetAll()
+        public virtual void Delete(T entity)
         {
             throw new NotImplementedException();
         }
 
-        T IRepository<T>.GetById(Guid id)
+        public virtual void SaveChanges()
         {
-            throw new NotImplementedException();
+            // Implement save changes logic
         }
 
-        void IRepository<T>.SaveChanges()
+        public virtual async Task SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            await Task.CompletedTask;
         }
 
-        Task IRepository<T>.SaveChangesAsync()
+        public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            // Implement find logic
+            return new List<T>();
         }
-
-        void IRepository<T>.Update(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         // Implement other IRepository<T> members...
     }
 }

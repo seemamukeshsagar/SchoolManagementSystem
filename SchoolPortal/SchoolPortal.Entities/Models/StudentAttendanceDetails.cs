@@ -45,4 +45,9 @@ public partial class StudentAttendanceDetails
     public string Status { get; set; } = "INC";
 
     public string StatusMessage { get; set; } = "In Process....";
+
+    // Additional properties to resolve compilation errors
+    public Guid StudentId { get; set; }
+    public DateTime AttendanceDate { get; set; }
+    public string Remarks { get; set; }
 }

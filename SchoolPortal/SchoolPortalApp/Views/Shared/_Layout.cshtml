@@ -31,9 +31,26 @@
 
 		if (!string.IsNullOrWhiteSpace(schoolIdStr1) && Guid.TryParse(schoolIdStr1, out var schoolId))
 		{
-			var schools = Lookup.GetSchools(schoolId);
-			var sch = schools?.FirstOrDefault(s => s.Id == schoolId);
-			schoolName = sch?.Name ?? string.Empty;
+			try
+			{
+				// First try to get all schools and find the matching one
+				var allSchools = Lookup.GetSchools() ?? new List<LookupItem>();
+				var school = allSchools.FirstOrDefault(s => s.Id == schoolId);
+				schoolName = school?.Name ?? string.Empty;
+				
+				// If not found, try the specific school ID method
+				if (string.IsNullOrEmpty(schoolName))
+				{
+					var specificSchool = Lookup.GetSchools(schoolId).FirstOrDefault();
+					schoolName = specificSchool?.Name ?? string.Empty;
+				}
+			}
+			catch (Exception ex)
+			{
+				// Log error if needed
+				Console.WriteLine($"Error getting school name: {ex.Message}");
+				schoolName = string.Empty;
+			}
 		}
 	}
 }

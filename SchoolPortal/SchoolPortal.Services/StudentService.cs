@@ -562,15 +562,16 @@ namespace SchoolPortal.Services
 
         // This method is now implemented as GetByIdAsync
 
-        public async Task<StudentMaster> Create(StudentMaster student)
+        public Guid Create(StudentMaster student)
         {
             try
             {
                 if (student == null)
                     throw new ArgumentNullException(nameof(student));
-                // Generate new ID if not provided
+                    
                 if (student.Id == Guid.Empty)
                     student.Id = Guid.NewGuid();
+                    
                 using (var p = new Proc("Student_Create"))
                 {
                     // Map StudentMaster properties to stored procedure parameters
@@ -601,7 +602,7 @@ namespace SchoolPortal.Services
 
                     if (dt.Rows.Count > 0 && dt.Rows[0]["Id"] != DBNull.Value)
                     {
-                        return student;
+                        return student.Id;
                     }
                     throw new Exception("Failed to create student.");
                 }
@@ -612,7 +613,7 @@ namespace SchoolPortal.Services
             }
         }
 
-        public async Task<bool> Update(StudentMaster student)
+        public bool Update(StudentMaster student)
         {
             try
             {
@@ -643,12 +644,7 @@ namespace SchoolPortal.Services
 
                     DataTable dt = new DataTable();
                     p.Exec(dt);
-                    var result = dt.Rows.Count;
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return dt.Rows.Count > 0;
                 }
             }
             catch (Exception ex)
@@ -657,15 +653,157 @@ namespace SchoolPortal.Services
             }
         }
 
-        public async Task<bool> Delete(Guid id)
+        public bool Delete(Guid id)
         {
             using (var p = new Proc("Student_Delete"))
             {
                 p["@Id"] = id;
                 DataTable dt = new DataTable();
-                await Task.Run(() => p.Exec(dt));
+                p.Exec(dt);
                 return dt.Rows.Count > 0;
             }
+        }
+
+        // Add these methods to the StudentService class
+
+        public List<StudentMaster> GetAll(Guid? schoolId = null)
+        {
+            var p = new Proc("Student_GetAll");
+            if (schoolId.HasValue)
+            {
+                p["@SchoolId"] = schoolId.Value;
+            }
+
+            DataTable dt = new DataTable();
+            p.Exec(dt);
+            return dt.Rows.Cast<DataRow>().Select(Map).ToList();
+        }
+
+        public StudentMaster GetById(Guid id)
+        {
+            var p = new Proc("Student_GetById");
+            p["@Id"] = id;
+            DataTable dt = new DataTable();
+            p.Exec(dt);
+            return dt.Rows.Count > 0 ? Map(dt.Rows[0]) : null;
+        }
+
+        public async Task<Guid> CreateStudentAttendanceAsync(StudentAttendanceDetails attendance)
+        {
+            if (attendance == null)
+                throw new ArgumentNullException(nameof(attendance));
+
+            var p = new Proc("StudentAttendance_Create");
+            p["@StudentId"] = attendance.StudentId;
+            p["@AttendanceDate"] = attendance.AttendanceDate;
+            p["@Status"] = attendance.Status;
+            p["@Remarks"] = attendance.Remarks ?? string.Empty;
+            p["@CreatedBy"] = attendance.CreatedBy;
+            p["@CreatedDate"] = attendance.CreatedDate;
+
+            var dt = new DataTable();
+            p.Exec(dt);
+            
+            if (dt.Rows.Count > 0 && dt.Rows[0]["Id"] != DBNull.Value)
+            {
+                return (Guid)dt.Rows[0]["Id"];
+            }
+            
+            return Guid.Empty;
+        }
+
+        public async Task<bool> UpdateStudentAttendanceAsync(StudentAttendanceDetails attendance)
+        {
+            if (attendance == null || attendance.Id == Guid.Empty)
+                throw new ArgumentException("Attendance or Attendance ID cannot be null");
+
+            var p = new Proc("StudentAttendance_Update");
+            p["@Id"] = attendance.Id;
+            p["@Status"] = attendance.Status;
+            p["@Remarks"] = attendance.Remarks ?? string.Empty;
+            p["@ModifiedBy"] = attendance.ModifiedBy;
+            p["@ModifiedDate"] = attendance.ModifiedDate;
+
+            var dt = new DataTable();
+            p.Exec(dt);
+            
+            return dt.Rows.Count > 0 && dt.Rows[0]["Success"] != DBNull.Value && (bool)dt.Rows[0]["Success"];
+        }
+
+        public async Task<IEnumerable<StudentMaster>> SearchStudentsAsync(StudentSearchCriteria criteria)
+        {
+            if (criteria == null)
+                throw new ArgumentNullException(nameof(criteria));
+
+            return await Task.Run(() =>
+            {
+                var p = new Proc("Student_Search");
+                if (!string.IsNullOrEmpty(criteria.SearchTerm))
+                    p["@SearchTerm"] = criteria.SearchTerm;
+                if (criteria.SchoolId.HasValue)
+                    p["@SchoolId"] = criteria.SchoolId.Value;
+                if (criteria.ClassId.HasValue)
+                    p["@ClassId"] = criteria.ClassId.Value;
+                if (criteria.IsActive.HasValue)
+                    p["@IsActive"] = criteria.IsActive.Value;
+                p["@PageNumber"] = criteria.PageNumber;
+                p["@PageSize"] = criteria.PageSize;
+
+                DataTable dt = new DataTable();
+                p.Exec(dt);
+                return dt.Rows.Cast<DataRow>().Select(Map).ToList();
+            });
+        }
+
+        public async Task<StudentStats> GetStudentStatisticsAsync(Guid? schoolId = null)
+        {
+            return await Task.Run(() =>
+            {
+                var p = new Proc("Student_GetStatistics");
+                if (schoolId.HasValue)
+                {
+                    p["@SchoolId"] = schoolId.Value;
+                }
+
+                DataTable dt = new DataTable();
+                p.Exec(dt);
+                
+                if (dt.Rows.Count == 0) return new StudentStats();
+                
+                var row = dt.Rows[0];
+                return new StudentStats
+                {
+                    TotalStudents = Convert.ToInt32(row["TotalStudents"]),
+                    MaleCount = Convert.ToInt32(row["MaleCount"]),
+                    FemaleCount = Convert.ToInt32(row["FemaleCount"]),
+                    ActiveStudents = Convert.ToInt32(row["ActiveStudents"]),
+                    NewThisMonth = Convert.ToInt32(row["NewThisMonth"]),
+                    InactiveStudents = Convert.ToInt32(row["InactiveStudents"]),
+                    GraduatedThisYear = Convert.ToInt32(row["GraduatedThisYear"])
+                };
+            });
+        }
+
+        public async Task<bool> BulkUpdateStatusAsync(IEnumerable<Guid> studentIds, bool isActive)
+        {
+            if (studentIds == null || !studentIds.Any())
+                return false;
+
+            var idTable = new DataTable();
+            idTable.Columns.Add("Id", typeof(Guid));
+            foreach (var id in studentIds.Distinct())
+            {
+                idTable.Rows.Add(id);
+            }
+
+            var p = new Proc("Student_BulkUpdateStatus");
+            p["@StudentIds"] = idTable;
+            p["@IsActive"] = isActive;
+
+            var dt = new DataTable();
+            p.Exec(dt);
+            
+            return dt.Rows.Count > 0 && dt.Rows[0]["Success"] != DBNull.Value && (bool)dt.Rows[0]["Success"];
         }
     }
 }

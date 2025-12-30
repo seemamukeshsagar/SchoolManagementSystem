@@ -100,8 +100,7 @@ namespace SchoolPortal.DBAccess
 			{
 				ApplicationName = "SchoolManagementSystem",
 				DataSource = dataSource,
-				InitialCatalog = dataBase,
-				AsynchronousProcessing = true
+				InitialCatalog = dataBase
 			};
 
 			if (user != string.Empty)

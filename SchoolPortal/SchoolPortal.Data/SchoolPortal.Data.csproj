@@ -7,24 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DBAccess\DBAccess.csproj" />
-    <!--<ProjectReference Include="..\SchoolPortal.Data\SchoolPortal.Data.csproj" />-->
     <ProjectReference Include="..\SchoolPortal.Entities\SchoolPortal.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="IServices\ItemService.cs" />
-    <Compile Remove="StudentService_old.cs" />
   </ItemGroup>
 
 </Project>
