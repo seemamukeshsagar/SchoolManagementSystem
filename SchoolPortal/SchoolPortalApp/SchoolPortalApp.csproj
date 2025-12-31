@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DBAccess\DBAccess.csproj" />
-    <ProjectReference Include="..\SchoolPortal.Data\SchoolPortal.Data.csproj" />
     <ProjectReference Include="..\SchoolPortal.Entities\SchoolPortal.Entities.csproj" />
     <ProjectReference Include="..\SchoolPortal.Services\SchoolPortal.Services.csproj" />
   </ItemGroup>

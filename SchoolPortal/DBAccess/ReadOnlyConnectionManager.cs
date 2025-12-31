@@ -1,18 +1,18 @@
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 //using Properties = SchoolPortal.DBAccess.Properties;
 
 namespace SchoolPortal.DBAccess
 {
-	public class ReadOnlyConnectionManager : ConnectionManager
-	{
-		private IQueryLogger _queryLogger;
+    public class ReadOnlyConnectionManager : ConnectionManager
+    {
+        private IQueryLogger? _queryLogger;
 
-		public new IQueryLogger QueryLogger
-		{
-			get { return _queryLogger; }
-			set { _queryLogger = value; }
-		}
+        public new IQueryLogger? QueryLogger
+        {
+            get => _queryLogger;
+            set => _queryLogger = value;
+        }
 
 		//private static readonly ReadOnlyConnectionManager _defaultConnectionManager = new ReadOnlyConnectionManager();
 		//Properties.Settings.Default.ReadOnlyDefaultConnectionString);

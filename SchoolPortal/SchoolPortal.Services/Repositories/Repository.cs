@@ -4,9 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using SchoolPortal.Data;
+using SchoolPortal.Services.IServices;
 
-namespace SchoolPortal.Data.Repositories
+namespace SchoolPortal.Services.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {

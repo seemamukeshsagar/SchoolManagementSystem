@@ -77,7 +77,12 @@ namespace SchoolPortal.Services
 
 							IsActive = bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
 							DesignationName = row["DesignationName"]?.ToString() ?? string.Empty,
-							RoleName = row["RoleName"]?.ToString() ?? string.Empty
+							RoleName = row["RoleName"]?.ToString() ?? string.Empty,
+							
+							// Address information
+							Address = row["Address"]?.ToString() ?? string.Empty,
+							City = row["City"]?.ToString() ?? string.Empty,
+							State = row["State"]?.ToString() ?? string.Empty
 						};
 
 						list.Add(user);

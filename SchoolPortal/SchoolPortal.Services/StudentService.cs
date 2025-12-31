@@ -6,6 +6,7 @@ using SchoolPortal.DBAccess;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 
 namespace SchoolPortal.Services
@@ -13,14 +14,19 @@ namespace SchoolPortal.Services
     public class StudentService : IStudentService
     {
         private readonly ILookupService _lookupService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public StudentService(ILookupService lookupService)
+        public StudentService(ILookupService lookupService, IHttpContextAccessor httpContextAccessor)
         {
             _lookupService = lookupService ?? throw new ArgumentNullException(nameof(lookupService));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         private static StudentMaster Map(DataRow r)
         {
+            if (r == null)
+                throw new ArgumentNullException(nameof(r));
+                
             var s = new StudentMaster();
 
             // Identifiers
@@ -135,7 +141,7 @@ namespace SchoolPortal.Services
             });
         }
 
-        public async Task<StudentMaster> GetByIdAsync(Guid id)
+        public async Task<StudentMaster?> GetByIdAsync(Guid id)
         {
             return await Task.Run(() =>
             {
@@ -168,8 +174,20 @@ namespace SchoolPortal.Services
             if (s == null)
                 throw new ArgumentNullException(nameof(s));
 
-            if (s.CompanyId == Guid.Empty || s.SchoolId == Guid.Empty || s.CreatedBy == Guid.Empty)
-                throw new ArgumentException("Required fields (CompanyId, SchoolId, or CreatedBy) are missing");
+            if (s.CompanyId == Guid.Empty)
+                throw new ArgumentException("CompanyId cannot be empty", nameof(s.CompanyId));
+                
+            if (s.SchoolId == Guid.Empty)
+                throw new ArgumentException("SchoolId cannot be empty", nameof(s.SchoolId));
+                
+            if (s.CreatedBy == Guid.Empty)
+                throw new ArgumentException("CreatedBy cannot be empty", nameof(s.CreatedBy));
+                
+            if (s.FirstName == null)
+                throw new ArgumentException("First name is required", nameof(s.FirstName));
+                
+            if (s.LastName == null)
+                throw new ArgumentException("Last name is required", nameof(s.LastName));
 
             // Validate category exists asynchronously
             if (s.CategoryId != Guid.Empty && !await CategoryExistsAsync(s.CategoryId))
@@ -289,8 +307,20 @@ namespace SchoolPortal.Services
 
         public async Task<bool> UpdateAsync(StudentMaster s)
         {
-            if (s == null || s.Id == Guid.Empty)
-                throw new ArgumentException("Student or Student ID cannot be null");
+            if (s == null)
+                throw new ArgumentNullException(nameof(s));
+                
+            if (s.Id == Guid.Empty)
+                throw new ArgumentException("Student ID cannot be empty", nameof(s.Id));
+                
+            if (s.FirstName == null)
+                throw new ArgumentException("First name is required", nameof(s.FirstName));
+                
+            if (s.LastName == null)
+                throw new ArgumentException("Last name is required", nameof(s.LastName));
+                
+            if (s.SchoolId == Guid.Empty || s.ModifiedBy == Guid.Empty)
+                throw new ArgumentException("Required fields (SchoolId or ModifiedBy) are missing");
 
             // Validate category exists asynchronously if provided
             if (s.CategoryId != Guid.Empty && !await CategoryExistsAsync(s.CategoryId))
@@ -408,17 +438,17 @@ namespace SchoolPortal.Services
         public async Task<bool> DeleteAsync(Guid id)
         {
             if (id == Guid.Empty)
-                throw new ArgumentException("Student ID cannot be empty");
+                throw new ArgumentException("Student ID cannot be empty", nameof(id));
+
+            var currentUserId = GetCurrentUserId();
 
             using (var p = new Proc("Student_Delete"))
             {
                 p["@Id"] = id;
+                p["@ModifiedBy"] = currentUserId;
                 DataTable dt = new DataTable();
                 await Task.Run(() => p.Execute(dt));
-                if (dt.Rows.Count > 0)
-                    return true;
-                else
-                    return false;
+                return dt.Rows.Count > 0;
             }
         }
 
@@ -804,6 +834,30 @@ namespace SchoolPortal.Services
             p.Exec(dt);
             
             return dt.Rows.Count > 0 && dt.Rows[0]["Success"] != DBNull.Value && (bool)dt.Rows[0]["Success"];
+        }
+
+        /// <summary>
+        /// Gets the current user's ID from the authentication context.
+        /// Note: This is a placeholder implementation. You should replace this with your actual authentication logic.
+        /// </summary>
+        /// <returns>The current user's ID as a Guid</returns>
+        private Guid GetCurrentUserId()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null)
+            {
+                throw new InvalidOperationException("HTTP context is not available");
+            }
+
+            // Get the user ID from session
+            var userId = httpContext.Session.GetString("UserId");
+            
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var parsedUserId))
+            {
+                throw new UnauthorizedAccessException("User is not authenticated or session has expired");
+            }
+            
+            return parsedUserId;
         }
     }
 }

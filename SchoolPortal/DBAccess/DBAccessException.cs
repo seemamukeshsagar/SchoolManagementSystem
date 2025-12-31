@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace SchoolPortal.DBAccess
 {
@@ -47,10 +47,13 @@ namespace SchoolPortal.DBAccess
 
 		public DBAccessException(string message) : base(message) { }
 		public DBAccessException(string message, Exception inner) : base(message, inner) { }
-		protected DBAccessException(
-		System.Runtime.Serialization.SerializationInfo info,
-		System.Runtime.Serialization.StreamingContext context)
-			: base(info, context) { }
+#if NET8_0_OR_GREATER
+        [Obsolete("This constructor is obsolete. Use the constructor without the SerializationInfo and StreamingContext parameters.")]
+#endif
+        protected DBAccessException(
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
 
 
 		public override string ToString()

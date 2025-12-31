@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SchoolPortal.Data
+namespace SchoolPortal.Services.IServices
 {
     public interface IRepository<T> where T : class
     {

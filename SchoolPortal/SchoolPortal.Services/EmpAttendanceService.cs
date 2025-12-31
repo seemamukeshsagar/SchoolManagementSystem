@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SchoolPortal.Data;
-using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
+using SchoolPortal.Entities.Models;
 
 namespace SchoolPortal.Services.Services
 {

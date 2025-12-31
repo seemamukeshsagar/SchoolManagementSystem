@@ -1,0 +1,284 @@
+@model dynamic
+@{
+    ViewData["Title"] = "User Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">User Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="profile-image-container mb-3">
+                                <img src="https://via.placeholder.com/150" class="img-fluid rounded-circle" alt="Profile Image" id="profileImage">
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-outline-primary" id="changeImageBtn">Change Image</button>
+                                </div>
+                            </div>
+                            <h5 id="userFullName">Loading...</h5>
+                            <p class="text-muted" id="userDesignation">Loading...</p>
+                            <div class="badge bg-success text-white" id="userStatus">Active</div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#profile" data-bs-toggle="tab">Profile</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#settings" data-bs-toggle="tab">Settings</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="profile">
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="userName" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="userEmail" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">First Name</label>
+                                                    <input type="text" class="form-control" id="userFirstName" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control" id="userLastName" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Role</label>
+                                                    <input type="text" class="form-control" id="userRole" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Status</label>
+                                                    <input type="text" class="form-control" id="userActiveStatus" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-12">
+                                                    <label class="form-label">Address</label>
+                                                    <input type="text" class="form-control" id="userAddress" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="userCity" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">State</label>
+                                                    <input type="text" class="form-control" id="userState" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="settings">
+                                            <form id="changePasswordForm">
+                                                <div class="mb-3">
+                                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                                    <input type="password" class="form-control" id="currentPassword" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="newPassword" class="form-label">New Password</label>
+                                                    <input type="password" class="form-control" id="newPassword" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Update Password</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                    <button class="btn btn-outline-secondary" id="printProfileBtn">Print Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Fetch user profile data
+            function loadUserProfile() {
+                $.ajax({
+                    url: '/Account/GetUserProfile',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response) {
+                            // Update profile information
+                            $('#userFullName').text(response.fullName || 'N/A');
+                            $('#userDesignation').text(response.designation || 'N/A');
+                            $('#userStatus').text(response.isActive ? 'Active' : 'Inactive');
+                            
+                            // Update form fields
+                            $('#userName').val(response.userName || 'N/A');
+                            $('#userEmail').val(response.email || 'N/A');
+                            $('#userFirstName').val(response.firstName || 'N/A');
+                            $('#userLastName').val(response.lastName || 'N/A');
+                            $('#userRole').val(response.role || 'N/A');
+                            $('#userActiveStatus').val(response.isActive ? 'Active' : 'Inactive');
+                            
+                            // Update address information
+                            $('#userAddress').val(response.address || 'N/A');
+                            $('#userCity').val(response.city || 'N/A');
+                            $('#userState').val(response.state || 'N/A');
+                            
+                            // Update status badge color
+                            const statusBadge = $('#userStatus');
+                            statusBadge.removeClass('bg-success bg-danger');
+                            statusBadge.addClass(response.isActive ? 'bg-success' : 'bg-danger');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading user profile:', error);
+                        showAlert('Error loading profile. Please try again.', 'danger');
+                    }
+                });
+            }
+
+            // Handle password change form submission
+            $('#changePasswordForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const currentPassword = $('#currentPassword').val();
+                const newPassword = $('#newPassword').val();
+                const confirmPassword = $('#confirmPassword').val();
+                
+                if (newPassword !== confirmPassword) {
+                    showAlert('New password and confirm password do not match.', 'danger');
+                    return;
+                }
+                
+                // Here you would typically make an AJAX call to update the password
+                // For now, we'll just show a success message
+                showAlert('Password updated successfully!', 'success');
+                $('#changePasswordForm')[0].reset();
+            });
+
+            // Edit profile button click handler
+            $('#editProfileBtn').on('click', function() {
+                // Enable form fields for editing
+                $('.profile-field').prop('readonly', false);
+                $(this).text('Save Changes').removeClass('btn-primary').addClass('btn-success')
+                    .off('click').on('click', saveProfileChanges);
+                
+                // Add edit mode class to indicate fields are editable
+                $('.profile-field').addClass('editable-field');
+            });
+
+            // Save profile changes
+            function saveProfileChanges() {
+                // Here you would typically make an AJAX call to save the changes
+                // For now, we'll just show a success message and reset the button
+                showAlert('Profile updated successfully!', 'success');
+                
+                // Reset the button
+                $('.profile-field').prop('readonly', true).removeClass('editable-field');
+                $('#editProfileBtn').text('Edit Profile').removeClass('btn-success').addClass('btn-primary')
+                    .off('click').on('click', function() {
+                        $('.profile-field').prop('readonly', false);
+                        $(this).text('Save Changes').removeClass('btn-primary').addClass('btn-success')
+                            .off('click').on('click', saveProfileChanges);
+                        $('.profile-field').addClass('editable-field');
+                    });
+            }
+
+            // Print profile
+            $('#printProfileBtn').on('click', function() {
+                window.print();
+            });
+
+            // Helper function to show alerts
+            function showAlert(message, type) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`;
+                
+                // Remove any existing alerts
+                $('.alert-dismissible').alert('close');
+                
+                // Add the new alert
+                $('.card-body').prepend(alertHtml);
+                
+                // Auto-dismiss after 5 seconds
+                setTimeout(() => {
+                    $('.alert-dismissible').alert('close');
+                }, 5000);
+            }
+
+            // Initialize the page
+            loadUserProfile();
+        });
+    </script>
+}
+    
+    <style>
+        .profile-image-container {
+            position: relative;
+            width: 150px;
+            margin: 0 auto;
+        }
+        
+        #profileImage {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 5px solid #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #changeImageBtn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .editable-field {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            padding: 0.375rem 0.75rem;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+        
+        .nav-tabs .nav-link.active {
+            font-weight: 600;
+            color: #0d6efd;
+        }
+    </style>
+</div>

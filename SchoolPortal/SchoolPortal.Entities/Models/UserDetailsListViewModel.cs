@@ -23,5 +23,10 @@ namespace SchoolPortal.Entities.Models
         public string DesignationName { get; set; } = string.Empty;
         public string CompanyName { get; set; } = string.Empty;
         public string SchoolName { get; set; } = string.Empty;
+        
+        // Address information
+        public string Address { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
     }
 }

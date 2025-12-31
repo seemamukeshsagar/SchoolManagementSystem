@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -50,8 +50,15 @@ namespace SchoolPortal.DBAccess
         /// </summary>
         private static SqlCommand GetCommand(Proc proc)
         {
+            if (proc == null)
+                throw new ArgumentNullException(nameof(proc));
+                
             var field = typeof(Proc).GetField("_command", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (SqlCommand)field.GetValue(proc);
+            if (field == null)
+                throw new InvalidOperationException("Unable to find _command field on Proc class");
+                
+            var command = field.GetValue(proc) as SqlCommand;
+            return command ?? throw new InvalidOperationException("Command is null");
         }
 
         /// <summary>
@@ -59,8 +66,15 @@ namespace SchoolPortal.DBAccess
         /// </summary>
         private static ConnectionManager GetConnectionManager(Proc proc)
         {
+            if (proc == null)
+                throw new ArgumentNullException(nameof(proc));
+                
             var field = typeof(Proc).GetField("_connectionManager", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (ConnectionManager)field.GetValue(proc);
+            if (field == null)
+                throw new InvalidOperationException("Unable to find _connectionManager field on Proc class");
+                
+            var connectionManager = field.GetValue(proc) as ConnectionManager;
+            return connectionManager ?? throw new InvalidOperationException("ConnectionManager is null");
         }
 
         /// <summary>
@@ -125,8 +139,11 @@ namespace SchoolPortal.DBAccess
         /// Executes the stored procedure and returns the first row as the specified type
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T ExecSingle<T>(this Proc proc) where T : new()
+        public static T? ExecSingle<T>(this Proc proc) where T : class, new()
         {
+            if (proc == null)
+                throw new ArgumentNullException(nameof(proc));
+                
             return proc.Exec<T>().FirstOrDefault();
         }
 
@@ -151,8 +168,14 @@ namespace SchoolPortal.DBAccess
         /// <summary>
         /// Sets a parameter value on the stored procedure
         /// </summary>
-        public static Proc SetParameter(this Proc proc, string name, object value)
+        public static Proc SetParameter(this Proc proc, string name, object? value)
         {
+            if (proc == null)
+                throw new ArgumentNullException(nameof(proc));
+                
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Parameter name cannot be null or empty", nameof(name));
+                
             if (proc.Parameters.Contains(name))
             {
                 proc.Parameters[name].Value = value ?? DBNull.Value;

@@ -1,19 +1,22 @@
 #nullable enable
 using OfficeOpenXml;
-using SchoolPortal.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.RegularExpressions;
 using SchoolPortal.Services.Common;
-using Microsoft.Extensions.DependencyInjection;
+using SchoolPortal.Services.IServices;
+using Microsoft.Extensions.DependencyInjection;  // For DependencyInjection
 using SchoolPortal.DBAccess;
 using SchoolPortal.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using SchoolPortal.Services;
-using SchoolPortal.Data;
 using SchoolPortalApp.Helpers;
-using SchoolPortal.Data.Repositories;
 using SchoolPortalApp.Utilities;  // For ConnectionStringHelper
-using Microsoft.Extensions.DependencyInjection;  // For DependencyInjection
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using SchoolPortalApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -226,7 +229,30 @@ builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
 builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
 
+// Add application lifetime and logging for shutdown handling
+builder.Services.AddSingleton<ApplicationLifetimeService>();
+builder.Services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ApplicationLifetimeService>());
+
+// Build the application
 var app = builder.Build();
+
+// Get the application lifetime service
+var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+var lifetimeService = app.Services.GetRequiredService<ApplicationLifetimeService>();
+
+// Register application stopping handler
+lifetime.ApplicationStopping.Register(() =>
+{
+    try
+    {
+        lifetimeService.OnStopping();
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during application stopping");
+    }
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -263,11 +289,22 @@ app.MapControllerRoute(
 app.MapRazorPages()
    .WithStaticAssets();
 
-// Configure AuthorizedManager for each request
-//app.Use(async (context, next) =>
-//{
-//    AuthorizedManager.Configure(context.RequestServices.GetRequiredService<IHttpContextAccessor>());
-//    await next();
-//});
+
+
+// Register application stopped handler
+lifetime.ApplicationStopped.Register(async () =>
+{
+    try
+    {
+        // The StopAsync method will be called automatically by the host
+        // But we can also call OnStoppedAsync directly if needed
+        await lifetimeService.StopAsync(CancellationToken.None);
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during application shutdown");
+    }
+});
 
 app.Run();

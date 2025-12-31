@@ -1,6 +1,6 @@
 #nullable enable
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.IO;
 //using Properties = SchoolPortal.DBAccess.Properties;
 
