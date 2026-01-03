@@ -837,30 +837,30 @@ namespace SchoolPortal.DBAccess
 			return sb.ToString();
 		}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    // Dispose managed resources
-                    _command?.Dispose();
-                    _connectionManager?.Dispose();
-                }
-                disposed = true;
-            }
-        }
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				if (disposing)
+				{
+					// Dispose managed resources
+					_command?.Dispose();
+					_connectionManager?.Dispose();
+				}
+				disposed = true;
+			}
+		}
 
-        ~Proc()
-        {
-            Dispose(false);
-        }        
+		~Proc()
+		{
+			Dispose(false);
+		}        
 	}
 
 	#endregion Proc class

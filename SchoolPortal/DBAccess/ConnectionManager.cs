@@ -38,7 +38,21 @@ namespace SchoolPortal.DBAccess
 							{
 								System.Diagnostics.Debug.WriteLine($"Error creating DefaultConnectionManager: {ex.Message}");
 								string machineName = Environment.MachineName;
-								_defaultConnectionManager = new ConnectionManager($"Data Source={machineName};Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True");
+								
+								// Create fallback connection string with TCP/IP settings
+								var fallbackBuilder = new SqlConnectionStringBuilder
+								{
+									ApplicationName = "Unity Enterprise",
+									InitialCatalog = "SchoolManagementSystem",
+									IntegratedSecurity = true,
+									ConnectTimeout = 30,
+									TrustServerCertificate = true,
+									Encrypt = false,
+									MultipleActiveResultSets = true,
+									DataSource = machineName
+								};
+								
+								_defaultConnectionManager = new ConnectionManager(fallbackBuilder.ConnectionString);
 							}
 						}
 					}
@@ -62,28 +76,72 @@ namespace SchoolPortal.DBAccess
 				// Replace any environment variables in the connection string
 				string connectionString = string.Empty;
 				string machineName = Environment.MachineName;
+				
+				// Build connection string with TCP/IP protocol and common fallback options
+				// Using SqlConnectionStringBuilder for better reliability
+				var builder = new SqlConnectionStringBuilder
+				{
+					ApplicationName = "Unity Enterprise",
+					InitialCatalog = "SchoolManagementSystem",
+					IntegratedSecurity = true,
+					ConnectTimeout = 30,
+					TrustServerCertificate = true,
+					Encrypt = false, // Set to false for local connections
+					MultipleActiveResultSets = true
+				};
+
 				if (machineName.Equals("DESKTOP-L9I46P8"))
 				{
-					connectionString = "Data Source=DESKTOP-L9I46P8;Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
-                }
+					// Try machine name first, then localhost as fallback
+					builder.DataSource = "DESKTOP-L9I46P8";
+				}
 				else
 				{
-					//connectionString = connectionString.Replace("${ServerName}", machineName + "\\SQL2026");
-					connectionString = "Data Source=" + machineName + ";Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
-                }
+					// Try machine name, but also support localhost and named instances
+					builder.DataSource = machineName + "\\SQL2025" ;
+				}
+
+				// Force TCP/IP protocol by adding Network Library
+				connectionString = builder.ConnectionString; // + ";Network Library=dbmssocn";
 				return connectionString;
 			}
 			catch (Exception ex)
 			{
 				System.Diagnostics.Debug.WriteLine($"Error accessing Settings.Default.DefaultConnectionString: {ex.Message}");
 				string machineName = Environment.MachineName;
-				return $"Data Source={machineName};Initial Catalog=SchoolManagementSystem;Application Name=Unity Enterprise;Integrated Security=True";
+				
+				// Fallback connection string with TCP/IP and common settings
+				var fallbackBuilder = new SqlConnectionStringBuilder
+				{
+					ApplicationName = "Unity Enterprise",
+					InitialCatalog = "SchoolManagementSystem",
+					IntegratedSecurity = true,
+					ConnectTimeout = 30,
+					TrustServerCertificate = true,
+					Encrypt = false,
+					MultipleActiveResultSets = true,
+					DataSource = machineName + "\\SQL2025"
+				};
+				
+				// Force TCP/IP protocol by adding Network Library
+				return fallbackBuilder.ConnectionString + ";Network Library=dbmssocn";
 			}
 		}
 
 		public void ResetConnectionString()
 		{
 			ConnectionString = string.Empty;
+		}
+
+		/// <summary>
+		/// Sets the connection string directly
+		/// </summary>
+		public void SetConnectionString(string connectionString)
+		{
+			if (string.IsNullOrWhiteSpace(connectionString))
+				throw new ArgumentException("Connection string cannot be null or empty", nameof(connectionString));
+			
+			ConnectionString = connectionString;
 		}
 
 		public void ResetConnectionString(string dataSource, string user, string pw)
@@ -100,7 +158,11 @@ namespace SchoolPortal.DBAccess
 			{
 				ApplicationName = "SchoolManagementSystem",
 				DataSource = dataSource,
-				InitialCatalog = dataBase
+				InitialCatalog = dataBase,
+				ConnectTimeout = 30,
+				TrustServerCertificate = true,
+				Encrypt = false, // Set to false for local connections, true for remote
+				MultipleActiveResultSets = true
 			};
 
 			if (user != string.Empty)
@@ -109,13 +171,13 @@ namespace SchoolPortal.DBAccess
 				builder.UserID = user;
 				builder.Password = pw;
 			}
-
 			else
 			{
 				builder.IntegratedSecurity = true;
 			}
 
-			ConnectionString = builder.ConnectionString;
+			// Force TCP/IP protocol by adding Network Library
+			ConnectionString = builder.ConnectionString + ";Network Library=dbmssocn";
 		}
 
 		private string GetDBConnectionInfo()
@@ -151,6 +213,89 @@ namespace SchoolPortal.DBAccess
 		public SqlConnection GetConnection()
 		{
 			return new SqlConnection(ConnectionString);
+		}
+
+		/// <summary>
+		/// Tests the connection and returns true if successful
+		/// </summary>
+		public bool TestConnection()
+		{
+			try
+			{
+				using (var connection = GetConnection())
+				{
+					connection.Open();
+					return true;
+				}
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine($"Connection test failed: {ex.Message}");
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Attempts to find a working connection by trying multiple server name variations
+		/// </summary>
+		public static string? FindWorkingConnectionString(string databaseName = "SchoolManagementSystem")
+		{
+			string machineName = Environment.MachineName;
+			// Try TCP/IP first (127.0.0.1 and localhost), then machine name variations
+			// Include SQL2025 instance name
+			var serverNamesToTry = new[]
+			{
+				"127.0.0.1\\SQL2025",  // Explicit IP with instance - forces TCP/IP
+				"localhost\\SQL2025",   // localhost with instance - prefers TCP/IP
+				$"{machineName}\\SQL2025",  // Machine name with instance
+				"127.0.0.1",  // Explicit IP address - forces TCP/IP
+				"localhost",  // Try localhost - typically uses TCP/IP
+				"(local)\\SQL2025",
+				$"localhost\\SQLEXPRESS",
+				$"{machineName}\\SQLEXPRESS",
+				"(local)\\SQLEXPRESS",
+				$"localhost\\MSSQLSERVER",
+				$"{machineName}\\MSSQLSERVER",
+				machineName,
+				"(local)"
+			};
+
+			foreach (var serverName in serverNamesToTry)
+			{
+				try
+				{
+					var builder = new SqlConnectionStringBuilder
+					{
+						ApplicationName = "Unity Enterprise",
+						InitialCatalog = databaseName,
+						IntegratedSecurity = true,
+						ConnectTimeout = 5, // Short timeout for testing
+						TrustServerCertificate = true,
+						Encrypt = false,
+						MultipleActiveResultSets = true,
+						DataSource = serverName
+					};
+
+					// Force TCP/IP protocol
+					var connectionString = builder.ConnectionString; // + ";Network Library=dbmssocn";
+
+					using (var connection = new SqlConnection(connectionString))
+					{
+						connection.Open();
+						// If we get here, the connection works
+						// Return with normal timeout
+						builder.ConnectTimeout = 30;
+						return builder.ConnectionString; // + ";Network Library=dbmssocn";
+					}
+				}
+				catch
+				{
+					// Try next server name
+					continue;
+				}
+			}
+
+			return null; // No working connection found
 		}
 
 		internal void LogQuery(Proc proc)

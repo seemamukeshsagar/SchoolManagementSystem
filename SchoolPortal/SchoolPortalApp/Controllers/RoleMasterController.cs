@@ -28,26 +28,26 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
-			return View();
-			// try
-			// {
-			// 	var roles = _service.GetAll()
-			// 		.Select(r => new RoleMasterListItemViewModel
-			// 		{
-			// 			Id = r.Id,
-			// 			RoleName = r.Name,
-			// 			Description = r.Description,
-			// 			IsActive = r.IsActive
-			// 		})
-			// 		.ToList();
+			//return View();
+			try
+			{
+				var roles = _service.GetAll()
+					.Select(r => new RoleMasterListItemViewModel
+					{
+						Id = r.Id,
+						RoleName = r.Name,
+						Description = r.Description,
+						IsActive = r.IsActive
+					})
+					.ToList();
 
-			// 	return View(roles);
-			// }
-			// catch (Exception ex)
-			// {
-			// 	_logger.LogError(ex, "Error occurred while getting roles list");
-			// 	return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
-			// }
+				return View(roles);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error occurred while getting roles list");
+				return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
+			}
 		}
 
 		[HttpGet]
@@ -300,6 +300,7 @@ namespace SchoolPortalApp.Controllers
 				var searchValue = Request.Form["search[value]"].FirstOrDefault()?.ToLower();
 				int pageSize = length != null ? Convert.ToInt32(length) : 0;
 				int skip = start != null ? Convert.ToInt32(start) : 0;
+				int drawValue = draw != null ? Convert.ToInt32(draw) : 0;
 				
 				// Get all roles
 				var roles = _service.GetAll().AsQueryable();
@@ -346,7 +347,7 @@ namespace SchoolPortalApp.Controllers
 					.ToList();
 					
 				return Json(new {
-					draw = draw,
+					draw = drawValue,
 					recordsFiltered = recordsTotal,
 					recordsTotal = recordsTotal,
 					data = data
@@ -355,7 +356,15 @@ namespace SchoolPortalApp.Controllers
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, "Error getting roles for DataTable");
-				return Json(new { error = "An error occurred while processing your request." });
+				var draw = Request.Form["draw"].FirstOrDefault();
+				int drawValue = draw != null ? Convert.ToInt32(draw) : 0;
+				return Json(new {
+					draw = drawValue,
+					recordsFiltered = 0,
+					recordsTotal = 0,
+					data = new object[0],
+					error = "An error occurred while processing your request."
+				});
 			}
 		}
 

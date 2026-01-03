@@ -25,17 +25,17 @@ var serverName = Regex.Replace(serverNameRaw, "[^A-Za-z0-9_.-]", "_");
 
 if (serverName == "DESKTOP-L9I46P8")
 {
-    serverName = "Office";
+	serverName = "Office";
 }
 else
 {
-    serverName = "Home";
+	serverName = "Home";
 }
 
 builder.Configuration
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
-        .AddEnvironmentVariables();
+		.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+		.AddJsonFile($"appsettings.{serverName}.json", optional: true, reloadOnChange: true)
+		.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -49,10 +49,81 @@ builder.Services.AddSingleton<IConfiguration>(configuration);
 ConnectionStringHelper.Initialize(configuration);
 
 // Get connection string using the helper
-var connectionString = ConnectionStringHelper.GetConnectionString();
+string connectionString;
+try
+{
+	connectionString = ConnectionStringHelper.GetConnectionString("DefaultConnectionString");
+}
+catch
+{
+	// Fallback: try DefaultConnection key
+	try
+	{
+		connectionString = ConnectionStringHelper.GetConnectionString("DefaultConnection");
+	}
+	catch
+	{
+		// Last resort: use ConnectionManager's FindWorkingConnectionString
+		connectionString = SchoolPortal.DBAccess.ConnectionManager.FindWorkingConnectionString() 
+			?? throw new InvalidOperationException("Could not determine a valid connection string. Please check your appsettings.json and ensure SQL Server is running.");
+	}
+}
+
+// Test the connection string and try alternatives if it fails
+try
+{
+	using (var testConnection = new Microsoft.Data.SqlClient.SqlConnection(connectionString))
+	{
+		testConnection.Open();
+	}
+}
+catch
+{
+	// Try to find a working connection string
+	var workingConnectionString = SchoolPortal.DBAccess.ConnectionManager.FindWorkingConnectionString();
+	if (workingConnectionString != null)
+	{
+		connectionString = workingConnectionString;
+	}
+	else
+	{
+		// Log warning but continue - connection will be tested again when actually used
+		using var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+		{
+			loggingBuilder.AddConsole();
+			loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+		});
+		var logger = loggerFactory.CreateLogger<Program>();
+		logger.LogWarning("Initial connection test failed. Will retry when connection is actually needed.");
+	}
+}
 
 // Set the connection string in configuration
 builder.Configuration["ConnectionStrings:DefaultConnectionString"] = connectionString;
+
+// Update ConnectionManager with the connection string from appsettings
+// This ensures ConnectionManager uses the configured connection string
+try
+{
+	var connectionManager = SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager;
+	if (!string.IsNullOrWhiteSpace(connectionString) && 
+		!connectionString.Contains("{SQL_SERVER}") && 
+		!connectionString.Contains("{DATABASE_NAME}"))
+	{
+		connectionManager.SetConnectionString(connectionString);
+	}
+}
+catch (Exception ex)
+{
+	// Create a logger factory manually to avoid BuildServiceProvider anti-pattern
+	using var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+	{
+		loggingBuilder.AddConsole();
+		loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
+	});
+	var logger = loggerFactory.CreateLogger<Program>();
+	logger.LogWarning(ex, "Failed to update ConnectionManager with appsettings connection string. Using default.");
+}
 
 // Add data services and configure dependency injection
 builder.Services.AddDataServices();
@@ -62,57 +133,57 @@ builder.Services.AddMemoryCache();
 
 // Authentication & Authorization
 builder.Services
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Authentication/Login";
-        options.LogoutPath = "/Authentication/Logout";
-        options.AccessDeniedPath = "/Authentication/AccessDenied";
-        options.ReturnUrlParameter = "returnUrl";
-        options.ExpireTimeSpan = TimeSpan.FromHours(2);
-        options.SlidingExpiration = true;
-        options.Events = new CookieAuthenticationEvents
-        {
-            OnRedirectToLogin = context =>
-            {
-                // Don't redirect to login page for unauthorized requests
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return Task.CompletedTask;
-            }
-        };
-    });
+	.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+	.AddCookie(options =>
+	{
+		options.LoginPath = "/Authentication/Login";
+		options.LogoutPath = "/Authentication/Logout";
+		options.AccessDeniedPath = "/Authentication/AccessDenied";
+		options.ReturnUrlParameter = "returnUrl";
+		options.ExpireTimeSpan = TimeSpan.FromHours(2);
+		options.SlidingExpiration = true;
+		options.Events = new CookieAuthenticationEvents
+		{
+			OnRedirectToLogin = context =>
+			{
+				// Don't redirect to login page for unauthorized requests
+				context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+				return Task.CompletedTask;
+			}
+		};
+	});
 
 // Configure default authorization policy
 builder.Services.AddAuthorization(options =>
 {
-    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    
-    // Add a fallback policy that allows anonymous access
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAssertion(_ => true) // This allows all requests by default
-        .Build();
+	options.DefaultPolicy = new AuthorizationPolicyBuilder()
+		.RequireAuthenticatedUser()
+		.Build();
+	
+	// Add a fallback policy that allows anonymous access
+	options.FallbackPolicy = new AuthorizationPolicyBuilder()
+		.RequireAssertion(_ => true) // This allows all requests by default
+		.Build();
 });
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+	options.IdleTimeout = TimeSpan.FromMinutes(30);
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddAntiforgery(o =>
 {
-    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-        ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
-        : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-    o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
-    o.Cookie.HttpOnly = true;
-    o.HeaderName = "X-CSRF-TOKEN";
-    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+	o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+		? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
+		: Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+	o.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+	o.Cookie.HttpOnly = true;
+	o.HeaderName = "X-CSRF-TOKEN";
+	o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 // Register IHttpContextAccessor (singleton)
@@ -121,16 +192,16 @@ builder.Services.AddHttpContextAccessor();
 // Register logging
 builder.Services.AddLogging(loggingBuilder =>
 {
-    loggingBuilder.AddConsole();
-    loggingBuilder.AddDebug();
+	loggingBuilder.AddConsole();
+	loggingBuilder.AddDebug();
 });
 
 // Register connection manager and database connection
 builder.Services.AddSingleton<SchoolPortal.DBAccess.ConnectionManager>(_ =>
-    SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
+	SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager);
 
 builder.Services.AddScoped<System.Data.IDbConnection>(sp =>
-     sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
+	 sp.GetRequiredService<SchoolPortal.DBAccess.ConnectionManager>().GetConnection());
 
 // Core services
 builder.Services.AddScoped<ILoginService, SchoolPortal.Services.LoginService>();
@@ -243,23 +314,23 @@ var lifetimeService = app.Services.GetRequiredService<ApplicationLifetimeService
 // Register application stopping handler
 lifetime.ApplicationStopping.Register(() =>
 {
-    try
-    {
-        lifetimeService.OnStopping();
-    }
-    catch (Exception ex)
-    {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred during application stopping");
-    }
+	try
+	{
+		lifetimeService.OnStopping();
+	}
+	catch (Exception ex)
+	{
+		var logger = app.Services.GetRequiredService<ILogger<Program>>();
+		logger.LogError(ex, "An error occurred during application stopping");
+	}
 });
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -276,14 +347,14 @@ app.MapStaticAssets();
 
 // Map specific controller routes (if needed)
 app.MapControllerRoute(
-    name: "account",
-    pattern: "Authentication/{action=Login}",
-    defaults: new { controller = "Authentication" });
+	name: "account",
+	pattern: "Authentication/{action=Login}",
+	defaults: new { controller = "Authentication" });
 
 // The default route handles all controller/action patterns
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Map Razor Pages (must be after controller routes to avoid conflicts)
 app.MapRazorPages()
@@ -294,17 +365,17 @@ app.MapRazorPages()
 // Register application stopped handler
 lifetime.ApplicationStopped.Register(async () =>
 {
-    try
-    {
-        // The StopAsync method will be called automatically by the host
-        // But we can also call OnStoppedAsync directly if needed
-        await lifetimeService.StopAsync(CancellationToken.None);
-    }
-    catch (Exception ex)
-    {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred during application shutdown");
-    }
+	try
+	{
+		// The StopAsync method will be called automatically by the host
+		// But we can also call OnStoppedAsync directly if needed
+		await lifetimeService.StopAsync(CancellationToken.None);
+	}
+	catch (Exception ex)
+	{
+		var logger = app.Services.GetRequiredService<ILogger<Program>>();
+		logger.LogError(ex, "An error occurred during application shutdown");
+	}
 });
 
 app.Run();

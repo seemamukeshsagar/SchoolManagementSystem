@@ -80,9 +80,9 @@ namespace SchoolPortal.Services
 							RoleName = row["RoleName"]?.ToString() ?? string.Empty,
 							
 							// Address information
-							Address = row["Address"]?.ToString() ?? string.Empty,
-							City = row["City"]?.ToString() ?? string.Empty,
-							State = row["State"]?.ToString() ?? string.Empty
+							//Address = row["Address"]?.ToString() ?? string.Empty,
+							//City = row["City"]?.ToString() ?? string.Empty,
+							//State = row["State"]?.ToString() ?? string.Empty
 						};
 
 						list.Add(user);

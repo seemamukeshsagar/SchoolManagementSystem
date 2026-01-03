@@ -2,6 +2,8 @@
 	ViewData["Title"] = "Roles";
 }
 
+@Html.AntiForgeryToken()
+
 <div class="card">
 	<div class="card-header">
 		@* <h3 class="card-title">Roles</h3> *@
@@ -164,8 +166,19 @@
 				ajax: {
 					url: '@Url.Action("GetRoles", "RoleMaster")',
 					type: 'POST',
+					beforeSend: function(xhr) {
+						var token = $('input[name="__RequestVerificationToken"]').val();
+						if (token) {
+							xhr.setRequestHeader("X-CSRF-TOKEN", token);
+						}
+					},
 					data: function (d) {
 						// Add any additional parameters here
+					},
+					error: function(xhr, error, thrown) {
+						console.error('DataTables error:', error, thrown);
+						console.error('Response:', xhr.responseText);
+						alert('An error occurred while loading data. Please check the console for details.');
 					}
 				},
 				columns: [
