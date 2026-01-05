@@ -1,48 +1,59 @@
 @* Views/Shared/NavigationBars/_ReceptionNavigationBar.cshtml *@
-<div class="sidebar-menu">
-    <ul class="menu">
-        <li class="sidebar-title">Reception Menu</li>
-        
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
-            <a href="@Url.Action("Index", "Home")" class="sidebar-link">
-                <i class="bi bi-house-door"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
+<nav class="nav-sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Reception</h3>
+    </div>
 
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "StudentMaster" ? "active" : "")">
-            <a href="@Url.Action("Index", "StudentMaster")" class="sidebar-link">
-                <i class="bi bi-people"></i>
-                <span>Students</span>
-            </a>
-        </li>
-
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Visitors" ? "active" : "")">
-            <a href="@Url.Action("Index", "Visitors")" class="sidebar-link">
-                <i class="bi bi-people"></i>
-                <span>Visitors</span>
-            </a>
-        </li>
-
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Appointments" ? "active" : "")">
-            <a href="@Url.Action("Index", "Appointments")" class="sidebar-link">
-                <i class="bi bi-calendar-check"></i>
-                <span>Appointments</span>
-            </a>
-        </li>
-
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Messages" ? "active" : "")">
-            <a href="@Url.Action("Index", "Messages")" class="sidebar-link">
-                <i class="bi bi-chat-dots"></i>
-                <span>Messages</span>
-            </a>
-        </li>
-
-        <li class="sidebar-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PhoneLogs" ? "active" : "")">
-            <a href="@Url.Action("Index", "PhoneLogs")" class="sidebar-link">
-                <i class="bi bi-telephone"></i>
-                <span>Phone Logs</span>
-            </a>
-        </li>
-    </ul>
-</div>
+    <div class="accordion" id="sidebarAccordion">
+        <ul class="nav nav-pills flex-column mb-2">
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Home")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
+                   data-tooltip="Dashboard">
+                    <i class="bi bi-house-door"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "StudentMaster")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "StudentMaster" ? "active" : "")"
+                   data-tooltip="Students">
+                    <i class="bi bi-people"></i>
+                    <span>Students</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Visitors")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Visitors" ? "active" : "")"
+                   data-tooltip="Visitors">
+                    <i class="bi bi-people"></i>
+                    <span>Visitors</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Appointments")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Appointments" ? "active" : "")"
+                   data-tooltip="Appointments">
+                    <i class="bi bi-calendar-check"></i>
+                    <span>Appointments</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Messages")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Messages" ? "active" : "")"
+                   data-tooltip="Messages">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>Messages</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "PhoneLogs")"
+                   class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PhoneLogs" ? "active" : "")"
+                   data-tooltip="Phone Logs">
+                    <i class="bi bi-telephone"></i>
+                    <span>Phone Logs</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

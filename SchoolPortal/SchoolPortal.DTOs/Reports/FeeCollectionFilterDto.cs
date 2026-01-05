@@ -9,6 +9,6 @@ namespace SchoolPortal.DTOs.Reports
         public int? FeeTypeId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
-        public string PaymentStatus { get; set; }
+        public string? PaymentStatus { get; set; }
     }
 }

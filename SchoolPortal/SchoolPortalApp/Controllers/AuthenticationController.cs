@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Linq;
 using SchoolPortal.Entities.Models;
@@ -143,6 +144,15 @@ namespace SchoolPortalApp.Controllers
 		{
 			_logger.LogInformation("GET ChangePassword method called");
 			return View(new ChangePasswordViewModel());
+		}
+
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("AccessDenied")]
+		public IActionResult AccessDenied(string? returnUrl = null)
+		{
+			ViewData["ReturnUrl"] = returnUrl;
+			return View();
 		}
 
 		[HttpPost]

@@ -57,7 +57,7 @@ namespace SchoolPortal.Services
 			var list = new List<SectionMaster>();
 			using (Proc p = new Proc("Section_GetBySchoolId"))
 			{
-				p["@SchoolId"] = schoolId;
+				p["@SchoolId"] = schoolId.HasValue ? (object)schoolId.Value : DBNull.Value;
 				var dt = new DataTable();
 				p.Exec(dt);
 				foreach (DataRow r in dt.Rows)

@@ -365,6 +365,8 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+app.MapControllers();
+
 // Map specific controller routes (if needed)
 app.MapControllerRoute(
 	name: "account",

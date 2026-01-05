@@ -60,7 +60,7 @@ namespace SchoolPortal.Services
 			p["@Description"] = attendanceReason.Description ?? string.Empty;
 			p["@CompanyId"] = attendanceReason.CompanyId;
 			p["@SchoolId"] = attendanceReason.SchoolId;
-			p["@IsActive"] = attendanceReason.IsActive;
+			p["@IsActive"] = attendanceReason.IsActive.HasValue ? (object)attendanceReason.IsActive.Value : DBNull.Value;
 			p["@CreatedBy"] = attendanceReason.CreatedBy;
 			var dt = new DataTable();
 			p.Exec(dt);
@@ -82,7 +82,7 @@ namespace SchoolPortal.Services
 			p["@Code"] = attendanceReason.Code;
 			p["@Name"] = attendanceReason.Name;
 			p["@Description"] = attendanceReason.Description ?? string.Empty;
-			p["@IsActive"] = attendanceReason.IsActive;
+			p["@IsActive"] = attendanceReason.IsActive.HasValue ? (object)attendanceReason.IsActive.Value : DBNull.Value;
 			p["@ModifiedBy"] = attendanceReason.ModifiedBy ?? Guid.Empty;
 			p.Exec();
 			var ret = p.Parameters["@RETURN_VALUE"].Value;

@@ -1,9 +1,8 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolPortal.Services;
-using SchoolPortal.DTOs.Reports;
-using System;
-using System.Threading.Tasks;
 
 namespace SchoolPortalApp.Controllers
 {

@@ -19,7 +19,7 @@ namespace SchoolPortal.Services.IServices
 		Task<StudentAttendanceDetails?> GetStudentAttendanceByIdAsync(Guid id);
 		Task<Guid> CreateStudentAttendanceAsync(StudentAttendanceDetails attendance);
 		Task<bool> UpdateStudentAttendanceAsync(StudentAttendanceDetails attendance);
-		StudentMaster GetById(Guid id);
+		StudentMaster? GetById(Guid id);
 		Guid Create(StudentMaster student);
 		bool Update(StudentMaster student);
 		bool Delete(Guid id);

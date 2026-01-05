@@ -30,7 +30,7 @@ namespace SchoolPortal.Services.Services
 					p["@NonTeachingId"] = nonTeachingId;
 					var dt = new DataTable();
 					p.Exec(dt);
-					if (dt.Rows.Count == 0) return null;
+					if (dt.Rows.Count == 0) return Enumerable.Empty<NonTeachingQualificationDetails>();
 					return (IEnumerable<NonTeachingQualificationDetails>)Map((IDataReader)dt);
 				}
 			}
@@ -41,7 +41,7 @@ namespace SchoolPortal.Services.Services
 			}
 		}
 
-		public NonTeachingQualificationDetails GetQualificationById(Guid id)
+		public NonTeachingQualificationDetails? GetQualificationById(Guid id)
 		{  
 			Proc p = new Proc("sp_NonTeachingQualification_GetById");
 			p["@Id"] = id;
@@ -132,7 +132,7 @@ namespace SchoolPortal.Services.Services
 			return code == 1;
 		}
 
-		private T GetColumnValue<T>(IDataReader reader, string columnName, T defaultValue = default)
+		private T GetColumnValue<T>(IDataReader reader, string columnName, T defaultValue = default!)
 		{
 			try 
 			{

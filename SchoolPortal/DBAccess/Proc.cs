@@ -300,7 +300,11 @@ namespace SchoolPortal.DBAccess
 		/// <param name="result"></param>
 		private void HandleCallback(IAsyncResult result)
 		{
-			AsyncHelper e = (AsyncHelper)result.AsyncState;
+			var e = result.AsyncState as AsyncHelper;
+			if (e == null)
+			{
+				return;
+			}
 			SqlDataReader?	 reader = null;
 			try
 			{
@@ -321,7 +325,17 @@ namespace SchoolPortal.DBAccess
 				// from the form's thread. 
 
 				// invoke this delegate to let the caller do his thing.  and the cleanup when he's done.
-				e.SynchronizationContext.Send(state => e.CallbackDelegate(e.Command, reader, state), e.State);
+				if (e.CallbackDelegate != null && e.Command != null)
+				{
+					if (e.SynchronizationContext != null)
+					{
+						e.SynchronizationContext.Send(state => e.CallbackDelegate(e.Command, reader, state!), e.State);
+					}
+					else
+					{
+						e.CallbackDelegate(e.Command, reader, e.State!);
+					}
+				}
 			}
 			catch (Exception ex)
 			{
@@ -342,7 +356,7 @@ namespace SchoolPortal.DBAccess
 					// as in the try block here. 
 					// You can create the delegate instance as you 
 					// invoke it, like this:
-					if (e.ErrorDelegate != null)
+					if (e.ErrorDelegate != null && e.Command != null)
 					{
 						e.ErrorDelegate(e.Command, ex);
 					}
@@ -515,7 +529,14 @@ namespace SchoolPortal.DBAccess
 
 							if (!append)
 							{
-								ds.Tables[tableMappings[i]].Rows.Clear(); // remove all rows before inserting new ones
+								if (ds.Tables.Contains(tableMappings[i]))
+								{
+									var table = ds.Tables[tableMappings[i]];
+									if (table != null)
+									{
+										table.Rows.Clear(); // remove all rows before inserting new ones
+									}
+								}
 							}
 						}
 

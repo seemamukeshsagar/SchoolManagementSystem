@@ -43,7 +43,7 @@ namespace SchoolPortal.Services
             };
         }
 
-        private static T GetValueOrDefault<T>(DataRow row, string columnName, T defaultValue = default)
+        private static T GetValueOrDefault<T>(DataRow row, string columnName, T defaultValue = default!)
         {
             if (row.Table.Columns.Contains(columnName) && row[columnName] != DBNull.Value)
             {
@@ -211,7 +211,7 @@ namespace SchoolPortal.Services
                     p["@Name"] = entity.Name ?? string.Empty;
                     p["@Description"] = entity.Description;
                     p["@IsActive"] = entity.IsActive;
-                    p["@ModifiedBy"] = entity.ModifiedBy;
+                    p["@ModifiedBy"] = entity.ModifiedBy ?? (object)DBNull.Value;
                     p["@ModifiedDate"] = entity.ModifiedDate ?? DateTime.UtcNow;
 
                     var dt = new DataTable();

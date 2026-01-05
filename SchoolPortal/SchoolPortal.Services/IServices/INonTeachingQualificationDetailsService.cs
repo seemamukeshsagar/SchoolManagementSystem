@@ -8,7 +8,7 @@ namespace SchoolPortal.Services.IServices
     public interface INonTeachingQualificationDetailsService
     {
         IEnumerable<NonTeachingQualificationDetails> GetByNonTeachingId(Guid nonTeachingId);
-        NonTeachingQualificationDetails GetQualificationById(Guid id);
+        NonTeachingQualificationDetails? GetQualificationById(Guid id);
         bool Add(NonTeachingQualificationDetails entity);
         bool Update(NonTeachingQualificationDetails entity);
         bool Delete(Guid id);

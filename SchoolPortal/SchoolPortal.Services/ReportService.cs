@@ -32,9 +32,9 @@ namespace SchoolPortal.Services
 				p["PageSize"] = filter.PageSize;
 				p["Department"] = DBNull.Value;
 				p["LeaveType"] = filter.LeaveTypeId.HasValue ? (object)filter.LeaveTypeId.Value : DBNull.Value;
-				p["Status"] = (object)filter.Status ?? DBNull.Value;
-				p["StartDate"] = (object)filter.FromDate ?? DBNull.Value;
-				p["EndDate"] = (object)filter.ToDate ?? DBNull.Value;
+				p["Status"] = (object?)filter.Status ?? DBNull.Value;
+				p["StartDate"] = (object?)filter.FromDate ?? DBNull.Value;
+				p["EndDate"] = (object?)filter.ToDate ?? DBNull.Value;
 
 				using (var ds = new DataSet())
 				{
@@ -86,9 +86,9 @@ namespace SchoolPortal.Services
 			{
 				p["Department"] = DBNull.Value; // No Department property in EmployeeLeaveFilterDto
 				p["LeaveType"] = filter.LeaveTypeId.HasValue ? (object)filter.LeaveTypeId.Value : DBNull.Value;
-				p["Status"] = (object)filter.Status ?? DBNull.Value;
-				p["StartDate"] = (object)filter.FromDate ?? DBNull.Value;
-				p["EndDate"] = (object)filter.ToDate ?? DBNull.Value;
+				p["Status"] = (object?)filter.Status ?? DBNull.Value;
+				p["StartDate"] = (object?)filter.FromDate ?? DBNull.Value;
+				p["EndDate"] = (object?)filter.ToDate ?? DBNull.Value;
 
 				using (var dt = new DataTable())
 				{

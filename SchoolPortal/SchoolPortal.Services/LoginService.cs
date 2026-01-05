@@ -27,7 +27,7 @@ namespace SchoolPortal.Services
             {
                 if (!reader.Read())
                 {
-                    return null;
+                    return null!;
                 }
 
                 var userDetails = new UserDetailsOutput();

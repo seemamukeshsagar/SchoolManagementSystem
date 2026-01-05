@@ -217,8 +217,8 @@ namespace SchoolPortal.Services
 					p["@Name"] = assesment.Name;
 					p["@Description"] = assesment.Description ?? string.Empty;
 					p["@PercentageWeightage"] = assesment.PercentageWeightage ?? 0m;
-					p["@FromPeriod"] = assesment.FromPeriod;
-					p["@ToPeriod"] = assesment.ToPeriod;
+					p["@FromPeriod"] = assesment.FromPeriod.HasValue ? (object)assesment.FromPeriod.Value : DBNull.Value;
+					p["@ToPeriod"] = assesment.ToPeriod.HasValue ? (object)assesment.ToPeriod.Value : DBNull.Value;
 					p["@CompanyId"] = assesment.CompanyId;
 					p["@SchoolId"] = assesment.SchoolId;
 					p["@IsActive"] = assesment.IsActive;
@@ -270,8 +270,8 @@ namespace SchoolPortal.Services
 					p["@Name"] = assesment.Name;
 					p["@Description"] = assesment.Description ?? string.Empty;
 					p["@PercentageWeightage"] = assesment.PercentageWeightage ?? 0m;
-					p["@FromPeriod"] = assesment.FromPeriod;
-					p["@ToPeriod"] = assesment.ToPeriod;
+					p["@FromPeriod"] = assesment.FromPeriod.HasValue ? (object)assesment.FromPeriod.Value : DBNull.Value;
+					p["@ToPeriod"] = assesment.ToPeriod.HasValue ? (object)assesment.ToPeriod.Value : DBNull.Value;
 					p["@SchoolId"] = assesment.SchoolId;
 					p["@IsActive"] = assesment.IsActive;
 					p["@ModifiedBy"] = assesment.ModifiedBy ?? Guid.Empty;

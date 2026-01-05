@@ -265,7 +265,7 @@ namespace SchoolPortal.Services
 				p["@SchoolId"] = cls.SchoolId;
 				p["@CreatedBy"] = cls.CreatedBy;
 				p["@CreatedDate"] = DateTime.UtcNow;
-				p["@OrderBy"] = cls.OrderBy;
+				p["@OrderBy"] = cls.OrderBy.HasValue ? (object)cls.OrderBy.Value : DBNull.Value;
 
 				var result = p.ExecScalar();
 				return result != null && result != DBNull.Value ? (Guid)result : Guid.Empty;
@@ -285,9 +285,9 @@ namespace SchoolPortal.Services
 				p["@IsGradePointApplicable"] = cls.IsGradePointApplicable ?? false;
 				p["@IsActive"] = cls.IsActive;
 				p["@SchoolId"] = cls.SchoolId;
-				p["@ModifiedBy"] = cls.ModifiedBy;
+				p["@ModifiedBy"] = cls.ModifiedBy ?? (object)DBNull.Value;
 				p["@ModifiedDate"] = DateTime.UtcNow;
-				p["@OrderBy"] = cls.OrderBy;
+				p["@OrderBy"] = cls.OrderBy.HasValue ? (object)cls.OrderBy.Value : DBNull.Value;
 
 				var result = p.ExecNonQuery();
 				return result > 0;

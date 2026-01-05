@@ -224,14 +224,14 @@ namespace SchoolPortal.Services
             p["@SectionId"] = s.SectionId;
 
             // Transport & image
-            p["@AvailTransport"] = s.AvailTransport;
+            p["@AvailTransport"] = s.AvailTransport.HasValue ? (object)s.AvailTransport.Value : DBNull.Value;
             p["@Image"] = s.Image ?? string.Empty;
 
             // Category & flags
             p["@CategoryId"] = s.CategoryId;
-            p["@SiblingsIfAny"] = s.SiblingsIfAny;
-            p["@SiblingClassId"] = s.SiblingClassId;
-            p["@Gender"] = s.Gender;
+            p["@SiblingsIfAny"] = s.SiblingsIfAny.HasValue ? (object)s.SiblingsIfAny.Value : DBNull.Value;
+            p["@SiblingClassId"] = s.SiblingClassId.HasValue ? (object)s.SiblingClassId.Value : DBNull.Value;
+            p["@Gender"] = s.Gender.HasValue ? (object)s.Gender.Value : DBNull.Value;
 
             // Medical & birth
             p["@DisabilityAny"] = s.DisabilityAny ?? string.Empty;
@@ -242,8 +242,8 @@ namespace SchoolPortal.Services
 
             // Previous school
             p["@PreviousSchoolAttended"] = s.PreviousSchoolAttended ?? string.Empty;
-            p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId;
-            p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage;
+            p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId.HasValue ? (object)s.PreviousSchoolClassId.Value : DBNull.Value;
+            p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage.HasValue ? (object)s.PreviousSchoolPercentage.Value : DBNull.Value;
             p["@PreviousSchoolRank"] = s.PreviousSchoolRank ?? string.Empty;
             if (s.PreviousSchoolBoardId != Guid.Empty)
             {
@@ -253,9 +253,9 @@ namespace SchoolPortal.Services
             {
                 p["@PreviousSchoolBoardId"] = new Guid("9C6B72D5-EE6D-48FA-AF3D-05BFF3198617");
             }
-            p["@PreviousSchoolFromDate"] = s.PreviousSchoolFromDate;
-            p["@PreviousSchoolToDate"] = s.PreviousSchoolToDate;
-            p["@WithdrawnDate"] = s.WithdrawnDate;
+            p["@PreviousSchoolFromDate"] = (object?)s.PreviousSchoolFromDate ?? DBNull.Value;
+            p["@PreviousSchoolToDate"] = (object?)s.PreviousSchoolToDate ?? DBNull.Value;
+            p["@WithdrawnDate"] = (object?)s.WithdrawnDate ?? DBNull.Value;
             p["@WithdrawnReason"] = s.WithdrawnReason ?? string.Empty;
 
             // Other info
@@ -265,20 +265,20 @@ namespace SchoolPortal.Services
             p["@ReligionId"] = s.ReligionId;
 
             // Transport route details
-            p["@RouteId"] = s.RouteId;
-            p["@RouteStopDetailsId"] = s.RouteStopDetailsId;
-            p["@ClassTeacherId"] = s.ClassTeacherId;
-            p["@RoutePickAndDrop"] = s.RoutePickAndDrop;
+            p["@RouteId"] = s.RouteId.HasValue ? (object)s.RouteId.Value : DBNull.Value;
+            p["@RouteStopDetailsId"] = s.RouteStopDetailsId.HasValue ? (object)s.RouteStopDetailsId.Value : DBNull.Value;
+            p["@ClassTeacherId"] = s.ClassTeacherId.HasValue ? (object)s.ClassTeacherId.Value : DBNull.Value;
+            p["@RoutePickAndDrop"] = s.RoutePickAndDrop.HasValue ? (object)s.RoutePickAndDrop.Value : DBNull.Value;
 
             // Fees
-            p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId;
-            p["@TutionFees"] = s.TutionFees;
-            p["@AnnualFees"] = s.AnnualFees;
-            p["@TransportFees"] = s.TransportFees;
-            p["@UseTransportFees"] = s.UseTransportFees;
+            p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId.HasValue ? (object)s.FeesDiscountCategoryMasterId.Value : DBNull.Value;
+            p["@TutionFees"] = s.TutionFees.HasValue ? (object)s.TutionFees.Value : DBNull.Value;
+            p["@AnnualFees"] = s.AnnualFees.HasValue ? (object)s.AnnualFees.Value : DBNull.Value;
+            p["@TransportFees"] = s.TransportFees.HasValue ? (object)s.TransportFees.Value : DBNull.Value;
+            p["@UseTransportFees"] = s.UseTransportFees.HasValue ? (object)s.UseTransportFees.Value : DBNull.Value;
 
             // Session & ownership
-            p["@SessionId"] = s.SessionId;
+            p["@SessionId"] = s.SessionId.HasValue ? (object)s.SessionId.Value : DBNull.Value;
             p["@CompanyId"] = s.CompanyId;
             p["@SchoolId"] = s.SchoolId;
 
@@ -291,7 +291,7 @@ namespace SchoolPortal.Services
             p["@StatusMessage"] = s.StatusMessage ?? string.Empty;
 
             // House
-            p["@HouseAllotted"] = s.HouseAllotted;
+            p["@HouseAllotted"] = s.HouseAllotted.HasValue ? (object)s.HouseAllotted.Value : DBNull.Value;
             var dt = new DataTable();
             p.Exec(dt);
             if (dt.Rows.Count > 0)
@@ -360,14 +360,14 @@ namespace SchoolPortal.Services
                 p["@SectionId"] = s.SectionId;
 
                 // Transport & image
-                p["@AvailTransport"] = s.AvailTransport;
+                p["@AvailTransport"] = s.AvailTransport.HasValue ? (object)s.AvailTransport.Value : DBNull.Value;
                 p["@Image"] = s.Image ?? string.Empty;
 
                 // Category & flags
                 p["@CategoryId"] = s.CategoryId;
-                p["@SiblingsIfAny"] = s.SiblingsIfAny;
-                p["@SiblingClassId"] = s.SiblingClassId;
-                p["@Gender"] = s.Gender;
+                p["@SiblingsIfAny"] = s.SiblingsIfAny.HasValue ? (object)s.SiblingsIfAny.Value : DBNull.Value;
+                p["@SiblingClassId"] = s.SiblingClassId.HasValue ? (object)s.SiblingClassId.Value : DBNull.Value;
+                p["@Gender"] = s.Gender.HasValue ? (object)s.Gender.Value : DBNull.Value;
 
                 // Medical & birth
                 p["@DisabilityAny"] = s.DisabilityAny ?? string.Empty;
@@ -378,13 +378,13 @@ namespace SchoolPortal.Services
 
                 // Previous school
                 p["@PreviousSchoolAttended"] = s.PreviousSchoolAttended ?? string.Empty;
-                p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId;
-                p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage;
+                p["@PreviousSchoolClassId"] = s.PreviousSchoolClassId.HasValue ? (object)s.PreviousSchoolClassId.Value : DBNull.Value;
+                p["@PreviousSchoolPercentage"] = s.PreviousSchoolPercentage.HasValue ? (object)s.PreviousSchoolPercentage.Value : DBNull.Value;
                 p["@PreviousSchoolRank"] = s.PreviousSchoolRank ?? string.Empty;
                 p["@PreviousSchoolBoardId"] = s.PreviousSchoolBoardId;
-                p["@PreviousSchoolFromDate"] = s.PreviousSchoolFromDate;
-                p["@PreviousSchoolToDate"] = s.PreviousSchoolToDate;
-                p["@WithdrawnDate"] = s.WithdrawnDate;
+                p["@PreviousSchoolFromDate"] = (object?)s.PreviousSchoolFromDate ?? DBNull.Value;
+                p["@PreviousSchoolToDate"] = (object?)s.PreviousSchoolToDate ?? DBNull.Value;
+                p["@WithdrawnDate"] = (object?)s.WithdrawnDate ?? DBNull.Value;
                 p["@WithdrawnReason"] = s.WithdrawnReason ?? string.Empty;
 
                 // Other info
@@ -394,20 +394,20 @@ namespace SchoolPortal.Services
                 p["@ReligionId"] = s.ReligionId;
 
                 // Transport route details
-                p["@RouteId"] = s.RouteId;
-                p["@RouteStopDetailsId"] = s.RouteStopDetailsId;
-                p["@ClassTeacherId"] = s.ClassTeacherId;
-                p["@RoutePickAndDrop"] = s.RoutePickAndDrop;
+                p["@RouteId"] = s.RouteId.HasValue ? (object)s.RouteId.Value : DBNull.Value;
+                p["@RouteStopDetailsId"] = s.RouteStopDetailsId.HasValue ? (object)s.RouteStopDetailsId.Value : DBNull.Value;
+                p["@ClassTeacherId"] = s.ClassTeacherId.HasValue ? (object)s.ClassTeacherId.Value : DBNull.Value;
+                p["@RoutePickAndDrop"] = s.RoutePickAndDrop.HasValue ? (object)s.RoutePickAndDrop.Value : DBNull.Value;
 
                 // Fees
-                p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId;
-                p["@TutionFees"] = s.TutionFees;
-                p["@AnnualFees"] = s.AnnualFees;
-                p["@TransportFees"] = s.TransportFees;
-                p["@UseTransportFees"] = s.UseTransportFees;
+                p["@FeesDiscountCategoryMasterId"] = s.FeesDiscountCategoryMasterId.HasValue ? (object)s.FeesDiscountCategoryMasterId.Value : DBNull.Value;
+                p["@TutionFees"] = s.TutionFees.HasValue ? (object)s.TutionFees.Value : DBNull.Value;
+                p["@AnnualFees"] = s.AnnualFees.HasValue ? (object)s.AnnualFees.Value : DBNull.Value;
+                p["@TransportFees"] = s.TransportFees.HasValue ? (object)s.TransportFees.Value : DBNull.Value;
+                p["@UseTransportFees"] = s.UseTransportFees.HasValue ? (object)s.UseTransportFees.Value : DBNull.Value;
 
                 // Session & ownership
-                p["@SessionId"] = s.SessionId;
+                p["@SessionId"] = s.SessionId.HasValue ? (object)s.SessionId.Value : DBNull.Value;
                 p["@CompanyId"] = s.CompanyId; // included based on proc signature
                 p["@SchoolId"] = s.SchoolId;
 
@@ -419,7 +419,7 @@ namespace SchoolPortal.Services
                 p["@StatusMessage"] = s.StatusMessage ?? string.Empty;
 
                 // House
-                p["@HouseAllotted"] = s.HouseAllotted;
+                p["@HouseAllotted"] = s.HouseAllotted.HasValue ? (object)s.HouseAllotted.Value : DBNull.Value;
                 DataTable dt = new DataTable();
                 p.Exec(dt);
                 if (dt != null)
@@ -528,7 +528,7 @@ namespace SchoolPortal.Services
         private StudentAttendanceDetails MapToStudentAttendanceDetails(DataRow row)
         {
             if (row == null)
-                return null;
+                return new StudentAttendanceDetails();
 
             return new StudentAttendanceDetails
             {
@@ -621,11 +621,11 @@ namespace SchoolPortal.Services
                     p["@RegistrationNumber"] = student.RegistrationNumber;
                     p["@ClassId"] = student.ClassId;
                     p["@SectionId"] = student.SectionId;
-                    p["@AvailTransport"] = student.AvailTransport;
+                    p["@AvailTransport"] = student.AvailTransport.HasValue ? (object)student.AvailTransport.Value : DBNull.Value;
                     p["@Image"] = student.Image;
                     p["@Email"] = student.Email;
                     p["@CategoryId"] = student.CategoryId;
-                    p["@SiblingsIfAny"] = student.SiblingsIfAny;
+                    p["@SiblingsIfAny"] = student.SiblingsIfAny.HasValue ? (object)student.SiblingsIfAny.Value : DBNull.Value;
 
                     var dt = new DataTable();
                     p.Exec(dt);
@@ -666,11 +666,11 @@ namespace SchoolPortal.Services
                     p["@RegistrationNumber"] = student.RegistrationNumber;
                     p["@ClassId"] = student.ClassId;
                     p["@SectionId"] = student.SectionId;
-                    p["@AvailTransport"] = student.AvailTransport;
+                    p["@AvailTransport"] = student.AvailTransport.HasValue ? (object)student.AvailTransport.Value : DBNull.Value;
                     p["@Image"] = student.Image;
                     p["@Email"] = student.Email;
                     p["@CategoryId"] = student.CategoryId;
-                    p["@SiblingsIfAny"] = student.SiblingsIfAny;
+                    p["@SiblingsIfAny"] = student.SiblingsIfAny.HasValue ? (object)student.SiblingsIfAny.Value : DBNull.Value;
 
                     DataTable dt = new DataTable();
                     p.Exec(dt);
@@ -709,7 +709,7 @@ namespace SchoolPortal.Services
             return dt.Rows.Cast<DataRow>().Select(Map).ToList();
         }
 
-        public StudentMaster GetById(Guid id)
+        public StudentMaster? GetById(Guid id)
         {
             var p = new Proc("Student_GetById");
             p["@Id"] = id;
@@ -751,8 +751,8 @@ namespace SchoolPortal.Services
             p["@Id"] = attendance.Id;
             p["@Status"] = attendance.Status;
             p["@Remarks"] = attendance.Remarks ?? string.Empty;
-            p["@ModifiedBy"] = attendance.ModifiedBy;
-            p["@ModifiedDate"] = attendance.ModifiedDate;
+            p["@ModifiedBy"] = attendance.ModifiedBy ?? (object)DBNull.Value;
+            p["@ModifiedDate"] = attendance.ModifiedDate ?? (object)DBNull.Value;
 
             var dt = new DataTable();
             p.Exec(dt);

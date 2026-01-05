@@ -115,7 +115,7 @@ namespace SchoolPortal.Services
 		{
 			Proc p = new Proc("ClassSectionDetail_ToggleStatus");
 			p["@Id"] = id;
-			p["@ModifiedBy"] = userId;
+			p["@ModifiedBy"] = userId.HasValue ? (object)userId.Value : DBNull.Value;
 			p.Exec();
 			var ret = p.Parameters["@RETURN_VALUE"].Value;
 			int code = ret == null || ret == DBNull.Value ? 0 : Convert.ToInt32(ret);

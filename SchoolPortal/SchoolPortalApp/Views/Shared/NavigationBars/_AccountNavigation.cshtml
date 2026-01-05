@@ -1,153 +1,195 @@
 @using SchoolPortalApp.Helpers
-@{
-    Layout = "_BaseNavigationBar";
-}
+<nav class="nav-sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Accounts</h3>
+    </div>
 
-<ul class="nav nav-pills flex-column mb-2">
-    <li class="nav-item">
-        <a href="@Url.Action("Index", "Home")" class="nav-link" data-tooltip="Home">
-            <i class="bi bi-house-door"></i>
-            <span>Home</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("Dashboard", "Accounts")" class="nav-link" data-tooltip="Dashboard">
-            <i class="bi bi-speedometer2"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("Index", "StudentMaster")" class="nav-link" data-tooltip="Students">
-            <i class="bi bi-people"></i>
-            <span>All Students</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("Index", "Emp")" class="nav-link" data-tooltip="Employees">
-            <i class="bi bi-person-badge"></i>
-            <span>All Employees</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("FeeStructure", "Accounts")" class="nav-link" data-tooltip="Fee Management">
-            <i class="bi bi-cash-coin"></i>
-            <span>Fee Management</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("ReceivePayment", "Accounts")" class="nav-link" data-tooltip="Payments">
-            <i class="bi bi-credit-card"></i>
-            <span>Payments</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#reportsSubmenu" role="button" aria-expanded="false" data-tooltip="Reports">
-            <i class="bi bi-file-earmark-text"></i>
-            <span>Reports</span>
-            <i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <div class="collapse" id="reportsSubmenu">
-            <ul class="nav nav-pills flex-column ms-4">
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#employeeReportsSubmenu" role="button" aria-expanded="false">
-                        <i class="bi bi-people"></i>
-                        <span>Employee</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <div class="collapse" id="employeeReportsSubmenu">
-                        <ul class="nav nav-pills flex-column ms-4">
-                            <li class="nav-item">
-                                <a href="@Url.Action("AllEmployees", "Reports")" class="nav-link" data-tooltip="All Employees Report">
-                                    <i class="bi bi-list-ul"></i>
-                                    <span>All Employees</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("EmpSalary", "Reports")" class="nav-link" data-tooltip="Employee Salary Report">
-                                    <i class="bi bi-cash-stack"></i>
-                                    <span>Salary</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("EmpLeaves", "Reports")" class="nav-link" data-tooltip="Employee Leaves Report">
-                                    <i class="bi bi-calendar3"></i>
-                                    <span>Leaves</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#studentReportsSubmenu" role="button" aria-expanded="false">
-                        <i class="bi bi-mortarboard"></i>
-                        <span>Students</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <div class="collapse" id="studentReportsSubmenu">
-                        <ul class="nav nav-pills flex-column ms-4">
-                            <li class="nav-item">
-                                <a href="@Url.Action("AllStudents", "Reports")" class="nav-link" data-tooltip="All Students Report">
-                                    <i class="bi bi-list-ul"></i>
-                                    <span>All Students</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("FeesCollection", "Reports")" class="nav-link" data-tooltip="Fees Collection Report">
-                                    <i class="bi bi-cash-coin"></i>
-                                    <span>Fees Collection</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("FeesDefaulters", "Reports")" class="nav-link text-warning" data-tooltip="Fees Defaulters Report">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    <span>Fees Defaulters</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#inventoryReportsSubmenu" role="button" aria-expanded="false">
-                        <i class="bi bi-box-seam"></i>
-                        <span>Inventory</span>
-                        <i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <div class="collapse" id="inventoryReportsSubmenu">
-                        <ul class="nav nav-pills flex-column ms-4">
-                            <li class="nav-item">
-                                <a href="@Url.Action("AllItems", "Reports")" class="nav-link" data-tooltip="All Inventory Items">
-                                    <i class="bi bi-grid"></i>
-                                    <span>All Items</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Invoices", "Reports")" class="nav-link" data-tooltip="Inventory Invoices">
-                                    <i class="bi bi-file-earmark-text"></i>
-                                    <span>Invoices</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Bills", "Reports")" class="nav-link" data-tooltip="Inventory Bills">
-                                    <i class="bi bi-receipt"></i>
-                                    <span>Bills</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+    <div class="accordion" id="sidebarAccordion">
+        <ul class="nav nav-pills flex-column mb-2">
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Home")"
+                   class="nav-link"
+                   data-tooltip="Home">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-dashboard">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-dashboard"
+                        aria-expanded="false"
+                        aria-controls="collapse-dashboard"
+                        data-tooltip="Dashboard">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <span>Dashboard</span>
+                </button>
+            </h2>
+            <div id="collapse-dashboard" class="accordion-collapse collapse"
+                 aria-labelledby="heading-dashboard" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li class="nav-item">
+                            <a href="@Url.Action("Dashboard", "Accounts")"
+                               class="nav-link">Dashboard</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("Profile", "Account")" class="nav-link" data-tooltip="Profile">
-            <i class="bi bi-person"></i>
-            <span>My Profile</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="@Url.Action("Logout", "Account")" class="nav-link text-danger" data-tooltip="Logout">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Logout</span>
-        </a>
-    </li>
-</ul>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-people">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-people"
+                        aria-expanded="false"
+                        aria-controls="collapse-people"
+                        data-tooltip="People">
+                    <i class="bi bi-people me-2"></i>
+                    <span>People</span>
+                </button>
+            </h2>
+            <div id="collapse-people" class="accordion-collapse collapse"
+                 aria-labelledby="heading-people" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "StudentMaster")"
+                               class="nav-link">All Students</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Emp")"
+                               class="nav-link">All Employees</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-fees">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-fees"
+                        aria-expanded="false"
+                        aria-controls="collapse-fees"
+                        data-tooltip="Fee Management">
+                    <i class="bi bi-cash-coin me-2"></i>
+                    <span>Fee Management</span>
+                </button>
+            </h2>
+            <div id="collapse-fees" class="accordion-collapse collapse"
+                 aria-labelledby="heading-fees" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li class="nav-item">
+                            <a href="@Url.Action("FeeStructure", "Accounts")"
+                               class="nav-link">Fee Structure</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ReceivePayment", "Accounts")"
+                               class="nav-link">Payments</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-reports">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-reports"
+                        aria-expanded="false"
+                        aria-controls="collapse-reports"
+                        data-tooltip="Reports">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <span>Reports</span>
+                </button>
+            </h2>
+            <div id="collapse-reports" class="accordion-collapse collapse"
+                 aria-labelledby="heading-reports" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#employeeReportsSubmenu" role="button" aria-expanded="false">
+                                <i class="bi bi-people me-2"></i>
+                                <span>Employee</span>
+                            </a>
+                            <div class="collapse" id="employeeReportsSubmenu">
+                                <ul class="nav flex-column ms-3 mb-2">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AllEmployees", "Reports")" class="nav-link" data-tooltip="All Employees Report">All Employees</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("EmpSalary", "Reports")" class="nav-link" data-tooltip="Employee Salary Report">Salary</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("EmpLeaves", "Reports")" class="nav-link" data-tooltip="Employee Leaves Report">Leaves</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#studentReportsSubmenu" role="button" aria-expanded="false">
+                                <i class="bi bi-mortarboard me-2"></i>
+                                <span>Students</span>
+                            </a>
+                            <div class="collapse" id="studentReportsSubmenu">
+                                <ul class="nav flex-column ms-3 mb-2">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AllStudents", "Reports")" class="nav-link" data-tooltip="All Students Report">All Students</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("FeesCollection", "Reports")" class="nav-link" data-tooltip="Fees Collection Report">Fees Collection</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("FeesDefaulters", "Reports")" class="nav-link text-warning" data-tooltip="Fees Defaulters Report">Fees Defaulters</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#inventoryReportsSubmenu" role="button" aria-expanded="false">
+                                <i class="bi bi-box-seam me-2"></i>
+                                <span>Inventory</span>
+                            </a>
+                            <div class="collapse" id="inventoryReportsSubmenu">
+                                <ul class="nav flex-column ms-3 mb-2">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AllItems", "Reports")" class="nav-link" data-tooltip="All Inventory Items">All Items</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Invoices", "Reports")" class="nav-link" data-tooltip="Inventory Invoices">Invoices</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Bills", "Reports")" class="nav-link" data-tooltip="Inventory Bills">Bills</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills flex-column mb-2">
+            <li class="nav-item">
+                <a href="@Url.Action("Profile", "Account")" class="nav-link" data-tooltip="Profile">
+                    <i class="bi bi-person"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("Logout", "Account")" class="nav-link text-danger" data-tooltip="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

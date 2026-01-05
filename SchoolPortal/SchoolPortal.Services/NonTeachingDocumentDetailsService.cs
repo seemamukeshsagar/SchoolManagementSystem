@@ -93,11 +93,11 @@ namespace SchoolPortal.Services.Services
 			p["@Id"] = nonTeachingId;
 			var dt = new DataTable();
 			p.Exec(dt);
-			if (dt.Rows.Count == 0) return null;
+			if (dt.Rows.Count == 0) return Enumerable.Empty<NonTeachingDocumentDetails>();
 			return Map(dt.Rows[0]);            
 		}
 
-		public NonTeachingDocumentDetails GetDocumentById(Guid id)
+		public NonTeachingDocumentDetails? GetDocumentById(Guid id)
 		{
 			try
 			{
@@ -106,8 +106,8 @@ namespace SchoolPortal.Services.Services
 					p["@Id"] = id;
 					var dt = new DataTable();
 					p.Exec(dt);
-					if (dt.Rows.Count == 0) return null!; // Use null-forgiving operator to satisfy non-nullable contract
-					return (NonTeachingDocumentDetails)Map(dt.Rows[0]);
+					if (dt.Rows.Count == 0) return null;
+					return Map(dt.Rows[0]).FirstOrDefault();
 				}
 			}
 			catch (Exception ex)
@@ -121,38 +121,31 @@ namespace SchoolPortal.Services.Services
 		{
 			try
 			{
-						using (var p = new Proc("sp_NonTeachingDocument_Insert"))
-						{
-							p["@Id"] = entity.Id;
-							p["@NonTeachingId"] = entity.NonTeachingId;
-							p["@DocumentTypeId"] = entity.DocumentTypeId;
-							p["@DocumentType"] = entity.DocumentType ?? (object)DBNull.Value;
-							p["@DocumentNumber"] = entity.DocumentNumber ?? (object)DBNull.Value;
-							p["@DocumentPath"] = entity.DocumentPath ?? (object)DBNull.Value;
-							p["@IssueDate"] = entity.IssueDate ?? (object)DBNull.Value;
-							p["@ExpiryDate"] = entity.ExpiryDate ?? (object)DBNull.Value;
-							p["@Remarks"] = entity.Remarks ?? (object)DBNull.Value;
-							p["@IsActive"] = entity.IsActive;
-							p["@IsVerified"] = entity.IsVerified;
-							p["@VerifiedBy"] = entity.VerifiedBy;
-							p["@VerifiedOn"] = entity.VerifiedOn ?? (object)DBNull.Value;
-							p["@CreatedBy"] = entity.CreatedBy;
-							p["@CreatedDate"] = entity.CreatedDate;
-							p["@ModifiedBy"] = entity.ModifiedBy;
-							p["@ModifiedDate"] = entity.ModifiedDate ?? (object)DBNull.Value;
+				using (var p = new Proc("sp_NonTeachingDocument_Insert"))
+				{
+					p["@Id"] = entity.Id;
+					p["@NonTeachingId"] = entity.NonTeachingId;
+					p["@DocumentTypeId"] = entity.DocumentTypeId;
+					p["@DocumentType"] = entity.DocumentType ?? (object)DBNull.Value;
+					p["@DocumentNumber"] = entity.DocumentNumber ?? (object)DBNull.Value;
+					p["@DocumentPath"] = entity.DocumentPath ?? (object)DBNull.Value;
+					p["@IssueDate"] = entity.IssueDate ?? (object)DBNull.Value;
+					p["@ExpiryDate"] = entity.ExpiryDate ?? (object)DBNull.Value;
+					p["@Remarks"] = entity.Remarks ?? (object)DBNull.Value;
+					p["@IsActive"] = entity.IsActive;
+					p["@IsVerified"] = entity.IsVerified;
+					p["@VerifiedBy"] = entity.VerifiedBy;
+					p["@VerifiedOn"] = entity.VerifiedOn ?? (object)DBNull.Value;
+					p["@CreatedBy"] = entity.CreatedBy;
+					p["@CreatedDate"] = entity.CreatedDate;
+					p["@ModifiedBy"] = entity.ModifiedBy;
+					p["@ModifiedDate"] = entity.ModifiedDate ?? (object)DBNull.Value;
 
-							var dt = new DataTable();
-							p.Exec(dt);
-							if (dt.Rows.Count > 0)
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						}
-			 }
+					var dt = new DataTable();
+					p.Exec(dt);
+					return dt.Rows.Count > 0;
+				}
+			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, $"Error in NonTeachingDocumentDetailsService.Add for NonTeachingId: {entity.NonTeachingId}");

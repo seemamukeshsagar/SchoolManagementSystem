@@ -10,6 +10,9 @@
     <BuildType Solution="Development|*" Project="Release" />
     <Platform Solution="*|x86" Project="x86" />
   </Project>
+  <Project Path="SchoolPortal.DTOs/SchoolPortal.DTOs.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
   <Project Path="SchoolPortal.Entities/SchoolPortal.Entities.csproj">
     <BuildType Solution="Development|*" Project="Release" />
   </Project>

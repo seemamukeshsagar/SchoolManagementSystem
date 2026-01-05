@@ -1,196 +1,202 @@
 @using SchoolPortalApp.Helpers
-@{
-    Layout = "_BaseNavigationBar";
-}
 
-<ul class="nav nav-pills flex-column mb-2">
-    <li class="nav-item">
-        <a href="@Url.Action("Index", "Home")" 
-           class="nav-link @(ViewHelper.IsActive(ViewContext, "Home") ? "active" : "")" 
-           data-tooltip="Home">
-            <i class="bi bi-house-door"></i>
-            <span>Home</span>
-        </a>
-    </li>
-</ul>
+<nav class="nav-sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Management</h3>
+    </div>
 
-<!-- DASHBOARD -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-dashboard">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-dashboard"
-                aria-expanded="true"
-                aria-controls="collapse-dashboard"
-                data-tooltip="Dashboard">
-            <i class="bi bi-speedometer2 me-2"></i>
-            <span>Dashboard</span>
-        </button>
-    </h2>
-    <div id="collapse-dashboard" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "Dashboard") || 
+    <div class="accordion" id="sidebarAccordion">
+        <ul class="nav nav-pills flex-column mb-2">
+            <li class="nav-item">
+                <a href="@Url.Action("Index", "Home")"
+                   class="nav-link @(ViewHelper.IsActive(ViewContext, "Home") ? "active" : "")"
+                   data-tooltip="Home">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- DASHBOARD -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-dashboard">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-dashboard"
+                        aria-expanded="true"
+                        aria-controls="collapse-dashboard"
+                        data-tooltip="Dashboard">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <span>Dashboard</span>
+                </button>
+            </h2>
+            <div id="collapse-dashboard" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "Dashboard") || 
                                                                   ViewHelper.IsActive(ViewContext, "Management", "KPI") ||
                                                                   ViewHelper.IsActive(ViewContext, "Management", "Alerts") ||
                                                                   ViewHelper.IsActive(ViewContext, "Management", "QuickStats") ? "show" : "")" 
-         aria-labelledby="heading-dashboard" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("Dashboard", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Dashboard") ? "active" : "")">Overview</a></li>
-                <li><a href="@Url.Action("KPI", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "KPI") ? "active" : "")">Key Performance Indicators</a></li>
-                <li><a href="@Url.Action("Alerts", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Alerts") ? "active" : "")">Alerts & Notifications</a></li>
-                <li><a href="@Url.Action("QuickStats", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "QuickStats") ? "active" : "")">Quick Stats</a></li>
-            </ul>
+                 aria-labelledby="heading-dashboard" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("Dashboard", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Dashboard") ? "active" : "")">Overview</a></li>
+                        <li><a href="@Url.Action("KPI", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "KPI") ? "active" : "")">Key Performance Indicators</a></li>
+                        <li><a href="@Url.Action("Alerts", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Alerts") ? "active" : "")">Alerts & Notifications</a></li>
+                        <li><a href="@Url.Action("QuickStats", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "QuickStats") ? "active" : "")">Quick Stats</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- STRATEGIC PLANNING -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-strategic">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-strategic"
-                aria-expanded="false"
-                aria-controls="collapse-strategic"
-                data-tooltip="Strategic Planning">
-            <i class="bi bi-diagram-3 me-2"></i>
-            <span>Strategic Planning</span>
-        </button>
-    </h2>
-    <div id="collapse-strategic" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "StrategicGoals") || 
+        <!-- STRATEGIC PLANNING -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-strategic">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-strategic"
+                        aria-expanded="false"
+                        aria-controls="collapse-strategic"
+                        data-tooltip="Strategic Planning">
+                    <i class="bi bi-diagram-3 me-2"></i>
+                    <span>Strategic Planning</span>
+                </button>
+            </h2>
+            <div id="collapse-strategic" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "StrategicGoals") || 
                                                                    ViewHelper.IsActive(ViewContext, "Management", "Initiatives") ||
                                                                    ViewHelper.IsActive(ViewContext, "Management", "SWOT") ? "show" : "")" 
-         aria-labelledby="heading-strategic" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("StrategicGoals", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StrategicGoals") ? "active" : "")">Strategic Goals</a></li>
-                <li><a href="@Url.Action("Initiatives", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Initiatives") ? "active" : "")">Initiatives</a></li>
-                <li><a href="@Url.Action("SWOT", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "SWOT") ? "active" : "")">SWOT Analysis</a></li>
-            </ul>
+                 aria-labelledby="heading-strategic" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("StrategicGoals", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StrategicGoals") ? "active" : "")">Strategic Goals</a></li>
+                        <li><a href="@Url.Action("Initiatives", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Initiatives") ? "active" : "")">Initiatives</a></li>
+                        <li><a href="@Url.Action("SWOT", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "SWOT") ? "active" : "")">SWOT Analysis</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- PERFORMANCE MONITORING -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-performance">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-performance"
-                aria-expanded="false"
-                aria-controls="collapse-performance"
-                data-tooltip="Performance Monitoring">
-            <i class="bi bi-graph-up me-2"></i>
-            <span>Performance Monitoring</span>
-        </button>
-    </h2>
-    <div id="collapse-performance" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "DepartmentMetrics") || 
+        <!-- PERFORMANCE MONITORING -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-performance">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-performance"
+                        aria-expanded="false"
+                        aria-controls="collapse-performance"
+                        data-tooltip="Performance Monitoring">
+                    <i class="bi bi-graph-up me-2"></i>
+                    <span>Performance Monitoring</span>
+                </button>
+            </h2>
+            <div id="collapse-performance" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "DepartmentMetrics") || 
                                                                      ViewHelper.IsActive(ViewContext, "Management", "StaffPerformance") ||
                                                                      ViewHelper.IsActive(ViewContext, "Management", "StudentAchievement") ? "show" : "")" 
-         aria-labelledby="heading-performance" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("DepartmentMetrics", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "DepartmentMetrics") ? "active" : "")">Department Metrics</a></li>
-                <li><a href="@Url.Action("StaffPerformance", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StaffPerformance") ? "active" : "")">Staff Performance</a></li>
-                <li><a href="@Url.Action("StudentAchievement", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StudentAchievement") ? "active" : "")">Student Achievement</a></li>
-            </ul>
+                 aria-labelledby="heading-performance" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("DepartmentMetrics", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "DepartmentMetrics") ? "active" : "")">Department Metrics</a></li>
+                        <li><a href="@Url.Action("StaffPerformance", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StaffPerformance") ? "active" : "")">Staff Performance</a></li>
+                        <li><a href="@Url.Action("StudentAchievement", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "StudentAchievement") ? "active" : "")">Student Achievement</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- RESOURCE ALLOCATION -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-resources">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-resources"
-                aria-expanded="false"
-                aria-controls="collapse-resources"
-                data-tooltip="Resource Allocation">
-            <i class="bi bi-collection me-2"></i>
-            <span>Resource Allocation</span>
-        </button>
-    </h2>
-    <div id="collapse-resources" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "BudgetAllocation") || 
+        <!-- RESOURCE ALLOCATION -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-resources">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-resources"
+                        aria-expanded="false"
+                        aria-controls="collapse-resources"
+                        data-tooltip="Resource Allocation">
+                    <i class="bi bi-collection me-2"></i>
+                    <span>Resource Allocation</span>
+                </button>
+            </h2>
+            <div id="collapse-resources" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "BudgetAllocation") || 
                                                                    ViewHelper.IsActive(ViewContext, "Management", "Staffing") ||
                                                                    ViewHelper.IsActive(ViewContext, "Management", "Facilities") ? "show" : "")" 
-         aria-labelledby="heading-resources" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("BudgetAllocation", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "BudgetAllocation") ? "active" : "")">Budget Allocation</a></li>
-                <li><a href="@Url.Action("Staffing", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Staffing") ? "active" : "")">Staffing</a></li>
-                <li><a href="@Url.Action("Facilities", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Facilities") ? "active" : "")">Facilities</a></li>
-            </ul>
+                 aria-labelledby="heading-resources" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("BudgetAllocation", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "BudgetAllocation") ? "active" : "")">Budget Allocation</a></li>
+                        <li><a href="@Url.Action("Staffing", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Staffing") ? "active" : "")">Staffing</a></li>
+                        <li><a href="@Url.Action("Facilities", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "Facilities") ? "active" : "")">Facilities</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- REPORTS & ANALYTICS -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-reports">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-reports"
-                aria-expanded="false"
-                aria-controls="collapse-reports"
-                data-tooltip="Reports & Analytics">
-            <i class="bi bi-file-earmark-text me-2"></i>
-            <span>Reports & Analytics</span>
-        </button>
-    </h2>
-    <div id="collapse-reports" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "FinancialReports") || 
+        <!-- REPORTS & ANALYTICS -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-reports">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-reports"
+                        aria-expanded="false"
+                        aria-controls="collapse-reports"
+                        data-tooltip="Reports & Analytics">
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <span>Reports & Analytics</span>
+                </button>
+            </h2>
+            <div id="collapse-reports" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Management", "FinancialReports") || 
                                                                  ViewHelper.IsActive(ViewContext, "Management", "AcademicReports") ||
                                                                  ViewHelper.IsActive(ViewContext, "Management", "CustomReports") ? "show" : "")" 
-         aria-labelledby="heading-reports" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("FinancialReports", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "FinancialReports") ? "active" : "")">Financial Reports</a></li>
-                <li><a href="@Url.Action("AcademicReports", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "AcademicReports") ? "active" : "")">Academic Reports</a></li>
-                <li><a href="@Url.Action("CustomReports", "Management")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "CustomReports") ? "active" : "")">Custom Reports</a></li>
-            </ul>
+                 aria-labelledby="heading-reports" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("FinancialReports", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "FinancialReports") ? "active" : "")">Financial Reports</a></li>
+                        <li><a href="@Url.Action("AcademicReports", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "AcademicReports") ? "active" : "")">Academic Reports</a></li>
+                        <li><a href="@Url.Action("CustomReports", "Management")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Management", "CustomReports") ? "active" : "")">Custom Reports</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- SETTINGS -->
-<div class="accordion-item">
-    <h2 class="accordion-header" id="heading-settings">
-        <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-settings"
-                aria-expanded="false"
-                aria-controls="collapse-settings"
-                data-tooltip="Settings">
-            <i class="bi bi-gear me-2"></i>
-            <span>Settings</span>
-        </button>
-    </h2>
-    <div id="collapse-settings" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Account", "Profile") || 
+        <!-- SETTINGS -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-settings">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-settings"
+                        aria-expanded="false"
+                        aria-controls="collapse-settings"
+                        data-tooltip="Settings">
+                    <i class="bi bi-gear me-2"></i>
+                    <span>Settings</span>
+                </button>
+            </h2>
+            <div id="collapse-settings" class="accordion-collapse collapse @(ViewHelper.IsActive(ViewContext, "Account", "Profile") || 
                                                                   ViewHelper.IsActive(ViewContext, "Account", "ChangePassword") ? "show" : "")" 
-         aria-labelledby="heading-settings" data-bs-parent="#sidebarAccordion">
-        <div class="accordion-body p-0">
-            <ul class="nav flex-column ms-1 mb-2">
-                <li><a href="@Url.Action("Profile", "Account")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Account", "Profile") ? "active" : "")">My Profile</a></li>
-                <li><a href="@Url.Action("ChangePassword", "Account")" 
-                      class="nav-link @(ViewHelper.IsActive(ViewContext, "Account", "ChangePassword") ? "active" : "")">Change Password</a></li>
-                <li><a href="@Url.Action("Logout", "Account")" class="nav-link">Logout</a></li>
-            </ul>
+                 aria-labelledby="heading-settings" data-bs-parent="#sidebarAccordion">
+                <div class="accordion-body p-0">
+                    <ul class="nav flex-column ms-3 mb-2">
+                        <li><a href="@Url.Action("Profile", "Account")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Account", "Profile") ? "active" : "")">My Profile</a></li>
+                        <li><a href="@Url.Action("ChangePassword", "Account")" 
+                              class="nav-link @(ViewHelper.IsActive(ViewContext, "Account", "ChangePassword") ? "active" : "")">Change Password</a></li>
+                        <li><a href="@Url.Action("Logout", "Account")" class="nav-link text-danger">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
+</nav>
