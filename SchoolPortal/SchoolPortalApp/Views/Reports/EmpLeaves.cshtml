@@ -1,0 +1,203 @@
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Employee Leaves Report";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Employee Leaves Report</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item">Reports</li>
+        <li class="breadcrumb-item">Employee</li>
+        <li class="breadcrumb-item active">Leaves</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Employee Leaves
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="departmentFilter">Department</label>
+                        <select class="form-select" id="departmentFilter">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="leaveTypeFilter">Leave Type</label>
+                        <select class="form-select" id="leaveTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="Sick">Sick Leave</option>
+                            <option value="Casual">Casual Leave</option>
+                            <option value="Earned">Earned Leave</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="statusFilter">Status</label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button id="btnFilter" class="btn btn-primary me-2">Filter</button>
+                    <button id="btnReset" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="leavesTable" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Leave Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Days</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via AJAX -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#leavesTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/Reports/GetEmployeeLeaves',
+                    type: 'POST',
+                    data: function (d) {
+                        d.department = $('#departmentFilter').val();
+                        d.leaveType = $('#leaveTypeFilter').val();
+                        d.status = $('#statusFilter').val();
+                    }
+                },
+                columns: [
+                    { data: 'employeeId' },
+                    { data: 'employeeName' },
+                    { data: 'department' },
+                    { data: 'leaveType' },
+                    { 
+                        data: 'fromDate',
+                        render: function(data) {
+                            return new Date(data).toLocaleDateString();
+                        }
+                    },
+                    { 
+                        data: 'toDate',
+                        render: function(data) {
+                            return new Date(data).toLocaleDateString();
+                        }
+                    },
+                    { data: 'days' },
+                    { 
+                        data: 'status',
+                        render: function(data) {
+                            var badgeClass = 'bg-secondary';
+                            if (data === 'Approved') badgeClass = 'bg-success';
+                            else if (data === 'Rejected') badgeClass = 'bg-danger';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-primary view-btn" data-id="${row.id}" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info print-btn" data-id="${row.id}" title="Print">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                order: [[4, 'desc']], // Default sort by From Date
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print',
+                    {
+                        text: 'Export to Excel',
+                        action: function (e, dt, node, config) {
+                            // Custom export to Excel implementation
+                            window.location.href = '/Reports/ExportEmployeeLeavesToExcel';
+                        }
+                    }
+                ]
+            });
+
+            // Filter button click handler
+            $('#btnFilter').on('click', function() {
+                table.ajax.reload();
+            });
+
+            // Reset button click handler
+            $('#btnReset').on('click', function() {
+                $('#departmentFilter, #leaveTypeFilter, #statusFilter').val('');
+                table.ajax.reload();
+            });
+
+            // View button click handler
+            $('#leavesTable tbody').on('click', '.view-btn', function() {
+                var id = $(this).data('id');
+                // Implement view details functionality
+                window.location.href = `/Employee/LeaveDetails/${id}`;
+            });
+
+            // Print button click handler
+            $('#leavesTable tbody').on('click', '.print-btn', function() {
+                var id = $(this).data('id');
+                // Implement print functionality
+                window.open(`/Reports/PrintLeave/${id}`, '_blank');
+            });
+        });
+    </script>
+}
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_info {
+        padding-top: 10px;
+    }
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+    .badge {
+        font-size: 0.85em;
+        padding: 0.35em 0.65em;
+    }
+</style>

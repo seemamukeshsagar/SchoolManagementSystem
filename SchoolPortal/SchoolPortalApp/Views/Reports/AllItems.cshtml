@@ -1,0 +1,778 @@
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Inventory Items Report";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Inventory Items</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item">Reports</li>
+        <li class="breadcrumb-item">Inventory</li>
+        <li class="breadcrumb-item active">All Items</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-boxes me-1"></i>
+            Item Inventory
+            <div class="float-end">
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="fas fa-plus"></i> Add New Item
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="categoryFilter">Category</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <!-- Will be populated via AJAX -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="supplierFilter">Supplier</label>
+                        <select class="form-select" id="supplierFilter">
+                            <option value="">All Suppliers</option>
+                            <!-- Will be populated via AJAX -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="statusFilter">Stock Status</label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="in_stock">In Stock</option>
+                            <option value="low_stock">Low Stock</option>
+                            <option value="out_of_stock">Out of Stock</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button id="btnFilter" class="btn btn-primary me-2">Filter</button>
+                    <button id="btnReset" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="itemsTable" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
+                            <th>Unit</th>
+                            <th>In Stock</th>
+                            <th>Price</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via AJAX -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Item Modal -->
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addItemModalLabel">Add New Inventory Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addItemForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="itemName" class="form-label">Item Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="itemName" name="itemName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="itemCode" class="form-label">Item Code</label>
+                                <input type="text" class="form-control" id="itemCode" name="itemCode" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="categoryId" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="categoryId" name="categoryId" required>
+                                    <option value="">Select Category</option>
+                                    <!-- Will be populated via AJAX -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplierId" class="form-label">Supplier</label>
+                                <select class="form-select" id="supplierId" name="supplierId">
+                                    <option value="">Select Supplier</option>
+                                    <!-- Will be populated via AJAX -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="unit" class="form-label">Unit <span class="text-danger">*</span></label>
+                                <select class="form-select" id="unit" name="unit" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="Piece">Piece</option>
+                                    <option value="Box">Box</option>
+                                    <option value="Kg">Kilogram</option>
+                                    <option value="Gm">Gram</option>
+                                    <option value="Ltr">Liter</option>
+                                    <option value="Meter">Meter</option>
+                                    <option value="Set">Set</option>
+                                    <option value="Dozen">Dozen</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="purchasePrice" class="form-label">Purchase Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" step="0.01" class="form-control" id="purchasePrice" name="purchasePrice">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sellingPrice" class="form-label">Selling Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" step="0.01" class="form-control" id="sellingPrice" name="sellingPrice">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="minStock" class="form-label">Minimum Stock Level</label>
+                                <input type="number" class="form-control" id="minStock" name="minStock" value="5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View/Edit Item Modal -->
+<div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemDetailsModalLabel">Item Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">Basic Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <th>Item Code:</th>
+                                        <td id="detailItemCode"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Item Name:</th>
+                                        <td id="detailItemName"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Category:</th>
+                                        <td id="detailCategory"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Supplier:</th>
+                                        <td id="detailSupplier"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Unit:</th>
+                                        <td id="detailUnit"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description:</th>
+                                        <td id="detailDescription"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">Pricing & Stock</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <th>Purchase Price:</th>
+                                        <td id="detailPurchasePrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Selling Price:</th>
+                                        <td id="detailSellingPrice"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Current Stock:</th>
+                                        <td id="detailCurrentStock"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Min. Stock Level:</th>
+                                        <td id="detailMinStock"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Stock Status:</th>
+                                        <td><span id="detailStockStatus" class="badge"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Value:</th>
+                                        <td id="detailTotalValue"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Stock Movement</h6>
+                                <button class="btn btn-sm btn-primary" id="btnAddStock">
+                                    <i class="fas fa-plus"></i> Add Stock
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm" id="stockMovementTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Ref No.</th>
+                                                <th>In</th>
+                                                <th>Out</th>
+                                                <th>Balance</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated via AJAX -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnEditItem">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Stock Modal -->
+<div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStockModalLabel">Add Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addStockForm">
+                <div class="modal-body">
+                    <input type="hidden" id="itemIdForStock" name="itemId">
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" required min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="transactionType" class="form-label">Transaction Type <span class="text-danger">*</span></label>
+                        <select class="form-select" id="transactionType" name="transactionType" required>
+                            <option value="purchase">Purchase</option>
+                            <option value="return">Return</option>
+                            <option value="adjustment_in">Adjustment (In)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="referenceNo" class="form-label">Reference No.</label>
+                        <input type="text" class="form-control" id="referenceNo" name="referenceNo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#itemsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/Inventory/GetItems',
+                    type: 'POST',
+                    data: function (d) {
+                        d.categoryId = $('#categoryFilter').val();
+                        d.supplierId = $('#supplierFilter').val();
+                        d.status = $('#statusFilter').val();
+                    }
+                },
+                columns: [
+                    { data: 'itemCode' },
+                    { 
+                        data: 'itemName',
+                        render: function(data, type, row) {
+                            return `<a href="#" class="view-item" data-id="${row.id}">${data}</a>`;
+                        }
+                    },
+                    { data: 'categoryName' },
+                    { data: 'supplierName' },
+                    { data: 'unit' },
+                    { 
+                        data: 'quantityInStock',
+                        className: 'text-end'
+                    },
+                    { 
+                        data: 'sellingPrice',
+                        render: function(data) {
+                            return '₹' + parseFloat(data).toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        },
+                        className: 'text-end'
+                    },
+                    { 
+                        data: null,
+                        render: function(data, type, row) {
+                            const totalValue = row.quantityInStock * row.purchasePrice;
+                            return '₹' + totalValue.toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        },
+                        className: 'text-end'
+                    },
+                    { 
+                        data: 'stockStatus',
+                        render: function(data) {
+                            var badgeClass = 'bg-secondary';
+                            if (data === 'In Stock') badgeClass = 'bg-success';
+                            else if (data === 'Low Stock') badgeClass = 'bg-warning';
+                            else if (data === 'Out of Stock') badgeClass = 'bg-danger';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        },
+                        className: 'text-center'
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-primary view-item" data-id="${row.id}" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning edit-item" data-id="${row.id}" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-item" data-id="${row.id}" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                order: [[0, 'asc']],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print',
+                    {
+                        text: 'Export to Excel',
+                        action: function (e, dt, node, config) {
+                            window.location.href = '/Reports/ExportInventoryItems';
+                        }
+                    },
+                    {
+                        text: 'Print Barcode Labels',
+                        action: function (e, dt, node, config) {
+                            var selected = [];
+                            $('input[type="checkbox"]:checked').each(function() {
+                                selected.push($(this).val());
+                            });
+                            
+                            if (selected.length === 0) {
+                                alert('Please select at least one item');
+                                return;
+                            }
+                            
+                            window.open('/Inventory/PrintBarcodeLabels?ids=' + selected.join(','), '_blank');
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        checkboxes: {
+                            selectRow: true
+                        }
+                    }
+                ],
+                select: {
+                    style: 'multi'
+                },
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+                    
+                    // Calculate total of quantity in stock
+                    var totalQty = api
+                        .column(5, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseFloat(a) + parseFloat(b);
+                        }, 0);
+                    
+                    // Calculate total value
+                    var totalValue = 0;
+                    api.rows({ page: 'current' }).every(function () {
+                        var data = this.data();
+                        totalValue += data.quantityInStock * data.purchasePrice;
+                    });
+                    
+                    // Update footer
+                    $(api.column(5).footer()).html(
+                        '<strong>Total: ' + totalQty.toLocaleString() + '</strong>'
+                    );
+                    
+                    $(api.column(7).footer()).html(
+                        '<strong>₹' + totalValue.toLocaleString('en-IN', {minimumFractionDigits: 2}) + '</strong>'
+                    );
+                }
+            });
+
+            // Load categories for filter and form
+            function loadCategories() {
+                $.get('/api/Inventory/GetCategories', function(data) {
+                    var filterOptions = '<option value="">All Categories</option>';
+                    var formOptions = '<option value="">Select Category</option>';
+                    
+                    $.each(data, function(i, item) {
+                        filterOptions += `<option value="${item.id}">${item.name}</option>`;
+                        formOptions += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                    
+                    $('#categoryFilter').html(filterOptions);
+                    $('#categoryId').html(formOptions);
+                });
+            }
+
+            // Load suppliers for filter and form
+            function loadSuppliers() {
+                $.get('/api/Inventory/GetSuppliers', function(data) {
+                    var filterOptions = '<option value="">All Suppliers</option>';
+                    var formOptions = '<option value="">Select Supplier</option>';
+                    
+                    $.each(data, function(i, item) {
+                        filterOptions += `<option value="${item.id}">${item.name}</option>`;
+                        formOptions += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                    
+                    $('#supplierFilter').html(filterOptions);
+                    $('#supplierId').html(formOptions);
+                });
+            }
+
+            // Generate item code
+            function generateItemCode() {
+                // This is a simple implementation. You might want to customize this based on your needs.
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = 'ITM-';
+                for (let i = 0; i < 6; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
+
+            // Initialize form
+            function initAddItemForm() {
+                $('#itemCode').val(generateItemCode());
+                $('#addItemForm')[0].reset();
+                $('#itemCode').val(generateItemCode());
+            }
+
+            // Filter button click handler
+            $('#btnFilter').on('click', function() {
+                table.ajax.reload();
+            });
+
+            // Reset button click handler
+            $('#btnReset').on('click', function() {
+                $('#categoryFilter, #supplierFilter, #statusFilter').val('');
+                table.ajax.reload();
+            });
+
+            // View item details
+            $(document).on('click', '.view-item', function(e) {
+                e.preventDefault();
+                const itemId = $(this).data('id');
+                
+                // Fetch item details
+                $.get(`/api/Inventory/GetItem/${itemId}`, function(item) {
+                    // Populate modal
+                    $('#detailItemCode').text(item.itemCode);
+                    $('#detailItemName').text(item.itemName);
+                    $('#detailCategory').text(item.categoryName);
+                    $('#detailSupplier').text(item.supplierName || 'N/A');
+                    $('#detailUnit').text(item.unit);
+                    $('#detailDescription').text(item.description || 'N/A');
+                    $('#detailPurchasePrice').text('₹' + parseFloat(item.purchasePrice).toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                    $('#detailSellingPrice').text('₹' + parseFloat(item.sellingPrice).toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                    $('#detailCurrentStock').text(item.quantityInStock);
+                    $('#detailMinStock').text(item.minStockLevel);
+                    
+                    // Set stock status badge
+                    let statusBadge = $('#detailStockStatus');
+                    statusBadge.removeClass().addClass('badge');
+                    
+                    if (item.quantityInStock <= 0) {
+                        statusBadge.addClass('bg-danger').text('Out of Stock');
+                    } else if (item.quantityInStock <= item.minStockLevel) {
+                        statusBadge.addClass('bg-warning').text('Low Stock');
+                    } else {
+                        statusBadge.addClass('bg-success').text('In Stock');
+                    }
+                    
+                    // Calculate and set total value
+                    const totalValue = item.quantityInStock * item.purchasePrice;
+                    $('#detailTotalValue').text('₹' + totalValue.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                    
+                    // Load stock movement history
+                    loadStockMovement(itemId);
+                    
+                    // Store item ID for add stock form
+                    $('#itemIdForStock').val(itemId);
+                    
+                    // Show modal
+                    $('#itemDetailsModal').modal('show');
+                });
+            });
+
+            // Load stock movement history
+            function loadStockMovement(itemId) {
+                $.get(`/api/Inventory/GetItemStockMovement/${itemId}`, function(data) {
+                    const tbody = $('#stockMovementTable tbody');
+                    tbody.empty();
+                    
+                    if (data.length === 0) {
+                        tbody.append('<tr><td colspan="7" class="text-center">No stock movement records found</td></tr>');
+                        return;
+                    }
+                    
+                    $.each(data, function(i, record) {
+                        const row = `
+                            <tr>
+                                <td>${new Date(record.transactionDate).toLocaleDateString()}</td>
+                                <td>${record.transactionType}</td>
+                                <td>${record.referenceNo || 'N/A'}</td>
+                                <td class="text-end">${record.quantityIn > 0 ? record.quantityIn : ''}</td>
+                                <td class="text-end">${record.quantityOut > 0 ? record.quantityOut : ''}</td>
+                                <td class="text-end">${record.balance}</td>
+                                <td>${record.notes || ''}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                });
+            }
+
+            // Add stock button click handler
+            $('#btnAddStock').on('click', function() {
+                $('#addStockForm')[0].reset();
+                $('#addStockModal').modal('show');
+            });
+
+            // Submit add stock form
+            $('#addStockForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    itemId: $('#itemIdForStock').val(),
+                    quantity: parseFloat($('#quantity').val()),
+                    transactionType: $('#transactionType').val(),
+                    referenceNo: $('#referenceNo').val(),
+                    notes: $('#notes').val()
+                };
+                
+                $.ajax({
+                    url: '/api/Inventory/AddStock',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        toastr.success('Stock updated successfully');
+                        $('#addStockModal').modal('hide');
+                        
+                        // Refresh the item details and table
+                        const itemId = $('#itemIdForStock').val();
+                        loadStockMovement(itemId);
+                        table.ajax.reload();
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error updating stock: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                    }
+                });
+            });
+
+            // Submit add item form
+            $('#addItemForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    itemCode: $('#itemCode').val(),
+                    itemName: $('#itemName').val(),
+                    categoryId: $('#categoryId').val(),
+                    supplierId: $('#supplierId').val() || null,
+                    unit: $('#unit').val(),
+                    purchasePrice: parseFloat($('#purchasePrice').val()) || 0,
+                    sellingPrice: parseFloat($('#sellingPrice').val()) || 0,
+                    minStockLevel: parseInt($('#minStock').val()) || 0,
+                    description: $('#description').val()
+                };
+                
+                $.ajax({
+                    url: '/api/Inventory/AddItem',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        toastr.success('Item added successfully');
+                        $('#addItemModal').modal('hide');
+                        table.ajax.reload();
+                        initAddItemForm();
+                    },
+                    error: function(xhr) {
+                        toastr.error('Error adding item: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                    }
+                });
+            });
+
+            // Initialize the page
+            function initPage() {
+                loadCategories();
+                loadSuppliers();
+                initAddItemForm();
+            }
+
+            // Initialize the page when document is ready
+            initPage();
+        });
+    </script>
+}
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_info {
+        padding-top: 10px;
+    }
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+    .badge {
+        font-size: 0.85em;
+        padding: 0.35em 0.65em;
+    }
+    table.dataTable tbody td {
+        vertical-align: middle;
+    }
+    .table th {
+        white-space: nowrap;
+    }
+    .table td {
+        vertical-align: middle;
+    }
+    .text-end {
+        text-align: right !important;
+    }
+    .text-center {
+        text-align: center !important;
+    }
+    .modal-lg {
+        max-width: 90%;
+    }
+    .card {
+        margin-bottom: 1.5rem;
+        border: 1px solid #e3e6f0;
+        border-radius: 0.35rem;
+    }
+    .card-header {
+        background-color: #f8f9fc;
+        border-bottom: 1px solid #e3e6f0;
+        padding: 0.75rem 1.25rem;
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .table-sm td, .table-sm th {
+        padding: 0.3rem;
+    }
+    .form-label {
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+    }
+    .text-danger {
+        color: #e74a3b !important;
+    }
+    .bg-success {
+        background-color: #1cc88a !important;
+    }
+    .bg-warning {
+        background-color: #f6c23e !important;
+    }
+    .bg-danger {
+        background-color: #e74a3b !important;
+    }
+    .bg-secondary {
+        background-color: #858796 !important;
+    }
+    .bg-primary {
+        background-color: #4e73df !important;
+    }
+</style>

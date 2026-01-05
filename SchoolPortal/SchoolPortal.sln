@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolPortal.Services", "Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolPortalApp", "SchoolPortalApp\SchoolPortalApp.csproj", "{A244DCC9-C337-4E5A-A14E-38EF7FD45BEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolPortal.DTOs", "SchoolPortal.DTOs\SchoolPortal.DTOs.csproj", "{CDD271EA-6C4F-40AD-A812-300FE13B77B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{A244DCC9-C337-4E5A-A14E-38EF7FD45BEA}.Release|x64.Build.0 = Release|Any CPU
 		{A244DCC9-C337-4E5A-A14E-38EF7FD45BEA}.Release|x86.ActiveCfg = Release|Any CPU
 		{A244DCC9-C337-4E5A-A14E-38EF7FD45BEA}.Release|x86.Build.0 = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|x64.Build.0 = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Debug|x86.Build.0 = Debug|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|x64.ActiveCfg = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|x64.Build.0 = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|x86.ActiveCfg = Release|Any CPU
+		{CDD271EA-6C4F-40AD-A812-300FE13B77B6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

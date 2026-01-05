@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using SchoolPortalApp.Services;
+using ClosedXML.Excel;
+using ClosedXML.Excel.Drawings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +41,12 @@ builder.Configuration
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Preserve property casing
+    });
 
 // Add configuration
 var configuration = builder.Configuration;
@@ -186,6 +193,16 @@ builder.Services.AddAntiforgery(o =>
 	o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 // Register IHttpContextAccessor (singleton)
 builder.Services.AddHttpContextAccessor();
 
@@ -299,6 +316,9 @@ builder.Services.AddScoped<IAcademicYearService, SchoolPortal.Services.AcademicY
 builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
 builder.Services.AddScoped<INonTeachingQualificationDetailsService, NonTeachingQualificationDetailsService>();
+
+// Add services to the container
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Add application lifetime and logging for shutdown handling
 builder.Services.AddSingleton<ApplicationLifetimeService>();
