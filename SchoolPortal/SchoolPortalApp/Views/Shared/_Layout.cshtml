@@ -76,7 +76,7 @@
 	<header>
 		@if (User.Identity.IsAuthenticated)
 		{
-			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 				<div class="container-fluid">
 					<button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
 						<i class="bi bi-list"></i>
@@ -134,7 +134,7 @@
 		}
 		else
 		{
-			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 				<div class="container-fluid">
 					<a class="navbar-brand" asp-controller="Home" asp-action="Index">School Portal</a>
 					<div class="ms-auto">
@@ -149,7 +149,7 @@
 	<div class="main-container">
 		@if (isAuthenticated)
 		{
-			var userRole = Context.Session.GetString("UserRole") ?? "";
+			var userRole = Context.Session.GetString("RoleName") ?? "";
 			string navigationBar = "_NavigationBar"; // Default navigation bar
 
 			switch (userRole.ToLower())
@@ -184,7 +184,7 @@
 					navigationBar = "_ReceptionNavigationBar";
 					break;
 				case "user":
-					navigationBar = "";
+					navigationBar = "_NavigationBar";
 					break;
 			}
 
@@ -196,16 +196,16 @@
 		
 		<!-- MAIN CONTENT -->
 		<main role="main" class="content-area @(isAuthenticated ? "" : "full-width")" id="content">
-			<div class="body-scroll">
+			<div class="container-fluid py-3">
 				@RenderBody()
 			</div>
 		</main>
 	</div>
 
 	<!-- FOOTER -->
-	<footer class="border-top footer text-muted">
+	<footer>
 		<div class="container">
-			&copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+			&copy; @DateTime.Now.Year - SchoolPortal.Web - <a asp-area="" asp-page="/Privacy" class="text-light">Privacy</a>
 		</div>
 	</footer>
 
@@ -215,7 +215,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.js"></script>
 	<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
-
+	
 	<script>
 		async function setSchool(schoolId, element) {
 			try {
