@@ -71,6 +71,22 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	@RenderSection("Styles", required: false)
+
+	@if (User.Identity.IsAuthenticated)
+	{
+		<script>
+			window.userPermissions = @Json.Serialize(User.Claims
+				.Where(c => c.Type == "permission")
+				.Select(c => c.Value)
+				.ToList());
+		</script>
+	}
+	else
+	{
+		<script>
+			window.userPermissions = [];
+		</script>
+	}
 </head>
 <body>
 	<!-- HEADER -->

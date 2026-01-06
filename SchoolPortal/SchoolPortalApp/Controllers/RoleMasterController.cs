@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
-using SchoolPortalApp.Models;
+using SchoolPortalApp.ViewModels;
 using SchoolPortal.Services.IServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchoolPortalApp.Models;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -32,10 +33,10 @@ namespace SchoolPortalApp.Controllers
 			try
 			{
 				var roles = _service.GetAll()
-					.Select(r => new RoleMasterListItemViewModel
+					.Select(r => new Models.RoleMasterListItemViewModel
 					{
 						Id = r.Id,
-						RoleName = r.Name,
+						RoleName = r.Name, // Alias for compatibility
 						Description = r.Description,
 						IsActive = r.IsActive
 					})

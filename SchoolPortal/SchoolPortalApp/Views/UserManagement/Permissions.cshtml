@@ -1,0 +1,222 @@
+@model IEnumerable<SchoolPortalApp.ViewModels.RoleMasterListItemViewModel>
+
+@{
+    ViewData["Title"] = "Role Permissions";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Role Permissions</h1>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Roles</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach (var role in Model)
+                    {
+                        <a href="#" class="list-group-item list-group-item-action role-item @(role.IsActive ? "" : "text-muted")" 
+                           data-roleid="@role.Id">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">@role.RoleName</h6>
+                                <small>@(role.IsActive ? "Active" : "Inactive")</small>
+                            </div>
+                            <p class="mb-1 small text-muted">@(role.Description ?? "No description")</p>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Permissions</h6>
+                    <div class="d-none" id="roleTitle"></div>
+                </div>
+                <div class="card-body">
+                    <div id="permissionsContainer" class="d-none">
+                        <form id="permissionsForm">
+                            <input type="hidden" id="roleId" name="roleId" />
+                            
+                            <!-- Permissions will be loaded here via AJAX -->
+                            <div id="permissionsList">
+                                <div class="text-center text-muted py-5">
+                                    <i class="fas fa-shield-alt fa-3x mb-3"></i>
+                                    <p>Select a role to view and manage permissions</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-none" id="permissionsActions">
+                                <hr />
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="resetPermissions">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div id="noRoleSelected" class="text-center py-5">
+                        <i class="fas fa-shield-alt fa-4x text-gray-300 mb-3"></i>
+                        <h5 class="text-gray-500">No Role Selected</h5>
+                        <p class="text-muted small">Please select a role from the list to view and manage its permissions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .permission-group {
+            margin-bottom: 1.5rem;
+            border: 1px solid #e3e6f0;
+            border-radius: 0.35rem;
+            overflow: hidden;
+        }
+        
+        .permission-group-header {
+            padding: 0.75rem 1.25rem;
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: 600;
+        }
+        
+        .permission-item {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .permission-item:last-child {
+            border-bottom: none;
+        }
+        
+        .role-item.active {
+            background-color: #f8f9fc;
+            border-left: 4px solid #4e73df;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Handle role selection
+            $('.role-item').on('click', function(e) {
+                e.preventDefault();
+                $('.role-item').removeClass('active');
+                $(this).addClass('active');
+                
+                const roleId = $(this).data('roleid');
+                loadRolePermissions(roleId);
+            });
+            // Load permissions for selected role
+            function loadRolePermissions(roleId) {
+                $('#permissionsList').html(`
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>`);
+                $.get(`/api/UserManagementApi/roles/${roleId}/permissions`)
+                    .done(function(data) {
+                        renderPermissions(data);
+                        $('#permissionsActions').removeClass('d-none');
+                    })
+                    .fail(function() {
+                        $('#permissionsList').html(`
+                            <div class="alert alert-danger">
+                                Failed to load permissions. Please try again.
+                            </div>`);
+                    });
+            }
+            // Render permissions
+            function renderPermissions(permissions) {
+                const grouped = permissions.reduce((groups, perm) => {
+                    const category = perm.category || 'Other';
+                    if (!groups[category]) groups[category] = [];
+                    groups[category].push(perm);
+                    return groups;
+                }, {});
+                let html = '';
+                for (const [category, perms] of Object.entries(grouped)) {
+                    html += `
+                        <div class="permission-group mb-4">
+                            <div class="permission-group-header">${category}</div>`;
+                    perms.forEach(perm => {
+                        html += `
+                            <div class="permission-item">
+                                <div>
+                                    <h6 class="mb-0">${perm.description}</h6>
+                                    <small class="text-muted">${perm.name}</small>
+                                </div>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" 
+                                           id="perm_${perm.name}" 
+                                           data-permission="${perm.name}"
+                                           ${perm.isGranted ? 'checked' : ''}>
+                                    <label class="custom-control-label" for="perm_${perm.name}"></label>
+                                </div>
+                            </div>`;
+                    });
+                    html += `</div>`;
+                }
+                $('#permissionsList').html(html);
+            }
+            // Handle form submission
+            $('#permissionsForm').on('submit', function(e) {
+                e.preventDefault();
+                const roleId = $('#roleId').val();
+                const permissions = $('.permission-checkbox:checked').map((_, el) => 
+                    $(el).data('permission')).get();
+                
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalText = submitBtn.html();
+                submitBtn.prop('disabled', true)
+                    .html('<span class="spinner-border spinner-border-sm"></span> Saving...');
+                $.ajax({
+                    url: `/api/UserManagementApi/roles/${roleId}/permissions`,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ roleId, permissions }),
+                    success: function() {
+                        showToast('Success', 'Permissions updated successfully', 'success');
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.message || 'Error updating permissions';
+                        showToast('Error', error, 'error');
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false).html(originalText);
+                    }
+                });
+            });
+            // Helper function to show toast messages
+            function showToast(title, message, type) {
+                // Implement your toast notification here
+                console.log(`${title}: ${message} (${type})`);
+            }
+        });
+    </script>
+}

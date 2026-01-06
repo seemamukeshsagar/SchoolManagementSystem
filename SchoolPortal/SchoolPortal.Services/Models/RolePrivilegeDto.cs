@@ -12,5 +12,6 @@ namespace SchoolPortal.Services.Models
         public bool CanPrint { get; set; }
         public bool CanExport { get; set; }
         public bool CanImport { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

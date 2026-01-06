@@ -114,7 +114,7 @@ namespace SchoolPortalApp.Controllers
                 // Apply sorting
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
                 {
-                    var propertyInfo = typeof(SchoolPortal.Entities.Models.UserDetailsListViewModel).GetProperty(sortColumn, 
+                    var propertyInfo = typeof(UserDetailsListViewModel).GetProperty(sortColumn, 
                         System.Reflection.BindingFlags.IgnoreCase | 
                         System.Reflection.BindingFlags.Public | 
                         System.Reflection.BindingFlags.Instance);

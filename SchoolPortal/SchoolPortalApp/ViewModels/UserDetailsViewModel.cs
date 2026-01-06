@@ -1,10 +1,10 @@
-#nullable enable
-
 using System;
+using System.Collections.Generic;
+using SchoolPortal.Entities.Models;
 
-namespace SchoolPortalApp.Models
+namespace SchoolPortalApp.ViewModels
 {
-    public class UserDetailsListViewModel
+    public class UserDetailsViewModel
     {
         public Guid Id { get; set; }
         public string UserName { get; set; } = string.Empty;
@@ -12,18 +12,18 @@ namespace SchoolPortalApp.Models
         public string LastName { get; set; } = string.Empty;
         public string EmailAddress { get; set; } = string.Empty;
         public bool IsActive { get; set; }
-        
-        // ID fields
         public Guid DesignationId { get; set; }
-        public Guid? UserRoleId { get; set; }
-        public Guid? CompanyId { get; set; }
-        public Guid? SchoolId { get; set; }
-        
-        // Name fields (will be populated in the service)
-        public string FullName => $"{FirstName} {LastName}".Trim();
-        public string RoleName { get; set; } = string.Empty;
         public string DesignationName { get; set; } = string.Empty;
+        public Guid? UserRoleId { get; set; }
+        public string RoleName { get; set; } = string.Empty;
+        public List<string> Privileges { get; set; } = new();
+        public bool? IsSuperUser { get; set; }
+        public Guid? CompanyId { get; set; }
         public string CompanyName { get; set; } = string.Empty;
+        public Guid? SchoolId { get; set; }
         public string SchoolName { get; set; } = string.Empty;
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string FullName => $"{FirstName} {LastName}".Trim();
     }
 }

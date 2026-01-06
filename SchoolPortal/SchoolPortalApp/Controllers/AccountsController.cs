@@ -68,9 +68,9 @@ namespace SchoolPortalApp.Controllers
                     isActive = user.IsActive,
                     designation = user.DesignationName,
                     role = user.RoleName,
-                    address = user.Address,
-                    city = user.City,
-                    state = user.State
+                    //address = user.Address,
+                    //city = user.City,
+                    //state = user.State
                 });
             }
             catch (Exception ex)

@@ -1,24 +1,26 @@
 #nullable enable
-using OfficeOpenXml;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Text.RegularExpressions;
-using SchoolPortal.Services.Common;
-using SchoolPortal.Services.IServices;
-using Microsoft.Extensions.DependencyInjection;  // For DependencyInjection
-using SchoolPortal.DBAccess;
-using SchoolPortal.Services.Services;
-using Microsoft.AspNetCore.Authorization;
-using SchoolPortal.Services;
-using SchoolPortalApp.Helpers;
-using SchoolPortalApp.Utilities;  // For ConnectionStringHelper
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using SchoolPortalApp.Services;
 using ClosedXML.Excel;
 using ClosedXML.Excel.Drawings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.DependencyInjection;  // For DependencyInjection
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
+using SchoolPortal.DBAccess;
+using SchoolPortal.Services;
+using SchoolPortal.Services.Common;
+using SchoolPortal.Services.IServices;
+using SchoolPortal.Services.Services;
+using SchoolPortalApp.Helpers;
+using SchoolPortalApp.Services;
+using SchoolPortalApp.Utilities;  // For ConnectionStringHelper
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.RateLimiting;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,7 +73,7 @@ catch
 	catch
 	{
 		// Last resort: use ConnectionManager's FindWorkingConnectionString
-		connectionString = SchoolPortal.DBAccess.ConnectionManager.FindWorkingConnectionString() 
+		connectionString = SchoolPortal.DBAccess.ConnectionManager.FindWorkingConnectionString()
 			?? throw new InvalidOperationException("Could not determine a valid connection string. Please check your appsettings.json and ensure SQL Server is running.");
 	}
 }
@@ -113,8 +115,8 @@ builder.Configuration["ConnectionStrings:DefaultConnectionString"] = connectionS
 try
 {
 	var connectionManager = SchoolPortal.DBAccess.ConnectionManager.DefaultConnectionManager;
-	if (!string.IsNullOrWhiteSpace(connectionString) && 
-		!connectionString.Contains("{SQL_SERVER}") && 
+	if (!string.IsNullOrWhiteSpace(connectionString) &&
+		!connectionString.Contains("{SQL_SERVER}") &&
 		!connectionString.Contains("{DATABASE_NAME}"))
 	{
 		connectionManager.SetConnectionString(connectionString);
@@ -166,12 +168,16 @@ builder.Services.AddAuthorization(options =>
 	options.DefaultPolicy = new AuthorizationPolicyBuilder()
 		.RequireAuthenticatedUser()
 		.Build();
-	
+
 	// Add a fallback policy that allows anonymous access
 	options.FallbackPolicy = new AuthorizationPolicyBuilder()
 		.RequireAssertion(_ => true) // This allows all requests by default
 		.Build();
 });
+
+// Add health checks
+builder.Services.AddHealthChecks()
+	.AddCheck<DatabaseHealthCheck>("Database");
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -201,6 +207,17 @@ builder.Services.AddCors(options =>
 			.AllowAnyOrigin()
 			.AllowAnyMethod()
 			.AllowAnyHeader());
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+	options.AddFixedWindowLimiter("fixed", opt =>
+	{
+		opt.AutoReplenishment = true;
+		opt.PermitLimit = 100;
+		opt.Window = TimeSpan.FromMinutes(1);
+		opt.QueueLimit = 0;
+	});
 });
 
 // Register IHttpContextAccessor (singleton)
@@ -312,6 +329,9 @@ builder.Services.AddScoped<ISessionMasterService, SchoolPortal.Services.SessionM
 builder.Services.AddScoped<ITimeTablePeriodService, SchoolPortal.Services.TimeTablePeriodService>();
 builder.Services.AddScoped<IAcademicYearService, SchoolPortal.Services.AcademicYearService>();
 
+// Audit logging
+builder.Services.AddScoped<IAuditLogger, AuditLogger>();
+
 // Non-teaching staff services
 builder.Services.AddScoped<INonTeachingService, NonTeachingService>();
 builder.Services.AddScoped<INonTeachingDocumentDetailsService, NonTeachingDocumentDetailsService>();
@@ -358,6 +378,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Add rate limiting middleware
+app.UseRateLimiter();
+
+// Add request/response logging middleware
+app.UseMiddleware<SchoolPortalApp.Middleware.RequestResponseLoggingMiddleware>();
+
 app.UseSession();
 
 app.UseAuthentication();
@@ -366,6 +392,9 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapControllers();
+
+// Health check endpoint
+app.MapHealthChecks("/health");
 
 // Map specific controller routes (if needed)
 app.MapControllerRoute(

@@ -47,6 +47,21 @@ namespace SchoolPortal.Services.IServices
         Task<Guid> CreateAsync(RoleMaster entity);
 
         /// <summary>
+        /// Updates role permissions asynchronously
+        /// </summary>
+        /// <param name="roleId">The ID of the role to update</param>
+        /// <param name="permissions">Dictionary of permission names and their active state</param>
+        /// <returns>True if update was successful, false otherwise</returns>
+        Task<bool> UpdateRolePermissionsAsync(Guid roleId, Dictionary<string, bool> permissions);
+
+        /// <summary>
+        /// Gets a role by name asynchronously
+        /// </summary>
+        /// <param name="name">The name of the role to find</param>
+        /// <returns>The role if found, null otherwise</returns>
+        Task<RoleMaster?> GetByNameAsync(string name);
+
+        /// <summary>
         /// Updates an existing role asynchronously
         /// </summary>
         Task<bool> UpdateAsync(RoleMaster entity);

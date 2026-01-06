@@ -413,6 +413,16 @@ namespace SchoolPortal.Services
             }
         }
 
+        Task<bool> IRoleMasterService.UpdateRolePermissionsAsync(Guid roleId, Dictionary<string, bool> permissions)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<RoleMaster?> IRoleMasterService.GetByNameAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         ~RoleMasterService()
         {
             Dispose(false);

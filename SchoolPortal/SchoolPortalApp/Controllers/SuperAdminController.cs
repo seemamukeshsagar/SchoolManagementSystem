@@ -1,98 +1,163 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SchoolPortal.Entities.Models;
+using SchoolPortalApp.ViewModels;
+using SchoolPortal.Services.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using SchoolPortalApp.ViewModels;
 
 namespace SchoolPortalApp.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,SuperAdministrator,Super Administrator")]
-    public class SuperAdminController : Controller
-    {
-        private readonly ILogger<SuperAdminController> _logger;
+	[Authorize(Roles = "SuperAdmin,SuperAdministrator,Super Administrator")]
+	public class SuperAdminController : Controller
+	{
+		private readonly ILogger<SuperAdminController> _logger;
+		private readonly IUserDetailsService _userService;
+		private readonly IRoleMasterService _roleService;
 
-        public SuperAdminController(ILogger<SuperAdminController> logger)
-        {
-            _logger = logger;
-        }
+		public SuperAdminController(
+			ILogger<SuperAdminController> logger,
+			IUserDetailsService userService,
+			IRoleMasterService roleService)
+		{
+			_logger = logger;
+			_userService = userService ?? throw new ArgumentNullException(nameof(userService));
+			_roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
+		}
 
-        #region Dashboard Actions
-        public IActionResult Dashboard()
-        {
-            return View("Dashboard/Dashboard");
-        }
+		#region Dashboard Actions
+		public IActionResult Dashboard()
+		{
+			return View("Dashboard/Dashboard");
+		}
 
-        public IActionResult SystemHealth()
-        {
-            return View("Dashboard/SystemHealth");
-        }
+		public IActionResult SystemHealth()
+		{
+			return View("Dashboard/SystemHealth");
+		}
 
-        public IActionResult QuickActions()
-        {
-            return View("Dashboard/QuickActions");
-        }
+		public IActionResult QuickActions()
+		{
+			return View("Dashboard/QuickActions");
+		}
 
-        public IActionResult Alerts()
-        {
-            return View("Dashboard/Alerts");
-        }
-        #endregion
+		public IActionResult Alerts()
+		{
+			return View("Dashboard/Alerts");
+		}
+		#endregion
 
-        #region System Administration
-        public IActionResult SystemSettings()
-        {
-            return View("SystemAdmin/SystemSettings");
-        }
+		#region System Administration
+		public IActionResult SystemSettings()
+		{
+			return View("SystemAdmin/SystemSettings");
+		}
 
-        public IActionResult Database()
-        {
-            return View("SystemAdmin/Database");
-        }
+		public IActionResult Database()
+		{
+			return View("SystemAdmin/Database");
+		}
 
-        public IActionResult BackupRestore()
-        {
-            return View("SystemAdmin/BackupRestore");
-        }
-        #endregion
+		public IActionResult BackupRestore()
+		{
+			return View("SystemAdmin/BackupRestore");
+		}
+		#endregion
 
-        #region User Management
-        public IActionResult Users()
-        {
-            IEnumerable<UserViewModel> model = new List<UserViewModel>();
-            return View("UserManagement/Users", model);
-        }
+		#region User Management
+		public async Task<IActionResult> Users()
+		{
+			try
+			{
+				var users = _userService.GetAll();
+				var model = users.Select(u => new SchoolPortalApp.Models.UserDetailsListViewModel
+				{
+					Id = u.Id,
+					UserName = u.UserName,
+					FirstName = u.FirstName,
+					LastName = u.LastName,
+					EmailAddress = u.EmailAddress,
+					IsActive = u.IsActive
+				}).ToList();
 
-        public IActionResult Roles()
-        {
-            return View("UserManagement/Roles");
-        }
+				return View("UserManagement/Users", model);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error retrieving users");
+				TempData["ErrorMessage"] = "An error occurred while retrieving users.";
+				return View("UserManagement/Users", new List<SchoolPortalApp.Models.UserDetailsListViewModel>());
+			}
+		}
 
-        public IActionResult Permissions()
-        {
-            return View("UserManagement/Permissions");
-        }
-        #endregion
+		public async Task<IActionResult> Roles()
+		{
+			try
+			{
+				var roles = _roleService.GetAll() ?? new List<RoleMaster>();
+				var model = roles.Select(r => new RoleMasterListItemViewModel
+				{
+					Id = r.Id,
+					RoleName = r.Name,
+					Description = r.Description,
+					IsActive = r.IsActive
+				}).ToList();
 
-        #region Security
-        public IActionResult AuditLogs()
-        {
-            return View("Security/AuditLogs");
-        }
+				return View("UserManagement/Roles", model);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error retrieving roles");
+				TempData["ErrorMessage"] = "An error occurred while retrieving roles.";
+				return View("UserManagement/Roles", new List<RoleMasterListItemViewModel>());
+			}
+		}
 
-        public IActionResult SecuritySettings()
-        {
-            return View("Security/SecuritySettings");
-        }
-        #endregion
+		public async Task<IActionResult> Permissions()
+		{
+			try
+			{
+				var roles = _roleService.GetAll() ?? new List<RoleMaster>();
+				var model = roles.Select(r => new RoleMasterListItemViewModel
+				{
+					Id = r.Id,
+					RoleName = r.Name,
+					Description = r.Description,
+					IsActive = r.IsActive
+				}).ToList();
 
-        #region Error Handling
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error/DatabaseError");
-        }
-        #endregion
-    }
+				return View("UserManagement/Permissions", model);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading permissions");
+				TempData["ErrorMessage"] = "An error occurred while loading permissions.";
+				return View("UserManagement/Permissions", new List<RoleMasterListItemViewModel>());
+			}
+		}
+		#endregion
+
+		#region Security
+		public IActionResult AuditLogs()
+		{
+			return View("Security/AuditLogs");
+		}
+
+		public IActionResult SecuritySettings()
+		{
+			return View("Security/SecuritySettings");
+		}
+		#endregion
+
+		#region Error Handling
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View("Error/DatabaseError");
+		}
+		#endregion
+	}
 }

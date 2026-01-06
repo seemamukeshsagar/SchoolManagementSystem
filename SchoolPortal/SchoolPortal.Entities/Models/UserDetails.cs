@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolPortal.Entities.Models;
 
@@ -38,9 +39,15 @@ public partial class UserDetails
 
     public Guid? ModifiedBy { get; set; }
 
-    public DateTime? ModifiedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; } = DateTime.Now;
 
     public string Status { get; set; } = "INC";
 
     public string StatusMessage { get; set; } = "In Process....";
+
+    [NotMapped]
+    public string RoleName { get; set; } = string.Empty;
+    
+    [NotMapped]
+    public List<string> Privileges { get; set; } = new List<string>();
 }

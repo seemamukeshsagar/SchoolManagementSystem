@@ -31,4 +31,6 @@ public partial class RoleMaster
     public string Status { get; set; } = "INC";
 
     public string StatusMessage { get; set; } = "In Process....";
+
+    public bool IsSystemRole { get; set; } = false;
 }

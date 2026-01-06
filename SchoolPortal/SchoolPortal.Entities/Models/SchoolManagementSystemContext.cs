@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Schoolortal.Entities.Models;
+namespace SchoolPortal.Entities.Models;
 
 public partial class SchoolManagementSystemContext : DbContext
 {
@@ -12,6 +12,8 @@ public partial class SchoolManagementSystemContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
     // public virtual DbSet<AssesmentMaster> AssesmentMaster { get; set; }
 
