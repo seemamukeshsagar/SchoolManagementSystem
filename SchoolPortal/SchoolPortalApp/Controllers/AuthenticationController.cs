@@ -34,31 +34,31 @@ namespace SchoolPortalApp.Controllers
 			try
 			{
 				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                HttpContext.Session.Clear();
-                // Audit log the logout
-                if (!string.IsNullOrEmpty(userId))
-                {
-                    await _auditLogger.LogAsync(
-                        "UserLogout",
-                        "User logged out successfully",
-                        userId,
-                        ipAddress
-                    );
-                }
-                _logger.LogInformation("User {UserId} logged out from {IP}", userId, ipAddress);
+				var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+				await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+				HttpContext.Session.Clear();
+				// Audit log the logout
+				if (!string.IsNullOrEmpty(userId))
+				{
+					await _auditLogger.LogAsync(
+						"UserLogout",
+						"User logged out successfully",
+						userId,
+						ipAddress
+					);
+				}
+				_logger.LogInformation("User {UserId} logged out from {IP}", userId, ipAddress);
 			}
 			catch (System.Exception ex)
 			{
 				_logger.LogError(ex, "Error during logout");
-                // Still log the error to audit log
-                await _auditLogger.LogAsync(
-                    "LogoutError",
-                    $"Error during logout: {ex.Message}",
-                    User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "Unknown",
-                    HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
-                );
+				// Still log the error to audit log
+				await _auditLogger.LogAsync(
+					"LogoutError",
+					$"Error during logout: {ex.Message}",
+					User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "Unknown",
+					HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
+				);
 			}
 			return RedirectToAction("Login");
 		}
@@ -131,13 +131,13 @@ namespace SchoolPortalApp.Controllers
 					});
 					
 					// Audit log successful login
-                    await _auditLogger.LogAsync(
-                        "UserLogin",
-                        "User logged in successfully",
-                        userDetails.Id.ToString(),
-                        ipAddress
-                    );
-                    _logger.LogInformation("User {UserId} logged in from {IP}", userDetails.Id, ipAddress);
+					await _auditLogger.LogAsync(
+						"UserLogin",
+						"User logged in successfully",
+						userDetails.Id.ToString(),
+						ipAddress
+					);
+					_logger.LogInformation("User {UserId} logged in from {IP}", userDetails.Id, ipAddress);
 
 					// Redirect to home or returnUrl if provided
 					if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -148,12 +148,12 @@ namespace SchoolPortalApp.Controllers
 				}
 
 				// Audit log failed login attempt
-                await _auditLogger.LogAsync(
-                    "LoginFailed",
-                    $"Failed login attempt for username: {model.UserName}",
-                    "Anonymous",
-                    ipAddress
-                );
+				await _auditLogger.LogAsync(
+					"LoginFailed",
+					$"Failed login attempt for username: {model.UserName}",
+					"Anonymous",
+					ipAddress
+				);
 				
 				_logger.LogWarning("Authentication failed for user: {UserName}", model.UserName ?? string.Empty);
 				ModelState.AddModelError(string.Empty, "Invalid username or password.");
@@ -162,12 +162,12 @@ namespace SchoolPortalApp.Controllers
 			catch (System.Exception ex)
 			{
 				// Audit log login error
-                await _auditLogger.LogAsync(
-                    "LoginError",
-                    $"Error during login: {ex.Message}",
-                    "Anonymous",
-                    ipAddress
-                );
+				await _auditLogger.LogAsync(
+					"LoginError",
+					$"Error during login: {ex.Message}",
+					"Anonymous",
+					ipAddress
+				);
 				_logger.LogError(ex, "Error in Login POST method");
 				ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
 				return View(model);

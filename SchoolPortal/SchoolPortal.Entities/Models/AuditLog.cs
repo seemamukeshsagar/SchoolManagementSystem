@@ -12,16 +12,16 @@ namespace SchoolPortal.Entities.Models
         
         [Required]
         [MaxLength(100)]
-        public string Action { get; set; }
+        public string Action { get; set; } = string.Empty;
         
         [MaxLength(1000)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         
         [MaxLength(100)]
-        public string IpAddress { get; set; }
+        public string IpAddress { get; set; } = string.Empty;
         
         [Required]
         public DateTime Timestamp { get; set; }

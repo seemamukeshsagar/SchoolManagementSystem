@@ -28,6 +28,18 @@ namespace SchoolPortalApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult FeeStructure()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ReceivePayment()
+        {
+            return View();
+        }
+
         private readonly IUserDetailsService _userDetailsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
 using SchoolPortal.Services.IServices;
-using SchoolPortalApp.DTOs.UserManagement;
+using SchoolPortal.DTOs.UserManagement;
 using SchoolPortalApp.Helpers;
 using SchoolPortalApp.ViewModels;
 

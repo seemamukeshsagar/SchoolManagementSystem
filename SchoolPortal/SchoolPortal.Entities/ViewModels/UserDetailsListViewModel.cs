@@ -49,5 +49,5 @@ public class RolePrivilegeDto
     public bool CanExport { get; set; }
     public bool CanImport { get; set; }
     public bool IsActive { get; set; } = true;
-    public object Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

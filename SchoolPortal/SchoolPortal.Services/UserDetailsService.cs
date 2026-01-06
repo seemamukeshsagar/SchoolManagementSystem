@@ -191,7 +191,7 @@ namespace SchoolPortal.Services
         public UserDetails? GetById(Guid id)
         {
             var viewModel = GetUserDetailsByIdAsync(id).GetAwaiter().GetResult();
-            return MapToEntity(viewModel);
+            return MapToEntity(viewModel)!;
         }
 
         public async Task<Guid> CreateAsync(UserDetails entity)
@@ -219,7 +219,7 @@ namespace SchoolPortal.Services
 
                     if (dt.Rows.Count > 0 && dt.Rows[0]["Id"] != DBNull.Value)
                     {
-                        return Guid.Parse(dt.Rows[0]["Id"].ToString());
+                        return Guid.Parse(dt.Rows[0]["Id"]!.ToString()!);
                     }
                     return Guid.Empty;
                 });
@@ -341,7 +341,7 @@ namespace SchoolPortal.Services
                     SchoolName = row.Table.Columns.Contains("SchoolName") ? row["SchoolName"]?.ToString() ?? string.Empty : string.Empty,
                     IsSuperUser = row.Table.Columns.Contains("IsSuperUser") && bool.TryParse(row["IsSuperUser"]?.ToString(), out var isSuperUser) && isSuperUser,
                     CreatedDate = row.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(row["CreatedDate"]?.ToString(), out var createdDate) ? createdDate : DateTime.UtcNow,
-                    ModifiedDate = row.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(row["ModifiedDate"]?.ToString(), out var modifiedDate) ? modifiedDate : null
+                    ModifiedDate = row.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(row["ModifiedDate"]?.ToString(), out var modifiedDate) ? modifiedDate : DateTime.UtcNow
                 };
 
                 // Get role name and privileges if UserRoleId exists
@@ -372,7 +372,7 @@ namespace SchoolPortal.Services
         public UserDetails? GetByUsernameOrEmail(string usernameOrEmail)
         {
             var viewModel = GetByUsernameOrEmailAsync(usernameOrEmail).GetAwaiter().GetResult();
-            return MapToEntity(viewModel);
+            return MapToEntity(viewModel)!;
         }
 
         public async Task<UserDetailsViewModel?> GetByUsernameOrEmailAsync(string username, string email)
@@ -383,16 +383,10 @@ namespace SchoolPortal.Services
             return await GetByUsernameOrEmailAsync(email);
         }
 
-        // Overload for backward compatibility
         public UserDetails? GetByUsernameOrEmail(string username, string email)
         {
             var viewModel = GetByUsernameOrEmailAsync(username, email).GetAwaiter().GetResult();
-            return MapToEntity(viewModel);
-        }
-
-        private Dictionary<string, bool> ConvertToPermissionsDictionary(List<string> privileges)
-        {
-            return privileges?.ToDictionary(p => p, _ => true) ?? new Dictionary<string, bool>();
+            return MapToEntity(viewModel)!;
         }
 
         private async Task<byte[]> ReadFileAsync(string filePath)
@@ -405,7 +399,7 @@ namespace SchoolPortal.Services
             }
         }
         // Helper method to get role by name
-        private async Task<RoleMaster> GetRoleByNameAsync(string roleName)
+        private async Task<RoleMaster?> GetRoleByNameAsync(string roleName)
         {
             try
             {
@@ -419,7 +413,7 @@ namespace SchoolPortal.Services
                 return null;
             }
         }
-        private UserDetails MapToEntity(UserDetailsViewModel viewModel)
+        private UserDetails? MapToEntity(UserDetailsViewModel? viewModel)
         {
             if (viewModel == null) return null;
             return new UserDetails
@@ -436,70 +430,8 @@ namespace SchoolPortal.Services
                 CompanyId = viewModel.CompanyId,
                 SchoolId = viewModel.SchoolId,
                 CreatedDate = viewModel.CreatedDate,
-                ModifiedDate = (DateTime?)viewModel.ModifiedDate
+                ModifiedDate = viewModel.ModifiedDate
             };
-        }
-
-    //    public async Task<UserDetailsViewModel?> GetUserDetailsByIdAsync(Guid id)
-    //    {
-    //        try
-    //        {
-    //            var user = await Task.Run(() =>
-    //            {
-    //                Proc p = new Proc("UserDetails_GetById");
-    //                p["@Id"] = id;
-
-    //                var dt = new DataTable();
-    //                p.Exec(dt);
-
-    //                if (dt.Rows.Count == 0) return null;
-
-    //                var row = dt.Rows[0];
-    //                return new UserDetails
-    //                {
-    //                    Id = row.Table.Columns.Contains("Id") && Guid.TryParse(row["Id"]?.ToString(), out var idVal) ? idVal : Guid.Empty,
-    //                    UserName = row.Table.Columns.Contains("UserName") ? row["UserName"]?.ToString() : string.Empty,
-    //                    FirstName = row.Table.Columns.Contains("FirstName") ? row["FirstName"]?.ToString() : string.Empty,
-    //                    LastName = row.Table.Columns.Contains("LastName") ? row["LastName"]?.ToString() : string.Empty,
-    //                    EmailAddress = row.Table.Columns.Contains("EmailAddress") ? row["EmailAddress"]?.ToString() : string.Empty,
-    //                    IsActive = row.Table.Columns.Contains("IsActive") && bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
-    //                    UserRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId) ? roleId : (Guid?)null,
-    //                    DesignationId = row.Table.Columns.Contains("DesignationId") && Guid.TryParse(row["DesignationId"]?.ToString(), out var desigId) ? desigId : Guid.Empty,
-    //                    CompanyId = row.Table.Columns.Contains("CompanyId") && Guid.TryParse(row["CompanyId"]?.ToString(), out var compId) ? compId : (Guid?)null,
-    //                    SchoolId = row.Table.Columns.Contains("SchoolId") && Guid.TryParse(row["SchoolId"]?.ToString(), out var schoolId) ? schoolId : (Guid?)null,
-    //                    IsSuperUser = row.Table.Columns.Contains("IsSuperUser") && bool.TryParse(row["IsSuperUser"]?.ToString(), out var isSuperUser) && isSuperUser,
-    //                    CreatedDate = row.Table.Columns.Contains("CreatedDate") && DateTime.TryParse(row["CreatedDate"]?.ToString(), out var createdDate) ? createdDate : DateTime.UtcNow,
-    //                    ModifiedDate = row.Table.Columns.Contains("ModifiedDate") && DateTime.TryParse(row["ModifiedDate"]?.ToString(), out var modifiedDate) ? modifiedDate : (DateTime?)null
-    //                };
-    //            });
-
-    //            if (user == null) return null;
-
-    //            var viewModel = MapToViewModel(user);
-
-    //            // Get role name and privileges if UserRoleId exists
-    //            if (user.UserRoleId.HasValue)
-    //            {
-    //                var role = await _roleService.GetByIdAsync(user.UserRoleId.Value);
-    //                if (role != null)
-    //                {
-    //                    viewModel.RoleName = role.Name ?? string.Empty;
-
-    //                    // Get role privileges
-    //                    var privileges = await _roleService.GetRolePrivilegesAsync(role.Id);
-    //                    viewModel.Privileges = privileges != null
-    //? privileges.Select(p => p.Name?.ToString() ?? string.Empty).ToList()
-    //: new List<string>();
-    //                }
-    //            }
-
-    //            return viewModel;
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            _logger.LogError(ex, "Error getting user by ID: {UserId}", id);
-    //            return null;
-    //        }
-    //    }
+        }   
     }
 }

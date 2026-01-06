@@ -1,4 +1,4 @@
-namespace SchoolPortalApp.DTOs.UserManagement
+namespace SchoolPortal.DTOs.UserManagement
 {
     public class UpdatePermissionsRequest
     {

@@ -55,12 +55,12 @@ namespace SchoolPortal.Services.Models
         public IEnumerable<SelectListItem> Roles { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> Companies { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> Schools { get; set; } = Array.Empty<SelectListItem>();
-        public string RoleName { get; internal set; }
-        public object Privileges { get; internal set; }
-        public string DesignationName { get; internal set; }
-        public string CompanyName { get; internal set; }
-        public string SchoolName { get; internal set; }
-        public DateTime CreatedDate { get; internal set; }
-        public object ModifiedDate { get; internal set; }
+        public string RoleName { get; internal set; } = string.Empty;
+        public object Privileges { get; internal set; } = new List<string>();
+        public string DesignationName { get; internal set; } = string.Empty;
+        public string CompanyName { get; internal set; } = string.Empty;
+        public string SchoolName { get; internal set; } = string.Empty;
+        public DateTime CreatedDate { get; internal set; } = DateTime.UtcNow;
+        public DateTime? ModifiedDate { get; internal set; }
     }
 }

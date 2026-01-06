@@ -1,0 +1,362 @@
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Fees Collection Report";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Fees Collection Report</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+        <li class="breadcrumb-item">Reports</li>
+        <li class="breadcrumb-item">Students</li>
+        <li class="breadcrumb-item active">Fees Collection</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-money-bill-wave me-1"></i>
+            Fees Collection Details
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="classFilter">Class</label>
+                        <select class="form-select" id="classFilter">
+                            <option value="">All Classes</option>
+                            <!-- Will be populated via AJAX -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="feeTypeFilter">Fee Type</label>
+                        <select class="form-select" id="feeTypeFilter">
+                            <option value="">All Types</option>
+                            <!-- Will be populated via AJAX -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="dateRangeFilter">Date Range</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="startDate">
+                            <span class="input-group-text">to</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button id="btnFilter" class="btn btn-primary me-2">Filter</button>
+                    <button id="btnReset" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card bg-light">
+                        <div class="card-body py-2">
+                            <div class="row text-center">
+                                <div class="col-md-3 border-end">
+                                    <h6 class="text-muted mb-0">Total Collection</h6>
+                                    <h4 class="mb-0 text-primary" id="totalCollection">₹0.00</h4>
+                                </div>
+                                <div class="col-md-3 border-end">
+                                    <h6 class="text-muted mb-0">Total Fees</h6>
+                                    <h4 class="mb-0 text-success" id="totalFees">₹0.00</h4>
+                                </div>
+                                <div class="col-md-3 border-end">
+                                    <h6 class="text-muted mb-0">Total Discount</h6>
+                                    <h4 class="mb-0 text-info" id="totalDiscount">₹0.00</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="text-muted mb-0">Total Fine</h6>
+                                    <h4 class="mb-0 text-danger" id="totalFine">₹0.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="feesTable" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Receipt No</th>
+                            <th>Date</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Fee Type</th>
+                            <th>Amount</th>
+                            <th>Discount</th>
+                            <th>Fine</th>
+                            <th>Paid</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be loaded via AJAX -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Set default date range (current month)
+            var today = new Date();
+            var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            var lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            
+            $('#startDate').val(formatDate(firstDay));
+            $('#endDate').val(formatDate(lastDay));
+
+            // Initialize DataTable
+            var table = $('#feesTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/Reports/GetFeesCollection',
+                    type: 'POST',
+                    data: function (d) {
+                        d.classId = $('#classFilter').val();
+                        d.feeTypeId = $('#feeTypeFilter').val();
+                        d.startDate = $('#startDate').val();
+                        d.endDate = $('#endDate').val();
+                    },
+                    dataSrc: function (json) {
+                        // Update summary cards
+                        $('#totalCollection').text('₹' + json.summary.totalCollection.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                        $('#totalFees').text('₹' + json.summary.totalFees.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                        $('#totalDiscount').text('₹' + json.summary.totalDiscount.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                        $('#totalFine').text('₹' + json.summary.totalFine.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                        
+                        return json.data;
+                    }
+                },
+                columns: [
+                    { 
+                        data: 'receiptNo',
+                        render: function(data, type, row) {
+                            return `<a href="/Fees/PaymentReceipt/${row.id}" target="_blank">${data}</a>`;
+                        }
+                    },
+                    { 
+                        data: 'paymentDate',
+                        render: function(data) {
+                            return new Date(data).toLocaleDateString();
+                        }
+                    },
+                    { 
+                        data: 'studentName',
+                        render: function(data, type, row) {
+                            return `<a href="/Students/Details/${row.studentId}">${data}</a>`;
+                        }
+                    },
+                    { data: 'className' },
+                    { data: 'feeType' },
+                    { 
+                        data: 'amount',
+                        render: function(data) {
+                            return '₹' + parseFloat(data).toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        }
+                    },
+                    { 
+                        data: 'discount',
+                        render: function(data) {
+                            return '₹' + parseFloat(data || 0).toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        }
+                    },
+                    { 
+                        data: 'fine',
+                        render: function(data) {
+                            return '₹' + parseFloat(data || 0).toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        }
+                    },
+                    { 
+                        data: 'paidAmount',
+                        render: function(data) {
+                            return '₹' + parseFloat(data).toLocaleString('en-IN', {minimumFractionDigits: 2});
+                        }
+                    },
+                    { 
+                        data: 'status',
+                        render: function(data) {
+                            var badgeClass = 'bg-secondary';
+                            if (data === 'Paid') badgeClass = 'bg-success';
+                            else if (data === 'Partial') badgeClass = 'bg-warning';
+                            else if (data === 'Cancelled') badgeClass = 'bg-danger';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="btn-group">
+                                    <a href="/Fees/PaymentReceipt/${row.id}" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">
+                                        <i class="fas fa-receipt"></i>
+                                    </a>
+                                    <a href="/Fees/PrintReceipt/${row.id}" class="btn btn-sm btn-info" title="Print" target="_blank">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                    ${row.status !== 'Cancelled' ? `
+                                    <a href="/Fees/EditPayment/${row.id}" class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-danger cancel-payment" data-id="${row.id}" title="Cancel">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                order: [[1, 'desc']], // Default sort by Date
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print',
+                    {
+                        text: 'Export to Excel',
+                        action: function (e, dt, node, config) {
+                            var params = {
+                                classId: $('#classFilter').val(),
+                                feeTypeId: $('#feeTypeFilter').val(),
+                                startDate: $('#startDate').val(),
+                                endDate: $('#endDate').val(),
+                                exportType: 'excel'
+                            };
+                            
+                            var queryString = Object.keys(params)
+                                .filter(key => params[key] !== undefined && params[key] !== '')
+                                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+                                .join('&');
+                            
+                            window.location.href = '/Reports/ExportFeesCollection?' + queryString;
+                        }
+                    },
+                    {
+                        text: 'Print Summary',
+                        action: function (e, dt, node, config) {
+                            var params = {
+                                classId: $('#classFilter').val(),
+                                feeTypeId: $('#feeTypeFilter').val(),
+                                startDate: $('#startDate').val(),
+                                endDate: $('#endDate').val(),
+                                reportType: 'summary'
+                            };
+                            
+                            var queryString = Object.keys(params)
+                                .filter(key => params[key] !== undefined && params[key] !== '')
+                                .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+                                .join('&');
+                            
+                            window.open('/Reports/PrintFeesReport?' + queryString, '_blank');
+                        }
+                    }
+                ]
+            });
+
+            // Load classes for filter
+            $.get('/api/Classes/GetAll', function(data) {
+                var options = '<option value="">All Classes</option>';
+                $.each(data, function(i, item) {
+                    options += `<option value="${item.id}">${item.name}</option>`;
+                });
+                $('#classFilter').html(options);
+            });
+
+            // Load fee types for filter
+            $.get('/api/FeeTypes/GetAll', function(data) {
+                var options = '<option value="">All Types</option>';
+                $.each(data, function(i, item) {
+                    options += `<option value="${item.id}">${item.name}</option>`;
+                });
+                $('#feeTypeFilter').html(options);
+            });
+
+            // Filter button click handler
+            $('#btnFilter').on('click', function() {
+                table.ajax.reload();
+            });
+
+            // Reset button click handler
+            $('#btnReset').on('click', function() {
+                $('#classFilter, #feeTypeFilter').val('');
+                $('#startDate').val(formatDate(firstDay));
+                $('#endDate').val(formatDate(lastDay));
+                table.ajax.reload();
+            });
+
+            // Cancel payment handler
+            $('#feesTable tbody').on('click', '.cancel-payment', function() {
+                if (confirm('Are you sure you want to cancel this payment?')) {
+                    var paymentId = $(this).data('id');
+                    $.post(`/api/Fees/CancelPayment/${paymentId}`)
+                        .done(function() {
+                            table.ajax.reload();
+                            toastr.success('Payment cancelled successfully');
+                        })
+                        .fail(function() {
+                            toastr.error('Error cancelling payment');
+                        });
+                }
+            });
+
+            // Helper function to format date as YYYY-MM-DD
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
+        });
+    </script>
+}
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+        float: right;
+    }
+    .dataTables_wrapper .dataTables_info {
+        padding-top: 10px;
+    }
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+    .badge {
+        font-size: 0.85em;
+        padding: 0.35em 0.65em;
+    }
+    table.dataTable tbody td {
+        vertical-align: middle;
+    }
+    .card.bg-light {
+        margin-bottom: 20px;
+        border: 1px solid #e3e6f0;
+    }
+    .text-muted {
+        font-size: 0.8rem;
+    }
+    .mb-0 {
+        font-weight: 600;
+    }
+</style>

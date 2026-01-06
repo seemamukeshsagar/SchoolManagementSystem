@@ -62,14 +62,14 @@
                 <div class="accordion-body p-0">
                     <ul class="nav flex-column ms-3 mb-2">
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "ClassMaster")" class="nav-link">Classes</a>
+                            <a href="@Url.Action("Index", "Class")" class="nav-link">Classes</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "SubjectMaster")" class="nav-link">Subjects</a>
+                            <a href="@Url.Action("Index", "Section")" class="nav-link">Sections</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "SectionMaster")" class="nav-link">Sections</a>
-                        </li>
+                            <a href="@Url.Action("Index", "Subject")" class="nav-link">Subjects</a>
+                        </li>                        
                     </ul>
                 </div>
             </div>
@@ -134,7 +134,7 @@
 
         <ul class="nav nav-pills flex-column mb-2">
             <li class="nav-item mt-2">
-                <a href="@Url.Action("Profile", "Account")" class="nav-link" data-tooltip="My Profile">
+                <a href="@Url.Action("UserProfile", "Accounts")" class="nav-link" data-tooltip="My Profile">
                     <i class="bi bi-person"></i>
                     <span>My Profile</span>
                 </a>

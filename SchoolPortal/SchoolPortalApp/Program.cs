@@ -21,6 +21,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.RateLimiting;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SchoolPortal.Entities.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -136,6 +138,10 @@ catch (Exception ex)
 
 // Add data services and configure dependency injection
 builder.Services.AddDataServices();
+
+// Register AppDbContext with Entity Framework
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 // Add memory cache
 builder.Services.AddMemoryCache();
