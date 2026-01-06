@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using SchoolPortalApp.ViewModels;
 
 namespace SchoolPortalApp.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,SuperAdministrator,Super Administrator")]
     public class SuperAdminController : Controller
     {
         private readonly ILogger<SuperAdminController> _logger;
@@ -58,7 +60,8 @@ namespace SchoolPortalApp.Controllers
         #region User Management
         public IActionResult Users()
         {
-            return View("UserManagement/Users");
+            IEnumerable<UserViewModel> model = new List<UserViewModel>();
+            return View("UserManagement/Users", model);
         }
 
         public IActionResult Roles()

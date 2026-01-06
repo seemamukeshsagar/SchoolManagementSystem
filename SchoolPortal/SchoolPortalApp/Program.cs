@@ -43,10 +43,10 @@ builder.Configuration
 builder.Services.AddRazorPages();
 //builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Preserve property casing
-    });
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.PropertyNamingPolicy = null; // Preserve property casing
+	});
 
 // Add configuration
 var configuration = builder.Configuration;
@@ -196,11 +196,11 @@ builder.Services.AddAntiforgery(o =>
 // Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+	options.AddPolicy("AllowAll",
+		builder => builder
+			.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader());
 });
 
 // Register IHttpContextAccessor (singleton)

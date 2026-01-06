@@ -104,6 +104,10 @@ namespace SchoolPortalApp.Controllers
 						new Claim(ClaimTypes.Name, userDetails.FullName ?? userDetails.UserName ?? string.Empty),
 						new Claim("UserName", userDetails.UserName ?? string.Empty)
 					};
+					if (!string.IsNullOrWhiteSpace(userDetails.RoleName))
+					{
+						claims.Add(new Claim(ClaimTypes.Role, userDetails.RoleName));
+					}
 					// Add role/privilege claims if needed
 					foreach (var p in userDetails.Privileges ?? Enumerable.Empty<string>())
 					{

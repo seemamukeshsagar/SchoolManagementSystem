@@ -6,6 +6,9 @@
     <Platform Name="Any CPU" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="C:/Users/mukes/Desktop/MenuItems.xlsx" />
+  </Folder>
   <Project Path="DBAccess/DBAccess.csproj" Id="06c46e69-2643-401f-9d84-8d31baf6a4ee">
     <BuildType Solution="Development|*" Project="Release" />
     <Platform Solution="*|x86" Project="x86" />
