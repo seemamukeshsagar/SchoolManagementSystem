@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SchoolPortalApp.Controllers
 {
-	[Authorize(Roles = "SuperAdmin,SuperAdministrator,Super Administrator")]
+	//[Authorize(Roles = "SuperAdmin,SuperAdministrator,Super Administrator")]
 	public class SuperAdminController : Controller
 	{
 		private readonly ILogger<SuperAdminController> _logger;
@@ -72,15 +72,30 @@ namespace SchoolPortalApp.Controllers
 		{
 			try
 			{
+				// Get all users with their role information
 				var users = _userService.GetAll();
-				var model = users.Select(u => new SchoolPortalApp.Models.UserDetailsListViewModel
+				
+				// Map to UserViewModel
+				var model = users.Select(u => new UserViewModel
 				{
-					Id = u.Id,
+					Id = u.Id.ToString(),
 					UserName = u.UserName,
 					FirstName = u.FirstName,
 					LastName = u.LastName,
-					EmailAddress = u.EmailAddress,
-					IsActive = u.IsActive
+					Email = u.EmailAddress,
+					IsActive = u.IsActive,
+					RoleName = u.RoleName
+					// Map the RoleName from UserDetailsListViewModel to a list of RoleViewModel
+					// Roles = !string.IsNullOrEmpty(u.RoleName)
+					// 	? new List<RoleViewModel>
+					// 	{
+					// 		new RoleViewModel
+					// 		{
+					// 			Id = u.UserRoleId?.ToString() ?? string.Empty,
+					// 			Name = u.RoleName
+					// 		}
+					// 	}
+					// 	: new List<RoleViewModel>()
 				}).ToList();
 
 				return View("UserManagement/Users", model);
@@ -89,7 +104,7 @@ namespace SchoolPortalApp.Controllers
 			{
 				_logger.LogError(ex, "Error retrieving users");
 				TempData["ErrorMessage"] = "An error occurred while retrieving users.";
-				return View("UserManagement/Users", new List<SchoolPortalApp.Models.UserDetailsListViewModel>());
+				return View("UserManagement/Users", new List<UserViewModel>());
 			}
 		}
 

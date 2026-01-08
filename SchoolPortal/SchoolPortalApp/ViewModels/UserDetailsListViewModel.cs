@@ -32,5 +32,8 @@ namespace SchoolPortalApp.ViewModels
 		
 		// Navigation properties
 		public List<RolePrivilegeDto> RolePrivileges { get; set; } = new List<RolePrivilegeDto>();
+
+		// Audit fields
+		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 	}
 }

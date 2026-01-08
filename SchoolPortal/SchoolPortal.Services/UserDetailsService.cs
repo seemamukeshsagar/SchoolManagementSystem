@@ -81,9 +81,24 @@ namespace SchoolPortal.Services
                     try
                     {
                         var userId = Guid.TryParse(row["Id"]?.ToString(), out var id) ? id : Guid.Empty;
-                        var userRoleId = row.Table.Columns.Contains("UserRoleId") && Guid.TryParse(row["UserRoleId"]?.ToString(), out var roleId)
-                            ? roleId
-                            : (Guid?)null;
+                        
+                        // Try to get UserRoleId from either UserRoleId or RoleId column
+                        Guid? userRoleId = null;
+                        if (row.Table.Columns.Contains("UserRoleId") && 
+                            Guid.TryParse(row["UserRoleId"]?.ToString(), out var userRoleIdValue))
+                        {
+                            userRoleId = userRoleIdValue;
+                        }
+                        else if (row.Table.Columns.Contains("RoleId") && 
+                                Guid.TryParse(row["RoleId"]?.ToString(), out var roleIdValue))
+                        {
+                            userRoleId = roleIdValue;
+                            _logger.LogWarning($"Using 'RoleId' column instead of 'UserRoleId' for user {userId}");
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"No valid role ID found for user {userId}");
+                        }
 
                         var user = new UserDetailsListViewModel
                         {
