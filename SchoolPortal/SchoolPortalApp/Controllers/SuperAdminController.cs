@@ -102,21 +102,20 @@ namespace SchoolPortalApp.Controllers
 			try
 			{
 				var roles = _roleService.GetAll() ?? new List<RoleMaster>();
-				var model = roles.Select(r => new RoleMasterListItemViewModel
+				var model = roles.Select(r => new RoleViewModel
 				{
-					Id = r.Id,
+					Id = r.Id.ToString(),
 					RoleName = r.Name,
 					Description = r.Description,
 					IsActive = r.IsActive
 				}).ToList();
-
 				return View("UserManagement/Roles", model);
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, "Error retrieving roles");
 				TempData["ErrorMessage"] = "An error occurred while retrieving roles.";
-				return View("UserManagement/Roles", new List<RoleMasterListItemViewModel>());
+				return View("UserManagement/Roles", new List<RoleViewModel>());
 			}
 		}
 

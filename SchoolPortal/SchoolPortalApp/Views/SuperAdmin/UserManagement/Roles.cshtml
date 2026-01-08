@@ -23,7 +23,7 @@
                             <div class="col mr-2">
                                 <div class="d-flex justify-content-between">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        @role.Name
+                                        @role.RoleName
                                     </div>
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-link text-gray-400" type="button" id="roleMenu-@role.Id" data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,7 +73,7 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="roleName-@role.Id" class="form-label">Role Name</label>
-                                    <input type="text" class="form-control" id="roleName-@role.Id" value="@role.Name" @(role.IsSystemRole ? "disabled" : "")>
+                                    <input type="text" class="form-control" id="roleName-@role.Id" value="@role.RoleName" @(role.IsSystemRole ? "disabled" : "")>
                                 </div>
                                 <div class="mb-3">
                                     <label for="roleDescription-@role.Id" class="form-label">Description</label>
@@ -103,7 +103,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete the role <strong>@role.Name</strong>?</p>
+                            <p>Are you sure you want to delete the role <strong>@role.RoleName</strong>?</p>
                             @if (role.UsersCount > 0)
                             {
                                 <div class="alert alert-warning">
@@ -115,7 +115,7 @@
                                     <select class="form-select">
                                         @foreach (var otherRole in Model.Where(r => r.Id != role.Id))
                                         {
-                                            <option value="@otherRole.Id">@otherRole.Name (@otherRole.UsersCount users)</option>
+                                            <option value="@otherRole.Id">@otherRole.RoleName (@otherRole.UsersCount users)</option>
                                         }
                                     </select>
                                 </div>
@@ -203,7 +203,7 @@
                             <option value="">-- Select a role to copy --</option>
                             @foreach (var role in Model)
                             {
-                                <option value="@role.Id">@role.Name</option>
+                                <option value="@role.Id">@role.RoleName</option>
                             }
                         </select>
                     </div>

@@ -2,6 +2,14 @@
 @{
     ViewData["Title"] = "User Management";
     Layout = "_Layout";
+    
+    // Debug information
+    var modelType = Model?.GetType().FullName ?? "null";
+    var modelItems = Model?.Count() ?? 0;
+    <div class="alert alert-info d-none" id="debugInfo" data-model-type="@modelType">
+        Model Type: @modelType<br/>
+        Items in Model: @modelItems
+    </div>
 }
 
 <div class="container-fluid">
@@ -325,6 +333,22 @@
 @section Scripts {
     <script src="~/js/userManagement.js"></script>
     <script>
+        // Debug: Log model type to console
+        document.addEventListener('DOMContentLoaded', function() {
+            const debugInfo = document.getElementById('debugInfo');
+            if (debugInfo) {
+                const modelType = debugInfo.getAttribute('data-model-type');
+                console.log('Current model type:', modelType);
+                console.log('Expected model type: System.Collections.Generic.IEnumerable`1[[SchoolPortalApp.ViewModels.UserViewModel]]');
+                
+                // If there's a mismatch, log it as an error
+                if (modelType && !modelType.includes('IEnumerable`1[[SchoolPortalApp.ViewModels.UserViewModel]]')) {
+                    console.error('Model type mismatch detected!');
+                    console.error('Expected: IEnumerable<SchoolPortalApp.ViewModels.UserViewModel>');
+                    console.error('Actual: ' + modelType);
+                }
+            }
+        });
         // Initialize DataTable
         $(document).ready(function() {
             $('#usersTable').DataTable({
