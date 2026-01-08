@@ -85,17 +85,6 @@ namespace SchoolPortalApp.Controllers
 					Email = u.EmailAddress,
 					IsActive = u.IsActive,
 					RoleName = u.RoleName
-					// Map the RoleName from UserDetailsListViewModel to a list of RoleViewModel
-					// Roles = !string.IsNullOrEmpty(u.RoleName)
-					// 	? new List<RoleViewModel>
-					// 	{
-					// 		new RoleViewModel
-					// 		{
-					// 			Id = u.UserRoleId?.ToString() ?? string.Empty,
-					// 			Name = u.RoleName
-					// 		}
-					// 	}
-					// 	: new List<RoleViewModel>()
 				}).ToList();
 
 				return View("UserManagement/Users", model);

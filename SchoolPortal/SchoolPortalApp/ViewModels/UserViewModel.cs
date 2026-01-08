@@ -52,5 +52,8 @@ namespace SchoolPortalApp.ViewModels
 
         [Display(Name = "Permissions")]
         public List<PermissionViewModel> Permissions { get; set; } = new List<PermissionViewModel>();
+
+        [Display(Name = "Role Name")]
+        public string RoleName { get; set; }
     }
 }

@@ -121,17 +121,7 @@
                                 </td>
                                 <td>@user.Email</td>
                                 <td>
-                                    @if (user.Roles != null && user.Roles.Any())
-                                    {
-                                        foreach (var role in user.Roles)
-                                        {
-                                            <span class="badge bg-primary me-1">@role.Name</span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No roles assigned</span>
-                                    }
+                                    @user.RoleName
                                 </td>
                                 <td>@(user.LastLogin?.ToString("dd MMM yyyy HH:mm") ?? "Never")</td>
                                 <td>

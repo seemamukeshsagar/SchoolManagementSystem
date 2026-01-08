@@ -109,9 +109,10 @@ namespace SchoolPortal.Services
                             EmailAddress = row["EmailAddress"]?.ToString() ?? string.Empty,
                             IsActive = bool.TryParse(row["IsActive"]?.ToString(), out var isActive) && isActive,
                             DesignationName = row["DesignationName"]?.ToString() ?? string.Empty,
-                            RoleName = userRoleId.HasValue && roles.TryGetValue(userRoleId.Value, out var roleName)
-                                ? roleName
-                                : string.Empty,
+                            RoleName = row["RoleName"]?.ToString() ?? string.Empty,
+                            //RoleName = userRoleId.HasValue && roles.TryGetValue(userRoleId.Value, out var roleName)
+                            //    ? roleName
+                            //    : string.Empty,
                             CompanyName = row.Table.Columns.Contains("CompanyId") &&
                                          Guid.TryParse(row["CompanyId"]?.ToString(), out var companyId) &&
                                          companies.TryGetValue(companyId, out var companyName)
