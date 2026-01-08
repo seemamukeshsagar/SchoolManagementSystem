@@ -148,10 +148,10 @@
                 <div class="accordion-body p-0">
                     <ul class="nav flex-column ms-3 mb-2">
                         <li class="nav-item">
-                            <a href="@Url.Action("Users", "SuperAdmin")" class="nav-link">All Users</a>
+                            <a href="@Url.Action("Users", "SuperAdmin", new { area = "UserManagement" })" class="nav-link">All Users</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Roles", "SuperAdmin")" class="nav-link">Roles & Permissions</a>
+                            <a href="@Url.Action("Roles", "SuperAdmin", new { area = "UserManagement" })" class="nav-link">Roles & Permissions</a>
                         </li>
                         <li class="nav-item">
                             <a href="@Url.Action("ActivityLogs", "SuperAdmin")" class="nav-link">Activity Logs</a>

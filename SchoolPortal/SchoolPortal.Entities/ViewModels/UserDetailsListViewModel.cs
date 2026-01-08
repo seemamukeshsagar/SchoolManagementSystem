@@ -13,6 +13,7 @@ namespace SchoolPortalApp.Models
         public string LastName { get; set; } = string.Empty;
         public string EmailAddress { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public bool IsSuperUser { get; set; }
         
         // ID fields
         public Guid DesignationId { get; set; }

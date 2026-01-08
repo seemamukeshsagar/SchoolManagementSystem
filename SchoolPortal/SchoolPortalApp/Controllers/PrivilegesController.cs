@@ -1,11 +1,15 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SchoolPortal.Entities.Models;
 using SchoolPortalApp.Models;
 using SchoolPortal.Services.IServices;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SchoolPortal.Services.Models;
 
 namespace SchoolPortalApp.Controllers
 {
@@ -39,9 +43,35 @@ namespace SchoolPortalApp.Controllers
 		[Route("Index")]
 		public IActionResult Index()
 		{
+			try
+			{
+				// Just return the view - data will be loaded via AJAX
+				return View();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading users index");
+				return View("Error", new ErrorViewModel { 
+					RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier 
+				});
+			}
+		}
+
+		private List<PrivilegeListItemViewModel> GetFilteredPrivileges(Guid? roleId = null)
+		{
 			var list = _service.GetAll();
+			
+			// If a role is selected, filter privileges by that role
+			if (roleId.HasValue)
+			{
+				var rolePrivilegeService = HttpContext.RequestServices.GetService<IRolePrivilegeService>();
+				var privilegesTask = rolePrivilegeService?.GetRolePrivilegesByRoleIdAsync(roleId.Value);
+				var rolePrivileges = privilegesTask?.GetAwaiter().GetResult() ?? Enumerable.Empty<RolePrivilegeViewModel>();
+				var rolePrivilegeIds = rolePrivileges.Select(rp => rp.PrivilegeId).ToHashSet();
+				list = list.Where(p => rolePrivilegeIds.Contains(p.Id));
+			}
 			var allPrivileges = list.ToList();
-			var result = list.Select(item =>
+			return list.Select(item =>
 			{
 				var parent = allPrivileges.FirstOrDefault(p => p.Id == item.PrivilegeParentId);
 				return new PrivilegeListItemViewModel
@@ -52,7 +82,6 @@ namespace SchoolPortalApp.Controllers
 					ParentPrivilegeName = parent?.PrivilegeName ?? string.Empty,
 				};
 			}).ToList();
-			return View(result);
 		}
 
 		[HttpGet]

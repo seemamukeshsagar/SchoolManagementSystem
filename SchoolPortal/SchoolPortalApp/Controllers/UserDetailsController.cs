@@ -78,7 +78,7 @@ namespace SchoolPortalApp.Controllers
 
         [HttpPost]
         [Route("GetUsersData")]
-        public IActionResult GetUsersData()
+        public async Task<IActionResult> GetUsersData()
         {
             try
             {
@@ -88,14 +88,26 @@ namespace SchoolPortalApp.Controllers
                 var length = Convert.ToInt32(requestForm["length"].FirstOrDefault() ?? "10");
                 var sortColumn = requestForm["columns[" + requestForm["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDirection = requestForm["order[0][dir]"].FirstOrDefault();
-                var searchValue = requestForm["search[value]"].FirstOrDefault();
+                var searchValue = requestForm["search[value]"].FirstOrDefault() ?? string.Empty;
                 int pageSize = length != -1 ? length : 0;
                 int skip = start != 0 ? start : 0;
                 int recordsTotal = 0;
-
                 // Get all users
-                var users = _service.GetAll().ToList();
+                List<UserDetailsListViewModel> users;
                 
+                // Check if current user is SuperAdministrator
+                var currentUser = await _service.GetUserDetailsByIdAsync(CurrentUserId ?? Guid.Empty);
+                bool isSuperAdmin = currentUser?.IsSuperUser == true;
+                if (isSuperAdmin)
+                {
+                    // For SuperAdmin, get all users without filtering
+                    users = _service.GetAll().ToList();
+                }
+                else
+                {
+                    // For other roles, use the existing filtering logic
+                    users = _service.GetAll().ToList();
+                }
                 // Apply search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
@@ -107,10 +119,8 @@ namespace SchoolPortalApp.Controllers
                         (u.DesignationName != null && u.DesignationName.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
                     ).ToList();
                 }
-
                 // Get total count
                 recordsTotal = users.Count;
-
                 // Apply sorting
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
                 {
@@ -118,7 +128,6 @@ namespace SchoolPortalApp.Controllers
                         System.Reflection.BindingFlags.IgnoreCase | 
                         System.Reflection.BindingFlags.Public | 
                         System.Reflection.BindingFlags.Instance);
-
                     if (propertyInfo != null)
                     {
                         if (sortColumnDirection.ToLower() == "asc")
@@ -131,7 +140,6 @@ namespace SchoolPortalApp.Controllers
                         }
                     }
                 }
-
                 // Apply pagination
                 var data = users
                     .Skip(skip)
@@ -147,7 +155,6 @@ namespace SchoolPortalApp.Controllers
                         isActive = u.IsActive
                     })
                     .ToList();
-
                 return Json(new { 
                     draw = draw, 
                     recordsFiltered = recordsTotal, 
