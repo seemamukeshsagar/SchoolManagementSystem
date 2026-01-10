@@ -1,0 +1,119 @@
+@model SchoolPortal.Entities.ViewModels.ParentMasterViewModel
+@{
+    ViewData["Title"] = "Edit Parent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Parent</h3>
+                </div>
+                <form asp-action="Edit">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FatherName" class="control-label"></label>
+                                    <input asp-for="FatherName" class="form-control" />
+                                    <span asp-validation-for="FatherName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MotherName" class="control-label"></label>
+                                    <input asp-for="MotherName" class="form-control" />
+                                    <span asp-validation-for="MotherName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FatherMobile" class="control-label"></label>
+                                    <input asp-for="FatherMobile" class="form-control" />
+                                    <span asp-validation-for="FatherMobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MotherMobile" class="control-label"></label>
+                                    <input asp-for="MotherMobile" class="form-control" />
+                                    <span asp-validation-for="MotherMobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FatherEmail" class="control-label"></label>
+                                    <input asp-for="FatherEmail" class="form-control" type="email" />
+                                    <span asp-validation-for="FatherEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MotherEmail" class="control-label"></label>
+                                    <input asp-for="MotherEmail" class="form-control" type="email" />
+                                    <span asp-validation-for="MotherEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FatherOccupation" class="control-label"></label>
+                                    <input asp-for="FatherOccupation" class="form-control" />
+                                    <span asp-validation-for="FatherOccupation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MotherOccupation" class="control-label"></label>
+                                    <input asp-for="MotherOccupation" class="form-control" />
+                                    <span asp-validation-for="MotherOccupation" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Address" class="control-label"></label>
+                            <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="IsActive" class="custom-control-input" />
+                                <label asp-for="IsActive" class="custom-control-label">Active</label>
+                            </div>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

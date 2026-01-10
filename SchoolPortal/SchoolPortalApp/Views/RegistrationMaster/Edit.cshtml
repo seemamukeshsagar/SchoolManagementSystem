@@ -1,0 +1,134 @@
+@model SchoolPortal.Entities.ViewModels.RegistrationMasterViewModel
+@{
+    ViewData["Title"] = "Edit Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Student Registration</h3>
+                </div>
+                <form asp-action="Edit">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="StudentName" class="control-label"></label>
+                                    <input asp-for="StudentName" class="form-control" />
+                                    <span asp-validation-for="StudentName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RegistrationNumber" class="control-label"></label>
+                                    <input asp-for="RegistrationNumber" class="form-control" readonly />
+                                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ClassId" class="control-label">Class</label>
+                                    <select asp-for="ClassId" class="form-control" asp-items="@(new SelectList(ViewBag.Classes, "Value", "Text"))">
+                                        <option value="">-- Select Class --</option>
+                                    </select>
+                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="SectionId" class="control-label">Section</label>
+                                    <select asp-for="SectionId" class="form-control" asp-items="@(new SelectList(ViewBag.Sections, "Value", "Text"))">
+                                        <option value="">-- Select Section --</option>
+                                    </select>
+                                    <span asp-validation-for="SectionId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DateOfBirth" class="control-label"></label>
+                                    <input asp-for="DateOfBirth" class="form-control" type="date" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <select asp-for="Gender" class="form-control">
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Address" class="control-label"></label>
+                            <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ParentName" class="control-label"></label>
+                                    <input asp-for="ParentName" class="form-control" />
+                                    <span asp-validation-for="ParentName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ParentMobile" class="control-label"></label>
+                                    <input asp-for="ParentMobile" class="form-control" />
+                                    <span asp-validation-for="ParentMobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="PreviousSchool" class="control-label"></label>
+                            <input asp-for="PreviousSchool" class="form-control" />
+                            <span asp-validation-for="PreviousSchool" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="IsActive" class="custom-control-input" />
+                                <label asp-for="IsActive" class="custom-control-label">Active</label>
+                            </div>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Registration
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

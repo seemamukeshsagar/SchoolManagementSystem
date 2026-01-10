@@ -17,7 +17,6 @@ public static class TimeTableExtensions
 		master.CreatedBy = details.CreatedBy;
 		master.CreatedDate = details.CreatedDate;
 		master.ModifiedBy = details.ModifiedBy;
-		master.ModifiedDate = details.ModifiedDate;
 		master.Status = details.Status;
 		master.StatusMessage = details.StatusMessage;
 		master.IsBreak = details.IsBreak;
@@ -41,7 +40,6 @@ public static class TimeTableExtensions
 		details.CreatedBy = master.CreatedBy;
 		details.CreatedDate = master.CreatedDate;
 		details.ModifiedBy = master.ModifiedBy;
-		details.ModifiedDate = master.ModifiedDate;
 		details.Status = master.Status;
 		details.StatusMessage = master.StatusMessage;
 		details.IsBreak = master.IsBreak;

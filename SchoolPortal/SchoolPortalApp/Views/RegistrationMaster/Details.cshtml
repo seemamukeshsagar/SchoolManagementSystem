@@ -1,0 +1,120 @@
+@model SchoolPortal.Entities.ViewModels.RegistrationMasterViewModel
+@{
+    ViewData["Title"] = "Registration Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Registration Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.RegistrationNumber)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.RegistrationNumber)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.StudentName)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.StudentName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.ClassName)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.ClassName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.SectionName)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.SectionName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.DateOfBirth)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.DateOfBirth)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Gender)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Gender)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Address)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Address)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.ParentName)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.ParentName)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.ParentMobile)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.ParentMobile)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.PreviousSchool)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.PreviousSchool)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.RegistrationDate)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.RegistrationDate)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Inactive</span>
+                            }
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.CreatedDate)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.ModifiedDate)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.ModifiedDate)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

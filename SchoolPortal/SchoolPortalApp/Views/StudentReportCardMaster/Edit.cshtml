@@ -1,0 +1,177 @@
+@model SchoolPortal.Entities.ViewModels.StudentReportCardMasterViewModel
+@{
+    ViewData["Title"] = "Edit Report Card";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Student Report Card</h3>
+                </div>
+                <form asp-action="Edit">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="StudentId" class="control-label">Student</label>
+                                    <select asp-for="StudentId" class="form-control" asp-items="@(new SelectList(ViewBag.Students, "Value", "Text"))">
+                                        <option value="">-- Select Student --</option>
+                                    </select>
+                                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="AcademicYearId" class="control-label">Academic Year</label>
+                                    <select asp-for="AcademicYearId" class="form-control" asp-items="@(new SelectList(ViewBag.AcademicYears, "Value", "Text"))">
+                                        <option value="">-- Select Academic Year --</option>
+                                    </select>
+                                    <span asp-validation-for="AcademicYearId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ClassId" class="control-label">Class</label>
+                                    <select asp-for="ClassId" class="form-control" asp-items="@(new SelectList(ViewBag.Classes, "Value", "Text"))">
+                                        <option value="">-- Select Class --</option>
+                                    </select>
+                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="SectionId" class="control-label">Section</label>
+                                    <select asp-for="SectionId" class="form-control" asp-items="@(new SelectList(ViewBag.Sections, "Value", "Text"))">
+                                        <option value="">-- Select Section --</option>
+                                    </select>
+                                    <span asp-validation-for="SectionId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ExamType" class="control-label"></label>
+                                    <select asp-for="ExamType" class="form-control">
+                                        <option value="">-- Select Exam Type --</option>
+                                        <option value="Mid Term">Mid Term</option>
+                                        <option value="Final Term">Final Term</option>
+                                        <option value="Unit Test 1">Unit Test 1</option>
+                                        <option value="Unit Test 2">Unit Test 2</option>
+                                        <option value="Quarterly">Quarterly</option>
+                                        <option value="Half Yearly">Half Yearly</option>
+                                    </select>
+                                    <span asp-validation-for="ExamType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="TotalMarks" class="control-label"></label>
+                                    <input asp-for="TotalMarks" class="form-control" type="number" />
+                                    <span asp-validation-for="TotalMarks" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ObtainedMarks" class="control-label"></label>
+                                    <input asp-for="ObtainedMarks" class="form-control" type="number" />
+                                    <span asp-validation-for="ObtainedMarks" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Percentage" class="control-label"></label>
+                                    <input asp-for="Percentage" class="form-control" type="number" step="0.01" readonly />
+                                    <span asp-validation-for="Percentage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Grade" class="control-label"></label>
+                                    <input asp-for="Grade" class="form-control" readonly />
+                                    <span asp-validation-for="Grade" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Rank" class="control-label"></label>
+                                    <input asp-for="Rank" class="form-control" type="number" />
+                                    <span asp-validation-for="Rank" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Remarks" class="control-label"></label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="IsActive" class="custom-control-input" />
+                                <label asp-for="IsActive" class="custom-control-label">Active</label>
+                            </div>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Report Card
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            $('#ObtainedMarks, #TotalMarks').on('input', function() {
+                var obtained = parseFloat($('#ObtainedMarks').val()) || 0;
+                var total = parseFloat($('#TotalMarks').val()) || 0;
+                
+                if (total > 0) {
+                    var percentage = (obtained / total) * 100;
+                    $('#Percentage').val(percentage.toFixed(2));
+                    
+                    // Auto-calculate grade based on percentage
+                    var grade = '';
+                    if (percentage >= 90) grade = 'A+';
+                    else if (percentage >= 80) grade = 'A';
+                    else if (percentage >= 70) grade = 'B+';
+                    else if (percentage >= 60) grade = 'B';
+                    else if (percentage >= 50) grade = 'C+';
+                    else if (percentage >= 40) grade = 'C';
+                    else grade = 'D';
+                    
+                    $('#Grade').val(grade);
+                }
+            });
+        });
+    </script>
+}

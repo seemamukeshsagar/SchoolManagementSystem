@@ -27,8 +27,14 @@ namespace SchoolPortal.Services
             // Register repositories
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            // Register other services as needed
-            // Example: services.AddScoped<IMyService, MyService>();
+            // Register new services
+            services.AddScoped<IAuthorMasterService, AuthorMasterService>();
+            services.AddScoped<IBookMasterService, BookMasterService>();
+            services.AddScoped<IPublisherMasterService, PublisherMasterService>();
+            services.AddScoped<IEmpCategoryMasterService, EmpCategoryMasterService>();
+            services.AddScoped<IParentMasterService, ParentMasterService>();
+            services.AddScoped<IRegistrationMasterService, RegistrationMasterService>();
+            services.AddScoped<IStudentReportCardMasterService, StudentReportCardMasterService>();
 
             return services;
         }

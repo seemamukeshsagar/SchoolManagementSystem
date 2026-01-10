@@ -15,315 +15,315 @@ public partial class SchoolManagementSystemContext : DbContext
 
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
-    // public virtual DbSet<AssesmentMaster> AssesmentMaster { get; set; }
+    public virtual DbSet<AssesmentMaster> AssesmentMaster { get; set; }
 
-    // public virtual DbSet<AttendanceReasonMaster> AttendanceReasonMaster { get; set; }
+    public virtual DbSet<AttendanceReasonMaster> AttendanceReasonMaster { get; set; }
 
-    // public virtual DbSet<Audit> Audit { get; set; }
+    public virtual DbSet<Audit> Audit { get; set; }
 
-    // public virtual DbSet<AuditType> AuditType { get; set; }
+    public virtual DbSet<AuditType> AuditType { get; set; }
 
-    // public virtual DbSet<AuthorMaster> AuthorMaster { get; set; }
+    public virtual DbSet<AuthorMaster> AuthorMaster { get; set; }
 
-    // public virtual DbSet<BillDetails> BillDetails { get; set; }
+    public virtual DbSet<BillDetails> BillDetails { get; set; }
 
-    // public virtual DbSet<BillMaster> BillMaster { get; set; }
+    public virtual DbSet<BillMaster> BillMaster { get; set; }
 
-    // public virtual DbSet<BloodGroupMaster> BloodGroupMaster { get; set; }
+    public virtual DbSet<BloodGroupMaster> BloodGroupMaster { get; set; }
 
-    // public virtual DbSet<BookCategoryMaster> BookCategoryMaster { get; set; }
+    public virtual DbSet<BookCategoryMaster> BookCategoryMaster { get; set; }
 
-    // public virtual DbSet<BookMaster> BookMaster { get; set; }
+    public virtual DbSet<BookMaster> BookMaster { get; set; }
 
-    // public virtual DbSet<BookTransactionDetails> BookTransactionDetails { get; set; }
+    public virtual DbSet<BookTransactionDetails> BookTransactionDetails { get; set; }
 
-    // public virtual DbSet<BookTransactionType> BookTransactionType { get; set; }
+    public virtual DbSet<BookTransactionType> BookTransactionType { get; set; }
 
-    // public virtual DbSet<BookTypeMaster> BookTypeMaster { get; set; }
+    public virtual DbSet<BookTypeMaster> BookTypeMaster { get; set; }
 
-    // public virtual DbSet<CategoryMaster> CategoryMaster { get; set; }
+    public virtual DbSet<CategoryMaster> CategoryMaster { get; set; }
 
-    // public virtual DbSet<CityMaster> CityMaster { get; set; }
+    public virtual DbSet<CityMaster> CityMaster { get; set; }
 
-    // public virtual DbSet<ClassMaster> ClassMaster { get; set; }
+    public virtual DbSet<ClassMaster> ClassMaster { get; set; }
 
-    // public virtual DbSet<ClassSMSTasksDetails> ClassSMSTasksDetails { get; set; }
+    public virtual DbSet<ClassSMSTasksDetails> ClassSMSTasksDetails { get; set; }
 
-    // public virtual DbSet<ClassScholasticDetail> ClassScholasticDetail { get; set; }
+    public virtual DbSet<ClassScholasticDetail> ClassScholasticDetail { get; set; }
 
-    // public virtual DbSet<ClassScholasticDetailHistory> ClassScholasticDetailHistory { get; set; }
+    public virtual DbSet<ClassScholasticDetailHistory> ClassScholasticDetailHistory { get; set; }
 
-    // public virtual DbSet<ClassSectionDetail> ClassSectionDetail { get; set; }
+    public virtual DbSet<ClassSectionDetail> ClassSectionDetail { get; set; }
 
-    // public virtual DbSet<ClassSubjectDetail> ClassSubjectDetail { get; set; }
+    public virtual DbSet<ClassSubjectDetail> ClassSubjectDetail { get; set; }
 
-    // public virtual DbSet<ClassSubjectDetailHistory> ClassSubjectDetailHistory { get; set; }
+    public virtual DbSet<ClassSubjectDetailHistory> ClassSubjectDetailHistory { get; set; }
 
-    // public virtual DbSet<CleanerMaster> CleanerMaster { get; set; }
+    public virtual DbSet<CleanerMaster> CleanerMaster { get; set; }
 
-    // public virtual DbSet<CompanyMaster> CompanyMaster { get; set; }
+    public virtual DbSet<CompanyMaster> CompanyMaster { get; set; }
 
-    // public virtual DbSet<CountryMaster> CountryMaster { get; set; }
+    public virtual DbSet<CountryMaster> CountryMaster { get; set; }
 
-    // public virtual DbSet<DeptDesigDetails> DeptDesigDetails { get; set; }
+    public virtual DbSet<DeptDesigDetails> DeptDesigDetails { get; set; }
 
-    // public virtual DbSet<DeptMaster> DeptMaster { get; set; }
+    public virtual DbSet<DeptMaster> DeptMaster { get; set; }
 
-    // public virtual DbSet<DesigGradeDetails> DesigGradeDetails { get; set; }
+    public virtual DbSet<DesigGradeDetails> DesigGradeDetails { get; set; }
 
-    // public virtual DbSet<DesigMaster> DesigMaster { get; set; }
+    public virtual DbSet<DesigMaster> DesigMaster { get; set; }
 
-    // public virtual DbSet<DesignationGrade> DesignationGrade { get; set; }
+    public virtual DbSet<DesignationGrade> DesignationGrade { get; set; }
 
-    // public virtual DbSet<DriverMaster> DriverMaster { get; set; }
+    public virtual DbSet<DriverMaster> DriverMaster { get; set; }
 
-    // public virtual DbSet<EmpAttendanceDetails> EmpAttendanceDetails { get; set; }
+    public virtual DbSet<EmpAttendanceDetails> EmpAttendanceDetails { get; set; }
 
-    // public virtual DbSet<EmpAttendanceDetailsHistory> EmpAttendanceDetailsHistory { get; set; }
+    public virtual DbSet<EmpAttendanceDetailsHistory> EmpAttendanceDetailsHistory { get; set; }
 
-    // public virtual DbSet<EmpCatLeaveDetails> EmpCatLeaveDetails { get; set; }
+    public virtual DbSet<EmpCatLeaveDetails> EmpCatLeaveDetails { get; set; }
 
-    // public virtual DbSet<EmpCatLeaveDetailsHistory> EmpCatLeaveDetailsHistory { get; set; }
+    public virtual DbSet<EmpCatLeaveDetailsHistory> EmpCatLeaveDetailsHistory { get; set; }
 
-    // public virtual DbSet<EmpCategoryMaster> EmpCategoryMaster { get; set; }
+    public virtual DbSet<EmpCategoryMaster> EmpCategoryMaster { get; set; }
 
-    // public virtual DbSet<EmpDocumentDetails> EmpDocumentDetails { get; set; }
+    public virtual DbSet<EmpDocumentDetails> EmpDocumentDetails { get; set; }
 
-    // public virtual DbSet<EmpLeaveAvailDetails> EmpLeaveAvailDetails { get; set; }
+    public virtual DbSet<EmpLeaveAvailDetails> EmpLeaveAvailDetails { get; set; }
 
-    // public virtual DbSet<EmpLeaveDetails> EmpLeaveDetails { get; set; }
+    public virtual DbSet<EmpLeaveDetails> EmpLeaveDetails { get; set; }
 
-    // public virtual DbSet<EmpLeaveDetailsHistory> EmpLeaveDetailsHistory { get; set; }
+    public virtual DbSet<EmpLeaveDetailsHistory> EmpLeaveDetailsHistory { get; set; }
 
-    // public virtual DbSet<EmpMaster> EmpMaster { get; set; }
+    public virtual DbSet<EmpMaster> EmpMaster { get; set; }
 
-    // public virtual DbSet<EmpProfQualiDetails> EmpProfQualiDetails { get; set; }
+    public virtual DbSet<EmpProfQualiDetails> EmpProfQualiDetails { get; set; }
 
-    // public virtual DbSet<EmpSalaryDetails> EmpSalaryDetails { get; set; }
+    public virtual DbSet<EmpSalaryDetails> EmpSalaryDetails { get; set; }
 
-    // public virtual DbSet<EmpSalaryDetailsHistory> EmpSalaryDetailsHistory { get; set; }
+    public virtual DbSet<EmpSalaryDetailsHistory> EmpSalaryDetailsHistory { get; set; }
 
-    // public virtual DbSet<EmpSalaryMaster> EmpSalaryMaster { get; set; }
+    public virtual DbSet<EmpSalaryMaster> EmpSalaryMaster { get; set; }
 
-    // public virtual DbSet<EmpSalaryMasterHistory> EmpSalaryMasterHistory { get; set; }
+    public virtual DbSet<EmpSalaryMasterHistory> EmpSalaryMasterHistory { get; set; }
 
-    // public virtual DbSet<EmpSalaryStructureDetails> EmpSalaryStructureDetails { get; set; }
+    public virtual DbSet<EmpSalaryStructureDetails> EmpSalaryStructureDetails { get; set; }
 
-    // public virtual DbSet<EmpSalaryStructureDetailsHistory> EmpSalaryStructureDetailsHistory { get; set; }
+    public virtual DbSet<EmpSalaryStructureDetailsHistory> EmpSalaryStructureDetailsHistory { get; set; }
 
-    // public virtual DbSet<EmpTypeMaster> EmpTypeMaster { get; set; }
+    public virtual DbSet<EmpTypeMaster> EmpTypeMaster { get; set; }
 
-    // public virtual DbSet<Error> Error { get; set; }
+    public virtual DbSet<Error> Error { get; set; }
 
-    // public virtual DbSet<ErrorDetail> ErrorDetail { get; set; }
+    public virtual DbSet<ErrorDetail> ErrorDetail { get; set; }
 
-    // public virtual DbSet<ErrorType> ErrorType { get; set; }
+    public virtual DbSet<ErrorType> ErrorType { get; set; }
 
-    // public virtual DbSet<ExamCategoryMaster> ExamCategoryMaster { get; set; }
+    public virtual DbSet<ExamCategoryMaster> ExamCategoryMaster { get; set; }
 
-    // public virtual DbSet<ExamUnitMaster> ExamUnitMaster { get; set; }
+    public virtual DbSet<ExamUnitMaster> ExamUnitMaster { get; set; }
 
-    // public virtual DbSet<ExpenseCategoryMaster> ExpenseCategoryMaster { get; set; }
+    public virtual DbSet<ExpenseCategoryMaster> ExpenseCategoryMaster { get; set; }
 
-    // public virtual DbSet<FeeClassDetails> FeeClassDetails { get; set; }
+    public virtual DbSet<FeeClassDetails> FeeClassDetails { get; set; }
 
-    // public virtual DbSet<FeeClassDetailsHistory> FeeClassDetailsHistory { get; set; }
+    public virtual DbSet<FeeClassDetailsHistory> FeeClassDetailsHistory { get; set; }
 
-    // public virtual DbSet<FeesCategoryMaster> FeesCategoryMaster { get; set; }
+    public virtual DbSet<FeesCategoryMaster> FeesCategoryMaster { get; set; }
 
-    // public virtual DbSet<FeesDiscountCategoryMaster> FeesDiscountCategoryMaster { get; set; }
+    public virtual DbSet<FeesDiscountCategoryMaster> FeesDiscountCategoryMaster { get; set; }
 
-    // public virtual DbSet<GenderMaster> GenderMaster { get; set; }
+    public virtual DbSet<GenderMaster> GenderMaster { get; set; }
 
-    // public virtual DbSet<GradeMaster> GradeMaster { get; set; }
+    public virtual DbSet<GradeMaster> GradeMaster { get; set; }
 
-    // public virtual DbSet<HolidayClassDetails> HolidayClassDetails { get; set; }
+    public virtual DbSet<HolidayClassDetails> HolidayClassDetails { get; set; }
 
-    // public virtual DbSet<HolidayDeptDetails> HolidayDeptDetails { get; set; }
+    public virtual DbSet<HolidayDeptDetails> HolidayDeptDetails { get; set; }
 
-    // public virtual DbSet<HolidayMaster> HolidayMaster { get; set; }
+    public virtual DbSet<HolidayMaster> HolidayMaster { get; set; }
 
-    // public virtual DbSet<HolidayTypeMaster> HolidayTypeMaster { get; set; }
+    public virtual DbSet<HolidayTypeMaster> HolidayTypeMaster { get; set; }
 
-    // public virtual DbSet<HouseMaster> HouseMaster { get; set; }
+    public virtual DbSet<HouseMaster> HouseMaster { get; set; }
 
-    // public virtual DbSet<InventoryMaster> InventoryMaster { get; set; }
+    public virtual DbSet<InventoryMaster> InventoryMaster { get; set; }
 
-    // public virtual DbSet<ItemLocationMaster> ItemLocationMaster { get; set; }
+    public virtual DbSet<ItemLocationMaster> ItemLocationMaster { get; set; }
 
-    // public virtual DbSet<ItemMaster> ItemMaster { get; set; }
+    public virtual DbSet<ItemMaster> ItemMaster { get; set; }
 
-    // public virtual DbSet<ItemTypeMaster> ItemTypeMaster { get; set; }
+    public virtual DbSet<ItemTypeMaster> ItemTypeMaster { get; set; }
 
-    // public virtual DbSet<LeaveStatusMaster> LeaveStatusMaster { get; set; }
+    public virtual DbSet<LeaveStatusMaster> LeaveStatusMaster { get; set; }
 
-    // public virtual DbSet<LeaveTypeMaster> LeaveTypeMaster { get; set; }
+    public virtual DbSet<LeaveTypeMaster> LeaveTypeMaster { get; set; }
 
-    // public virtual DbSet<LocationMaster> LocationMaster { get; set; }
+    public virtual DbSet<LocationMaster> LocationMaster { get; set; }
 
-    // public virtual DbSet<MaritalStatus> MaritalStatus { get; set; }
+    public virtual DbSet<MaritalStatus> MaritalStatus { get; set; }
 
-    // public virtual DbSet<MarksGradeMaster> MarksGradeMaster { get; set; }
+    public virtual DbSet<MarksGradeMaster> MarksGradeMaster { get; set; }
 
-    // public virtual DbSet<NotificationReceiverMaster> NotificationReceiverMaster { get; set; }
+    public virtual DbSet<NotificationReceiverMaster> NotificationReceiverMaster { get; set; }
 
-    // public virtual DbSet<ParentMaster> ParentMaster { get; set; }
+    public virtual DbSet<ParentMaster> ParentMaster { get; set; }
 
-    // public virtual DbSet<PaymentModeMaster> PaymentModeMaster { get; set; }
+    public virtual DbSet<PaymentModeMaster> PaymentModeMaster { get; set; }
 
-    // public virtual DbSet<PaymentTypeMode> PaymentTypeMode { get; set; }
+    public virtual DbSet<PaymentTypeMode> PaymentTypeMode { get; set; }
 
-    // public virtual DbSet<Privileges> Privileges { get; set; }
+    public virtual DbSet<Privileges> Privileges { get; set; }
 
-    // public virtual DbSet<ProfessionMaster> ProfessionMaster { get; set; }
+    public virtual DbSet<ProfessionMaster> ProfessionMaster { get; set; }
 
-    // public virtual DbSet<PublisherMaster> PublisherMaster { get; set; }
+    public virtual DbSet<PublisherMaster> PublisherMaster { get; set; }
 
-    // public virtual DbSet<QualificationMaster> QualificationMaster { get; set; }
+    public virtual DbSet<QualificationMaster> QualificationMaster { get; set; }
 
-    // public virtual DbSet<RegistrationMaster> RegistrationMaster { get; set; }
+    public virtual DbSet<RegistrationMaster> RegistrationMaster { get; set; }
 
-    // public virtual DbSet<RelationTypeMaster> RelationTypeMaster { get; set; }
+    public virtual DbSet<RelationTypeMaster> RelationTypeMaster { get; set; }
 
-    // public virtual DbSet<ReligionMaster> ReligionMaster { get; set; }
+    public virtual DbSet<ReligionMaster> ReligionMaster { get; set; }
 
-    // public virtual DbSet<RoleMaster> RoleMaster { get; set; }
+    public virtual DbSet<RoleMaster> RoleMaster { get; set; }
 
-    // public virtual DbSet<RolePrivileges> RolePrivileges { get; set; }
+    public virtual DbSet<RolePrivileges> RolePrivileges { get; set; }
 
-    // public virtual DbSet<RouteDetails> RouteDetails { get; set; }
+    public virtual DbSet<RouteDetails> RouteDetails { get; set; }
 
-    // public virtual DbSet<RouteLocationMaster> RouteLocationMaster { get; set; }
+    public virtual DbSet<RouteLocationMaster> RouteLocationMaster { get; set; }
 
-    // public virtual DbSet<RouteMaster> RouteMaster { get; set; }
+    public virtual DbSet<RouteMaster> RouteMaster { get; set; }
 
-    // public virtual DbSet<RouteStopDetails> RouteStopDetails { get; set; }
+    public virtual DbSet<RouteStopDetails> RouteStopDetails { get; set; }
 
-    // public virtual DbSet<SMSTask> SMSTask { get; set; }
+    public virtual DbSet<SMSTask> SMSTask { get; set; }
 
-    // public virtual DbSet<SMSTaskHistory> SMSTaskHistory { get; set; }
+    public virtual DbSet<SMSTaskHistory> SMSTaskHistory { get; set; }
 
-    // public virtual DbSet<SMSTaskSchedule> SMSTaskSchedule { get; set; }
+    public virtual DbSet<SMSTaskSchedule> SMSTaskSchedule { get; set; }
 
-    // public virtual DbSet<SMSTaskSmtpDetails> SMSTaskSmtpDetails { get; set; }
+    public virtual DbSet<SMSTaskSmtpDetails> SMSTaskSmtpDetails { get; set; }
 
-    // public virtual DbSet<SMSTaskStatusMaster> SMSTaskStatusMaster { get; set; }
+    public virtual DbSet<SMSTaskStatusMaster> SMSTaskStatusMaster { get; set; }
 
-    // public virtual DbSet<SalaryCode> SalaryCode { get; set; }
+    public virtual DbSet<SalaryCode> SalaryCode { get; set; }
 
-    // public virtual DbSet<SalaryDesigGradeDetails> SalaryDesigGradeDetails { get; set; }
+    public virtual DbSet<SalaryDesigGradeDetails> SalaryDesigGradeDetails { get; set; }
 
-    // public virtual DbSet<SalaryDesigGradeDetailsHistory> SalaryDesigGradeDetailsHistory { get; set; }
+    public virtual DbSet<SalaryDesigGradeDetailsHistory> SalaryDesigGradeDetailsHistory { get; set; }
 
-    // public virtual DbSet<SalaryHeadMaster> SalaryHeadMaster { get; set; }
+    public virtual DbSet<SalaryHeadMaster> SalaryHeadMaster { get; set; }
 
-    // public virtual DbSet<SalaryType> SalaryType { get; set; }
+    public virtual DbSet<SalaryType> SalaryType { get; set; }
 
-    // public virtual DbSet<SalaryTypeMaster> SalaryTypeMaster { get; set; }
+    public virtual DbSet<SalaryTypeMaster> SalaryTypeMaster { get; set; }
 
-    // public virtual DbSet<ScholasticMaster> ScholasticMaster { get; set; }
+    public virtual DbSet<ScholasticMaster> ScholasticMaster { get; set; }
 
-    // public virtual DbSet<ScholasticUnitDetail> ScholasticUnitDetail { get; set; }
+    public virtual DbSet<ScholasticUnitDetail> ScholasticUnitDetail { get; set; }
 
-    // public virtual DbSet<SchoolBoard> SchoolBoard { get; set; }
+    public virtual DbSet<SchoolBoard> SchoolBoard { get; set; }
 
-    // public virtual DbSet<SchoolContactMaster> SchoolContactMaster { get; set; }
+    public virtual DbSet<SchoolContactMaster> SchoolContactMaster { get; set; }
 
-    // public virtual DbSet<SchoolMaster> SchoolMaster { get; set; }
+    public virtual DbSet<SchoolMaster> SchoolMaster { get; set; }
 
-    // public virtual DbSet<SectionMaster> SectionMaster { get; set; }
+    public virtual DbSet<SectionMaster> SectionMaster { get; set; }
 
-    // public virtual DbSet<SessionMaster> SessionMaster { get; set; }
+    public virtual DbSet<SessionMaster> SessionMaster { get; set; }
 
-    // public virtual DbSet<SmtpDetails> SmtpDetails { get; set; }
+    public virtual DbSet<SmtpDetails> SmtpDetails { get; set; }
 
-    // public virtual DbSet<StateMaster> StateMaster { get; set; }
+    public virtual DbSet<StateMaster> StateMaster { get; set; }
 
-    // public virtual DbSet<StudentAchievements> StudentAchievements { get; set; }
+    public virtual DbSet<StudentAchievements> StudentAchievements { get; set; }
 
-    // public virtual DbSet<StudentAttendanceDetails> StudentAttendanceDetails { get; set; }
+    public virtual DbSet<StudentAttendanceDetails> StudentAttendanceDetails { get; set; }
 
-    // public virtual DbSet<StudentCommentDetails> StudentCommentDetails { get; set; }
+    public virtual DbSet<StudentCommentDetails> StudentCommentDetails { get; set; }
 
-    // public virtual DbSet<StudentCommentDetailsHistory> StudentCommentDetailsHistory { get; set; }
+    public virtual DbSet<StudentCommentDetailsHistory> StudentCommentDetailsHistory { get; set; }
 
-    // public virtual DbSet<StudentFeeDetails> StudentFeeDetails { get; set; }
+    public virtual DbSet<StudentFeeDetails> StudentFeeDetails { get; set; }
 
-    // public virtual DbSet<StudentFeeDetailsHistory> StudentFeeDetailsHistory { get; set; }
+    public virtual DbSet<StudentFeeDetailsHistory> StudentFeeDetailsHistory { get; set; }
 
-    // public virtual DbSet<StudentGradeDetails> StudentGradeDetails { get; set; }
+    public virtual DbSet<StudentGradeDetails> StudentGradeDetails { get; set; }
 
-    // public virtual DbSet<StudentGradeDetailsHistory> StudentGradeDetailsHistory { get; set; }
+    public virtual DbSet<StudentGradeDetailsHistory> StudentGradeDetailsHistory { get; set; }
 
-    // public virtual DbSet<StudentMarksDetails> StudentMarksDetails { get; set; }
+    public virtual DbSet<StudentMarksDetails> StudentMarksDetails { get; set; }
 
-    // public virtual DbSet<StudentMarksDetailsHistory> StudentMarksDetailsHistory { get; set; }
+    public virtual DbSet<StudentMarksDetailsHistory> StudentMarksDetailsHistory { get; set; }
 
-    // public virtual DbSet<StudentMaster> StudentMaster { get; set; }
+    public virtual DbSet<StudentMaster> StudentMaster { get; set; }
 
-    // public virtual DbSet<StudentMasterHistory> StudentMasterHistory { get; set; }
+    public virtual DbSet<StudentMasterHistory> StudentMasterHistory { get; set; }
 
-    // public virtual DbSet<StudentReportCardDetails> StudentReportCardDetails { get; set; }
+    public virtual DbSet<StudentReportCardDetails> StudentReportCardDetails { get; set; }
 
-    // public virtual DbSet<StudentReportCardDetailsHistory> StudentReportCardDetailsHistory { get; set; }
+    public virtual DbSet<StudentReportCardDetailsHistory> StudentReportCardDetailsHistory { get; set; }
 
-    // public virtual DbSet<StudentReportCardMaster> StudentReportCardMaster { get; set; }
+    public virtual DbSet<StudentReportCardMaster> StudentReportCardMaster { get; set; }
 
-    // public virtual DbSet<StudentReportCardMasterHistory> StudentReportCardMasterHistory { get; set; }
+    public virtual DbSet<StudentReportCardMasterHistory> StudentReportCardMasterHistory { get; set; }
 
-    // public virtual DbSet<SubjectCategoryDetails> SubjectCategoryDetails { get; set; }
+    public virtual DbSet<SubjectCategoryDetails> SubjectCategoryDetails { get; set; }
 
-    // public virtual DbSet<SubjectCategoryDetailsHistory> SubjectCategoryDetailsHistory { get; set; }
+    public virtual DbSet<SubjectCategoryDetailsHistory> SubjectCategoryDetailsHistory { get; set; }
 
-    // public virtual DbSet<SubjectMaster> SubjectMaster { get; set; }
+    public virtual DbSet<SubjectMaster> SubjectMaster { get; set; }
 
-    // public virtual DbSet<SupplierMaster> SupplierMaster { get; set; }
+    public virtual DbSet<SupplierMaster> SupplierMaster { get; set; }
 
-    // public virtual DbSet<SystemParameters> SystemParameters { get; set; }
+    public virtual DbSet<SystemParameters> SystemParameters { get; set; }
 
-    // public virtual DbSet<TeacherClassDetails> TeacherClassDetails { get; set; }
+    public virtual DbSet<TeacherClassDetails> TeacherClassDetails { get; set; }
 
-    // public virtual DbSet<TeacherDocumentDetails> TeacherDocumentDetails { get; set; }
+    public virtual DbSet<TeacherDocumentDetails> TeacherDocumentDetails { get; set; }
 
-    // public virtual DbSet<TeacherMaster> TeacherMaster { get; set; }
+    public virtual DbSet<TeacherMaster> TeacherMaster { get; set; }
 
-    // public virtual DbSet<TeacherQualificationDetails> TeacherQualificationDetails { get; set; }
+    public virtual DbSet<TeacherQualificationDetails> TeacherQualificationDetails { get; set; }
 
-    // public virtual DbSet<TeacherSectionDetails> TeacherSectionDetails { get; set; }
+    public virtual DbSet<TeacherSectionDetails> TeacherSectionDetails { get; set; }
 
-    // public virtual DbSet<TeacherSubjectDetails> TeacherSubjectDetails { get; set; }
+    public virtual DbSet<TeacherSubjectDetails> TeacherSubjectDetails { get; set; }
 
-    // public virtual DbSet<TimeTableClassPeriodDetails> TimeTableClassPeriodDetails { get; set; }
+    public virtual DbSet<TimeTableClassPeriodDetails> TimeTableClassPeriodDetails { get; set; }
 
-    // public virtual DbSet<TimeTableClassPeriodDetailsHistory> TimeTableClassPeriodDetailsHistory { get; set; }
+    public virtual DbSet<TimeTableClassPeriodDetailsHistory> TimeTableClassPeriodDetailsHistory { get; set; }
 
-    // public virtual DbSet<TimeTableDetailsHistory> TimeTableDetailsHistory { get; set; }
+    public virtual DbSet<TimeTableDetailsHistory> TimeTableDetailsHistory { get; set; }
 
-    // public virtual DbSet<TimeTablePeriodMaster> TimeTablePeriodMaster { get; set; }
+    public virtual DbSet<TimeTablePeriodMaster> TimeTablePeriodMaster { get; set; }
 
-    // public virtual DbSet<TimeTableSessions> TimeTableSessions { get; set; }
+    public virtual DbSet<TimeTableSessions> TimeTableSessions { get; set; }
 
-    // public virtual DbSet<TimeTableSetupDetails> TimeTableSetupDetails { get; set; }
+    public virtual DbSet<TimeTableSetupDetails> TimeTableSetupDetails { get; set; }
 
-    // public virtual DbSet<TimeTableSetupDetailsHistory> TimeTableSetupDetailsHistory { get; set; }
+    public virtual DbSet<TimeTableSetupDetailsHistory> TimeTableSetupDetailsHistory { get; set; }
 
-    // public virtual DbSet<TimeTableSubstitutionDetails> TimeTableSubstitutionDetails { get; set; }
+    public virtual DbSet<TimeTableSubstitutionDetails> TimeTableSubstitutionDetails { get; set; }
 
-    // public virtual DbSet<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistory { get; set; }
+    public virtual DbSet<TimeTableSubstitutionDetailsHistory> TimeTableSubstitutionDetailsHistory { get; set; }
 
-    // public virtual DbSet<UserDetails> UserDetails { get; set; }
+    public virtual DbSet<UserDetails> UserDetails { get; set; }
 
-    // public virtual DbSet<VehicleExpenseDetails> VehicleExpenseDetails { get; set; }
+    public virtual DbSet<VehicleExpenseDetails> VehicleExpenseDetails { get; set; }
 
-    // public virtual DbSet<VehicleMaster> VehicleMaster { get; set; }
+    public virtual DbSet<VehicleMaster> VehicleMaster { get; set; }
 
-    // public virtual DbSet<VehicleTypeMaster> VehicleTypeMaster { get; set; }
+    public virtual DbSet<VehicleTypeMaster> VehicleTypeMaster { get; set; }
 
-    // public virtual DbSet<VendorMaster> VendorMaster { get; set; }
+    public virtual DbSet<VendorMaster> VendorMaster { get; set; }
 
-    // public virtual DbSet<VisitorMaster> VisitorMaster { get; set; }
+    public virtual DbSet<VisitorMaster> VisitorMaster { get; set; }
 
-    // public virtual DbSet<VoucherMaster> VoucherMaster { get; set; }
+    public virtual DbSet<VoucherMaster> VoucherMaster { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
