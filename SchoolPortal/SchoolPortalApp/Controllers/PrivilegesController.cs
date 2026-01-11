@@ -17,11 +17,13 @@ namespace SchoolPortalApp.Controllers
 	public class PrivilegesController : BaseController
 	{
 		private readonly IPrivilegeService _service;
+		private readonly IRoleMasterService _roleService;
 		private new readonly ILogger<PrivilegesController> _logger;
 
-		public PrivilegesController(IPrivilegeService service, ILogger<PrivilegesController> logger)
+		public PrivilegesController(IPrivilegeService service, IRoleMasterService roleService, ILogger<PrivilegesController> logger)
 		{
 			_service = service;
+			_roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -45,15 +47,46 @@ namespace SchoolPortalApp.Controllers
 		{
 			try
 			{
-				// Just return the view - data will be loaded via AJAX
-				return View();
+				// Populate roles dropdown
+				var roles = _roleService.GetAll()
+					.Where(r => r.IsActive && !r.IsDeleted)
+					.Select(r => new SelectListItem
+					{
+						Value = r.Id.ToString(),
+						Text = r.Name
+					})
+					.ToList();
+
+				ViewBag.Roles = new SelectList(roles, "Value", "Text");
+
+				// Get initial privileges data
+				var privileges = GetFilteredPrivileges();
+
+				// Return the view with initial data
+				return View(privileges);
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Error loading users index");
+				_logger.LogError(ex, "Error loading privileges index");
 				return View("Error", new ErrorViewModel { 
 					RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier 
 				});
+			}
+		}
+
+		[HttpGet]
+		[Route("GetPrivilegesTable")]
+		public IActionResult GetPrivilegesTable(Guid? roleId = null)
+		{
+			try
+			{
+				var privileges = GetFilteredPrivileges(roleId);
+				return PartialView("_PrivilegesTable", privileges);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error loading privileges table");
+				return PartialView("_PrivilegesTable", new List<PrivilegeListItemViewModel>());
 			}
 		}
 

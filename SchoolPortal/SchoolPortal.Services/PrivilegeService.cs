@@ -33,6 +33,9 @@ namespace SchoolPortal.Services
 
         public Privileges? GetById(Guid id)
         {
+            // Clear parameter cache to avoid mismatches
+            Proc.ResetParmCache();
+            
             using (var p = new Proc(_connectionManager, "sp_Privilege_GetById"))
             {
                 p.Parameters.AddWithValue("Id", id);

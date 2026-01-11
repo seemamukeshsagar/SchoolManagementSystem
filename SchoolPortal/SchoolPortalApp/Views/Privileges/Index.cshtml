@@ -61,11 +61,19 @@
             var table = null;
             
             function initializeDataTable() {
+                // Destroy existing DataTable if it exists
                 if ($.fn.DataTable.isDataTable('#privilegesTable')) {
                     table.destroy();
                 }
                 
-                table = $('#privilegesTable').DataTable({
+                // Only initialize DataTable if the table exists and has proper structure
+                var $table = $('#privilegesTable');
+                if ($table.length === 0 || $table.find('thead').length === 0) {
+                    console.warn('Table structure not found, skipping DataTable initialization');
+                    return;
+                }
+                
+                table = $table.DataTable({
                     paging: true,
                     pageLength: 10,
                     lengthChange: true,
@@ -112,17 +120,22 @@
                             return false;
                         }
                         return true;
+                    },
+                    initComplete: function() {
+                        console.log('DataTable initialized successfully');
                     }
                 });
             }
 
-            // Initialize DataTable on page load
-            initializeDataTable();
+            // Initialize DataTable on page load with a small delay to ensure DOM is ready
+            setTimeout(function() {
+                initializeDataTable();
+            }, 100);
 
             // Handle role filter change with AJAX
             $('#roleId').on('change', function () {
                 var roleId = $(this).val();
-                var url = $(this).data('url');
+                var url = $(this).data('url').replace('/Index', '/GetPrivilegesTable');
                 var params = {};
                 
                 if (roleId) {
@@ -140,9 +153,9 @@
                     data: params,
                     success: function (response) {
                         // Update the URL without reloading the page
-                        var newUrl = url;
+                        var newUrl = window.location.pathname;
                         if (roleId) {
-                            newUrl += (url.indexOf('?') >= 0 ? '&' : '?') + 'roleId=' + roleId;
+                            newUrl += (newUrl.indexOf('?') >= 0 ? '&' : '?') + 'roleId=' + roleId;
                         }
                         window.history.pushState({}, '', newUrl);
 
