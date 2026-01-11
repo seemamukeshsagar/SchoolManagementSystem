@@ -9,6 +9,11 @@ namespace SchoolPortal.Entities.Models
         }
 
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<StudentMaster> Students { get; set; }
+        public DbSet<StudentAttendanceDetails> StudentAttendance { get; set; }
+        public DbSet<TeacherMaster> Teachers { get; set; }
+        public DbSet<TeacherClassDetails> TeacherClassDetails { get; set; }
+        public DbSet<UserDetails> UserDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

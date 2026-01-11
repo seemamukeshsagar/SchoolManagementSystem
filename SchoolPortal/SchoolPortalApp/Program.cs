@@ -141,7 +141,7 @@ builder.Services.AddDataServices();
 
 // Register AppDbContext with Entity Framework
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+	options.UseSqlServer(connectionString));
 
 // Add memory cache
 builder.Services.AddMemoryCache();
@@ -325,6 +325,18 @@ builder.Services.AddScoped<IInventoryService, SchoolPortal.Services.InventorySer
 
 // User and account services
 builder.Services.AddScoped<IUserDetailsService, SchoolPortal.Services.UserDetailsService>();
+
+// Backup service
+builder.Services.AddScoped<IBackupService, SchoolPortal.Services.BackupService>();
+
+// Cache service
+builder.Services.AddScoped<ICacheService, SchoolPortal.Services.CacheService>();
+
+// Maintenance service
+builder.Services.AddScoped<IMaintenanceService, SchoolPortal.Services.MaintenanceService>();
+
+// Security service
+builder.Services.AddScoped<ISecurityService, SchoolPortal.Services.SecurityService>();
 
 // Academic services
 builder.Services.AddScoped<IFeesCategoryMasterService, SchoolPortal.Services.FeesCategoryMasterService>();

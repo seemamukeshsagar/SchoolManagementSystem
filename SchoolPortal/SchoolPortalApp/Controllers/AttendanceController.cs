@@ -1,4 +1,3 @@
-// SchoolPortalApp/Controllers/AttendanceController.cs
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -330,6 +329,13 @@ namespace SchoolPortalApp.Controllers
 				TempData["ErrorMessage"] = "An error occurred while deleting the attendance record.";
 				return RedirectToAction("Delete", new { id });
 			}
+		}
+
+		[HttpGet]
+		[Route("StudentAttendance")]
+		public IActionResult StudentAttendance()
+		{
+			return RedirectToAction("Index", "StudentAttendance");
 		}
 
 		private void PopulateDropdowns(AttendanceViewModel model)

@@ -21,7 +21,7 @@
                                     <i class="bi bi-database fs-1 text-primary mb-3"></i>
                                     <h5 class="card-title">Run Database Backup</h5>
                                     <p class="card-text small">Create a manual backup of the database</p>
-                                    <button class="btn btn-primary btn-sm">Run Backup</button>
+                                    <button class="btn btn-primary btn-sm" onclick="runBackup()">Run Backup</button>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                                     <i class="bi bi-arrow-clockwise fs-1 text-success mb-3"></i>
                                     <h5 class="card-title">Clear Cache</h5>
                                     <p class="card-text small">Clear system cache and temporary files</p>
-                                    <button class="btn btn-success btn-sm">Clear Now</button>
+                                    <button class="btn btn-success btn-sm" onclick="clearCache()">Clear Now</button>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                                     <i class="bi bi-gear fs-1 text-info mb-3"></i>
                                     <h5 class="card-title">System Maintenance</h5>
                                     <p class="card-text small">Run system maintenance tasks</p>
-                                    <button class="btn btn-info btn-sm text-white">Run Maintenance</button>
+                                    <button class="btn btn-info btn-sm text-white" onclick="runMaintenance()">Run Maintenance</button>
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                                     <i class="bi bi-shield-check fs-1 text-warning mb-3"></i>
                                     <h5 class="card-title">Security Scan</h5>
                                     <p class="card-text small">Run a security audit</p>
-                                    <button class="btn btn-warning btn-sm">Start Scan</button>
+                                    <button class="btn btn-warning btn-sm" onclick="startSecurityScan()">Start Scan</button>
                                 </div>
                             </div>
                         </div>
@@ -170,5 +170,187 @@
                     }, false)
                 })
         })()
+
+        // Start Security Scan function
+        function startSecurityScan() {
+            // Show confirmation dialog
+            if (!confirm('Security scan will audit user permissions, database security, application configuration, and system vulnerabilities. This may take several minutes. Continue?')) {
+                return;
+            }
+
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Scanning...';
+            button.disabled = true;
+
+            // Make AJAX call to security scan endpoint
+            fetch('/SuperAdmin/StartSecurityScan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: ''
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                throw new Error('Security scan request failed');
+            })
+            .catch(error => {
+                console.error('Security scan error:', error);
+                // Show error message
+                showNotification('Error running security scan. Please try again.', 'danger');
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
+
+        // Run Maintenance function
+        function runMaintenance() {
+            // Show confirmation dialog
+            if (!confirm('System maintenance will perform database optimization, cleanup tasks, and health checks. This may take several minutes. Continue?')) {
+                return;
+            }
+
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Running Maintenance...';
+            button.disabled = true;
+
+            // Make AJAX call to maintenance endpoint
+            fetch('/SuperAdmin/RunMaintenance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: ''
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                throw new Error('Maintenance request failed');
+            })
+            .catch(error => {
+                console.error('Maintenance error:', error);
+                // Show error message
+                showNotification('Error running maintenance. Please try again.', 'danger');
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
+
+        // Clear Cache function
+        function clearCache() {
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Clearing Cache...';
+            button.disabled = true;
+
+            // Make AJAX call to clear cache endpoint
+            fetch('/SuperAdmin/ClearCache', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: ''
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                throw new Error('Cache clearing request failed');
+            })
+            .catch(error => {
+                console.error('Cache clearing error:', error);
+                // Show error message
+                showNotification('Error clearing cache. Please try again.', 'danger');
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
+
+        // Run Backup function
+        function runBackup() {
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Creating Backup...';
+            button.disabled = true;
+
+            // Make AJAX call to backup endpoint
+            fetch('/SuperAdmin/RunBackup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: ''
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                throw new Error('Backup request failed');
+            })
+            .catch(error => {
+                console.error('Backup error:', error);
+                // Show error message
+                showNotification('Error creating backup. Please try again.', 'danger');
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
+
+        // Show notification function
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // Check for TempData messages on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Look for success or error messages from TempData
+            const successMessage = '@TempData["SuccessMessage"]';
+            const errorMessage = '@TempData["ErrorMessage"]';
+            
+            if (successMessage && successMessage !== '') {
+                showNotification(successMessage, 'success');
+            }
+            
+            if (errorMessage && errorMessage !== '') {
+                showNotification(errorMessage, 'danger');
+            }
+        });
     </script>
 }
